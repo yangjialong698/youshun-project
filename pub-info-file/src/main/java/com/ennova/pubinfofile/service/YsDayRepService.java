@@ -177,13 +177,14 @@ public class YsDayRepService {
             pageSize = 10;
         }
         BaseVO<DayRepDetailVO> baseVO = null ;
-        if (roleCode.equals("task_manage")){
-            //任务管理员 --- 子任务的数据
-            String subRoleCode = "sub_task_manage";
-            Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
-            List<DayRepDetailVO> list = ysDayRepMapper.getDayRepsByRoleCode(ysMasterTaskId,fileName,userId,subRoleCode,startTime,endTime);
-            baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
-        }else if (roleCode.equals("sub_task_manage")){
+//        if (roleCode.equals("task_manage")){
+//            //任务管理员 --- 子任务的数据
+//            String subRoleCode = "sub_task_manage";
+//            Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
+//            List<DayRepDetailVO> list = ysDayRepMapper.getDayRepsByRoleCode(ysMasterTaskId,fileName,userId,subRoleCode,startTime,endTime);
+//            baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+//        }else if
+        if (roleCode.equals("sub_task_manage")){
             //子任务管理 --- 1.归属团队数据 2.自己数据 3.下属数据
             List<YsTeam> ysTeams = ysTeamMapper.selectAllByExecutorId(userId);
             if (CollectionUtil.isNotEmpty(ysTeams)){
