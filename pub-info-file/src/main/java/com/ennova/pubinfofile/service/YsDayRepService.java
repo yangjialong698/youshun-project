@@ -73,6 +73,7 @@ public class YsDayRepService {
                         .ysMasterTaskId(ysDayRepVO.getYsMasterTaskId())
                         .fileContent(ysDayRepVO.getFileContent())
                         .dayrepTime(ysDayRepVO.getDayrepTime())
+                        .updateTime(new Date())
                         .build();
                 ysDayRepMapper.updateByPrimaryKeySelective(ysDayRep);
                 Integer  ysDayRepId = ysDayRep.getId();

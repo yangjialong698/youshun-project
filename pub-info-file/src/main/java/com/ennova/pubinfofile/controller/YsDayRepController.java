@@ -34,7 +34,7 @@ public class YsDayRepController {
         return ysDayRepService.insertOrUpdate(ysDayRepVO);
     }
 
-    @PostMapping("/deleteDayRep")
+    @DeleteMapping("/deleteDayRep")
     @ApiOperation(value = "日报管理 - 日报删除",tags = "日报管理API")
     public Callback deleteDayRep(Integer id) {
         return ysDayRepService.deleteDayRep(id);
