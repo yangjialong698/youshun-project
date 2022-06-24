@@ -328,7 +328,7 @@
     <if test="endTime!=null and endTime!=''">
       AND fin.dayrepTime &lt;= #{endTime,jdbcType=TIMESTAMP}
     </if>
-    GROUP BY fin.fileName
+    GROUP BY fin.id
     ORDER BY fin.createTime DESC
   </select>
 
