@@ -34,7 +34,7 @@
 
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, file_name, open_file, del_flag, ys_file_type_id, ys_master_task_id, file_content, 
+    id, file_name, open_file, del_flag, ys_master_task_id, file_content,
     user_id, dayrep_time, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -232,7 +232,7 @@
     <if test="endTime!=null and endTime!=''">
       AND ydr.dayrep_time &lt;= #{endTime,jdbcType=TIMESTAMP}
     </if>
-    GROUP BY ysMasterTaskId
+    GROUP BY id
     ORDER BY ydr.create_time DESC
   </select>
 
@@ -366,7 +366,7 @@
     <if test="endTime!=null and endTime!=''">
       AND ydr.dayrep_time &lt;= #{endTime,jdbcType=TIMESTAMP}
     </if>
-    GROUP BY ysMasterTaskId
+    GROUP BY id
     ORDER BY ydr.create_time DESC
   </select>
 
@@ -403,7 +403,7 @@
     <if test="endTime!=null and endTime!=''">
       AND ydr.dayrep_time &lt;= #{endTime,jdbcType=TIMESTAMP}
     </if>
-    GROUP BY ysMasterTaskId
+    GROUP BY id
     ORDER BY ydr.create_time DESC
   </select>
 
