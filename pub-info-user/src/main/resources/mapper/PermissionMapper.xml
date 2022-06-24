@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfouser.dao.PermissionDao">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfouser.entity.PermissionEntity">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="val" jdbcType="VARCHAR" property="val" />
+        <result column="parent_val" jdbcType="VARCHAR" property="parentVal" />
+        <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+        <result column="level" jdbcType="INTEGER" property="level" />
+        <result column="platform" jdbcType="INTEGER" property="platform" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="type_module" jdbcType="INTEGER" property="typeModule" />
+        <result column="flag" jdbcType="INTEGER" property="flag" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="permission_type" jdbcType="INTEGER" property="permissionType" />
+    </resultMap>
+    <sql id="Base_Column_List">
+     id, permission_name, description, val, parent_val, parent_id, level, platform, sort,
+     url, icon, type_module, flag, create_time,permission_type
+   </sql>
+    <!-- 获取权限列表 -->
+    <select id="getPermissions" resultType="com.ennova.pubinfouser.vo.PermissionVO">
+        SELECT id, permission_name AS permissionName, description, val, parent_val AS parentVal, parent_id AS parentId,
+        level, platform, sort, url, icon,redirect,component,hidden,active FROM t_permission
+        order by sort asc
+    </select>
+<!--    <select id="list" resultMap="BaseResultMap">-->
+<!--        select-->
+<!--        <include refid="Base_Column_List" />-->
+<!--        from t_permission-->
+<!--        where flag = 0 and level=1 and type_module=0-->
+<!--        <if test="platform != null">-->
+<!--            and platform = #{platform,jdbcType=INTEGER}-->
+<!--        </if>-->
+<!--        order by sort-->
+<!--    </select>-->
+<!--    <select id="selectById" resultMap="BaseResultMap">-->
+<!--        select-->
+<!--        <include refid="Base_Column_List" />-->
+<!--        from t_permission-->
+<!--        where id =#{id}-->
+<!--    </select>-->
+<!--    <select id="findAll" resultMap="BaseResultMap">-->
+<!--        select-->
+<!--        <include refid="Base_Column_List" />-->
+<!--        from t_permission-->
+<!--        where flag = 0 and type_module=0-->
+<!--        <if test="platform != null">-->
+<!--            and platform = #{platform,jdbcType=INTEGER}-->
+<!--        </if>-->
+<!--        order by sort-->
+<!--    </select>-->
+    <select id="getSelectPermissions" resultType="com.ennova.pubinfouser.vo.PermissionVO">
+        SELECT p.id,
+               p.permission_name AS permissionName,
+               p.description,
+               p.val,
+               p.parent_val      AS parentVal,
+               p.parent_id       AS parentId,
+               p.level,
+               p.platform,
+               p.sort,
+               p.url,
+               p.icon
+        FROM t_permission p
+                 left join t_role_permission rp on rp.permission_id = p.id
+                 left join t_role r on r.id = rp.role_id
+        where 1 = 1  and r.is_delete = 0
+        order by p.sort asc
+    </select>
+
+<!--    &lt;!&ndash; 获取角色权限 &ndash;&gt;-->
+    <select id="getRolePermissions" resultType="com.ennova.pubinfouser.entity.RolePermissionEntity">
+        SELECT id, role_id AS roleId, permission_id AS permissionId
+        FROM t_role_permission
+        WHERE role_id = #{roleId}
+    </select>
+<!--    <update id="deleteById">-->
+<!--        update  t_permission set flag=1-->
+<!--        where id =#{id}-->
+<!--    </update>-->
+    <!-- 添加角色权限 -->
+    <insert id="addRolePermission">
+        INSERT INTO
+        t_role_permission
+        (role_id, permission_id) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{roleId}, #{item})
+        </foreach>
+    </insert>
+
+    <!-- 删除权限 -->
+    <delete id="delRolePermission">
+        DELETE
+        FROM t_role_permission
+        WHERE role_id = #{roleId}
+    </delete>
+
+<!--    <select id="getOpPermissions" resultType="com.ichuk.youshun.entity.PermissionEntity">-->
+<!--        SELECT *-->
+<!--        FROM t_permission-->
+<!--        WHERE parent_id = (SELECT id FROM t_permission WHERE url = #{urlName})-->
+<!--          and platform = #{platform};-->
+<!--    </select>-->
+
+<!--    <select id="checkExist" resultType="Integer">-->
+<!--        select count(*)-->
+<!--        from t_role_permission-->
+<!--        where role_id = #{roleId}-->
+<!--          and permission_id = #{pid}-->
+<!--    </select>-->
+<!--    <insert id="insert" parameterType="com.ichuk.youshun.entity.PermissionEntity">-->
+<!--    insert into t_permission (id, permission_name, description,-->
+<!--      val, parent_val, parent_id,-->
+<!--      level, platform, sort,-->
+<!--      url, icon, type_module,-->
+<!--      flag, create_time)-->
+<!--    values (#{id,jdbcType=INTEGER}, #{permissionName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},-->
+<!--      #{val,jdbcType=VARCHAR}, #{parentVal,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER},-->
+<!--      #{level,jdbcType=INTEGER}, #{platform,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER},-->
+<!--      #{url,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{typeModule,jdbcType=INTEGER},-->
+<!--      #{flag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})-->
+<!--  </insert>-->
+<!--    <insert id="insertSelective" parameterType="com.ichuk.youshun.entity.PermissionEntity">-->
+<!--        insert into t_permission-->
+<!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--            <if test="permissionName != null">-->
+<!--                permission_name,-->
+<!--            </if>-->
+<!--            <if test="description != null">-->
+<!--                description,-->
+<!--            </if>-->
+<!--            <if test="val != null">-->
+<!--                val,-->
+<!--            </if>-->
+<!--            <if test="parentVal != null">-->
+<!--                parent_val,-->
+<!--            </if>-->
+<!--            <if test="parentId != null">-->
+<!--                parent_id,-->
+<!--            </if>-->
+<!--            <if test="level != null">-->
+<!--                level,-->
+<!--            </if>-->
+<!--            <if test="platform != null">-->
+<!--                platform,-->
+<!--            </if>-->
+<!--            <if test="sort != null">-->
+<!--                sort,-->
+<!--            </if>-->
+<!--            <if test="url != null">-->
+<!--                url,-->
+<!--            </if>-->
+<!--            <if test="icon != null">-->
+<!--                icon,-->
+<!--            </if>-->
+<!--            <if test="typeModule != null">-->
+<!--                type_module,-->
+<!--            </if>-->
+<!--            <if test="flag != null">-->
+<!--                flag,-->
+<!--            </if>-->
+<!--            <if test="createTime != null">-->
+<!--                create_time,-->
+<!--            </if>-->
+<!--            <if test="permissionType != null">-->
+<!--                permission_type,-->
+<!--            </if>-->
+<!--        </trim>-->
+<!--        <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--            <if test="permissionName != null">-->
+<!--                #{permissionName,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="description != null">-->
+<!--                #{description,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="val != null">-->
+<!--                #{val,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="parentVal != null">-->
+<!--                #{parentVal,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="parentId != null">-->
+<!--                #{parentId,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="level != null">-->
+<!--                #{level,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="platform != null">-->
+<!--                #{platform,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="sort != null">-->
+<!--                #{sort,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="url != null">-->
+<!--                #{url,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="icon != null">-->
+<!--                #{icon,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="typeModule != null">-->
+<!--                #{typeModule,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="flag != null">-->
+<!--                #{flag,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="createTime != null">-->
+<!--                #{createTime,jdbcType=TIMESTAMP},-->
+<!--            </if>-->
+<!--            <if test="permissionType != null">-->
+<!--                #{permissionType,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--        </trim>-->
+<!--    </insert>-->
+<!--    <update id="updateByPrimaryKeySelective" parameterType="com.ichuk.youshun.entity.PermissionEntity">-->
+<!--        update t_permission-->
+<!--        <set>-->
+<!--            <if test="permissionName != null">-->
+<!--                permission_name = #{permissionName,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="description != null">-->
+<!--                description = #{description,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="val != null">-->
+<!--                val = #{val,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="parentVal != null">-->
+<!--                parent_val = #{parentVal,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="parentId != null">-->
+<!--                parent_id = #{parentId,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="level != null">-->
+<!--                level = #{level,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="platform != null">-->
+<!--                platform = #{platform,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="sort != null">-->
+<!--                sort = #{sort,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="url != null">-->
+<!--                url = #{url,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="icon != null">-->
+<!--                icon = #{icon,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="typeModule != null">-->
+<!--                type_module = #{typeModule,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="flag != null">-->
+<!--                flag = #{flag,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="createTime != null">-->
+<!--                create_time = #{createTime,jdbcType=TIMESTAMP},-->
+<!--            </if>-->
+<!--            <if test="permissionType != null">-->
+<!--                permission_type = #{permissionType,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--        </set>-->
+<!--        where id = #{id,jdbcType=INTEGER}-->
+<!--    </update>-->
+<!--    <update id="updateByPrimaryKey" parameterType="com.ichuk.youshun.entity.PermissionEntity">-->
+<!--    update t_permission-->
+<!--    set permission_name = #{permissionName,jdbcType=VARCHAR},-->
+<!--      description = #{description,jdbcType=VARCHAR},-->
+<!--      val = #{val,jdbcType=VARCHAR},-->
+<!--      parent_val = #{parentVal,jdbcType=VARCHAR},-->
+<!--      parent_id = #{parentId,jdbcType=INTEGER},-->
+<!--      level = #{level,jdbcType=INTEGER},-->
+<!--      platform = #{platform,jdbcType=INTEGER},-->
+<!--      sort = #{sort,jdbcType=INTEGER},-->
+<!--      url = #{url,jdbcType=VARCHAR},-->
+<!--      permission_type = #{permissionType,jdbcType=INTEGER},-->
+<!--      icon = #{icon,jdbcType=VARCHAR},-->
+<!--      type_module = #{typeModule,jdbcType=INTEGER},-->
+<!--      flag = #{flag,jdbcType=INTEGER},-->
+<!--      create_time = #{createTime,jdbcType=TIMESTAMP}-->
+<!--    where id = #{id,jdbcType=INTEGER}-->
+<!--  </update>-->
+</mapper>

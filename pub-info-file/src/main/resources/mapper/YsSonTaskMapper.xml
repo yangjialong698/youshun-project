@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfofile.dao.YsSonTaskMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfofile.entity.YsSonTask">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="ys_master_task_id" jdbcType="INTEGER" property="ysMasterTaskId" />
+    <result column="pressing_level" jdbcType="INTEGER" property="pressingLevel" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="estimate_work_time" jdbcType="INTEGER" property="estimateWorkTime" />
+    <result column="ys_team_id" jdbcType="INTEGER" property="ysTeamId" />
+    <result column="cost" jdbcType="DOUBLE" property="cost" />
+    <result column="receive_id" jdbcType="INTEGER" property="receiveId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="ys_master_file_id" jdbcType="INTEGER" property="ysMasterFileId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, `name`, ys_master_task_id, pressing_level, `status`, start_time, end_time, estimate_work_time, 
+    ys_team_id, cost, receive_id, create_time, update_time, ys_master_file_id
+  </sql>
+
+  <select id="selectAllByYsTeamIds" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from ys_son_task
+    where  ys_team_id in
+    <foreach close=")" collection="teamIds" item="item" open="(" separator=", ">
+      #{item}
+    </foreach>
+  </select>
+</mapper>

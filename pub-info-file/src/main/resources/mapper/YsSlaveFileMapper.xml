@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfofile.dao.YsSlaveFileMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfofile.entity.YsSlaveFileEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="file_master_id" jdbcType="INTEGER" property="fileMasterId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="file_md5" jdbcType="VARCHAR" property="fileMd5" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
+    <result column="open_file" jdbcType="INTEGER" property="openFile" />
+    <result column="file_size" jdbcType="VARCHAR" property="fileSize" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, file_master_id, `name`, file_md5, file_url, del_flag, open_file, file_size, create_time,
+    update_time, user_id
+  </sql>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfofile.vo.YsSlaveFileVO" useGeneratedKeys="true">
+        insert into ys_slave_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileMasterId != null">
+                file_master_id,
+            </if>
+            <if test="name != null and name != ''">
+                `name`,
+            </if>
+            <if test="fileMd5 != null and fileMd5 != ''">
+                file_md5,
+            </if>
+            <if test="fileUrl != null and fileUrl != ''">
+                file_url,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="openFile != null">
+                open_file,
+            </if>
+            <if test="fileSize != null and fileSize != ''">
+                file_size,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileMasterId != null">
+                #{fileMasterId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null and name != ''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="fileMd5 != null and fileMd5 != ''">
+                #{fileMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="fileUrl != null and fileUrl != ''">
+                #{fileUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="openFile != null">
+                #{openFile,jdbcType=INTEGER},
+            </if>
+            <if test="fileSize != null and fileSize != ''">
+                #{fileSize,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByFileMd5" resultType="java.lang.Integer">
+        select
+            count(id)
+        from
+            ys_slave_file
+        where
+            file_md5=#{fileMd5}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from ys_slave_file
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectByFileMasterId" resultType="java.lang.Integer">
+        select
+            count(id)
+        from
+            ys_slave_file
+        where
+            file_master_id=#{fileMasterId}
+    </select>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfofile.vo.YsSlaveFileVO">
+        update ys_slave_file
+        <set>
+            <if test="fileMasterId != null">
+                file_master_id = #{fileMasterId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null and name != ''">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="fileMd5 != null and fileMd5 != ''">
+                file_md5 = #{fileMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="fileUrl != null and fileUrl != ''">
+                file_url = #{fileUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="openFile != null">
+                open_file = #{openFile,jdbcType=INTEGER},
+            </if>
+            <if test="fileSize != null and fileSize != ''">
+                file_size = #{fileSize,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="deleteSlaveFiles">
+        update ys_slave_file
+        set del_flag = 1
+        where file_master_id = #{id}
+    </update>
+
+    <select id="selectAllByFileMd5AndUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ys_slave_file
+        <where>
+            del_flag = 0
+            <if test="fileMd5 != null">
+                and file_md5 = #{fileMd5,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+</mapper>

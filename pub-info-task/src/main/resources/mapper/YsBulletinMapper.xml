@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfotask.dao.YsBulletinMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfotask.entity.YsBulletin">
+    <!--@mbg.generated-->
+    <!--@Table `ys_bulletin`-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_id" jdbcType="INTEGER" property="createId" />
+    <result column="check_user_id" jdbcType="INTEGER" property="checkUserId" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    `id`, `title`, `content`, `type`, `status`, `create_id`, `check_user_id`, `check_time`,
+    `is_delete`, `create_time`, `update_time`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from `ys_bulletin`
+    where `id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from `ys_bulletin`
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsBulletin" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into `ys_bulletin` (`title`, `content`, `type`,
+      `status`, `create_id`, `check_user_id`,
+      `check_time`, `is_delete`, `create_time`,
+      `update_time`)
+    values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+      #{status,jdbcType=INTEGER}, #{createId,jdbcType=INTEGER}, #{checkUserId,jdbcType=INTEGER},
+      #{checkTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsBulletin" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into `ys_bulletin`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null and title != ''">
+        `title`,
+      </if>
+      <if test="content != null and content != ''">
+        `content`,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createId != null">
+        `create_id`,
+      </if>
+      <if test="checkUserId != null">
+        `check_user_id`,
+      </if>
+      <if test="checkTime != null">
+        `check_time`,
+      </if>
+      <if test="isDelete != null">
+        `is_delete`,
+      </if>
+      <if test="createTime != null">
+        `create_time`,
+      </if>
+      <if test="updateTime != null">
+        `update_time`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null and title != ''">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null and content != ''">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="checkUserId != null">
+        #{checkUserId,jdbcType=INTEGER},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfotask.entity.YsBulletin">
+    <!--@mbg.generated-->
+    update `ys_bulletin`
+    <set>
+      <if test="title != null and title != ''">
+        `title` = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null and content != ''">
+        `content` = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null">
+        `create_id` = #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="checkUserId != null">
+        `check_user_id` = #{checkUserId,jdbcType=INTEGER},
+      </if>
+      <if test="checkTime != null">
+        `check_time` = #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        `is_delete` = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfotask.entity.YsBulletin">
+    <!--@mbg.generated-->
+    update `ys_bulletin`
+    set `title` = #{title,jdbcType=VARCHAR},
+      `content` = #{content,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      `create_id` = #{createId,jdbcType=INTEGER},
+      `check_user_id` = #{checkUserId,jdbcType=INTEGER},
+      `check_time` = #{checkTime,jdbcType=TIMESTAMP},
+      `is_delete` = #{isDelete,jdbcType=INTEGER},
+      `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{updateTime,jdbcType=TIMESTAMP}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update `ys_bulletin`
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="`title` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.title,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="`content` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.content,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="`type` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.type,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`status` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.status,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`create_id` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.createId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`check_user_id` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.checkUserId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`check_time` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.checkTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="`is_delete` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.isDelete,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`create_time` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="`update_time` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+    </trim>
+    where `id` in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into `ys_bulletin`
+    (`title`, `content`, `type`, `status`, `create_id`, `check_user_id`, `check_time`,
+      `is_delete`, `create_time`, `update_time`)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.title,jdbcType=VARCHAR}, #{item.content,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER},
+        #{item.status,jdbcType=INTEGER}, #{item.createId,jdbcType=INTEGER}, #{item.checkUserId,jdbcType=INTEGER},
+        #{item.checkTime,jdbcType=TIMESTAMP}, #{item.isDelete,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+
+  <select id="getReviewerList" resultType="com.ennova.pubinfotask.vo.ReviewerVO">
+    SELECT
+        t1.id userId,
+        t1.username
+    FROM
+        t_user t1,
+        t_user_role t2,
+        t_role t3
+    WHERE
+        t1.id = t2.user_id
+        AND t2.role_id = t3.id
+        and (t3.role_code="task_manage" or t3.role_code="check_person")
+    order by t1.create_time desc
+  </select>
+  <select id="selectByStatusAndTitleLike" resultType="com.ennova.pubinfotask.vo.YsBulletinVO">
+        select
+			t1.id id,
+            t1.title title,
+            t1.content content,
+            t1.type type,
+            t1.status status,
+            t1.create_id createId,
+            (select username from t_user where id=t1.create_id) createName,
+            t1.check_user_id checkUserId,
+            (select username from t_user where id=t1.check_user_id) checkName,
+            t1.check_time checkTime,
+            t1.is_delete isDelete,
+            t1.create_time createTime,
+            t1.update_time updateTime
+        from
+            ys_bulletin t1
+    <where>
+      <if test="userId != null">
+       (t1.create_id = #{userId} or t1.check_user_id = #{userId})
+      </if>
+      <if test="status != null">
+        and `status`=#{status,jdbcType=INTEGER}
+      </if>
+      <if test="likeTitle != null and likeTitle != ''">
+        and  (`title` like concat('%',trim(#{likeTitle}),'%') or id like trim(#{likeTitle}))
+      </if>
+    </where>
+    <if test="orderBy != null">
+      order by ${orderBy}
+    </if>
+</select>
+  <select id="selectByTitleAndContent" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from `ys_bulletin`
+    <where>
+      <if test="title != null and title != ''">and `title`=#{title,jdbcType=VARCHAR}</if>
+      <if test="content != null and content != ''">and `content`=#{content,jdbcType=VARCHAR}</if>
+    </where>
+    </select>
+  <select id="selectByTitleAndContentAndIdNot" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from `ys_bulletin`
+    <where>
+      <if test="title != null and title != ''">and `title`=#{title,jdbcType=VARCHAR}</if>
+      <if test="content != null and content != ''">and `content`=#{content,jdbcType=VARCHAR}</if>
+      <if test="notId != null">and `id` <![CDATA[<>]]> #{notId,jdbcType=INTEGER}</if>
+    </where>
+    </select>
+  <select id="selectbyIdAndCreateId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from `ys_bulletin`
+    <where>
+      <if test="id != null">and `id`=#{id,jdbcType=INTEGER}</if>
+      <if test="createId != null">and `create_id`=#{createId,jdbcType=INTEGER}</if>
+    </where>
+  </select>
+</mapper>

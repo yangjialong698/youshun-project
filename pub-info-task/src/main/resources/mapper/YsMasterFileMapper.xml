@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfotask.dao.YsMasterFileMapper">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfotask.entity.YsMasterFile">
+        <!--@mbg.generated-->
+        <!--@Table ys_master_file-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber"/>
+    <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
+    <result column="open_file" jdbcType="INTEGER" property="openFile"/>
+    <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+    <result column="ys_file_type_id" jdbcType="INTEGER" property="ysFileTypeId"/>
+    <result column="ys_master_task_id" jdbcType="INTEGER" property="ysMasterTaskId"/>
+    <result column="ys_son_task_id" jdbcType="INTEGER" property="ysSonTaskId"/>
+    <result column="file_content" jdbcType="VARCHAR" property="fileContent"/>
+    <result column="user_id" jdbcType="INTEGER" property="userId"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+  <sql id="Base_Column_List">
+      <!--@mbg.generated-->
+      id,
+      serial_number,
+      file_name,
+      open_file,
+      del_flag,
+      ys_file_type_id,
+      ys_master_task_id,
+      ys_son_task_id,
+      file_content,
+      user_id,
+      create_time,
+      update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      <!--@mbg.generated-->
+      select
+      <include refid="Base_Column_List"/>
+      from ys_master_file
+      where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+      <!--@mbg.generated-->
+      delete
+      from ys_master_file
+      where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsMasterFile"
+          useGeneratedKeys="true">
+      <!--@mbg.generated-->
+      insert into ys_master_file (serial_number, file_name, open_file,
+                                  del_flag, ys_file_type_id, ys_master_task_id,
+                                  ys_son_task_id, file_content, user_id,
+                                  create_time, update_time)
+      values (#{serialNumber,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{openFile,jdbcType=INTEGER},
+              #{delFlag,jdbcType=INTEGER}, #{ysFileTypeId,jdbcType=INTEGER}, #{ysMasterTaskId,jdbcType=INTEGER},
+              #{ysSonTaskId,jdbcType=INTEGER}, #{fileContent,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},
+              #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id"
+          parameterType="com.ennova.pubinfotask.entity.YsMasterFile" useGeneratedKeys="true">
+      <!--@mbg.generated-->
+      insert into ys_master_file
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+          <if test="serialNumber != null and serialNumber != ''">
+              serial_number,
+          </if>
+      <if test="fileName != null and fileName != ''">
+          file_name,
+      </if>
+      <if test="openFile != null">
+          open_file,
+      </if>
+      <if test="delFlag != null">
+          del_flag,
+      </if>
+      <if test="ysFileTypeId != null">
+          ys_file_type_id,
+      </if>
+      <if test="ysMasterTaskId != null">
+          ys_master_task_id,
+      </if>
+      <if test="ysSonTaskId != null">
+          ys_son_task_id,
+      </if>
+      <if test="fileContent != null and fileContent != ''">
+          file_content,
+      </if>
+      <if test="versionNo != null and versionNo != ''">
+          version_no,
+      </if>
+      <if test="userId != null">
+          user_id,
+      </if>
+      <if test="createTime != null">
+          create_time,
+      </if>
+      <if test="updateTime != null">
+          update_time,
+      </if>
+      </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="serialNumber != null and serialNumber != ''">
+            #{serialNumber,jdbcType=VARCHAR},
+        </if>
+      <if test="fileName != null and fileName != ''">
+          #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="openFile != null">
+          #{openFile,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+          #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="ysFileTypeId != null">
+          #{ysFileTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="ysMasterTaskId != null">
+          #{ysMasterTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="ysSonTaskId != null">
+          #{ysSonTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="fileContent != null and fileContent != ''">
+          #{fileContent,jdbcType=VARCHAR},
+      </if>
+      <if test="versionNo != null and versionNo != ''">
+          #{versionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+          #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+          #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+          #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfotask.entity.YsMasterFile">
+      <!--@mbg.generated-->
+      update ys_master_file
+      <set>
+          <if test="serialNumber != null and serialNumber != ''">
+              serial_number = #{serialNumber,jdbcType=VARCHAR},
+          </if>
+      <if test="fileName != null and fileName != ''">
+          file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="openFile != null">
+          open_file = #{openFile,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+          del_flag = #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="ysFileTypeId != null">
+          ys_file_type_id = #{ysFileTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="ysMasterTaskId != null">
+          ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="ysSonTaskId != null">
+          ys_son_task_id = #{ysSonTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="fileContent != null and fileContent != ''">
+          file_content = #{fileContent,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+          user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+          update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      </set>
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfotask.entity.YsMasterFile">
+      <!--@mbg.generated-->
+      update ys_master_file
+      set serial_number     = #{serialNumber,jdbcType=VARCHAR},
+          file_name         = #{fileName,jdbcType=VARCHAR},
+          open_file         = #{openFile,jdbcType=INTEGER},
+          del_flag          = #{delFlag,jdbcType=INTEGER},
+          ys_file_type_id   = #{ysFileTypeId,jdbcType=INTEGER},
+          ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER},
+          ys_son_task_id    = #{ysSonTaskId,jdbcType=INTEGER},
+          file_content      = #{fileContent,jdbcType=VARCHAR},
+          user_id           = #{userId,jdbcType=INTEGER},
+          create_time       = #{createTime,jdbcType=TIMESTAMP},
+          update_time       = #{updateTime,jdbcType=TIMESTAMP}
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+      <!--@mbg.generated-->
+      update ys_master_file
+      <trim prefix="set" suffixOverrides=",">
+          <trim prefix="serial_number = case" suffix="end,">
+              <foreach collection="list" index="index" item="item">
+                  when id = #{item.id,jdbcType=INTEGER} then #{item.serialNumber,jdbcType=VARCHAR}
+              </foreach>
+          </trim>
+      <trim prefix="file_name = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.fileName,jdbcType=VARCHAR}
+          </foreach>
+      </trim>
+      <trim prefix="open_file = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.openFile,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="del_flag = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.delFlag,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="ys_file_type_id = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.ysFileTypeId,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="ys_master_task_id = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.ysMasterTaskId,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="ys_son_task_id = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.ysSonTaskId,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="file_content = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.fileContent,jdbcType=VARCHAR}
+          </foreach>
+      </trim>
+      <trim prefix="user_id = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.userId,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+          </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+          </foreach>
+      </trim>
+      </trim>
+      where id in
+      <foreach close=")" collection="list" item="item" open="(" separator=", ">
+          #{item.id,jdbcType=INTEGER}
+      </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+      <!--@mbg.generated-->
+      insert into ys_master_file
+      (serial_number, file_name, open_file, del_flag, ys_file_type_id, ys_master_task_id,
+       ys_son_task_id, file_content, user_id, create_time, update_time)
+      values
+      <foreach collection="list" item="item" separator=",">
+          (#{item.serialNumber,jdbcType=VARCHAR}, #{item.fileName,jdbcType=VARCHAR}, #{item.openFile,jdbcType=INTEGER},
+           #{item.delFlag,jdbcType=INTEGER}, #{item.ysFileTypeId,jdbcType=INTEGER},
+           #{item.ysMasterTaskId,jdbcType=INTEGER},
+           #{item.ysSonTaskId,jdbcType=INTEGER}, #{item.fileContent,jdbcType=VARCHAR}, #{item.userId,jdbcType=INTEGER},
+           #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+      </foreach>
+  </insert>
+  <select id="selectAllByYsMasterTaskId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from ys_master_file
+      <where>
+          del_flag = 0
+          <if test="ysMasterTaskId != null">
+              and ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER}
+          </if>
+      </where>
+  </select>
+
+    <select id="selectHasRbById" resultType="java.lang.Integer">
+        SELECT t1.id
+        FROM ys_master_file t1,
+             ys_file_type t2
+        where t1.ys_file_type_id = t2.id
+          and t1.del_flag = 0
+          and t2.del_flag = 0
+          and t2.file_prefix = 'gzrb'
+          and t1.ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER}
+          and t1.ys_son_task_id is null limit 1
+    </select>
+    <select id="selectHasJyjyById" resultType="java.lang.Integer">
+        SELECT t1.id
+        FROM ys_master_file t1,
+             ys_file_type t2
+        where t1.ys_file_type_id = t2.id
+          and t1.del_flag = 0
+          and t2.del_flag = 0
+          and t2.file_prefix = 'jyjy'
+          and t1.ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER}
+          and t1.ys_son_task_id is null limit 1
+    </select>
+
+  <select id="selectAllByYsSonTaskId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from ys_master_file
+      <where>
+          del_flag = 0
+          <if test="ysSonTaskId != null">
+              and ys_son_task_id = #{ysSonTaskId,jdbcType=INTEGER}
+          </if>
+      </where>
+  </select>
+  <select id="selectByYsFileTypeId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from ys_master_file
+      <where>
+          <if test="ysFileTypeId != null">
+              and ys_file_type_id = #{ysFileTypeId,jdbcType=INTEGER}
+          </if>
+      </where>
+  </select>
+    <!--   <select id="selectByYsMasterTaskId" resultType="com.ennova.pubinfotask.dto.MasterFileDTO">-->
+    <!--      SELECT-->
+    <!--        b.ys_file_type_id ysFileTypeId,-->
+    <!--        b.id fileMasterId-->
+    <!--    FROM-->
+    <!--		 ys_master_file b-->
+    <!--    <where>-->
+    <!--            b.del_flag = 0-->
+    <!--            <if test="ysMasterTaskId != null">-->
+    <!--                 and b.ys_master_task_id=#{ysMasterTaskId}-->
+    <!--            </if>-->
+    <!--    </where>-->
+    <!--  </select>-->
+</mapper>

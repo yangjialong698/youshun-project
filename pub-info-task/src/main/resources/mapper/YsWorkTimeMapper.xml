@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfotask.dao.YsWorkTimeMapper">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfotask.entity.YsWorkTime">
+        <!--@mbg.generated-->
+        <!--@Table ys_work_time-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="ys_son_task_id" jdbcType="INTEGER" property="ysSonTaskId"/>
+    <result column="take_time" jdbcType="TIMESTAMP" property="takeTime"/>
+    <result column="total_consume" jdbcType="INTEGER" property="totalConsume"/>
+    <result column="surplus" jdbcType="INTEGER" property="surplus"/>
+    <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    <result column="receive_id" jdbcType="INTEGER" property="receiveId"/>
+    <result column="executor_id" jdbcType="INTEGER" property="executorId"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+  <sql id="Base_Column_List">
+      <!--@mbg.generated-->
+      id, ys_son_task_id, take_time, total_consume, surplus, remark, receive_id, executor_id,
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      <!--@mbg.generated-->
+      select
+      <include refid="Base_Column_List"/>
+      from ys_work_time
+      where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+      <!--@mbg.generated-->
+      delete
+      from ys_work_time
+      where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsWorkTime"
+          useGeneratedKeys="true">
+      <!--@mbg.generated-->
+      insert into ys_work_time (ys_son_task_id, take_time, total_consume,
+                                surplus, remark, receive_id,
+                                executor_id, create_time, update_time)
+      values (#{ysSonTaskId,jdbcType=INTEGER}, #{takeTime,jdbcType=TIMESTAMP}, #{totalConsume,jdbcType=INTEGER},
+              #{surplus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{receiveId,jdbcType=INTEGER},
+              #{executorId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsWorkTime"
+          useGeneratedKeys="true">
+      <!--@mbg.generated-->
+      insert into ys_work_time
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+          <if test="ysSonTaskId != null">
+              ys_son_task_id,
+          </if>
+      <if test="takeTime != null">
+          take_time,
+      </if>
+      <if test="totalConsume != null">
+          total_consume,
+      </if>
+      <if test="surplus != null">
+          surplus,
+      </if>
+      <if test="remark != null and remark != ''">
+          remark,
+      </if>
+      <if test="receiveId != null">
+          receive_id,
+      </if>
+      <if test="executorId != null">
+          executor_id,
+      </if>
+      <if test="createTime != null">
+          create_time,
+      </if>
+      <if test="updateTime != null">
+          update_time,
+      </if>
+      </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="ysSonTaskId != null">
+            #{ysSonTaskId,jdbcType=INTEGER},
+        </if>
+      <if test="takeTime != null">
+          #{takeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalConsume != null">
+          #{totalConsume,jdbcType=INTEGER},
+      </if>
+      <if test="surplus != null">
+          #{surplus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null and remark != ''">
+          #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveId != null">
+          #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="executorId != null">
+          #{executorId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+          #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+          #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfotask.entity.YsWorkTime">
+      <!--@mbg.generated-->
+      update ys_work_time
+      <set>
+          <if test="ysSonTaskId != null">
+              ys_son_task_id = #{ysSonTaskId,jdbcType=INTEGER},
+          </if>
+      <if test="takeTime != null">
+          take_time = #{takeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalConsume != null">
+          total_consume = #{totalConsume,jdbcType=INTEGER},
+      </if>
+      <if test="surplus != null">
+          surplus = #{surplus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null and remark != ''">
+          remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveId != null">
+          receive_id = #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="executorId != null">
+          executor_id = #{executorId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+          update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      </set>
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfotask.entity.YsWorkTime">
+      <!--@mbg.generated-->
+      update ys_work_time
+      set ys_son_task_id = #{ysSonTaskId,jdbcType=INTEGER},
+          take_time      = #{takeTime,jdbcType=TIMESTAMP},
+          total_consume  = #{totalConsume,jdbcType=INTEGER},
+          surplus        = #{surplus,jdbcType=INTEGER},
+          remark         = #{remark,jdbcType=VARCHAR},
+          receive_id     = #{receiveId,jdbcType=INTEGER},
+          executor_id    = #{executorId,jdbcType=INTEGER},
+          create_time    = #{createTime,jdbcType=TIMESTAMP},
+          update_time    = #{updateTime,jdbcType=TIMESTAMP}
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+      <!--@mbg.generated-->
+      update ys_work_time
+      <trim prefix="set" suffixOverrides=",">
+          <trim prefix="ys_son_task_id = case" suffix="end,">
+              <foreach collection="list" index="index" item="item">
+                  when id = #{item.id,jdbcType=INTEGER} then #{item.ysSonTaskId,jdbcType=INTEGER}
+              </foreach>
+          </trim>
+      <trim prefix="take_time = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.takeTime,jdbcType=TIMESTAMP}
+          </foreach>
+      </trim>
+      <trim prefix="total_consume = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.totalConsume,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="surplus = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.surplus,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="remark = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.remark,jdbcType=VARCHAR}
+          </foreach>
+      </trim>
+      <trim prefix="receive_id = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.receiveId,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="executor_id = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.executorId,jdbcType=INTEGER}
+          </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+          </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+          <foreach collection="list" index="index" item="item">
+              when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+          </foreach>
+      </trim>
+      </trim>
+      where id in
+      <foreach close=")" collection="list" item="item" open="(" separator=", ">
+          #{item.id,jdbcType=INTEGER}
+      </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+      <!--@mbg.generated-->
+      insert into ys_work_time
+      (ys_son_task_id, take_time, total_consume, surplus, remark, receive_id, executor_id,
+       create_time, update_time)
+      values
+      <foreach collection="list" item="item" separator=",">
+          (#{item.ysSonTaskId,jdbcType=INTEGER}, #{item.takeTime,jdbcType=TIMESTAMP},
+           #{item.totalConsume,jdbcType=INTEGER},
+           #{item.surplus,jdbcType=INTEGER}, #{item.remark,jdbcType=VARCHAR}, #{item.receiveId,jdbcType=INTEGER},
+           #{item.executorId,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP},
+           #{item.updateTime,jdbcType=TIMESTAMP})
+      </foreach>
+  </insert>
+  <delete id="batchDeleteByPrimaryKey">
+      delete
+      from ys_work_time where id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+          #{item}
+      </foreach>
+  </delete>
+
+  <select id="selectOneByYsSonTaskId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from ys_work_time
+      <where>
+          <if test="ysSonTaskId != null">
+              and ys_son_task_id = #{ysSonTaskId,jdbcType=INTEGER}
+          </if>
+      </where>
+      order by id desc
+      limit 1
+  </select>
+    <!--auto generated by MybatisCodeHelper on 2022-05-20-->
+    <select id="selectAllByYsSonTaskIdInAndExecutorIdIn" resultType="com.ennova.pubinfotask.dto.YsWorkTimeDTO">
+        select t3.username       executorName,
+               t1.id,
+               t1.ys_son_task_id ysSonTaskId,
+               t1.take_time      takeTime,
+               t1.total_consume  totalConsume,
+               t1.surplus,
+               t1.remark,
+               t1.executor_id    executorId,
+               t1.create_time    createTime,
+               t1.update_time    updateTime,
+               t1.receive_id     receiveId
+        from ys_work_time t1,
+             ys_team t2,
+             t_user t3
+        <where>
+            t1.executor_id = t2.id
+              and t1.executor_id = t3.id
+            <if test="ysSonTaskIdCollection != null and ysSonTaskIdCollection.size() > 0">
+                and ys_son_task_id in
+                <foreach item="item" index="index" collection="ysSonTaskIdCollection"
+                         open="(" separator="," close=")">
+                    #{item,jdbcType=INTEGER}
+                </foreach>
+            </if>
+      <if test="executorIdCollection != null and executorIdCollection.size() > 0">
+          and executor_id in
+          <foreach item="item" index="index" collection="executorIdCollection"
+                   open="(" separator="," close=")">
+              #{item,jdbcType=INTEGER}
+          </foreach>
+      </if>
+        </where>
+    </select>
+  <select id="selectAllByYsSonTaskId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from ys_work_time
+      <where>
+          <if test="ysSonTaskId != null">
+              and ys_son_task_id = #{ysSonTaskId,jdbcType=INTEGER}
+          </if>
+      </where>
+  </select>
+</mapper>

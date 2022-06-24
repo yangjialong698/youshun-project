@@ -1,0 +1,303 @@
+package com.ennova.pubinfouser.service;
+
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.IdUtil;
+
+import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfocommon.utils.JWTUtil;
+import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfocommon.vo.PageUtil;
+import com.ennova.pubinfouser.dao.BaseDao;
+import com.ennova.pubinfouser.dao.UserDao;
+import com.ennova.pubinfouser.dao.UserDeptMapper;
+import com.ennova.pubinfouser.dto.BaseDTO;
+import com.ennova.pubinfouser.dto.UserDTO;
+import com.ennova.pubinfouser.dao.UserRoleMapper;
+import com.ennova.pubinfouser.entity.UserDept;
+import com.ennova.pubinfouser.entity.UserEntity;
+import com.ennova.pubinfouser.entity.UserRole;
+import com.ennova.pubinfouser.service.feign.PubInfoTaskClient;
+import com.ennova.pubinfouser.vo.CheckCodeVO;
+import com.ennova.pubinfouser.vo.DeptNumVO;
+import com.ennova.pubinfouser.vo.PerDeptNumVO;
+import com.ennova.pubinfouser.vo.UserVO;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.List;
+
+import static org.springframework.util.DigestUtils.md5DigestAsHex;
+
+@Service
+@Slf4j
+public class UserService extends BaseService<UserEntity> {
+
+    @Resource
+    private UserDao userDao;
+
+    @Resource
+    private RoleService roleService;
+
+    @Autowired
+    private PubInfoTaskClient pubInfoTaskClient;
+
+    @Autowired
+    private BaseDao baseDao;
+
+//    @Resource
+//    private RoleDao roleDao;
+
+//    @Resource
+//    private PermissionDao permissionDao;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+
+    @Autowired
+    private UserDeptMapper userDeptMapper;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+
+    public Callback<UserVO> login(String account, String password) {
+        System.out.println("*****************路由测试***************"+account+" -- "+password);
+        if(account == null || "".equals(account)) {
+            return Callback.error("请输入账号");
+        }
+        if(password == null || "".equals(password)) {
+            return Callback.error("请输入密码");
+        }
+        UserVO userVO = userDao.getUserInfoByMobile(account);
+        if(userVO == null) {
+            return Callback.error("号码未注册");
+        }
+        List<UserRole>  userRoleList = userRoleMapper.selectByUserId(userVO.getId());
+        UserRole userRole = null ;
+        if (CollectionUtil.isNotEmpty(userRoleList)){
+            userRole = userRoleList.get(0);
+        }else {
+            return Callback.error("用户无角色,无法登入");
+        }
+        // 验证密码是否正确
+        try {
+            password = md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!password.equals(userVO.getPassword())) {
+            return Callback.error("手机号或密码错误，请重试");
+        }
+        if(userVO.getStatus().equals("1")) {
+            return Callback.error("账号已被禁用，请确认");
+        }
+        //生成token
+        String token = JWTUtil.generateTokenForLog(account,userVO.getId(), userVO.getCompany().toString());
+        //生成刷新token
+        String refreshToken = JWTUtil.generateRefToken(account,userVO.getId(), userVO.getCompany().toString());
+        userVO.setToken(token);
+        userVO.setRefreshToken(refreshToken);
+        userVO.setPassword("");
+        userVO.setMenu(roleService.getMenu(userRole.getRoleId()));
+        return Callback.success(userVO);
+    }
+
+    public Callback<String> refreshToken(String refreshToken) {
+        if (StringUtils.isEmpty(refreshToken)){
+            return Callback.error("refreshToken不能为空");
+        }
+        if (!JWTUtil.verify(refreshToken)){
+            return  new Callback(1004, "refreshToken已过期", null);
+        }
+        com.ennova.pubinfocommon.vo.UserVO userVO = JWTUtil.getUserVOByToken(refreshToken);
+        String username = userVO.getUsername();
+        Integer userId = userVO.getId();
+        String company = userVO.getCompany();
+        String newToken = JWTUtil.generateTokenForLog(username, userId, company);
+        return Callback.success(newToken);
+    }
+
+    @Transactional
+    public Callback<Boolean> addUser(UserDTO userDTO) {
+        UserEntity userEntity=new UserEntity();
+        BeanUtils.copyProperties(userDTO,userEntity);
+        if (!userDTO.getPassword().equals(userDTO.getConPassWord())) {
+            return Callback.error("密码不一致！请重新输入");
+        }
+        UserVO tempUserByMo = userDao.getUserInfoByMobile(userEntity.getMobile());
+        if(tempUserByMo != null) {
+            return Callback.error("手机号已经存在！请确认");
+        }
+        List<UserVO> userVOList = userDao.getUserInfoByUname(userEntity.getUsername());
+        if(CollectionUtil.isNotEmpty(userVOList)) {
+            return Callback.error("该用户名已经存在！请确认");
+        }
+        Integer roleId = userDTO.getRoleId();
+        Integer department = userDTO.getDepartment();
+        if(StringUtils.isNotEmpty(userEntity.getPassword())) {
+            userEntity.setPassword(md5DigestAsHex(userEntity.getPassword().getBytes(StandardCharsets.UTF_8)));
+        }
+        //保存用户表
+        userDao.insert(userEntity);
+        //保存用户部门表
+        if(null != department){
+            UserDept userDept=new UserDept();
+            userDept.setUserId(userEntity.getId());
+            userDept.setDeptId(department);
+            userDept.setCreateTime(new Date());
+            userDeptMapper.insertSelective(userDept);
+        }
+        //保存用户角色表
+        if(roleId !=null){
+            UserRole userRole=new UserRole();
+            userRole.setUserId(userEntity.getId());
+            userRole.setRoleId(roleId);
+            userRole.setCreateTime(new Date());
+            userRoleMapper.insertSelective(userRole);
+        }
+        return Callback.success(true);
+    }
+
+
+    public Callback<UserVO> getUserById(Integer id) {
+
+        if(id == null || id <= 0) {
+            return Callback.error("参数错误");
+        }
+        return Callback.success(userDao.getUserById(id));
+
+    }
+
+
+    public Callback deleteUser(Integer id) {
+        if (id == null || id <= 0) {
+            return Callback.error("参数错误");
+        }
+        Callback callback = pubInfoTaskClient.selectByHaveUserId(id);
+        Integer count = (Integer) callback.data;
+        if (count > 0){
+            return Callback.error("该用户已创建任务无法删除");
+        }
+        //删除该用户对应的角色
+        userRoleMapper.deleteByUserId(id);
+        //删除该用户对应的角色
+        userDeptMapper.deleteByUserId(id);
+        //删除用户
+        int result = userDao.delete(id);
+        if (result < 1) {
+            return Callback.error("操作失败");
+        }
+        return Callback.success("删除成功");
+    }
+
+    public Callback<BaseVO<UserVO>> listUsers(Integer page, Integer pageSize, Integer company,Integer roleId,Integer department, String searchKey) {
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
+        }
+        Page<UserVO> startPage = PageHelper.startPage(page, pageSize);
+        List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey);
+        BaseVO<UserVO> baseVO = new BaseVO<>(userVOList, new PageUtil(pageSize, (int)startPage.getTotal(), page));
+        return Callback.success(baseVO);
+    }
+
+    @Transactional
+    public Callback updateUser(UserDTO userDTO) {
+        UserEntity userEntity = BaseDTO.convertBean(userDTO);
+        if (StringUtils.isNotEmpty(userDTO.getPassword()) || StringUtils.isNotEmpty(userDTO.getConPassWord())){
+            if (!userDTO.getPassword().equals(userDTO.getConPassWord())) {
+                return Callback.error("密码不一致！请重新输入");
+            }
+        }
+        if(StringUtils.isNotEmpty(userEntity.getPassword())) {
+            userEntity.setPassword(md5DigestAsHex(userEntity.getPassword().getBytes(StandardCharsets.UTF_8)));
+        }
+        UserVO userIn = userDao.getUserById(userEntity.getId());
+        if (!userIn.getMobile().equals(userEntity.getMobile())){
+            UserVO tempUser = userDao.getUserInfoByMobile(userEntity.getMobile());
+            if(tempUser != null) {
+                return Callback.error("手机号已经存在！请确认");
+            }
+        }
+        //更新用户表
+        userDao.update(userEntity);
+        //更新用户部门表
+        List<UserDept> userDepts = userDeptMapper.selectByUserId(userEntity.getId());
+        if (CollectionUtil.isNotEmpty(userDepts)){
+            UserDept userDept = userDepts.get(0);
+            userDept.setUserId(userDTO.getId());
+            userDept.setDeptId(userDTO.getDepartment());
+            userDeptMapper.updateByPrimaryKeySelective(userDept);
+        }
+        //更新用户角色表
+        List<UserRole> userRoles = userRoleMapper.selectByUserId(userEntity.getId());
+        if (CollectionUtil.isNotEmpty(userRoles)){
+            UserRole userRole = userRoles.get(0);
+            userRole.setUserId(userDTO.getId());
+            userRole.setRoleId(userDTO.getRoleId());
+            userRoleMapper.updateByPrimaryKeySelective(userRole);
+        }
+        return Callback.success("用户修改成功");
+    }
+
+    public Callback<DeptNumVO> getCouPerDept() {
+        DeptNumVO deptNumVO = new DeptNumVO();
+        List<PerDeptNumVO> perDeptNumVOS = userDao.getCouPerDept();
+        deptNumVO.setDeptNum(perDeptNumVOS);
+        int total = perDeptNumVOS.stream().mapToInt(PerDeptNumVO::getDeptCou).sum();
+        deptNumVO.setTotalNum(total);
+        return Callback.success(deptNumVO);
+    }
+
+    public Callback resetPassword(UserDTO userDTO) {
+        UserEntity userEntity = BaseDTO.convertBean(userDTO);
+        if (!userDTO.getPassword().equals(userDTO.getConPassWord())) {
+            return Callback.error("密码不一致！请重新输入");
+        }
+        if(StringUtils.isNotEmpty(userEntity.getPassword())) {
+            userEntity.setPassword(md5DigestAsHex(userEntity.getPassword().getBytes(StandardCharsets.UTF_8)));
+        }
+        //更新用户表
+        int i = userDao.update(userEntity);
+        if (i>0){
+            return Callback.success("重设密码成功");
+        }
+        return Callback.error("重设密码失败");
+    }
+
+    public Callback<UserVO> getUserByMobile(String mobile) {
+        if(StringUtils.isEmpty(mobile)) {
+            return Callback.error("参数错误");
+        }
+        UserVO userVO = userDao.getUserByMobile(mobile);
+        if (null != userVO){
+            return Callback.success(userVO);
+        }
+        return Callback.error("手机号暂未注册");
+    }
+
+    public Callback checkCode(CheckCodeVO checkCodeVO) {
+        //校验短信验证码
+        String verificationCode = checkCodeVO.getVerificationCode();
+        String verificationCodeService = redisTemplate.opsForValue().get("reset_password_sms_code:" + checkCodeVO.getMobile());
+        if (!verificationCode.equals(verificationCodeService)){
+            return Callback.error("验证码错误,请重新输入");
+        }
+        return Callback.success("验证成功");
+    }
+
+
+}

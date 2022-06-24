@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfouser.dao.RoleDao">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfouser.entity.RoleEntity">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+        <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
+        <result column="use_status" jdbcType="VARCHAR" property="useStatus" />
+        <result column="is_operate" jdbcType="INTEGER" property="isOperate" />
+        <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+        <result column="company" jdbcType="INTEGER" property="company" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, role_name, role_code,use_status, is_operate, is_delete, company, create_time, update_time
+    </sql>
+
+    <select id="getRolesByName" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from t_role
+        where is_delete = 0
+        and role_name = #{roleName}
+    </select>
+
+    <select id="selectByRoleCode" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from t_role
+        where is_delete = 0
+        and role_code = #{roleCode}
+    </select>
+
+    <insert id="insertSelective" parameterType="com.ennova.pubinfouser.entity.RoleEntity">
+        insert into t_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleName != null">
+                role_name,
+            </if>
+            <if test="roleCode != null">
+                role_code,
+            </if>
+            <if test="useStatus != null">
+                use_status,
+            </if>
+            <if test="isOperate != null">
+                is_operate,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="company != null">
+                company,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleName != null">
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleCode != null">
+                #{roleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="useStatus != null">
+                #{useStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="isOperate != null">
+                #{isOperate,jdbcType=INTEGER},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="company != null">
+                #{company,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getDeptById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from t_role
+        where is_delete = 0
+        and id = #{id}
+    </select>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfouser.entity.RoleEntity">
+        update t_role
+        <set>
+            <if test="roleName != null">
+                role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleCode != null">
+                role_code = #{roleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="useStatus != null">
+                use_status = #{useStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="isOperate != null">
+                is_operate = #{isOperate,jdbcType=INTEGER},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="company != null">
+                company = #{company,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType="TIMESTAMP"},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType="TIMESTAMP"},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="listRoles" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from t_role
+        where is_delete = 0
+        and company = #{company}
+        and flag = 0
+        <if test="searchKey != null and searchKey != ''">
+            and  trim(replace(role_name,' ','')) like trim(replace(CONCAT('%',#{searchKey},'%'),' ',''))
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="getRoleById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from t_role
+        where is_delete = 0
+        and id = #{id}
+    </select>
+
+    <update id="delete">
+        update t_role
+        set is_delete = 1
+        where id = #{id}
+    </update>
+
+    <select id="listRoleList" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from t_role
+        where is_delete = 0
+        and use_status = 0
+        and flag = 0
+        and company = #{company}
+    </select>
+
+
+
+
+</mapper>

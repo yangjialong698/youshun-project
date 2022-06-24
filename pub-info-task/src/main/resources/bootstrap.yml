@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: pub-info-task-config
+  cloud:
+    nacos:
+      config:
+        file-extension: yaml
+#        server-addr: 172.23.98.247:8848
+        #server-addr: 192.168.0.113:8848
+        #server-addr: 192.168.31.102:8848
+
+        #开发
+        server-addr: 139.196.150.88:8848
+
+        #本地测试
+        #server-addr: 172.168.3.104:8848
+
+        #生产
+        #server-addr: 123.60.73.204:8848
+
+
+
+logging:
+  level:
+    com:
+      ennova:
+        pubinfotask:
+          dao: debug
+
+
+

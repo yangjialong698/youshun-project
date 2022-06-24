@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfotask.dao.YsSonTaskMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfotask.entity.YsSonTask">
+    <!--@mbg.generated-->
+    <!--@Table ys_son_task-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="ys_master_task_id" jdbcType="INTEGER" property="ysMasterTaskId" />
+    <result column="pressing_level" jdbcType="INTEGER" property="pressingLevel" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="estimate_work_time" jdbcType="INTEGER" property="estimateWorkTime" />
+    <result column="ys_team_id" jdbcType="INTEGER" property="ysTeamId" />
+    <result column="cost" jdbcType="DOUBLE" property="cost" />
+    <result column="receive_id" jdbcType="INTEGER" property="receiveId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="ys_master_file_id" jdbcType="INTEGER" property="ysMasterFileId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, ys_master_task_id, pressing_level, `status`, start_time, end_time, estimate_work_time, 
+    ys_team_id, cost, receive_id, create_time, update_time, ys_master_file_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from ys_son_task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from ys_son_task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsSonTask" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_son_task (`name`, ys_master_task_id, pressing_level, 
+      `status`, start_time, end_time, 
+      estimate_work_time, ys_team_id, cost, 
+      receive_id, create_time, update_time, 
+      ys_master_file_id)
+    values (#{name,jdbcType=VARCHAR}, #{ysMasterTaskId,jdbcType=INTEGER}, #{pressingLevel,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{estimateWorkTime,jdbcType=INTEGER}, #{ysTeamId,jdbcType=INTEGER}, #{cost,jdbcType=DOUBLE}, 
+      #{receiveId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{ysMasterFileId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsSonTask" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_son_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="ysMasterTaskId != null">
+        ys_master_task_id,
+      </if>
+      <if test="pressingLevel != null">
+        pressing_level,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="estimateWorkTime != null">
+        estimate_work_time,
+      </if>
+      <if test="ysTeamId != null">
+        ys_team_id,
+      </if>
+      <if test="cost != null">
+        cost,
+      </if>
+      <if test="receiveId != null">
+        receive_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="ysMasterFileId != null">
+        ys_master_file_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="ysMasterTaskId != null">
+        #{ysMasterTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="pressingLevel != null">
+        #{pressingLevel,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="estimateWorkTime != null">
+        #{estimateWorkTime,jdbcType=INTEGER},
+      </if>
+      <if test="ysTeamId != null">
+        #{ysTeamId,jdbcType=INTEGER},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=DOUBLE},
+      </if>
+      <if test="receiveId != null">
+        #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ysMasterFileId != null">
+        #{ysMasterFileId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfotask.entity.YsSonTask">
+    <!--@mbg.generated-->
+    update ys_son_task
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="ysMasterTaskId != null">
+        ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="pressingLevel != null">
+        pressing_level = #{pressingLevel,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="estimateWorkTime != null">
+        estimate_work_time = #{estimateWorkTime,jdbcType=INTEGER},
+      </if>
+      <if test="ysTeamId != null">
+        ys_team_id = #{ysTeamId,jdbcType=INTEGER},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=DOUBLE},
+      </if>
+      <if test="receiveId != null">
+        receive_id = #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ysMasterFileId != null">
+        ys_master_file_id = #{ysMasterFileId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfotask.entity.YsSonTask">
+    <!--@mbg.generated-->
+    update ys_son_task
+    set `name` = #{name,jdbcType=VARCHAR},
+      ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER},
+      pressing_level = #{pressingLevel,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      estimate_work_time = #{estimateWorkTime,jdbcType=INTEGER},
+      ys_team_id = #{ysTeamId,jdbcType=INTEGER},
+      cost = #{cost,jdbcType=DOUBLE},
+      receive_id = #{receiveId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      ys_master_file_id = #{ysMasterFileId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update ys_son_task
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="`name` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="ys_master_task_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.ysMasterTaskId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="pressing_level = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.pressingLevel,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`status` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.status,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="start_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.startTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="end_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.endTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="estimate_work_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.estimateWorkTime,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="ys_team_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.ysTeamId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="cost = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.cost,jdbcType=DOUBLE}
+        </foreach>
+      </trim>
+      <trim prefix="receive_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.receiveId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="ys_master_file_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.ysMasterFileId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_son_task
+    (`name`, ys_master_task_id, pressing_level, `status`, start_time, end_time, estimate_work_time, 
+      ys_team_id, cost, receive_id, create_time, update_time, ys_master_file_id)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.name,jdbcType=VARCHAR}, #{item.ysMasterTaskId,jdbcType=INTEGER}, #{item.pressingLevel,jdbcType=INTEGER}, 
+        #{item.status,jdbcType=INTEGER}, #{item.startTime,jdbcType=TIMESTAMP}, #{item.endTime,jdbcType=TIMESTAMP}, 
+        #{item.estimateWorkTime,jdbcType=INTEGER}, #{item.ysTeamId,jdbcType=INTEGER}, #{item.cost,jdbcType=DOUBLE}, 
+        #{item.receiveId,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, 
+        #{item.ysMasterFileId,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+  <update id="updateSonTaskByMasterId">
+        update ys_son_task set receive_id =#{receiveId}  where ys_master_task_id =#{id}
+  </update>
+
+  <!-- 查询team中执行人的主任务名、主任务认领人的主任务名，提供给子任务中查主任务的名称 -->
+  <select id="selectMasterNameByReceiveId" resultType="java.util.LinkedHashMap">
+<!--    SELECT-->
+<!--        a2.id,-->
+<!--        a2.name-->
+<!--    FROM-->
+<!--        ( SELECT distinct ys_master_task_id FROM ys_team-->
+<!--      <where>-->
+<!--          <if test="userId != null">-->
+<!--               (user_id in (#{userId})-->
+<!--               or executor_id in (#{userId}))-->
+<!--          </if>-->
+<!--      </where>-->
+<!--      GROUP BY ys_master_task_id ) a1,-->
+<!--        ys_master_task a2-->
+<!--    WHERE-->
+<!--        a1.ys_master_task_id = a2.id-->
+<!--    order by a2.create_time desc-->
+     select * from
+        ((SELECT
+                a2.id,
+                a2.name
+            FROM
+                ( SELECT
+                distinct ys_master_task_id
+            FROM
+                ys_team
+            <where>
+                <if test="userId != null">
+                         executor_id in (#{userId})
+                   </if>
+            </where>
+
+            GROUP BY
+                ys_master_task_id ) a1,
+                ys_master_task a2
+            WHERE
+                a1.ys_master_task_id = a2.id)
+        union all
+            ( SELECT
+                t1.id,
+                t1.NAME
+                FROM
+                    ys_master_task t1,
+                    ys_task_receive t2
+                <where>
+                    t1.id = t2.ys_master_task_id
+                    <if test="userId != null">
+                        AND t2.receive_id IN ( #{userId} )
+                    </if>
+                </where>
+      )) c1 GROUP BY c1.id desc
+  </select>
+
+  <select id="selectMasterNameByExecutor" resultType="java.util.LinkedHashMap">
+        select
+            t2.id,
+            t2.name
+        from
+            ys_team t1,
+            ys_master_task t2
+        where
+            t1.ys_master_task_id = t2.id
+            and t2.STATUS != 0
+            and t2.STATUS !=1
+            <if test="executorId">
+              and t1.executor_id =#{executorId}
+            </if>
+        group by t2.id
+  </select>
+  <select id="selectMasterNameNotCloseByReceiveId" resultType="java.util.LinkedHashMap">
+        select distinct
+            t1.id,
+            t1.name
+       from
+            ys_master_task t1,
+            ys_task_receive t2
+       where
+           t1.status != 0 and t1.status !=1 and t1.status !=5
+           and t1.id=t2.ys_master_task_id
+       <if test="list != null and list.size() != 0">
+           and t2.receive_id in
+            <foreach close=")" collection="list" item="item" open="(" separator=", ">
+                #{item}
+            </foreach>
+        </if>
+       ORDER BY t1.create_time desc
+  </select>
+
+   <select id="selectMasterNameNotCloseByExecutor" resultType="java.util.LinkedHashMap">
+       select
+           distinct
+           t1.id,
+           t1.name
+       from
+           ys_master_task t1,
+           ys_team t2
+       where
+           t2.ys_master_task_id = t1.id
+       and  t1.status != 0
+       and t1.status !=1
+       and t1.status !=5
+       and t2.is_delete=0
+         <if test="executorId != null">
+             and t2.executor_id =#{executorId}
+         </if>
+       order by
+           t2.create_time desc
+  </select>
+
+  <update id="updateByYsMasterTaskId">
+  update ys_son_task
+    <set>
+      <if test="updated.name != null and updated.name != ''">name = #{updated.name,jdbcType=VARCHAR},</if>
+      <if test="updated.pressingLevel != null">
+        pressing_level = #{updated.pressingLevel,jdbcType=INTEGER},
+      </if>
+      <if test="updated.status != null">status = #{updated.status,jdbcType=INTEGER},</if>
+      <if test="updated.startTime != null">start_time = #{updated.startTime,jdbcType=TIMESTAMP},</if>
+      <if test="updated.endTime != null">end_time = #{updated.endTime,jdbcType=TIMESTAMP},</if>
+      <if test="updated.estimateWorkTime != null">
+        estimate_work_time = #{updated.estimateWorkTime,jdbcType=INTEGER},
+      </if>
+      <if test="updated.ysTeamId != null">ys_team_id = #{updated.ysTeamId,jdbcType=INTEGER},</if>
+      <if test="updated.cost != null">cost = #{updated.cost,jdbcType=INTEGER},</if>
+      <if test="updated.receiveId != null">receive_id = #{updated.receiveId,jdbcType=INTEGER},</if>
+      <if test="updated.createTime != null">create_time = #{updated.createTime,jdbcType=TIMESTAMP},</if>
+      <if test="updated.updateTime != null">update_time = #{updated.updateTime,jdbcType=TIMESTAMP},</if>
+    </set>
+    where ys_master_task_id=#{updated.ysMasterTaskId,jdbcType=INTEGER}
+ </update>
+ <select id="selectAllByYsMasterTaskIdAndYsTeamId" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List" />
+    from ys_son_task
+    <where>
+      <if test="ysMasterTaskId != null">and ys_master_task_id=#{ysMasterTaskId,jdbcType=INTEGER}</if>
+      <if test="ysTeamId != null">and ys_team_id=#{ysTeamId,jdbcType=INTEGER}</if>
+    </where>
+  </select>
+
+  <select id="selectSonTaskPagelist" resultType="com.ennova.pubinfotask.vo.YsSonTaskPageListVO">
+    SELECT
+        t1.id,
+        t1.name,
+        t3.id teamUserId,
+        t5.username username,
+        t2.name masterName,
+        t1.start_time startTime,
+        t1.end_time endTime,
+        t1.estimate_work_time estimateWorkTime, -- 预计
+        -- 使用
+        case when t1.id then
+        (select sum(total_consume) from ys_work_time where ys_son_task_id = t1.id) else 0 end as totalConsume, -- 消耗
+        t1.receive_id receiveId,
+        t1.pressing_level pressingLevel,
+        t1.status
+    FROM
+        ys_son_task t1,
+        ys_master_task t2,
+        ys_team t3,
+        ys_task_receive t4,
+        t_user t5
+    <where>
+      t1.ys_master_task_id=t2.id
+      and t2.id=t4.ys_master_task_id
+      and t1.ys_team_id = t3.id
+      and t3.executor_id = t5.id
+      <if test="status != null">
+           and t1.status=#{status}
+      </if>
+      <if test="teamUserId != null">
+           and t3.id=#{teamUserId}
+      </if>
+<!--      <if test="masterTaskName != null and masterTaskName != ''">-->
+<!--          and t2.name like concat('%',trim(#{masterTaskName}),'%')-->
+<!--      </if>-->
+      <if test="masterTaskId != null">
+          and t2.id = #{masterTaskId}
+      </if>
+      <if test="sonTaskName != null and sonTaskName != ''">
+           and t1.name like concat('%',trim(#{sonTaskName}),'%')
+      </if>
+      <if test="dto.userList != null and dto.userList.size() != 0">
+         and (t4.receive_id in
+          <foreach close=")" collection="dto.userList" item="item" open="(" separator=", ">
+              #{item}
+          </foreach>
+           or t3.executor_id in
+           <foreach close=")" collection="dto.userList" item="item" open="(" separator=", ">
+              #{item}
+          </foreach>
+          )
+      </if>
+      <if test="dto.masterIds != null and dto.masterIds.size() != 0">
+         and t2.id in
+          <foreach close=")" collection="dto.masterIds" item="masterTaskId" open="(" separator=", ">
+              #{masterTaskId}
+          </foreach>
+      </if>
+    </where>
+    order by t1.create_time desc
+  </select>
+
+  <select id="selectSonTaskOne" resultType="com.ennova.pubinfotask.vo.EditSontTaskAndFileVO">
+       SELECT
+            t1.id,t1.`name`,t1.ys_master_task_id ysMasterTaskId,t1.pressing_level pressingLevel,t1.`status`,
+            t1.start_time startTime,t1.end_time endTime,t1.estimate_work_time estimateWorkTime,t1.ys_team_id ysTeamId,t1.cost,t1.create_time createTime,
+            t1.update_time updateTime, t2.id masterFileId, t2.ys_file_type_id ysFileTypeId
+        FROM
+            ys_son_task t1
+                    left join ys_master_file t2 on  t1.ys_master_file_id = t2.id
+        where
+           t1.id =#{sonTaskId}
+  </select>
+
+  <select id="selectEstimateHourByMasterTaskId" resultType="com.ennova.pubinfotask.vo.WorkTimeResidueVO">
+      SELECT
+        t1.estimate_hour total,
+        t1.task_end_date taskEndDate
+      FROM
+        ys_master_task t1
+      WHERE
+        t1.STATUS != 0
+      AND t1.STATUS != 1
+      AND t1.STATUS != 5
+    <if test="masterTaskId != null">
+      AND t1.id = #{masterTaskId}
+    </if>
+  </select>
+
+  <select id="selectWorkTimeResidueDTOByMasterId" resultType="com.ennova.pubinfotask.dto.WorkTimeResidueDTO">
+    SELECT
+      t3.id sonId,
+      t3.estimate_work_time ewtime
+    FROM
+      ys_son_task t3,
+      ys_master_task t4,
+      ys_task_receive t5
+    WHERE t3.ys_master_task_id = t4.id
+      AND t4.id = t5.ys_master_task_id
+    <if test="receiveId != null">
+      AND t5.receive_id = #{receiveId}
+    </if>
+    <if test="masterTaskId != null">
+      AND t4.id = #{masterTaskId}
+    </if>
+  </select>
+
+  <select id="selectAllByYsTeamId" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"/>
+    from ys_son_task
+    <where>
+      <if test="ysTeamId != null">
+        and ys_team_id=#{ysTeamId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectGroupTeamIdByMasterTaskId" resultType="com.ennova.pubinfotask.dto.MasterTeamGroupDTO">
+    SELECT
+         ys_team_id ysTeamId,
+         count(ys_team_id)	countNum
+    FROM
+        ys_son_task
+    WHERE
+        ys_master_task_id =#{ysMasterTaskId}
+    GROUP BY ys_team_id
+  </select>
+
+</mapper>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfotask.dao.YsMessageMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfotask.entity.YsMessage">
+    <!--@mbg.generated-->
+    <!--@Table `ys_message`-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ys_bulletin" jdbcType="INTEGER" property="ysBulletin" />
+    <result column="receive_id" jdbcType="INTEGER" property="receiveId" />
+    <result column="source_type" jdbcType="TINYINT" property="sourceType" />
+    <result column="status" jdbcType="BOOLEAN" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    `id`, `ys_bulletin`, `receive_id`, `source_type`, `status`, `create_time`, `update_time`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from `ys_message`
+    where `id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from `ys_message`
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsMessage" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into `ys_message` (`ys_bulletin`, `receive_id`, `source_type`, 
+      `status`, `create_time`, `update_time`
+      )
+    values (#{ysBulletin,jdbcType=INTEGER}, #{receiveId,jdbcType=INTEGER}, #{sourceType,jdbcType=TINYINT}, 
+      #{status,jdbcType=BOOLEAN}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsMessage" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into `ys_message`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ysBulletin != null">
+        `ys_bulletin`,
+      </if>
+      <if test="receiveId != null">
+        `receive_id`,
+      </if>
+      <if test="sourceType != null">
+        `source_type`,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createTime != null">
+        `create_time`,
+      </if>
+      <if test="updateTime != null">
+        `update_time`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ysBulletin != null">
+        #{ysBulletin,jdbcType=INTEGER},
+      </if>
+      <if test="receiveId != null">
+        #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="sourceType != null">
+        #{sourceType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfotask.entity.YsMessage">
+    <!--@mbg.generated-->
+    update `ys_message`
+    <set>
+      <if test="ysBulletin != null">
+        `ys_bulletin` = #{ysBulletin,jdbcType=INTEGER},
+      </if>
+      <if test="receiveId != null">
+        `receive_id` = #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="sourceType != null">
+        `source_type` = #{sourceType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfotask.entity.YsMessage">
+    <!--@mbg.generated-->
+    update `ys_message`
+    set `ys_bulletin` = #{ysBulletin,jdbcType=INTEGER},
+      `receive_id` = #{receiveId,jdbcType=INTEGER},
+      `source_type` = #{sourceType,jdbcType=TINYINT},
+      `status` = #{status,jdbcType=BOOLEAN},
+      `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{updateTime,jdbcType=TIMESTAMP}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update `ys_message`
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="`ys_bulletin` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.ysBulletin,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`receive_id` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.receiveId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`source_type` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.sourceType,jdbcType=TINYINT}
+        </foreach>
+      </trim>
+      <trim prefix="`status` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.status,jdbcType=BOOLEAN}
+        </foreach>
+      </trim>
+      <trim prefix="`create_time` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="`update_time` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when `id` = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+    </trim>
+    where `id` in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into `ys_message`
+    (`ys_bulletin`, `receive_id`, `source_type`, `status`, `create_time`, `update_time`
+      )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.ysBulletin,jdbcType=INTEGER}, #{item.receiveId,jdbcType=INTEGER}, #{item.sourceType,jdbcType=TINYINT}, 
+        #{item.status,jdbcType=BOOLEAN}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}
+        )
+    </foreach>
+  </insert>
+  <select id="selectByStatusAndYsBulletinLike" resultType="com.ennova.pubinfotask.vo.YsMessageVO">
+    SELECT
+        t1.id id,
+        t2.title title,
+        t1.source_type sourceType,
+        t2.create_id createId,
+        t3.username userName,
+        t2.check_time checkTime,
+        t1.status status
+    FROM
+        ys_message t1,
+        ys_bulletin t2,
+        t_user t3
+    <where>
+      t1.ys_bulletin = t2.id
+      and t2.create_id=t3.id
+      <if test="status != null">and t1.status=#{status,jdbcType=BOOLEAN}</if>
+      <if test="title != null and title !=''">and t2.title like concat('%',#{title},'%')</if>
+      <if test="receiveId != null">and t1.receive_id=#{receiveId}</if>
+    </where>
+    order by t1.id desc
+  </select>
+  <select id="selectByIdAndReceiveId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from `ys_message`
+    <where>
+      <if test="id != null">and `id`=#{id,jdbcType=INTEGER}</if>
+      <if test="receiveId != null">and `receive_id`=#{receiveId,jdbcType=INTEGER}</if>
+    </where>
+  </select>
+  <select id="selectByReceiveIdAndStatus" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from `ys_message`
+    <where>
+      <if test="receiveId != null">and `receive_id`=#{receiveId,jdbcType=INTEGER}</if>
+      <if test="status != null">and `status`=#{status,jdbcType=BOOLEAN}</if>
+    </where>
+  </select>
+</mapper>

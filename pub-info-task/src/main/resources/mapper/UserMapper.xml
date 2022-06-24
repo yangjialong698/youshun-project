@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ennova.pubinfotask.dao.UserMapper">
+    <select id="selectCurrentUser" resultType="com.ennova.pubinfotask.vo.CurrentUserVO">
+        SELECT
+            t1.id userId,
+            t1.username,
+            t3.role_name roleName,
+            t3.role_code roleCode
+        FROM
+            t_user t1,
+            t_user_role t2,
+            t_role t3
+        <where>
+            t1.id = t2.user_id
+            AND t2.role_id = t3.id
+            AND t3.use_status = 0
+            AND t3.is_delete = 0
+            AND t1.STATUS = 0
+            AND t1.is_delete = 0
+            <if test="userId != null">
+                AND t1.id=#{userId}
+            </if>
+        </where>
+    </select>
+    <select id="selectByHaveUserId" resultType="java.lang.Integer">
+        select ifnull(sum(num),0)
+            from
+            (
+            SELECT count(id) as num FROM `ys_master_task` where user_id = (#{userId})
+            union all
+            SELECT count(id) as num FROM `ys_son_task` where receive_id = (#{userId})
+            union all
+            SELECT count(id)as num FROM `ys_master_file` where user_id = (#{userId})
+            union all
+            SELECT count(id) as num FROM `ys_task_receive` where receive_id = (#{userId})
+            union all
+            SELECT count(id) as num FROM `ys_team` where user_id = (#{userId})
+            union all
+            SELECT count(id) as num FROM `ys_work_time` where receive_id = (#{userId})
+            union all
+            SELECT count(id) as num FROM `ys_work_time` where executor_id = (#{userId})
+        ) t
+    </select>
+    <select id="selectAllUser" resultType="com.ennova.pubinfotask.vo.CurrentUserVO">
+        SELECT
+            t1.id userId,
+            t1.username,
+            t3.role_name roleName,
+            t3.role_code roleCode
+        FROM
+            t_user t1,
+            t_user_role t2,
+            t_role t3
+        <where>
+            t1.id = t2.user_id
+            AND t2.role_id = t3.id
+            AND t3.use_status = 0
+            AND t3.is_delete = 0
+            AND t1.STATUS = 0
+            AND t1.is_delete = 0
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.ennova.pubinfotask.dto.UserDTO">
+        select
+            id,
+            username as userName
+            from t_user
+            <where>
+                <if test="id != null">and id=#{id,jdbcType=INTEGER}</if>
+            </where>
+    </select>
+</mapper>

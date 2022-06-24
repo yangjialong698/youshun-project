@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfofile.dao.YsTeamMapper">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfofile.entity.YsTeam">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="cost" jdbcType="DOUBLE" property="cost"/>
+    <result column="user_id" jdbcType="INTEGER" property="userId"/>
+    <result column="executor_id" jdbcType="INTEGER" property="executorId"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    <result column="ys_master_task_id" jdbcType="INTEGER" property="ysMasterTaskId"/>
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete"/>
+    </resultMap>
+  <sql id="Base_Column_List">
+      id, cost, user_id, executor_id, create_time, update_time, ys_master_task_id, is_delete
+  </sql>
+    <select id="selectAllByExecutorId" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from ys_team
+        <where>
+            <if test="executorId != null">
+                and executor_id=#{executorId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+</mapper>
