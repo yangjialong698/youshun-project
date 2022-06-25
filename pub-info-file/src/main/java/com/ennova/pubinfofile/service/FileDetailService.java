@@ -312,6 +312,8 @@ public class FileDetailService {
                         list = list1.stream().distinct().collect(Collectors.toList());
                     }
                 }
+            }else {
+                list = list1;
             }
         }else if (roleCode.equals("executor")){
             List<YsTeam> ysTeams = ysTeamMapper.selectAllByExecutorId(userId);
@@ -510,6 +512,8 @@ public class FileDetailService {
                     list1.addAll(list2);
                     list = list1.stream().distinct().collect(Collectors.toList());
                 }
+            }else {
+                list = list1;
             }
         }else if (roleCode.equals("executor")){
             List<YsTeam> ysTeams = ysTeamMapper.selectAllByExecutorId(userId);
