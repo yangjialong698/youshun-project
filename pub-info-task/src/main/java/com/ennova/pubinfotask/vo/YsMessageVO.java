@@ -24,6 +24,9 @@ public class YsMessageVO {
     @ApiModelProperty(value = "消息名称")
     private String title;
 
+    @ApiModelProperty(value = "消息内容")
+    private String content;
+
     @ApiModelProperty(value = "消息来源: 0-公告")
     private int sourceType;
 

@@ -39,7 +39,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     //private String WEBSOCKET_PATH = "wss://172.168.3.104:8096/ws";
     private String WEBSOCKET_PATH = "wss://139.196.150.88:8096/ws";
     //private String WEBSOCKET_PATH = "wss://123.60.73.204:8096/ws";
-    ConcurrentMap<String, String> paramMap2 = new ConcurrentHashMap<>();
+    //ConcurrentMap<String, String> paramMap2 = new ConcurrentHashMap<>();
 
 
     @Override
@@ -107,12 +107,12 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             FullHttpRequest request = (FullHttpRequest) msg;
             String uri = request.uri();
             ConcurrentMap<String, String> paramMap = getUrlParams(uri);
-            paramMap2 = paramMap;
+            //paramMap2 = paramMap;
             log.info("接收到的参数：{}", JSON.toJSONString(paramMap));
             handleHttpRequest(ctx, (FullHttpRequest) msg);
-            if (MapUtils.isEmpty(paramMap)) {
-                paramMap.put("userId", paramMap2.get("userId"));
-            }
+            //if (MapUtils.isEmpty(paramMap)) {
+            //    paramMap.put("userId", paramMap2.get("userId"));
+            //}
 
 
 
@@ -193,26 +193,26 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         //cookie
         log.info("netty: 请求cookie：{}", headers.get("Cookie"));
 
-        boolean empty = MapUtils.isEmpty(paramMap2);
-            if (empty) {
-                // request中获取cookie
-                String cookie = headers.get("Cookie");
-                if (StringUtils.isNotEmpty(cookie)) {
-                    String[] split = cookie.split(";");
-                    for (String s : split) {
-                        if (s.contains("token")) {
-                            String[] split1 = s.split("=");
-                            log.info("从request中获取token:{}", split1[1]);
-                            UserVO userVO = JWTUtil.getUserVOByToken(split1[1]);
-                            if (null != userVO) {
-                                paramMap2.put("userId", String.valueOf(userVO.getId()));
-                            }
-                            break;
-                        }
-                    }
-                }
-
-            }
+        //boolean empty = MapUtils.isEmpty(paramMap2);
+        //    if (empty) {
+        //        // request中获取cookie
+        //        String cookie = headers.get("Cookie");
+        //        if (StringUtils.isNotEmpty(cookie)) {
+        //            String[] split = cookie.split(";");
+        //            for (String s : split) {
+        //                if (s.contains("token")) {
+        //                    String[] split1 = s.split("=");
+        //                    log.info("从request中获取token:{}", split1[1]);
+        //                    UserVO userVO = JWTUtil.getUserVOByToken(split1[1]);
+        //                    if (null != userVO) {
+        //                        paramMap2.put("userId", String.valueOf(userVO.getId()));
+        //                    }
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //
+        //    }
 
         return req.method().equals(HttpMethod.GET)
                 && headers.get(HttpHeaderNames.UPGRADE).equals("websocket");
