@@ -186,15 +186,22 @@ public class YsDayRepService {
 //            baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
 //        }else if
         if (roleCode.equals("sub_task_manage")){
-            //子任务管理 --- 1.归属团队数据 2.自己数据 3.下属数据
+            //子任务管理
             List<YsTeam> ysTeams = ysTeamMapper.selectAllByExecutorId(userId);
+            List<Integer> maskTaskIdList = null ;
             if (CollectionUtil.isNotEmpty(ysTeams)){
-                List<Integer> maskTaskIdList = ysTeams.stream().map(e -> e.getYsMasterTaskId()).distinct().collect(Collectors.toList());
-                if (CollectionUtil.isNotEmpty(maskTaskIdList)){
-                    Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
-                    List<DayRepDetailVO> list = ysDayRepMapper.getDayRepDetailsByStm(maskTaskIdList,ysMasterTaskId,fileName,userId,startTime,endTime);
-                    baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
-                }
+                maskTaskIdList = ysTeams.stream().map(e -> e.getYsMasterTaskId()).distinct().collect(Collectors.toList());
+            }
+            if (CollectionUtil.isNotEmpty(maskTaskIdList)){
+                //1.归属团队数据
+                Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
+                List<DayRepDetailVO> list = ysDayRepMapper.getDayRepDetailsByStm(maskTaskIdList,ysMasterTaskId,fileName,userId,startTime,endTime);
+                baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+            }else {
+                //2.自己数据 3.下属数据
+                Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
+                List<DayRepDetailVO> list = ysDayRepMapper.getDayRepDetails(ysMasterTaskId,fileName,userId,startTime,endTime);
+                baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
             }
         }else if (roleCode.equals("executor")){
             //普通用户

@@ -67,4 +67,10 @@ public interface YsDayRepMapper {
     int delete(Integer id);
 
     List<FileDownVO> fileDetail(@Param("id")Integer id);
+
+    List<DayRepDetailVO> getDayRepDetails(@Param("ysMasterTaskId")Integer ysMasterTaskId,
+                                          @Param("fileName")String fileName,
+                                          @Param("userId")Integer userId,
+                                          @Param("startTime")String startTime,
+                                          @Param("endTime")String endTime);
 }

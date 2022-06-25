@@ -332,6 +332,76 @@
     ORDER BY fin.createTime DESC
   </select>
 
+  <select id="getDayRepDetails" resultType="com.ennova.pubinfofile.vo.DayRepDetailVO">
+    SELECT
+    *
+    FROM
+    (
+      SELECT
+      ydr.id,
+      ydr.file_name AS fileName,
+      ydr.dayrep_time AS dayrepTime,
+      ymt.name AS masterTaskName,
+      ymt.id AS ysMasterTaskId,
+      tu.username AS username,
+      ydr.create_time AS createTime,
+      ysrf.id AS fileId,
+      yfb.feed_status AS feedStatus
+      FROM
+      ys_day_rep ydr
+      LEFT JOIN ys_master_task ymt ON ydr.ys_master_task_id = ymt.id
+      LEFT JOIN t_user tu ON ydr.user_id = tu.id
+      LEFT JOIN t_user_role tur ON tur.user_id = tu.id
+      LEFT JOIN t_role tr  ON tr.id = tur.role_id
+      LEFT JOIN ys_day_rep_file ysrf  ON ydr.id = ysrf.day_rep_id
+      LEFT JOIN ys_feed_back yfb on yfb.day_rep_id = ydr.id
+      WHERE 1=1
+      AND ydr.del_flag = 0
+      AND ydr.user_id = #{userId}
+    UNION
+      SELECT
+      ydr.id,
+      ydr.file_name AS fileName,
+      ydr.dayrep_time AS dayrepTime,
+      ymt.name AS masterTaskName,
+      ymt.id AS ysMasterTaskId,
+      tu.username AS username,
+      ydr.create_time AS createTime,
+      ysrf.id AS fileId,
+      yfb.feed_status AS feedStatus
+      FROM
+      ys_day_rep ydr
+      LEFT JOIN ys_master_task ymt ON ydr.ys_master_task_id = ymt.id
+      LEFT JOIN t_user tu ON ydr.user_id = tu.id
+      LEFT JOIN t_user_role tur ON tur.user_id = tu.id
+      LEFT JOIN t_role tr  ON tr.id = tur.role_id
+      LEFT JOIN ys_day_rep_file ysrf  ON ydr.id = ysrf.day_rep_id
+      INNER JOIN ys_team t2 ON ydr.user_id = t2.executor_id
+      LEFT JOIN ys_feed_back yfb on yfb.day_rep_id = ydr.id
+      WHERE
+      1 = 1
+      AND ydr.del_flag = 0
+      AND ydr.ys_master_task_id = t2.ys_master_task_id
+      AND t2.user_id = #{userId}
+    ) fin
+    WHERE
+    1 =1
+    <if test="ysMasterTaskId != null">
+      AND fin.ysMasterTaskId = #{ysMasterTaskId}
+    </if>
+    <if test="fileName != null and fileName != ''">
+      AND CONCAT(trim(replace(fileName,' ','')),trim(replace(username,' ',''))) like trim(replace(CONCAT('%',#{fileName},'%'),' ',''))
+    </if>
+    <if test="startTime!=null and startTime!=''">
+      AND fin.dayrepTime &gt;= #{startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime!=null and endTime!=''">
+      AND fin.dayrepTime &lt;= #{endTime,jdbcType=TIMESTAMP}
+    </if>
+    GROUP BY fin.id
+    ORDER BY fin.createTime DESC
+  </select>
+
   <select id="getDayRepsBySelf" resultType="com.ennova.pubinfofile.vo.DayRepDetailVO">
     SELECT
     ydr.id,
