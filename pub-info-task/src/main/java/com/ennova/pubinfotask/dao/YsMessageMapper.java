@@ -23,6 +23,8 @@ public interface YsMessageMapper {
 
     List<YsMessageVO> selectByStatusAndYsBulletinLike(@Param("status") Boolean status, @Param("title") String title, @Param("receiveId") Integer receiveId);
 
+    YsMessage selectBybulletinIdAndReceiveId(@Param("bulletinId")Integer bulletinId,@Param("receiveId")Integer receiveId);
+
     YsMessage selectByIdAndReceiveId(@Param("id")Integer id,@Param("receiveId")Integer receiveId);
 
     List<YsMessage> selectByReceiveIdAndStatus(@Param("receiveId")Integer receiveId,@Param("status")Boolean status);

@@ -98,8 +98,18 @@ public class YsBulletinController {
         return ysBulletinService.getMessageList(page, pageSize, status, likeTitle);
     }
 
-    @ApiOperation(value = "消息 - 修改为已读状态")
+    @ApiOperation(value = "消息 - 公告ID，修改为已读状态")
     @ApiOperationSort(value = 9)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "bulletinId", value = "公告ID")
+    })
+    @GetMapping("/updateMessageBulletin")
+    public Callback updateMessageBulletin(Integer bulletinId) {
+        return ysBulletinService.updateMessageBulletin(bulletinId);
+    }
+
+    @ApiOperation(value = "消息 - 消息ID，修改为已读状态")
+    @ApiOperationSort(value = 10)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "消息ID")
     })
@@ -109,7 +119,7 @@ public class YsBulletinController {
     }
 
     @ApiOperation(value = "消息 - 获取未读总条数")
-    @ApiOperationSort(value = 10)
+    @ApiOperationSort(value = 11)
     @GetMapping("/unreadMessageCount")
     public Callback unreadMessageCount(){
         return ysBulletinService.unreadMessageCount();

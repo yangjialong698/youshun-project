@@ -87,14 +87,26 @@ public class YsBulletinService {
             //推送:sourceType=0 公告,type=0 新增
             SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(0).content(ysBulletin).build();
             List<Channel> channelList = getChannelByName(String.valueOf(publishDTO.getCheckUserId()));
-            if (channelList.size() <= 0) {
+            if (null == channelList || channelList.size() <= 0) {
                 redisTemplate.opsForList().rightPush("bulletin:add:" + publishDTO.getCheckUserId(), JSONObject.toJSONString(socketVO));
-                log.info("用户: " + publishDTO.getCheckUserId()+" 没有登录，添加到redis队列");
+                log.info("用户: " + publishDTO.getCheckUserId() + " 没有登录，添加到redis队列");
                 return Callback.success();
             } else {
                 //channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame("您有一条编号为" + JSONObject.toJSONString(socketVO) + "的公告需要审批！")));
                 channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO))));
             }
+
+            //Channel channel = getChannelByName2(String.valueOf(publishDTO.getCheckUserId()));
+            //if (null != channel) {
+            //    if (online(String.valueOf(publishDTO.getCheckUserId()))) {
+            //        channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
+            //    } else {
+            //        redisTemplate.opsForList().rightPush("bulletin:add:" + publishDTO.getCheckUserId(), JSONObject.toJSONString(socketVO));
+            //        log.info("用户: " + publishDTO.getCheckUserId() + " 没有登录，添加到redis队列");
+            //    }
+            //
+            //}
+
             return Callback.success(true);
         }
         return Callback.error(2, "新增失败");
@@ -112,7 +124,7 @@ public class YsBulletinService {
 
         YsBulletin old = ysBulletinMapper.selectbyIdAndCreateId(publishDTO.getId(), userVo.getId());
         if (old == null) {
-            return Callback.error(2, "ID为"+ publishDTO.getId() +"的公告不存在");
+            return Callback.error(2, "ID为" + publishDTO.getId() + "的公告不存在");
         }
 
         // 排除当前ID，不能修改成已存在的公告标题和内容
@@ -134,13 +146,22 @@ public class YsBulletinService {
             //推送:sourceType=0 公告,type=3 修改
             SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(3).content(ysBulletin).build();
             List<Channel> channelList = getChannelByName(String.valueOf(publishDTO.getCheckUserId()));
-            if (channelList.size() <= 0) {
+            if (null == channelList || channelList.size() <= 0) {
                 redisTemplate.opsForList().rightPush("bulletin:add:" + publishDTO.getCheckUserId(), JSONObject.toJSONString(socketVO));
-                log.info("用户: " + publishDTO.getCheckUserId()+" 没有登录，添加到redis队列");
+                log.info("用户: " + publishDTO.getCheckUserId() + " 没有登录，添加到redis队列");
                 return Callback.success();
             } else {
                 channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO))));
             }
+            //Channel channel = getChannelByName2(String.valueOf(publishDTO.getCheckUserId()));
+            //if (null != channel) {
+            //    if (online(String.valueOf(publishDTO.getCheckUserId()))) {
+            //        channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
+            //    } else {
+            //        redisTemplate.opsForList().rightPush("bulletin:add:" + publishDTO.getCheckUserId(), JSONObject.toJSONString(socketVO));
+            //        log.info("用户: " + publishDTO.getCheckUserId() + " 没有登录，添加到redis队列");
+            //    }
+            //}
             return Callback.success(true);
         }
         return Callback.error(2, "修改失败");
@@ -152,7 +173,7 @@ public class YsBulletinService {
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
-        if(!currentUserVO.getRoleCode().equals("ADMIN")){
+        if (!currentUserVO.getRoleCode().equals("ADMIN")) {
             return Callback.error(2, "您没有权限删除");
         }
         YsBulletin old = ysBulletinMapper.selectByPrimaryKey(id);
@@ -175,7 +196,7 @@ public class YsBulletinService {
 
         // 菜单不展示，可查看人员的角色：task_manage、admin、check_person
         Page<YsFileType> startPage = PageMethod.startPage(page, pageSize);
-        List<YsBulletinVO> list = ysBulletinMapper.selectByStatusAndTitleLike(status, likeTitle,null,"id desc");
+        List<YsBulletinVO> list = ysBulletinMapper.selectByStatusAndTitleLike(status, likeTitle, null, "id desc");
         //list.stream().forEach(ysBulletin -> {
         //    ysBulletin.setIsEdit(false);
         //    if (currentUserVO.getUserId().equals(ysBulletin.getCreateId())) {
@@ -223,7 +244,7 @@ public class YsBulletinService {
 
         YsBulletin ysBulletin = ysBulletinMapper.selectByPrimaryKey(id);
         if (ysBulletin == null) {
-            return Callback.error(2, "当前ID为"+ id +"的公告不存在");
+            return Callback.error(2, "当前ID为" + id + "的公告不存在");
         }
 
         if (ysBulletin.getStatus() != 0) {
@@ -232,33 +253,49 @@ public class YsBulletinService {
 
         ysBulletin.setStatus(status);
         ysBulletin.setUpdateTime(LocalDateTime.now());
-        List<CurrentUserVO> currentUserVOS = userMapper.selectAllUser();
-        List<Integer> users = currentUserVOS.stream().map(CurrentUserVO::getUserId).collect(Collectors.toList());
+
 
         //审核通过
         if (status == 1) {
             ysBulletin.setStatus(1);
             ysBulletin.setCheckTime(LocalDateTime.now());
+            List<CurrentUserVO> currentUserVOS = userMapper.selectAllUser();
+            List<Integer> users = currentUserVOS.stream().map(CurrentUserVO::getUserId).collect(Collectors.toList());
 
             //TODO 审核通过
             //保存到数据库
-            users.stream().forEach(user->{
-                   YsMessage message = YsMessage.builder().sourceType(0).receiveId(user).ysBulletin(ysBulletin.getId()).status(false).createTime(LocalDateTime.now()).build();
-                   ysMessageMapper.insert(message);
+            users.stream().forEach(user -> {
+                YsMessage message = YsMessage.builder().sourceType(0).receiveId(user).ysBulletin(ysBulletin.getId()).status(false).createTime(LocalDateTime.now()).build();
+                ysMessageMapper.insert(message);
             });
 
             //推送:sourceType=0 公告,type=1 审核通过了
             SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(1).content(ysBulletin).build();
             if (users.size() > 0) {
-              //推送消息给所有用户
-               users.forEach(user ->{
-                   List<Channel> channelList = getChannelByName(String.valueOf(user));
-                   if (channelList.size() <= 0) {
-                       redisTemplate.opsForList().rightPush("bulletin:push:" + user, JSONObject.toJSONString(socketVO));
-                   } else {
-                       channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO))));
-                   }
-               });
+                //推送消息给所有用户
+                users.forEach(user -> {
+                    List<Channel> channelList = getChannelByName(String.valueOf(user));
+                    if (null == channelList || channelList.size() <= 0) {
+                        redisTemplate.opsForList().rightPush("bulletin:push:" + user, JSONObject.toJSONString(socketVO));
+                    } else {
+                        channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO))));
+                    }
+                });
+
+
+                //users.forEach(user -> {
+                //    Channel channel = getChannelByName2(String.valueOf(user));
+                //    if (null == channel) {
+                //        if (online(String.valueOf(user))) {
+                //            redisTemplate.opsForList().rightPush("bulletin:push:" + user, JSONObject.toJSONString(socketVO));
+                //        } else {
+                //            channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
+                //            //channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO))));
+                //        }
+                //
+                //    }
+                //
+                //});
             }
 
         }
@@ -269,9 +306,19 @@ public class YsBulletinService {
 
             //TODO 审核不通过
             //推送:sourceType=0 公告,type=2 审核不通过
-             SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(2).content(ysBulletin).build();
+            SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(2).content(ysBulletin).build();
+            //Channel channel = getChannelByName2(String.valueOf(ysBulletin.getCreateId()));
+            //if (null == channel) {
+            //    if (online(String.valueOf(ysBulletin.getCreateId()))) {
+            //        redisTemplate.opsForList().rightPush("bulletin:push:" + ysBulletin.getCreateId(), JSONObject.toJSONString(socketVO));
+            //    } else {
+            //        channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
+            //    }
+            //}
+
+
             List<Channel> channelList = getChannelByName(String.valueOf(ysBulletin.getCreateId()));
-            if (channelList.size() <= 0) {
+            if (null == channelList || channelList.size() <= 0) {
                 redisTemplate.opsForList().rightPush("bulletin:reject:" + ysBulletin.getCreateId(), JSONObject.toJSONString(socketVO));
             } else {
                 //channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame("您有一条编号为" + ysBulletin.getId() + "的公告已被驳回！")));
@@ -293,60 +340,77 @@ public class YsBulletinService {
         return ChannelHandlerPool.channelGroup.stream().filter(channel -> channel.attr(key).get().equals(name))
                 .collect(Collectors.toList());
     }
+    //
+    //public Channel getChannelByName2(String name) {
+    //    return ChannelHandlerPool.channelMap.get(name);
+    //}
+    //
+    //public Boolean online(String userId) {
+    //    return ChannelHandlerPool.channelMap.containsKey(userId) && ChannelHandlerPool.channelMap.get(userId) != null;
+    //}
 
 
-
-    /** -----------------------------------------------------   消息  ------------------------------------------------------------------------------   **/
+    /**
+     * -----------------------------------------------------   消息  ------------------------------------------------------------------------------
+     **/
 
     public Callback<BaseVO<YsMessageVO>> getMessageList(Integer page, Integer pageSize, Boolean status, String likeTitle) {
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
 
         Page<YsFileType> startPage = PageMethod.startPage(page, pageSize);
-        List<YsMessageVO> list = ysMessageMapper.selectByStatusAndYsBulletinLike(status, likeTitle,userVo.getId());
+        List<YsMessageVO> list = ysMessageMapper.selectByStatusAndYsBulletinLike(status, likeTitle, userVo.getId());
         BaseVO<YsMessageVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
 
-     // 只能修改自己的任务为已读状态
-    public Callback updateMessage(Integer id) {
+    // 只能修改自己的任务为已读状态
+    public Callback updateMessageBulletin(Integer bulletin) {
 
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
 
-        YsMessage ysMessage = ysMessageMapper.selectByIdAndReceiveId(id, userVo.getId());
-        if (null != ysMessage){
-            if (ysMessage.getStatus().equals(true)){
+        YsMessage ysMessage = ysMessageMapper.selectBybulletinIdAndReceiveId(bulletin, userVo.getId());
+        if (null != ysMessage) {
+            if (ysMessage.getStatus().equals(true)) {
                 return Callback.error(2, "此消息已读,不能重复修改状态!");
             }
             ysMessage.setStatus(true);
             ysMessage.setUpdateTime(LocalDateTime.now());
             int i = ysMessageMapper.updateByPrimaryKey(ysMessage);
-            if (i > 0){
+            if (i > 0) {
                 return Callback.success();
             }
         }
         return Callback.error(2, "状态更改失败!");
     }
 
-    public Callback unreadMessageCount(){
+    public Callback updateMessage(Integer id) {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+
+        YsMessage ysMessage = ysMessageMapper.selectByIdAndReceiveId(id, userVo.getId());
+        if (null != ysMessage) {
+            if (ysMessage.getStatus().equals(true)) {
+                return Callback.error(2, "此消息已读,不能重复修改状态!");
+            }
+            ysMessage.setStatus(true);
+            ysMessage.setUpdateTime(LocalDateTime.now());
+            int i = ysMessageMapper.updateByPrimaryKey(ysMessage);
+            if (i > 0) {
+                return Callback.success();
+            }
+        }
+        return Callback.error(2, "状态更改失败!");
+    }
+
+    public Callback unreadMessageCount() {
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         List<YsMessage> list = ysMessageMapper.selectByReceiveIdAndStatus(userVo.getId(), false);
         return Callback.success(list.size());
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
