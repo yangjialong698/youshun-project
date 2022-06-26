@@ -585,6 +585,7 @@ public class YsMasterTaskService {
             if (hasRbId != null && hasRbId != 0) {
                 x.setRbStatus(0);
             }
+
             // 是否存在经验建议记录
             Integer hasJyjyId = ysMasterFileMapper.selectHasJyjyById(x.getId());
             x.setExperienceStatus(1);
