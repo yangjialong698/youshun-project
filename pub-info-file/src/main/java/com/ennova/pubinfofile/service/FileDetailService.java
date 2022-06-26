@@ -502,7 +502,8 @@ public class FileDetailService {
         String roleCode = userVO.getRoleCode();
         List<LinkedHashMap> list = null;
         if (roleCode.equals("sub_task_manage")){
-            List<LinkedHashMap> list1  = ysMasterFileMapper.queryMasterTaskByUid(userId);
+            //List<LinkedHashMap> list1  = ysMasterFileMapper.queryMasterTaskByUid(userId);
+            List<LinkedHashMap> list1  = ysMasterFileMapper.selectMasterTaskByZrw(userId);
             //新增子任务管理归属哪个团队的主任务作为下拉菜单新增+搜索
             List<YsTeam> ysTeams = ysTeamMapper.selectAllByExecutorId(userId);
             if (CollectionUtil.isNotEmpty(ysTeams)){
