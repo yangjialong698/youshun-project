@@ -70,14 +70,14 @@ public class YsSonTaskController {
             @ApiImplicitParam(name = "status", value = "状态", required = false ),
             @ApiImplicitParam(name = "teamUserId", value = "执行人", required = false ),
             @ApiImplicitParam(name = "sonTaskName", value = "子任务名称 ( 模糊 ) ", required = false ),
-            @ApiImplicitParam(name = "masterTaskId", value = "主任务ID ", required = false ),
-            @ApiImplicitParam(name = "masterTaskName", value = "主任务名称 ", required = false )
+            @ApiImplicitParam(name = "masterTaskId", value = "主任务ID ", required = false )
+            //@ApiImplicitParam(name = "masterTaskName", value = "主任务名称 ", required = false )
     })
     @GetMapping("/selectSonTaskPagelist")
     public Callback<BaseVO<YsSonTaskPageListVO>> selectSonTaskPagelist(@RequestParam(defaultValue = "1") Integer page,
                                                                         @RequestParam(defaultValue = "10")Integer pageSize, Integer status,
-                                                                        Integer teamUserId, String sonTaskName, Integer masterTaskId, String masterTaskName){
-        return ysSonTaskService.selectSonTaskPagelist(page,pageSize,status,teamUserId,sonTaskName,masterTaskId,masterTaskName);
+                                                                        Integer teamUserId, String sonTaskName, Integer masterTaskId){
+        return ysSonTaskService.selectSonTaskPagelist(page,pageSize,status,teamUserId,sonTaskName,masterTaskId);
     }
 
     @ApiOperation(value = "子任务 - 完成")
@@ -139,12 +139,12 @@ public class YsSonTaskController {
         return ysSonTaskService.selectJobTitleGroup(masterTaskId);
     }
 
-    @ApiOperation(value = "子任务首页 - 团队管理 - 工时占比")
-    @ApiOperationSort(value = 11)
-    @GetMapping("/selectTeamWokeTimeGroup")
-    public Callback<List<WorkTimeChartVO>> selectTeamWokeTimeGroup(Integer masterTaskId){
-        return ysSonTaskService.selectTeamWokeTimeGroup(masterTaskId);
-    }
+    //@ApiOperation(value = "子任务首页 - 团队管理 - 工时占比")
+    //@ApiOperationSort(value = 11)
+    //@GetMapping("/selectTeamWokeTimeGroup")
+    //public Callback<List<WorkTimeChartVO>> selectTeamWokeTimeGroup(Integer masterTaskId){
+    //    return ysSonTaskService.selectTeamWokeTimeGroup(masterTaskId);
+    //}
 
     @ApiOperation(value = "子任务首页 - 子任务修改 - 查询一条记录")
     @ApiOperationSort(value = 12)

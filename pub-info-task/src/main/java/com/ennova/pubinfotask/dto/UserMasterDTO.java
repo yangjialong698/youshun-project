@@ -19,4 +19,3 @@ public class UserMasterDTO {
      private Set<Integer> userList;
      private Set<Integer> masterIds;
 }
-    

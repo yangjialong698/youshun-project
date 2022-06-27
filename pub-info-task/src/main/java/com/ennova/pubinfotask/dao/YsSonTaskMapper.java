@@ -61,6 +61,12 @@ public interface YsSonTaskMapper {
                                                     @Param("masterTaskId") Integer masterTaskId
     );
 
+    //List<YsSonTaskPageListVO> selectSonTaskPagelist(@Param("status") Integer status,
+    //                                                    @Param("teamUserId") Integer teamUserId,
+    //                                                    @Param("sonTaskName") String sonTaskName,
+    //                                                    //@Param("masterTaskId") Integer masterTaskId,
+    //                                                    @Param("userId") Integer userId, @Param("masterIds") Set<Integer> masterIds);
+
     EditSontTaskAndFileVO selectSonTaskOne(@Param("sonTaskId") Integer sonTaskId);
 
     WorkTimeResidueVO selectEstimateHourByMasterTaskId(@Param("masterTaskId") Integer masterTaskId);

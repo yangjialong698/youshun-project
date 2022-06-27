@@ -18,7 +18,7 @@ import java.util.List;
  * @Version: 1.0
  */
 @Mapper
-public interface YsTeamMapper {
+public interface YsTeamMapper<selectByExecutorId> {
     int deleteByPrimaryKey(Integer id);
 
     int insert(YsTeam record);

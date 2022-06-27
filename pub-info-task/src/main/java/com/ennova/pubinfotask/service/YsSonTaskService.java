@@ -1,7 +1,6 @@
 package com.ennova.pubinfotask.service;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.lang.Assert;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
@@ -30,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -331,7 +329,7 @@ public class YsSonTaskService {
 
     // 查询当前认领用户的子任务列表
     public Callback<BaseVO<YsSonTaskPageListVO>> selectSonTaskPagelist(Integer page, Integer pageSize, Integer status,
-                                                                       Integer teamUserId, String sonTaskName, Integer masterTaskId, String masterTaskName) {
+                                                                       Integer teamUserId, String sonTaskName, Integer masterTaskId) {
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
@@ -354,7 +352,7 @@ public class YsSonTaskService {
                 return Callback.success(newBaseVO);
             }
             // 上级领导相关的主任务有多个，存在不是自己负责的主任务
-            //setList = ysTeams.stream().map(YsTeam::getUserId).collect(Collectors.toSet());
+            setList.add(userVo.getId());
             masterIds = ysTeams.stream().map(YsTeam::getYsMasterTaskId).collect(Collectors.toSet());
         }
         setList.removeIf(Objects::isNull);
@@ -380,6 +378,57 @@ public class YsSonTaskService {
         return Callback.success(baseVO);
 
     }
+
+    //  // 查询当前认领用户的子任务列表
+    //public Callback<BaseVO<YsSonTaskPageListVO>> selectSonTaskPagelist(Integer page, Integer pageSize, Integer status,
+    //                                                                   Integer teamUserId, String sonTaskName, Integer masterTaskId) {
+    //    String token = req.getHeader("Authorization");
+    //    UserVO userVo = JWTUtil.getUserVOByToken(token);
+    //    assert userVo != null;
+    //    Integer userId = null;
+    //    CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
+    //
+    //    Set<Integer> masterIds = Sets.newHashSet();
+    //    masterIds.add(masterTaskId);
+    //    // 执行人可以查看某个主任务下，子任务的所有团队成员记录
+    //    if ("executor".equals(currentUserVO.getRoleCode())) {
+    //        List<YsTeam> ysTeams = ysTeamMapper.selectAllByYsMasterTaskIdAndExecutorId(userVo.getId(), masterTaskId);
+    //        if (CollectionUtils.isEmpty(ysTeams)) {
+    //            log.info("团队成员的上级人员，无认领的子任务");
+    //            List<YsSonTaskPageListVO> newList = new ArrayList<>();
+    //            BaseVO<YsSonTaskPageListVO> newBaseVO = new BaseVO<>(newList, new PageUtil(0, 0, 0));
+    //            return Callback.success(newBaseVO);
+    //        }
+    //        userId = currentUserVO.getUserId();
+    //        //masterIds是否为空
+    //        if (CollectionUtils.isEmpty(masterIds)) {
+    //            masterIds = ysTeams.stream().map(YsTeam::getYsMasterTaskId).collect(Collectors.toSet());
+    //        }
+    //
+    //        ysTeamMapper.selectByPrimaryKey(teamUserId);
+    //
+    //
+    //    }
+    //    masterIds.removeIf(Objects::isNull);
+    //    Page<YsSonTaskPageListVO> startPage = PageHelper.startPage(page, pageSize);
+    //    List<YsSonTaskPageListVO> list = ysSonTaskMapper.selectSonTaskPagelist(status, teamUserId, sonTaskName,userId,masterIds);
+    //    if (list != null && !list.isEmpty()) {
+    //        list.forEach(x -> {
+    //            List<YsMasterFile> masterFiles = ysMasterFileMapper.selectAllByYsSonTaskId(x.getId());
+    //            for (YsMasterFile masterFile : masterFiles) {
+    //                x.setYsFileTypeId(masterFile.getYsFileTypeId());
+    //            }
+    //            x.setButtonStatus(1);
+    //            if (masterFiles != null && !masterFiles.isEmpty()) {
+    //                x.setButtonStatus(0);
+    //            }
+    //        });
+    //    }
+    //
+    //    BaseVO<YsSonTaskPageListVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+    //    return Callback.success(baseVO);
+    //
+    //}
 
     public Callback updateSonTaskStatus(Integer sonTaskId) {
         String token = req.getHeader("Authorization");
@@ -814,101 +863,101 @@ public class YsSonTaskService {
     }
 
 
-    public Callback<List<WorkTimeChartVO>> selectTeamWokeTimeGroup(Integer masterTaskId) {
-        String token = req.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
-        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
-        // 非子任务管理角色，可查看所有
-        Set<Integer> userList = Sets.newHashSet();
-        Set<Integer> masterIds = Sets.newHashSet();
-        masterIds.add(masterTaskId);
-        if ("sub_task_manage".equals(currentUserVO.getRoleCode())) {
-            Integer userId = userVo.getId();
-            userList.add(userId);
-        }
-        // 执行人可根据某个主任务，查询所有的执行人工时占比
-        if ("executor".equals(currentUserVO.getRoleCode())) {
-            List<YsTeam> ysTeams = ysTeamMapper.selectAllByYsMasterTaskIdAndExecutorId(userVo.getId(), masterTaskId);
-            if (CollectionUtils.isEmpty(ysTeams)) {
-                log.info("没有子任务，无法查询工时占比");
-                List<WorkTimeChartVO> newList = new ArrayList<>();
-                return Callback.success(newList);
-            }
-            // userList = ysTeams.stream().map(YsTeam::getUserId).collect(Collectors.toSet());
-            masterIds = ysTeams.stream().map(YsTeam::getYsMasterTaskId).collect(Collectors.toSet());
-        }
-        userList.removeIf(Objects::isNull);
-        masterIds.removeIf(Objects::isNull);
-        UserMasterDTO dto = UserMasterDTO.builder().userList(userList).masterIds(masterIds).build();
-        List<WorkTimeChartVO> resultlist = new ArrayList<>();
-        List<YsSonTaskPageListVO> list = ysSonTaskMapper.selectSonTaskPagelist(null, null, null, dto, null);
-        Map<Integer, List<YsSonTaskPageListVO>> listMap = list.stream().collect(Collectors.groupingBy(YsSonTaskPageListVO::getTeamUserId));
-
-        Integer finalReduce = list.stream().map(x -> x.getTotalConsume() == null ? 0 : x.getTotalConsume()).reduce(Integer::sum).orElse(0);
-        resultlist = listMap.entrySet().stream().map(key -> {
-            Integer teamId = key.getKey();
-            WorkTimeChartVO chartVO = null;
-            List<YsSonTaskPageListVO> value = key.getValue();
-            if (value != null && !value.isEmpty()) {
-                int totalConsume = key.getValue().stream().mapToInt(x -> x.getTotalConsume() == null ? 0 : x.getTotalConsume()).sum();
-                String executorName = key.getValue().stream().findFirst().map(YsSonTaskPageListVO::getUsername).orElse(null);
-                int ratio = 0;
-                if (finalReduce != 0) {
-                    BigDecimal multiply = new BigDecimal(totalConsume).divide(new BigDecimal(finalReduce), 2, RoundingMode.HALF_UP)
-                            .multiply(new BigDecimal(100));
-                    ratio = multiply.intValue();
-                }
-                chartVO = WorkTimeChartVO.builder().executorName(executorName).ratio(ratio).sumConsume(totalConsume)
-                        .total(finalReduce).executorId(teamId).build();
-            }
-            return chartVO;
-        }).collect(Collectors.toList());
-        return Callback.success(resultlist);
-
-
-        //String token = req.getHeader("Authorization");
-        //UserVO userVo = JWTUtil.getUserVOByToken(token);
-        //assert userVo != null;
-        //CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
-        //Integer userId = null;
-        //if ("sub_task_manage".equals(currentUserVO.getRoleCode())) {
-        //    userId = currentUserVO.getUserId();
-        //}
-        //
-        //List<WorkTimeChartVO> resultlist = new ArrayList<>();
-        //List<TeamDTO> dtoList = ysTeamMapper.selectTeamDtoByMasterId(userId, masterTaskId);
-        //if (!dtoList.isEmpty()) {
-        //    List<Integer> sonlist = dtoList.stream().map(TeamDTO::getSonId).collect(Collectors.toList());
-        //    List<Integer> teamIdlist = dtoList.stream().map(TeamDTO::getYsTeamId).collect(Collectors.toList());
-        //    //查出所有工时
-        //    List<YsWorkTimeDTO> ysWorkTimeDTOS = ysWorkTimeMapper.selectAllByYsSonTaskIdInAndExecutorIdIn(sonlist, teamIdlist);
-        //    if (!ysWorkTimeDTOS.isEmpty()) {
-        //        //总工时
-        //        Integer reduce = ysWorkTimeDTOS.stream().map(YsWorkTimeDTO::getTotalConsume).reduce(0, (a, b) -> a + b);
-        //        Map<Integer, List<YsWorkTimeDTO>> listMap = ysWorkTimeDTOS.stream().collect(Collectors.groupingBy(vos -> {
-        //            return vos.getExecutorId();
-        //        }));
-        //        resultlist = listMap.entrySet().stream().map(key -> {
-        //            Integer teamId = key.getKey();
-        //            WorkTimeChartVO chartVO = null;
-        //            List<YsWorkTimeDTO> value = key.getValue();
-        //            if (value.size() > 0) {
-        //                Integer totalConsume = key.getValue().stream().mapToInt(YsWorkTimeDTO::getTotalConsume).sum();
-        //                String executorName = key.getValue().stream().findFirst().map(YsWorkTimeDTO::getExecutorName).get();
-        //
-        //                BigDecimal multiply = new BigDecimal(totalConsume).divide(new BigDecimal(reduce), 2, BigDecimal.ROUND_HALF_UP)
-        //                        .multiply(new BigDecimal(100));
-        //                Integer ratio = multiply.intValue();
-        //                chartVO = WorkTimeChartVO.builder().executorName(executorName).ratio(ratio).sumConsume(totalConsume)
-        //                        .total(reduce).executorId(teamId).build();
-        //            }
-        //            return chartVO;
-        //        }).collect(Collectors.toList());
-        //    }
-        //}
-        //return Callback.success(resultlist);
-    }
+    //public Callback<List<WorkTimeChartVO>> selectTeamWokeTimeGroup(Integer masterTaskId) {
+    //    String token = req.getHeader("Authorization");
+    //    UserVO userVo = JWTUtil.getUserVOByToken(token);
+    //    assert userVo != null;
+    //    CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
+    //    // 非子任务管理角色，可查看所有
+    //    Set<Integer> userList = Sets.newHashSet();
+    //    Set<Integer> masterIds = Sets.newHashSet();
+    //    masterIds.add(masterTaskId);
+    //    if ("sub_task_manage".equals(currentUserVO.getRoleCode())) {
+    //        Integer userId = userVo.getId();
+    //        userList.add(userId);
+    //    }
+    //    // 执行人可根据某个主任务，查询所有的执行人工时占比
+    //    if ("executor".equals(currentUserVO.getRoleCode())) {
+    //        List<YsTeam> ysTeams = ysTeamMapper.selectAllByYsMasterTaskIdAndExecutorId(userVo.getId(), masterTaskId);
+    //        if (CollectionUtils.isEmpty(ysTeams)) {
+    //            log.info("没有子任务，无法查询工时占比");
+    //            List<WorkTimeChartVO> newList = new ArrayList<>();
+    //            return Callback.success(newList);
+    //        }
+    //        // userList = ysTeams.stream().map(YsTeam::getUserId).collect(Collectors.toSet());
+    //        masterIds = ysTeams.stream().map(YsTeam::getYsMasterTaskId).collect(Collectors.toSet());
+    //    }
+    //    userList.removeIf(Objects::isNull);
+    //    masterIds.removeIf(Objects::isNull);
+    //    UserMasterDTO dto = UserMasterDTO.builder().userList(userList).masterIds(masterIds).build();
+    //    List<WorkTimeChartVO> resultlist = new ArrayList<>();
+    //    List<YsSonTaskPageListVO> list = ysSonTaskMapper.selectSonTaskPagelist(null, null, null, dto, null);
+    //    Map<Integer, List<YsSonTaskPageListVO>> listMap = list.stream().collect(Collectors.groupingBy(YsSonTaskPageListVO::getTeamUserId));
+    //
+    //    Integer finalReduce = list.stream().map(x -> x.getTotalConsume() == null ? 0 : x.getTotalConsume()).reduce(Integer::sum).orElse(0);
+    //    resultlist = listMap.entrySet().stream().map(key -> {
+    //        Integer teamId = key.getKey();
+    //        WorkTimeChartVO chartVO = null;
+    //        List<YsSonTaskPageListVO> value = key.getValue();
+    //        if (value != null && !value.isEmpty()) {
+    //            int totalConsume = key.getValue().stream().mapToInt(x -> x.getTotalConsume() == null ? 0 : x.getTotalConsume()).sum();
+    //            String executorName = key.getValue().stream().findFirst().map(YsSonTaskPageListVO::getUsername).orElse(null);
+    //            int ratio = 0;
+    //            if (finalReduce != 0) {
+    //                BigDecimal multiply = new BigDecimal(totalConsume).divide(new BigDecimal(finalReduce), 2, RoundingMode.HALF_UP)
+    //                        .multiply(new BigDecimal(100));
+    //                ratio = multiply.intValue();
+    //            }
+    //            chartVO = WorkTimeChartVO.builder().executorName(executorName).ratio(ratio).sumConsume(totalConsume)
+    //                    .total(finalReduce).executorId(teamId).build();
+    //        }
+    //        return chartVO;
+    //    }).collect(Collectors.toList());
+    //    return Callback.success(resultlist);
+    //
+    //
+    //    //String token = req.getHeader("Authorization");
+    //    //UserVO userVo = JWTUtil.getUserVOByToken(token);
+    //    //assert userVo != null;
+    //    //CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
+    //    //Integer userId = null;
+    //    //if ("sub_task_manage".equals(currentUserVO.getRoleCode())) {
+    //    //    userId = currentUserVO.getUserId();
+    //    //}
+    //    //
+    //    //List<WorkTimeChartVO> resultlist = new ArrayList<>();
+    //    //List<TeamDTO> dtoList = ysTeamMapper.selectTeamDtoByMasterId(userId, masterTaskId);
+    //    //if (!dtoList.isEmpty()) {
+    //    //    List<Integer> sonlist = dtoList.stream().map(TeamDTO::getSonId).collect(Collectors.toList());
+    //    //    List<Integer> teamIdlist = dtoList.stream().map(TeamDTO::getYsTeamId).collect(Collectors.toList());
+    //    //    //查出所有工时
+    //    //    List<YsWorkTimeDTO> ysWorkTimeDTOS = ysWorkTimeMapper.selectAllByYsSonTaskIdInAndExecutorIdIn(sonlist, teamIdlist);
+    //    //    if (!ysWorkTimeDTOS.isEmpty()) {
+    //    //        //总工时
+    //    //        Integer reduce = ysWorkTimeDTOS.stream().map(YsWorkTimeDTO::getTotalConsume).reduce(0, (a, b) -> a + b);
+    //    //        Map<Integer, List<YsWorkTimeDTO>> listMap = ysWorkTimeDTOS.stream().collect(Collectors.groupingBy(vos -> {
+    //    //            return vos.getExecutorId();
+    //    //        }));
+    //    //        resultlist = listMap.entrySet().stream().map(key -> {
+    //    //            Integer teamId = key.getKey();
+    //    //            WorkTimeChartVO chartVO = null;
+    //    //            List<YsWorkTimeDTO> value = key.getValue();
+    //    //            if (value.size() > 0) {
+    //    //                Integer totalConsume = key.getValue().stream().mapToInt(YsWorkTimeDTO::getTotalConsume).sum();
+    //    //                String executorName = key.getValue().stream().findFirst().map(YsWorkTimeDTO::getExecutorName).get();
+    //    //
+    //    //                BigDecimal multiply = new BigDecimal(totalConsume).divide(new BigDecimal(reduce), 2, BigDecimal.ROUND_HALF_UP)
+    //    //                        .multiply(new BigDecimal(100));
+    //    //                Integer ratio = multiply.intValue();
+    //    //                chartVO = WorkTimeChartVO.builder().executorName(executorName).ratio(ratio).sumConsume(totalConsume)
+    //    //                        .total(reduce).executorId(teamId).build();
+    //    //            }
+    //    //            return chartVO;
+    //    //        }).collect(Collectors.toList());
+    //    //    }
+    //    //}
+    //    //return Callback.success(resultlist);
+    //}
 
     //
     //public Callback selectTeamRatio(Integer masterTaskId) {
