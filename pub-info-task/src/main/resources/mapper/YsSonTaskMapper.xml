@@ -447,7 +447,8 @@
         (select sum(total_consume) from ys_work_time where ys_son_task_id = t1.id) else 0 end as totalConsume, -- 消耗
         t1.receive_id receiveId,
         t1.pressing_level pressingLevel,
-        t1.status
+        t1.status,
+        t2.status masterStatus
     FROM
         ys_son_task t1,
         ys_master_task t2,
@@ -561,4 +562,32 @@
     GROUP BY ys_team_id
   </select>
 
+  <select id="selectByIdAndExecutorId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ys_son_task t1, ys_team t2
+        <where>
+            t1.ys_team_id = t2.id
+            <if test="id != null">
+                and t1.id=#{id,jdbcType=INTEGER}
+            </if>
+            <if test="executorId != null">
+                and t2.executor_id=#{executorId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+  <select id="selectByIdAndReceiveId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ys_son_task
+        <where>
+            <if test="id != null">
+                and id=#{id,jdbcType=INTEGER}
+            </if>
+            <if test="receiveId != null">
+                and receive_id=#{receiveId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
 </mapper>

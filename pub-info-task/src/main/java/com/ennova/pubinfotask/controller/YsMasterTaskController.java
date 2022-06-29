@@ -175,5 +175,16 @@ public class YsMasterTaskController {
         return ysMasterTaskService.selectMasterLeve1(page,pageSize,receiveId,name,status);
     }
 
+    @ApiOperation(value = "主任务 - 进度")
+    @ApiOperationSort(value = 15)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "主任务ID" ),
+            @ApiImplicitParam(name = "rate", value = "进度")
+    })
+    @GetMapping("/updateRateById")
+    public Callback updateRateById(Integer id, Integer rate) {
+        return ysMasterTaskService.updateRateById(id,rate);
+    }
+
 
 }

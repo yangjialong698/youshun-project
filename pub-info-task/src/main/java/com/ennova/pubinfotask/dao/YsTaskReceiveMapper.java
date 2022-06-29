@@ -34,5 +34,6 @@ public interface YsTaskReceiveMapper {
 
     List<YsTaskReceive> selectByYsMasterTaskId(@Param("ysMasterTaskId")Integer ysMasterTaskId);
 
+    YsTaskReceive selectByYsMasterTaskIdAndReceiveId(@Param("ysMasterTaskId")Integer ysMasterTaskId,@Param("receiveId")Integer receiveId);
 
 }

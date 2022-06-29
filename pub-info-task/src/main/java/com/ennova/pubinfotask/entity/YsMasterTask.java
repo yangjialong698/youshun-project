@@ -45,9 +45,9 @@ public class YsMasterTask {
     private String name;
 
     /**
-     * 任务类型： 0- 实验类  1- 研发类
+     * 任务类型： 0- 实验类  1- 研发类  2-制造类  3-其它
      */
-    @ApiModelProperty(value = "任务类型： 0- 实验类  1- 研发类", example = "1")
+    @ApiModelProperty(value = "任务类型： 0- 实验类  1- 研发类  2-制造类  3-其它", example = "1")
     private Integer type;
 
     /**
@@ -63,7 +63,7 @@ public class YsMasterTask {
     private String summary;
 
     /**
-     * 任务成本
+     * 任务成本，单位万元：1-9位整数
      */
     @ApiModelProperty(value = "任务成本")
     private Double cost;
@@ -87,9 +87,15 @@ public class YsMasterTask {
     private LocalDate taskEndDate;
 
     /**
-     * 任务发布待认领日期
+     * 进度
      */
-    @ApiModelProperty(value = "任务发布待认领日期")
+    @ApiModelProperty(value = "进度")
+    private Integer rate;
+
+    /**
+     * 任务发布时间
+     */
+    @ApiModelProperty(value = "任务发布时间")
     private LocalDateTime publishDate;
 
     /**

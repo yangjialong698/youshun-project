@@ -1,325 +1,328 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ennova.pubinfotask.dao.YsMasterTaskMapper">
-    <resultMap id="BaseResultMap" type="com.ennova.pubinfotask.entity.YsMasterTask">
-        <!--@mbg.generated-->
-        <!--@Table ys_master_task-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-    <result column="serial_number" jdbcType="INTEGER" property="serialNumber"/>
-    <result column="name" jdbcType="VARCHAR" property="name"/>
-    <result column="type" jdbcType="INTEGER" property="type"/>
-    <result column="status" jdbcType="INTEGER" property="status"/>
-    <result column="summary" jdbcType="VARCHAR" property="summary"/>
-    <result column="cost" jdbcType="DOUBLE" property="cost"/>
-    <result column="check_standard" jdbcType="VARCHAR" property="checkStandard"/>
-    <result column="estimate_hour" jdbcType="INTEGER" property="estimateHour"/>
-    <result column="task_end_date" jdbcType="DATE" property="taskEndDate"/>
-    <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate"/>
-    <result column="user_id" jdbcType="INTEGER" property="userId"/>
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
-    <result column="ys_master_file_id" jdbcType="INTEGER" property="ysMasterFileId"/>
-    </resultMap>
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfotask.entity.YsMasterTask">
+    <!--@mbg.generated-->
+    <!--@Table ys_master_task-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="cost" jdbcType="DOUBLE" property="cost" />
+    <result column="check_standard" jdbcType="VARCHAR" property="checkStandard" />
+    <result column="estimate_hour" jdbcType="INTEGER" property="estimateHour" />
+    <result column="task_end_date" jdbcType="DATE" property="taskEndDate" />
+    <result column="rate" jdbcType="INTEGER" property="rate" />
+    <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="ys_master_file_id" jdbcType="INTEGER" property="ysMasterFileId" />
+  </resultMap>
   <sql id="Base_Column_List">
-      <!--@mbg.generated-->
-      id,
-      serial_number,
-      `name`,
-      `type`,
-      `status`,
-      summary,
-      cost,
-      check_standard,
-      estimate_hour,
-      task_end_date,
-      publish_date,
-      user_id,
-      create_time,
-      update_time,
-      ys_master_file_id
+    <!--@mbg.generated-->
+    id, serial_number, `name`, `type`, `status`, summary, cost, check_standard, estimate_hour, 
+    task_end_date, rate, publish_date, user_id, create_time, update_time, ys_master_file_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-      <!--@mbg.generated-->
-      select
-      <include refid="Base_Column_List"/>
-      from ys_master_task
-      where id = #{id,jdbcType=INTEGER}
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from ys_master_task
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-      <!--@mbg.generated-->
-      delete
-      from ys_master_task
-      where id = #{id,jdbcType=INTEGER}
+    <!--@mbg.generated-->
+    delete from ys_master_task
+    where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsMasterTask"
-          useGeneratedKeys="true">
-      <!--@mbg.generated-->
-      insert into ys_master_task (serial_number, `name`, `type`,
-                                  `status`, summary, cost,
-                                  check_standard, estimate_hour, task_end_date,
-                                  publish_date, user_id, create_time,
-                                  update_time, ys_master_file_id)
-      values (#{serialNumber,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
-              #{status,jdbcType=INTEGER}, #{summary,jdbcType=VARCHAR}, #{cost,jdbcType=DOUBLE},
-              #{checkStandard,jdbcType=VARCHAR}, #{estimateHour,jdbcType=INTEGER}, #{taskEndDate,jdbcType=DATE},
-              #{publishDate,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
-              #{updateTime,jdbcType=TIMESTAMP}, #{ysMasterFileId,jdbcType=INTEGER})
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsMasterTask" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_master_task (serial_number, `name`, `type`, 
+      `status`, summary, cost, 
+      check_standard, estimate_hour, task_end_date, 
+      rate, publish_date, user_id, 
+      create_time, update_time, ys_master_file_id
+      )
+    values (#{serialNumber,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{summary,jdbcType=VARCHAR}, #{cost,jdbcType=DOUBLE}, 
+      #{checkStandard,jdbcType=VARCHAR}, #{estimateHour,jdbcType=INTEGER}, #{taskEndDate,jdbcType=DATE}, 
+      #{rate,jdbcType=INTEGER}, #{publishDate,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{ysMasterFileId,jdbcType=INTEGER}
+      )
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id"
-          parameterType="com.ennova.pubinfotask.entity.YsMasterTask" useGeneratedKeys="true">
-      <!--@mbg.generated-->
-      insert into ys_master_task
-      <trim prefix="(" suffix=")" suffixOverrides=",">
-          <if test="serialNumber != null">
-              serial_number,
-          </if>
-      <if test="name != null and name != ''">
-          `name`,
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsMasterTask" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_master_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serialNumber != null">
+        serial_number,
+      </if>
+      <if test="name != null">
+        `name`,
       </if>
       <if test="type != null">
-          `type`,
+        `type`,
       </if>
       <if test="status != null">
-          `status`,
+        `status`,
       </if>
-      <if test="summary != null and summary != ''">
-          summary,
+      <if test="summary != null">
+        summary,
       </if>
       <if test="cost != null">
-          cost,
+        cost,
       </if>
-      <if test="checkStandard != null and checkStandard != ''">
-          check_standard,
+      <if test="checkStandard != null">
+        check_standard,
       </if>
       <if test="estimateHour != null">
-          estimate_hour,
+        estimate_hour,
       </if>
       <if test="taskEndDate != null">
-          task_end_date,
+        task_end_date,
+      </if>
+      <if test="rate != null">
+        rate,
       </if>
       <if test="publishDate != null">
-          publish_date,
+        publish_date,
       </if>
       <if test="userId != null">
-          user_id,
+        user_id,
       </if>
       <if test="createTime != null">
-          create_time,
+        create_time,
       </if>
       <if test="updateTime != null">
-          update_time,
+        update_time,
       </if>
       <if test="ysMasterFileId != null">
-          ys_master_file_id,
+        ys_master_file_id,
       </if>
-      </trim>
+    </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-        <if test="serialNumber != null">
-            #{serialNumber,jdbcType=INTEGER},
-        </if>
-      <if test="name != null and name != ''">
-          #{name,jdbcType=VARCHAR},
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
-          #{type,jdbcType=INTEGER},
+        #{type,jdbcType=INTEGER},
       </if>
       <if test="status != null">
-          #{status,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER},
       </if>
-      <if test="summary != null and summary != ''">
-          #{summary,jdbcType=VARCHAR},
+      <if test="summary != null">
+        #{summary,jdbcType=VARCHAR},
       </if>
       <if test="cost != null">
-          #{cost,jdbcType=DOUBLE},
+        #{cost,jdbcType=DOUBLE},
       </if>
-      <if test="checkStandard != null and checkStandard != ''">
-          #{checkStandard,jdbcType=VARCHAR},
+      <if test="checkStandard != null">
+        #{checkStandard,jdbcType=VARCHAR},
       </if>
       <if test="estimateHour != null">
-          #{estimateHour,jdbcType=INTEGER},
+        #{estimateHour,jdbcType=INTEGER},
       </if>
       <if test="taskEndDate != null">
-          #{taskEndDate,jdbcType=DATE},
+        #{taskEndDate,jdbcType=DATE},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=INTEGER},
       </if>
       <if test="publishDate != null">
-          #{publishDate,jdbcType=TIMESTAMP},
+        #{publishDate,jdbcType=TIMESTAMP},
       </if>
       <if test="userId != null">
-          #{userId,jdbcType=INTEGER},
+        #{userId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
-          #{createTime,jdbcType=TIMESTAMP},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null">
-          #{updateTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="ysMasterFileId != null">
-          #{ysMasterFileId,jdbcType=INTEGER},
+        #{ysMasterFileId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfotask.entity.YsMasterTask">
-      <!--@mbg.generated-->
-      update ys_master_task
-      <set>
-          <if test="serialNumber != null">
-              serial_number = #{serialNumber,jdbcType=INTEGER},
-          </if>
-      <if test="name != null and name != ''">
-          `name` = #{name,jdbcType=VARCHAR},
+    <!--@mbg.generated-->
+    update ys_master_task
+    <set>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
-          `type` = #{type,jdbcType=INTEGER},
+        `type` = #{type,jdbcType=INTEGER},
       </if>
       <if test="status != null">
-          `status` = #{status,jdbcType=INTEGER},
+        `status` = #{status,jdbcType=INTEGER},
       </if>
-      <if test="summary != null and summary != ''">
-          summary = #{summary,jdbcType=VARCHAR},
+      <if test="summary != null">
+        summary = #{summary,jdbcType=VARCHAR},
       </if>
       <if test="cost != null">
-          cost = #{cost,jdbcType=DOUBLE},
+        cost = #{cost,jdbcType=DOUBLE},
       </if>
-      <if test="checkStandard != null and checkStandard != ''">
-          check_standard = #{checkStandard,jdbcType=VARCHAR},
+      <if test="checkStandard != null">
+        check_standard = #{checkStandard,jdbcType=VARCHAR},
       </if>
       <if test="estimateHour != null">
-          estimate_hour = #{estimateHour,jdbcType=INTEGER},
+        estimate_hour = #{estimateHour,jdbcType=INTEGER},
       </if>
       <if test="taskEndDate != null">
-          task_end_date = #{taskEndDate,jdbcType=DATE},
+        task_end_date = #{taskEndDate,jdbcType=DATE},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=INTEGER},
       </if>
       <if test="publishDate != null">
-          publish_date = #{publishDate,jdbcType=TIMESTAMP},
+        publish_date = #{publishDate,jdbcType=TIMESTAMP},
       </if>
       <if test="userId != null">
-          user_id = #{userId,jdbcType=INTEGER},
+        user_id = #{userId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
-          create_time = #{createTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null">
-          update_time = #{updateTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="ysMasterFileId != null">
-          ys_master_file_id = #{ysMasterFileId,jdbcType=INTEGER},
+        ys_master_file_id = #{ysMasterFileId,jdbcType=INTEGER},
       </if>
-      </set>
-      where id = #{id,jdbcType=INTEGER}
+    </set>
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfotask.entity.YsMasterTask">
-      <!--@mbg.generated-->
-      update ys_master_task
-      set serial_number     = #{serialNumber,jdbcType=INTEGER},
-          `name`            = #{name,jdbcType=VARCHAR},
-          `type`            = #{type,jdbcType=INTEGER},
-          `status`          = #{status,jdbcType=INTEGER},
-          summary           = #{summary,jdbcType=VARCHAR},
-          cost              = #{cost,jdbcType=DOUBLE},
-          check_standard    = #{checkStandard,jdbcType=VARCHAR},
-          estimate_hour     = #{estimateHour,jdbcType=INTEGER},
-          task_end_date     = #{taskEndDate,jdbcType=DATE},
-          publish_date      = #{publishDate,jdbcType=TIMESTAMP},
-          user_id           = #{userId,jdbcType=INTEGER},
-          create_time       = #{createTime,jdbcType=TIMESTAMP},
-          update_time       = #{updateTime,jdbcType=TIMESTAMP},
-          ys_master_file_id = #{ysMasterFileId,jdbcType=INTEGER}
-      where id = #{id,jdbcType=INTEGER}
+    <!--@mbg.generated-->
+    update ys_master_task
+    set serial_number = #{serialNumber,jdbcType=INTEGER},
+      `name` = #{name,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      summary = #{summary,jdbcType=VARCHAR},
+      cost = #{cost,jdbcType=DOUBLE},
+      check_standard = #{checkStandard,jdbcType=VARCHAR},
+      estimate_hour = #{estimateHour,jdbcType=INTEGER},
+      task_end_date = #{taskEndDate,jdbcType=DATE},
+      rate = #{rate,jdbcType=INTEGER},
+      publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      ys_master_file_id = #{ysMasterFileId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateBatch" parameterType="java.util.List">
-      <!--@mbg.generated-->
-      update ys_master_task
-      <trim prefix="set" suffixOverrides=",">
-          <trim prefix="serial_number = case" suffix="end,">
-              <foreach collection="list" index="index" item="item">
-                  when id = #{item.id,jdbcType=INTEGER} then #{item.serialNumber,jdbcType=INTEGER}
-              </foreach>
-          </trim>
+    <!--@mbg.generated-->
+    update ys_master_task
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="serial_number = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.serialNumber,jdbcType=INTEGER}
+        </foreach>
+      </trim>
       <trim prefix="`name` = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
+        </foreach>
       </trim>
       <trim prefix="`type` = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.type,jdbcType=INTEGER}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.type,jdbcType=INTEGER}
+        </foreach>
       </trim>
       <trim prefix="`status` = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.status,jdbcType=INTEGER}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.status,jdbcType=INTEGER}
+        </foreach>
       </trim>
       <trim prefix="summary = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.summary,jdbcType=VARCHAR}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.summary,jdbcType=VARCHAR}
+        </foreach>
       </trim>
       <trim prefix="cost = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.cost,jdbcType=DOUBLE}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.cost,jdbcType=DOUBLE}
+        </foreach>
       </trim>
       <trim prefix="check_standard = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.checkStandard,jdbcType=VARCHAR}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.checkStandard,jdbcType=VARCHAR}
+        </foreach>
       </trim>
       <trim prefix="estimate_hour = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.estimateHour,jdbcType=INTEGER}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.estimateHour,jdbcType=INTEGER}
+        </foreach>
       </trim>
       <trim prefix="task_end_date = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.taskEndDate,jdbcType=DATE}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.taskEndDate,jdbcType=DATE}
+        </foreach>
+      </trim>
+      <trim prefix="rate = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.rate,jdbcType=INTEGER}
+        </foreach>
       </trim>
       <trim prefix="publish_date = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.publishDate,jdbcType=TIMESTAMP}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.publishDate,jdbcType=TIMESTAMP}
+        </foreach>
       </trim>
       <trim prefix="user_id = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.userId,jdbcType=INTEGER}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.userId,jdbcType=INTEGER}
+        </foreach>
       </trim>
       <trim prefix="create_time = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
       </trim>
       <trim prefix="update_time = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
       </trim>
       <trim prefix="ys_master_file_id = case" suffix="end,">
-          <foreach collection="list" index="index" item="item">
-              when id = #{item.id,jdbcType=INTEGER} then #{item.ysMasterFileId,jdbcType=INTEGER}
-          </foreach>
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.ysMasterFileId,jdbcType=INTEGER}
+        </foreach>
       </trim>
-      </trim>
-      where id in
-      <foreach close=")" collection="list" item="item" open="(" separator=", ">
-          #{item.id,jdbcType=INTEGER}
-      </foreach>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
   </update>
   <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
-      <!--@mbg.generated-->
-      insert into ys_master_task
-      (serial_number, `name`, `type`, `status`, summary, cost, check_standard, estimate_hour,
-       task_end_date, publish_date, user_id, create_time, update_time, ys_master_file_id)
-      values
-      <foreach collection="list" item="item" separator=",">
-          (#{item.serialNumber,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER},
-           #{item.status,jdbcType=INTEGER}, #{item.summary,jdbcType=VARCHAR}, #{item.cost,jdbcType=DOUBLE},
-           #{item.checkStandard,jdbcType=VARCHAR}, #{item.estimateHour,jdbcType=INTEGER},
-           #{item.taskEndDate,jdbcType=DATE}, #{item.publishDate,jdbcType=TIMESTAMP}, #{item.userId,jdbcType=INTEGER},
-           #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP},
-           #{item.ysMasterFileId,jdbcType=INTEGER})
-      </foreach>
+    <!--@mbg.generated-->
+    insert into ys_master_task
+    (serial_number, `name`, `type`, `status`, summary, cost, check_standard, estimate_hour, 
+      task_end_date, rate, publish_date, user_id, create_time, update_time, ys_master_file_id
+      )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.serialNumber,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, 
+        #{item.status,jdbcType=INTEGER}, #{item.summary,jdbcType=VARCHAR}, #{item.cost,jdbcType=DOUBLE}, 
+        #{item.checkStandard,jdbcType=VARCHAR}, #{item.estimateHour,jdbcType=INTEGER}, 
+        #{item.taskEndDate,jdbcType=DATE}, #{item.rate,jdbcType=INTEGER}, #{item.publishDate,jdbcType=TIMESTAMP}, 
+        #{item.userId,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, 
+        #{item.ysMasterFileId,jdbcType=INTEGER})
+    </foreach>
   </insert>
 
 
@@ -517,6 +520,7 @@
                         t1.serial_number     serialNumber,
                         t1.name,
                         t1.type,
+                        t1.rate percentage,
                         t1.status,
                         t1.summary,
                         t1.cost,
@@ -554,6 +558,7 @@
                                 t1.serial_number     serialNumber,
                                 t1.name,
                                 t1.type,
+                                t1.rate percentage,
                                 t1.status,
                                 t1.summary,
                                 t1.cost,
@@ -614,7 +619,7 @@
    </select>
   <select id="selectByName" resultMap="BaseResultMap">
       select
-      <include refid="Base_Column_List"/>
+      <include refid="Base_Column_List" />
       from ys_master_task
       <where>
           <if test="name != null">
@@ -625,7 +630,7 @@
 
   <select id="selectByIdAndName" resultMap="BaseResultMap">
       select
-      <include refid="Base_Column_List"/>
+      <include refid="Base_Column_List" />
       from ys_master_task
       <where>
           id != #{id,jdbcType=INTEGER}

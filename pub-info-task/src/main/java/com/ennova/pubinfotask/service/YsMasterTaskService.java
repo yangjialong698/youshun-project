@@ -568,17 +568,17 @@ public class YsMasterTaskService {
             Integer sumTotalConsume = ysMasterTaskMapper.selectSumTotalConsume(x.getId());
             // 剩余
             Integer surplus = null;
-            // 进度
-            Integer percentage = null;
+            // 进度 1.0
+//            Integer percentage = null;
 
-            if (sumEstimateWork != null && sumTotalConsume != null) {
-                surplus = sumEstimateWork - sumTotalConsume;
-                // 进度=（消耗/预计）*100%   。
-                if (sumEstimateWork != 0) {
-                    BigDecimal multiply = new BigDecimal(sumTotalConsume).divide(new BigDecimal(sumEstimateWork), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
-                    percentage = multiply.intValue();
-                }
-            }
+//            if (sumEstimateWork != null && sumTotalConsume != null) {
+//                surplus = sumEstimateWork - sumTotalConsume;
+//                // 进度=（消耗/预计）*100%   。
+//                if (sumEstimateWork != 0) {
+//                    BigDecimal multiply = new BigDecimal(sumTotalConsume).divide(new BigDecimal(sumEstimateWork), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+//                    percentage = multiply.intValue();
+//                }
+//            }
             // 是否存在日报记录
             Integer hasRbId = ysMasterFileMapper.selectHasRbById(x.getId());
             x.setRbStatus(1);
@@ -601,14 +601,50 @@ public class YsMasterTaskService {
             x.setEstimateHour(String.valueOf(sumEstimateWork));
             x.setTotalConsume(String.valueOf(sumTotalConsume));
             x.setSurplus(String.valueOf(surplus));
-            x.setPercentage(String.valueOf(percentage));
-
+            // 进度1.0
+//            x.setPercentage(percentage);
         });
 
         list = list.stream().sorted(Comparator.comparing(MasterLeve1::getPublishDate, Comparator.nullsLast(Comparator.reverseOrder()))).collect(Collectors.toList());
 
         BaseVO<MasterLeve1> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
+    }
+
+
+    public Callback updateRateById(Integer id, Integer rate) {
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
+        if (!"task_manage".equals(currentUserVO.getRoleCode())) {
+            return Callback.error(2, "您没有权限操作");
+        }
+        if(null == rate || !(rate <= 100 && rate >= 0)){
+            return Callback.error(2, "进度不能为空且必须在0-100之间");
+        }
+
+//        YsTaskReceive ysTaskReceive = ysTaskReceiveMapper.selectByYsMasterTaskIdAndReceiveId(id, currentUserVO.getUserId());
+//        if (ysTaskReceive == null) {
+//            return Callback.error(2, "您没有权限操作");
+//        }
+
+        YsMasterTask ysMasterTask = ysMasterTaskMapper.selectByPrimaryKey(id);
+        if(null != ysMasterTask){
+            if (ysMasterTask.getStatus() == 4 || ysMasterTask.getStatus() == 5) {
+                return Callback.error(2, "已完成或已关闭的任务，不能修改进度");
+            }
+            if(100 == rate) {
+                ysMasterTask.setStatus(4);
+            }
+            ysMasterTask.setRate(rate);
+            ysMasterTask.setUpdateTime(LocalDateTime.now());
+            int update = ysMasterTaskMapper.updateByPrimaryKey(ysMasterTask);
+            if (update == 1) {
+                return Callback.success();
+            }
+        }
+        return Callback.error(2, "更新失败");
     }
 
 

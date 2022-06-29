@@ -92,7 +92,7 @@ public class MasterLeve1 {
      * 进度
      */
     @ApiModelProperty(value = "进度", example = "1")
-    private String percentage;
+    private Integer percentage;
 
     /**
      * 认领人ID

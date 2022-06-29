@@ -76,4 +76,15 @@ public interface YsSonTaskMapper {
     List<WorkTimeResidueDTO> selectWorkTimeResidueDTOByMasterId(@Param("receiveId") Integer receiveId, @Param("masterTaskId") Integer masterTaskId);
     
     List<MasterTeamGroupDTO> selectGroupTeamIdByMasterTaskId(@Param("ysMasterTaskId") Integer ysMasterTaskId);
+
+    // 根据ID查询和团队表中的执行人，查询子任务信息
+    YsSonTask selectByIdAndExecutorId(@Param("id") Integer id, @Param("executorId") Integer executorId);
+
+    // 根据ID查询和认领人查看子任务信息
+    YsSonTask selectByIdAndReceiveId(@Param("id")Integer id,@Param("receiveId")Integer receiveId);
+
+
+
+
+
 }

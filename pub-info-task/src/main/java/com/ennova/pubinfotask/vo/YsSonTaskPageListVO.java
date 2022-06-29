@@ -59,6 +59,10 @@ public class YsSonTaskPageListVO {
     private Integer status;
 
     @JsonIgnore
+    @ApiModelProperty(value = "主任务状态： 0- 未发布 1- 已发布，待认领  2- 已认领，未开始  3- 进行中 4- 已完成 5- 已关闭")
+    private Integer masterStatus;
+
+    @JsonIgnore
     @ApiModelProperty(value="紧急程度：0-  一般、1- 重要、2- 紧急", example = "1")
     private Integer pressingLevel;
 
@@ -67,5 +71,8 @@ public class YsSonTaskPageListVO {
 
     @ApiModelProperty(value = "文件类型id： 3- 经验建议 ", example = "1")
     private Integer ysFileTypeId;
+
+    @ApiModelProperty(value = "主任务是否完成或已完关： true:是  false:不是")
+    private boolean masterFinish;
 
 }

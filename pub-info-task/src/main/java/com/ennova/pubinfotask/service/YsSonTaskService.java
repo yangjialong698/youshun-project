@@ -371,6 +371,10 @@ public class YsSonTaskService {
                 if (masterFiles != null && !masterFiles.isEmpty()) {
                     x.setButtonStatus(0);
                 }
+                x.setMasterFinish(false);
+                if (x.getMasterStatus() == 4 || x.getMasterStatus() == 5) {
+                    x.setMasterFinish(true);
+                }
             });
         }
 
@@ -430,17 +434,33 @@ public class YsSonTaskService {
     //
     //}
 
+    // 子任务改为已完成状态
     public Callback updateSonTaskStatus(Integer sonTaskId) {
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
-        if ("sub_task_manage".equals(currentUserVO.getRoleCode())) {
+        if ("sub_task_manage".equals(currentUserVO.getRoleCode()) || "executor".equals(currentUserVO.getRoleCode())) {
+            YsSonTask ysSonTask = null;
+            // 查询子任务是不是本人认领的
+            if ("sub_task_manage".equals(currentUserVO.getRoleCode())) {
+                ysSonTask = ysSonTaskMapper.selectByIdAndReceiveId(sonTaskId, userVo.getId());
+                if (ysSonTask == null) {
+                    return Callback.error(2,"您无权限操作该子任务");
+                }
+            }
+            // 查询执行人是不是该子任务的
+            if ("executor".equals(currentUserVO.getRoleCode())){
+                ysSonTask = ysSonTaskMapper.selectByIdAndExecutorId(sonTaskId, userVo.getId());
+                if (ysSonTask == null) {
+                    return Callback.error(2,"您无权限操作该子任务");
+                }
+            }
+
             if (sonTaskId != null) {
-                YsSonTask sonTask = ysSonTaskMapper.selectByPrimaryKey(sonTaskId);
-                if (sonTask.getStatus().equals(0) || sonTask.getStatus().equals(1)) {
-                    sonTask.setStatus(2);
-                    sonTask.setUpdateTime(LocalDateTime.now());
-                    int count = ysSonTaskMapper.updateByPrimaryKeySelective(sonTask);
+                if (ysSonTask.getStatus().equals(0) || ysSonTask.getStatus().equals(1)) {
+                    ysSonTask.setStatus(2);
+                    ysSonTask.setUpdateTime(LocalDateTime.now());
+                    int count = ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
                     if (count > 0) {
                         return Callback.success(true);
                     }
@@ -1091,6 +1111,33 @@ public class YsSonTaskService {
     }
 
 
+    /**
+     * 子任务状态为未开始，点击开始按钮，子任务状态改为进行中
+     */
+    public Callback updateStatusBySonTaskId(Integer sonTaskId) {
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
+        log.info("当前用户角色：{}", currentUserVO.getRoleCode());
+        if(!"executor".equals(currentUserVO.getRoleCode())){
+            return Callback.error(2,"只有执行人才能开始任务");
+        }
+        if ("executor".equals(currentUserVO.getRoleCode())) {
+            YsSonTask ysSonTask = ysSonTaskMapper.selectByIdAndExecutorId(sonTaskId, currentUserVO.getUserId());
+            if (ysSonTask == null) {
+                return Callback.error(2, "无权限查看此任务");
+            }
+            if (ysSonTask.getStatus() == 0) {
+                ysSonTask.setStatus(1);
+                ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
+                return Callback.success();
+            }else{
+                return Callback.error(2, "只有未开始的任务才能开始");
+            }
+        }
+        return Callback.error(2, "更新状态失败！");
+    }
 
 
 }

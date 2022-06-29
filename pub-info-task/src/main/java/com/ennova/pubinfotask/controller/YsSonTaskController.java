@@ -167,4 +167,11 @@ public class YsSonTaskController {
         return ysSonTaskService.selectGroupTeamIdByMasterTaskId(ysMasterTaskId);
     }
 
+    @ApiOperation(value = "子任务 - 状态：开始 -> 进行中")
+    @ApiOperationSort(value = 15)
+    @GetMapping("/updateStatusBySonTaskId")
+    public Callback updateStatusBySonTaskId(Integer sonTaskId) {
+        return ysSonTaskService.updateStatusBySonTaskId(sonTaskId);
+    }
+
 }
