@@ -46,6 +46,12 @@ public class UserEntity {
     private String mobile;
 
     /**
+     * 工号
+     */
+    @ApiModelProperty(value = "工号")
+    private String jobNum;
+
+    /**
      * 单位
      */
     @ApiModelProperty(value = "单位id")
