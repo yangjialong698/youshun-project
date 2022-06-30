@@ -40,6 +40,9 @@ public class UserDTO {
     @ApiModelProperty(value = "手机号")
     private String mobile;
 
+    @ApiModelProperty(value = "工号")
+    private String jobNum;
+
     @ApiModelProperty(value = "职位")
     private String position;
 

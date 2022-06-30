@@ -1,6 +1,7 @@
 package com.ennova.pubinfouser.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.IdUtil;
 
 import com.ennova.pubinfocommon.entity.Callback;
@@ -79,9 +80,17 @@ public class UserService extends BaseService<UserEntity> {
         if(password == null || "".equals(password)) {
             return Callback.error("请输入密码");
         }
-        UserVO userVO = userDao.getUserInfoByMobile(account);
-        if(userVO == null) {
-            return Callback.error("号码未注册");
+        UserVO userVO = null;
+        if (Validator.isMobile(account)) {
+            userVO = userDao.getUserInfoByMobile(account);
+            if (userVO == null) {
+                return Callback.error("手机号码未注册");
+            }
+        }else if (account.startsWith("U") && account.length() == 8){
+            userVO = userDao.getUserInfoByJobNum(account);
+            if (userVO == null) {
+                return Callback.error("工号未注册");
+            }
         }
         List<UserRole>  userRoleList = userRoleMapper.selectByUserId(userVO.getId());
         UserRole userRole = null ;
@@ -138,6 +147,10 @@ public class UserService extends BaseService<UserEntity> {
         UserVO tempUserByMo = userDao.getUserInfoByMobile(userEntity.getMobile());
         if(tempUserByMo != null) {
             return Callback.error("手机号已经存在！请确认");
+        }
+        UserVO tempUserByJn =userDao.getUserInfoByJobNum(userEntity.getJobNum());
+        if(tempUserByJn != null) {
+            return Callback.error("工号已经存在！请确认");
         }
         List<UserVO> userVOList = userDao.getUserInfoByUname(userEntity.getUsername());
         if(CollectionUtil.isNotEmpty(userVOList)) {

@@ -7,6 +7,7 @@
         <result column="username" jdbcType="VARCHAR" property="username" />
         <result column="password" jdbcType="VARCHAR" property="password" />
         <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+        <result column="job_num" jdbcType="VARCHAR" property="jobNum" />
         <result column="company" jdbcType="VARCHAR" property="company" />
         <result column="department" jdbcType="VARCHAR" property="department" />
         <result column="position" jdbcType="VARCHAR" property="position" />
@@ -17,13 +18,14 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, username, password, mobile, company, department, position, status, is_delete, create_time,update_time
+        id, username, password, mobile,job_num, company, department, position, status, is_delete, create_time,update_time
     </sql>
 
     <select id="getUserInfoByMobile" resultType="com.ennova.pubinfouser.vo.UserVO">
         select u.id,
                u.username,
                u.mobile,
+               u.job_num as jobNum,
                u.password,
                t.role_id     as roleId,
                u.company,
@@ -64,6 +66,9 @@
             <if test="mobile != null">
                 mobile,
             </if>
+            <if test="jobNum != null">
+                job_num,
+            </if>
             <if test="company != null">
                 company,
             </if>
@@ -99,6 +104,9 @@
             <if test="mobile != null">
                 #{mobile,jdbcType=VARCHAR},
             </if>
+            <if test="jobNum != null">
+                #{jobNum,jdbcType=VARCHAR},
+            </if>
             <if test="company != null">
                 #{company,jdbcType=VARCHAR},
             </if>
@@ -127,6 +135,7 @@
         SELECT
             u.id,
             u.mobile,
+            u.job_num AS jobNum,
             u.username,
             u.wechat_no AS wechatNo,
             d.id department,
@@ -158,6 +167,7 @@
         SELECT
         u.id,
         u.mobile,
+        u.job_num AS jobNum,
         u.username,
         u.department,
         u.wechat_no AS wechatNo,
@@ -217,6 +227,9 @@
             <if test="mobile != null">
                 mobile = #{mobile,jdbcType=VARCHAR},
             </if>
+            <if test="jobNum != null">
+                job_num = #{jobNum,jdbcType=VARCHAR},
+            </if>
             <if test="company != null">
                 company = #{company,jdbcType=VARCHAR},
             </if>
@@ -247,6 +260,7 @@
         SELECT
             u.id,
             u.mobile,
+            u.job_num AS jobNum,
             u.username,
             u.wechat_no AS wechatNo,
             u.position,
@@ -263,6 +277,7 @@
         SELECT
             u.id,
             u.mobile,
+            u.job_num AS jobNum,
             u.username,
             u.wechat_no AS wechatNo,
             u.position,
@@ -275,4 +290,30 @@
           AND u.username = #{username}
     </select>
 
+    <select id="getUserInfoByJobNum" resultType="com.ennova.pubinfouser.vo.UserVO">
+        select u.id,
+        u.username,
+        u.mobile,
+        u.job_num as jobNum,
+        u.password,
+        t.role_id     as roleId,
+        u.company,
+        u.department,
+        td.dept_name as deptName,
+        u.position,
+        u.status,
+        u.create_time as createTime,
+        u.update_time as updateTime,
+        u.is_delete   as isDelete,
+        r.role_name   as roleName,
+        r.role_code        as roleCode
+        from t_user u
+        left join t_user_role t on u.id = t.user_id
+        left join t_role r on t.role_id = r.id
+        left join t_user_dept tud on u.id = tud.user_id
+        left join t_dept td on tud.dept_id = td.id
+        where u.is_delete = 0
+        and u.job_num = #{jobNum}
+        limit 1
+    </select>
 </mapper>

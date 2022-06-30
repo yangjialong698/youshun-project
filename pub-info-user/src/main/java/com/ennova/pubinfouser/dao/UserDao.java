@@ -24,4 +24,6 @@ public interface UserDao extends BaseDao<UserEntity> {
     UserVO getUserByMobile(String mobile);
 
     List<UserVO> getUserInfoByUname(String username);
+
+    UserVO getUserInfoByJobNum(@Param("jobNum")String jobNum);
 }
