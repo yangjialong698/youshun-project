@@ -464,7 +464,7 @@
            and t1.status=#{status}
       </if>
       <if test="teamUserId != null">
-           and t3.id=#{teamUserId}
+           and t3.executor_id in (select executor_id from ys_team where id=#{teamUserId})
       </if>
 <!--      <if test="masterTaskName != null and masterTaskName != ''">-->
 <!--          and t2.name like concat('%',trim(#{masterTaskName}),'%')-->
@@ -562,10 +562,23 @@
     GROUP BY ys_team_id
   </select>
 
-  <select id="selectByIdAndExecutorId" resultMap="BaseResultMap">
+  <select id="selectByIdAndExecutorId" resultType="com.ennova.pubinfotask.entity.YsSonTask">
         select
-        <include refid="Base_Column_List"/>
-        from ys_son_task t1, ys_team t2
+          t1.id,
+          t1.name,
+          t1.ys_master_task_id ysMasterTaskId,
+          t1.pressing_level pressingLevel,
+          t1.status,
+          t1.start_time startTime,
+          t1.end_time endTime,
+          t1.estimate_work_time estimateWorkTime,
+          t1.ys_team_id ysTeamId,
+          t1.cost,
+          t1.receive_id receiveId,
+          t1.create_time createTime,
+          t1.update_time updateTime,
+          t1.ys_master_file_id ysMasterFileId
+      from ys_son_task t1, ys_team t2
         <where>
             t1.ys_team_id = t2.id
             <if test="id != null">

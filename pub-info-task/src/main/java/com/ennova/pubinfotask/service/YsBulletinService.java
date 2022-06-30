@@ -37,10 +37,7 @@ import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ennova.pubinfotask.config.ChannelHandlerPool.channelGroup;
@@ -90,21 +87,20 @@ public class YsBulletinService {
         if (i > 0) {
             //推送:sourceType=0 公告,type=0 新增
             SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(0).content(ysBulletin).build();
-            List<Channel> channelList = getChannelByName(String.valueOf(publishDTO.getCheckUserId()));
 
-                   log.info("新增公告时的审核人: " + publishDTO.getCheckUserId() );
-                log.info("新增公告时channeList: " + channelList );
-            if (null == channelList || channelList.size() <= 0) {
+            //List<Channel> channelList = getChannelByName(String.valueOf(publishDTO.getCheckUserId()));
+            Channel channel = getChannel(String.valueOf(publishDTO.getCheckUserId()));
+
+            log.info("新增公告时的审核人: " + publishDTO.getCheckUserId() );
+            log.info("新增公告时channeList: " + channel );
+            if (null == channel) {
                 redisTemplate.opsForList().rightPush("bulletin:add:" + publishDTO.getCheckUserId(), JSONObject.toJSONString(socketVO));
                 log.info("用户: " + publishDTO.getCheckUserId() + " 没有登录，添加到redis队列");
                 return Callback.success();
             } else {
-
-
                 //推送list第一个元素
                 //channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame("您有一条编号为" + JSONObject.toJSONString(socketVO) + "的公告需要审批！")));
-                channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO))));
-
+                channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
             }
 
             //Channel channel = getChannelByName2(String.valueOf(publishDTO.getCheckUserId()));
@@ -159,28 +155,19 @@ public class YsBulletinService {
             //推送:sourceType=0 公告,type=3 修改
 
             SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(3).content(ysBulletin).build();
-            List<Channel> channelList = getChannelByName(String.valueOf(publishDTO.getCheckUserId()));
-            log.info("更新公告时channeList: " + channelList );
-            if (null == channelList || channelList.size() <= 0) {
+            //List<Channel> channelList = getChannelByName(String.valueOf(publishDTO.getCheckUserId()));
+            Channel channel = getChannel(String.valueOf(publishDTO.getCheckUserId()));
+            log.info("更新公告时channeList: " + channel );
+            if (null == channel) {
                 redisTemplate.opsForList().rightPush("bulletin:add:" + publishDTO.getCheckUserId(), JSONObject.toJSONString(socketVO));
                 log.info("用户: " + publishDTO.getCheckUserId() + " 没有登录，添加到redis队列");
                 return Callback.success();
             } else {
-                channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO))));
+                channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
             }
-            //Channel channel = getChannelByName2(String.valueOf(publishDTO.getCheckUserId()));
-            //if (null != channel) {
-            //    if (online(String.valueOf(publishDTO.getCheckUserId()))) {
-            //        channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
-            //    } else {
-            //        redisTemplate.opsForList().rightPush("bulletin:add:" + publishDTO.getCheckUserId(), JSONObject.toJSONString(socketVO));
-            //        log.info("用户: " + publishDTO.getCheckUserId() + " 没有登录，添加到redis队列");
-            //    }
-            //}
             return Callback.success(true);
         }
         return Callback.error(2, "修改失败");
-
     }
 
     // 只有管理员可删除
@@ -283,31 +270,21 @@ public class YsBulletinService {
                 YsMessage message = YsMessage.builder().sourceType(0).receiveId(user).ysBulletin(ysBulletin.getId()).status(false).createTime(LocalDateTime.now()).build();
                 ysMessageMapper.insert(message);
             });
-
             log.info("审核通过获取所有用户"+users);
-
             //推送:sourceType=0 公告,type=1 审核通过了
             SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(1).content(ysBulletin).build();
             if (users.size() > 0) {
                 //推送消息给所有用户
                 users.forEach(user -> {
                     log.info("遍历要发送的用户user："+ user);
-                    List<Channel> channelList = getChannelByName(String.valueOf(user));
-                    log.info("遍历要发送的用户channeList："+ channelList + " =-----------------------------------------------------------" );
-                    log.info("通道个数：" + channelList.size() + "个用户");
-                    if (null == channelList || channelList.size() <= 0) {
+                    Channel channel = getChannel(String.valueOf(user));
+                    log.info("遍历要发送的用户channeList："+ channel + " =-----------------------------------------------------------" );
+                    if (null == channel) {
                          log.info("不在线的用户："+ user);
                         redisTemplate.opsForList().rightPush("bulletin:push:" + user, JSONObject.toJSONString(socketVO));
                     } else {
-                        channelList.forEach(
-                                channel ->
-                                {
-                                   log.info("发送成功的用户："+ user + " channel:" + channel);
-                                    channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
-                                }
-
-
-                        );
+                        log.info("发送成功的用户："+ user + " channel:" + channel);
+                        channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
                     }
                 });
 
@@ -346,15 +323,14 @@ public class YsBulletinService {
             //}
 
 
-            List<Channel> channelList = getChannelByName(String.valueOf(ysBulletin.getCreateId()));
-            log.info("审核不通过通道个数：" + channelList.size() + "个用户");
+            Channel channel = getChannel(String.valueOf(ysBulletin.getCreateId()));
             log.info("审核不通过用户：" + ysBulletin.getCreateId());
-            if (null == channelList || channelList.size() <= 0) {
+            if (null == channel) {
                 redisTemplate.opsForList().rightPush("bulletin:reject:" + ysBulletin.getCreateId(), JSONObject.toJSONString(socketVO));
             } else {
                 //channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame("您有一条编号为" + ysBulletin.getId() + "的公告已被驳回！")));
-                channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO))));
-                log.info("审核不通过的用户："+ ysBulletin.getCreateId() + " channel:" + channelList.get(0));
+                channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
+                log.info("审核不通过的用户："+ ysBulletin.getCreateId() + " channel:" + channel);
             }
         }
 
@@ -367,12 +343,22 @@ public class YsBulletinService {
 
 
     // 查询用户
-    public List<Channel> getChannelByName(String name) {
-        AttributeKey<String> key = AttributeKey.valueOf("user");
+//    public List<Channel> getChannelByName(String name) {
+//        AttributeKey<String> key = AttributeKey.valueOf("user");
+//
+//        return channelGroup.stream().filter(channel -> channel.attr(key).get().equals(name))
+//                .collect(Collectors.toList());
+//    }
 
-        return channelGroup.stream().filter(channel -> channel.attr(key).get().equals(name))
-                .collect(Collectors.toList());
+    // 查询用户
+    public Channel getChannel(String userId) {
+        // Channel channel = userMap.get(paramMap.get("userId")); //获取用户的channel
+        Map<String, Channel> getConnects = ChannelHandlerPool.getConnects;
+        Channel channel = getConnects.get(userId);
+        return channel;
     }
+
+
     //
     //public Channel getChannelByName2(String name) {
     //    return ChannelHandlerPool.channelMap.get(name);

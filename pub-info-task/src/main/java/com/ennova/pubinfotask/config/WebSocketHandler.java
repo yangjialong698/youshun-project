@@ -1,29 +1,28 @@
 package com.ennova.pubinfotask.config;
 
-import cn.hutool.core.map.MapUtil;
 import com.alibaba.fastjson.JSON;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
-import com.ennova.pubinfotask.config.ChannelHandlerPool;
-import io.netty.channel.*;
-import io.netty.handler.codec.http.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
-import io.netty.util.AsciiString;
-import io.netty.util.AttributeKey;
-import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.WebSocketSession;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -34,70 +33,16 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
 
     @Resource
     private RedisTemplate redisTemplate;
-    private final String USER = "user";
-    private final AttributeKey<String> key = AttributeKey.valueOf(USER);
-    //private String WEBSOCKET_PATH = "wss://172.168.3.104:8096/ws";
+//    private final String USER = "user";
+//    private final AttributeKey<String> key = AttributeKey.valueOf(USER);
     private String WEBSOCKET_PATH = "wss://139.196.150.88:8096/ws";
-    //private String WEBSOCKET_PATH = "wss://123.60.73.204:8096/ws";
-    //ConcurrentMap<String, String> paramMap2 = new ConcurrentHashMap<>();
 
+    static Map<String,Channel> userMap=new HashMap<>();
+    static Map<Channel,String> channelMap=new HashMap<>();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) {
     }
-
-
-//    @Override
-//    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-//
-//
-//        UserVO userVo = JWTUtil.getUserVOByToken(srctoken);
-//
-//        //redisTemplate获取List,然判是否为空
-//
-//        List<String> range = redisTemplate.opsForList().range("bulletin:add" + userVo.getId(), 0, -1);
-//        if (range.size() > 0) {
-//            System.out.println("有消息");
-//        }
-//
-//        //System.out.println("range = " + range);
-//
-//        String srctoken = this.srctoken;
-//        log.info("srctoken:{}", srctoken);
-//
-//        log.info("收到消息：" + msg);
-//        if (msg instanceof FullHttpRequest) {
-//
-//            System.out.println("------------收到http消息--------------" + msg);
-//            handleHttpRequest(ctx, (FullHttpRequest) msg);
-//        } else if (msg instanceof WebSocketFrame) {
-//            // 获取token
-//            String srctoken1 = srctoken;
-//            log.info("srctoken1:{}", srctoken1);
-//
-//
-//            //处理websocket客户端的消息
-//            String message = ((TextWebSocketFrame) msg).text();
-//            System.out.println("------------收到消息--------------" + message);
-////            ctx.channel().writeAndFlush(new TextWebSocketFrame(message));
-//            //将消息发送给指定的客户端
-//            Channel channel = ChannelMap.get(srctoken1);
-//            if (channel != null) {
-//                channel.writeAndFlush(new TextWebSocketFrame(message));
-//            }
-//
-//
-//            // 将消息回复给所有连接
-//            //Collection<Channel> values = ChannelMap.values();
-//            //for (Channel channel: values){
-//            //    channel.writeAndFlush(new TextWebSocketFrame(message));
-//            //    //处理粘包和拆包
-//            //    channel.writeAndFlush(new TextWebSocketFrame(message1.toString()+"\n"));
-//            //}
-//        }
-//
-//    }
-
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -106,6 +51,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         if (null != msg && msg instanceof FullHttpRequest) {
             FullHttpRequest request = (FullHttpRequest) msg;
             String uri = request.uri();
+            //ConcurrentMap<String, String> paramMap = getUrlParams(uri);
             ConcurrentMap<String, String> paramMap = getUrlParams(uri);
             //paramMap2 = paramMap;
             log.info("接收到的参数：{}", JSON.toJSONString(paramMap));
@@ -113,44 +59,96 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             //if (MapUtils.isEmpty(paramMap)) {
             //    paramMap.put("userId", paramMap2.get("userId"));
             //}
-
-
+            HttpHeaders headers = ((FullHttpRequest) msg).headers();
+            String cookie = headers.get("Cookie");
+            if(null != cookie){
+                String[] cookies = cookie.split(";");
+                for(String c : cookies){
+                    if(c.contains("token")){
+                        String[] token = c.split("=");
+                        if (MapUtils.isEmpty(paramMap)) {
+                            log.info("netty: 请求token：{}", token[1]);
+                            UserVO userVO = JWTUtil.getUserVOByToken(token[1]);
+                            if (null != userVO) {
+                                paramMap.put("userId", String.valueOf(userVO.getId()));
+                            }
+                        }
+                    }
+                }
+            }
 
             online(paramMap.get("userId"), ctx.channel());
 
+
+
+
             // 首次建立连接，获取该用户的推送记录进行推送
+//            List<String> ysBulletinIds = redisTemplate.opsForList().range("bulletin:add:" + paramMap.get("userId"), 0, -1);
+//            if (null != ysBulletinIds && ysBulletinIds.size() > 0) {
+//                ChannelHandlerPool.channelGroup.stream().forEach(channel -> {
+//                    ysBulletinIds.stream().forEach(bulletinId -> {
+//                        //channel.writeAndFlush(new TextWebSocketFrame("您有一条编号为" + bulletinId + "的公告需要审核！"));
+//                        channel.writeAndFlush(new TextWebSocketFrame(bulletinId));
+//                        redisTemplate.opsForList().remove("bulletin:add:" + paramMap.get("userId"), 0, bulletinId);
+//                    });
+//                });
+//            }
+
             List<String> ysBulletinIds = redisTemplate.opsForList().range("bulletin:add:" + paramMap.get("userId"), 0, -1);
             if (null != ysBulletinIds && ysBulletinIds.size() > 0) {
-                ChannelHandlerPool.channelGroup.stream().forEach(channel -> {
+                Channel channel = userMap.get(paramMap.get("userId")); //获取用户的channel
+                if (null != channel) {
                     ysBulletinIds.stream().forEach(bulletinId -> {
-                        //channel.writeAndFlush(new TextWebSocketFrame("您有一条编号为" + bulletinId + "的公告需要审核！"));
                         channel.writeAndFlush(new TextWebSocketFrame(bulletinId));
                         redisTemplate.opsForList().remove("bulletin:add:" + paramMap.get("userId"), 0, bulletinId);
                     });
-                });
+
+                };
             }
 
+
             // 首次建立连接，推送公告
+//            List<String> pushIds = redisTemplate.opsForList().range("bulletin:push:" + paramMap.get("userId"), 0, -1);
+//            if (null != pushIds && pushIds.size() > 0) {
+//                ChannelHandlerPool.channelGroup.stream().forEach(channel -> {
+//                    pushIds.stream().forEach(content -> {
+//                        channel.writeAndFlush(new TextWebSocketFrame(content));
+//                        redisTemplate.opsForList().remove("bulletin:push:" + paramMap.get("userId"), 0, content);
+//                    });
+//                });
+//            }
             List<String> pushIds = redisTemplate.opsForList().range("bulletin:push:" + paramMap.get("userId"), 0, -1);
             if (null != pushIds && pushIds.size() > 0) {
-                ChannelHandlerPool.channelGroup.stream().forEach(channel -> {
+                Channel channel = userMap.get(paramMap.get("userId")); //获取用户的channel
+                if (null != channel) {
                     pushIds.stream().forEach(content -> {
                         channel.writeAndFlush(new TextWebSocketFrame(content));
                         redisTemplate.opsForList().remove("bulletin:push:" + paramMap.get("userId"), 0, content);
                     });
-                });
+                }
             }
 
             // 首次建立连接，推送驳回
+//            List<String> rejectIds = redisTemplate.opsForList().range("bulletin:reject:" + paramMap.get("userId"), 0, -1);
+//            if (null != rejectIds && rejectIds.size() > 0) {
+//                ChannelHandlerPool.channelGroup.stream().forEach(channel -> {
+//                    rejectIds.stream().forEach(bulletinId -> {
+//                        //channel.writeAndFlush(new TextWebSocketFrame("您有一条编号为" + bulletinId + "的公告已驳回！"));
+//                        channel.writeAndFlush(new TextWebSocketFrame(bulletinId));
+//                        redisTemplate.opsForList().remove("bulletin:reject:" + paramMap.get("userId"), 0, bulletinId);
+//                    });
+//                });
+//            }
+
             List<String> rejectIds = redisTemplate.opsForList().range("bulletin:reject:" + paramMap.get("userId"), 0, -1);
             if (null != rejectIds && rejectIds.size() > 0) {
-                ChannelHandlerPool.channelGroup.stream().forEach(channel -> {
+                Channel channel = userMap.get(paramMap.get("userId")); //获取用户的channel
+                if (null != channel) {
                     rejectIds.stream().forEach(bulletinId -> {
-                        //channel.writeAndFlush(new TextWebSocketFrame("您有一条编号为" + bulletinId + "的公告已驳回！"));
                         channel.writeAndFlush(new TextWebSocketFrame(bulletinId));
                         redisTemplate.opsForList().remove("bulletin:reject:" + paramMap.get("userId"), 0, bulletinId);
                     });
-                });
+                }
             }
 
             // 如果url包含参数，需要处理
@@ -192,7 +190,6 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         log.info("netty: 请求头：{}", headers);
         //cookie
         log.info("netty: 请求cookie：{}", headers.get("Cookie"));
-
         //boolean empty = MapUtils.isEmpty(paramMap2);
         //    if (empty) {
         //        // request中获取cookie
@@ -238,8 +235,14 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         //Channel channel = ctx.channel();
         //ChannelMap.remove(channel.id().asShortText());
 
+
         log.info("与客户端断开连接，通道关闭！" + ChannelHandlerPool.channelGroup.size());
-        ChannelHandlerPool.channelGroup.remove(ctx.channel());
+        // ChannelHandlerPool.channelGroup.remove(ctx.channel());
+        userMap.remove(channelMap.get(ctx.channel()));
+        channelMap.remove(ctx.channel());
+
+
+
     }
 
     private static ConcurrentMap<String, String> getUrlParams(String url) {
@@ -278,16 +281,18 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     private void online(String userId, Channel channel) {
         log.info("用户上线，userId：" + userId);
         log.info("用户上线，channel：" + channel);
-        // 保存channel通道的附带信息，以用户的uid为标识
-        //channel.attr(key).set(userId);
-        //ChannelHandlerPool.channelGroup.add(channel);
-        if (StringUtils.isNoneBlank(userId)) {
-            ChannelHandlerPool.channelGroup.add(channel);
-            channel.attr(key).set(userId);
+        // 重复登陆，关闭之前的连接
+        if(userMap.containsKey(userId)){
+            channel.writeAndFlush(new TextWebSocketFrame("账号异地登录强制下线!"));
+            channel.close();
+            channelMap.remove(channel);
         }
-        //ChannelHandlerPool.channelMap.put(userId, channel);
-        //channel.attr(key).set(userId);
-    }
+        userMap.put(userId,channel);
+        channelMap.put(channel,userId);
+        ChannelHandlerPool.getConnects=userMap;
 
+//        ChannelHandlerPool.channelGroup.add(channel);
+//        channel.attr(key).set(userId);
+    }
 
 }

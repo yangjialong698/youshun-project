@@ -1,12 +1,15 @@
 package com.ennova.pubinfotask.config;
 
 
+import ch.qos.logback.core.encoder.EchoEncoder;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,5 +33,8 @@ public class SocketChannelInitializer extends ChannelInitializer<SocketChannel> 
         //自定义业务handler
         //ch.pipeline().addLast("handler",new WebSocketHandler());
         ch.pipeline().addLast("handler",webSocketHandler);
+
+        ch.pipeline().addLast(new IdleStateHandler(0,10,0));
+
     }
 }
