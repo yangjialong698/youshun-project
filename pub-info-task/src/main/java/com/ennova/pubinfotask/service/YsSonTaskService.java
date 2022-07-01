@@ -1121,7 +1121,20 @@ public class YsSonTaskService {
         CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
         log.info("当前用户角色：{}", currentUserVO.getRoleCode());
         if(!"executor".equals(currentUserVO.getRoleCode())){
-            return Callback.error(2,"只有执行人才能开始任务");
+            YsSonTask ysSonTask = ysSonTaskMapper.selectByPrimaryKey(sonTaskId);
+            if(ysSonTask != null){
+                YsTeam ysTeam = ysTeamMapper.selectByPrimaryKey(ysSonTask.getYsTeamId());
+                if(ysTeam != null){
+                    if(!currentUserVO.getUserId().equals(ysTeam.getExecutorId())){
+                        return Callback.error(2,"无权限操作此任务");
+                    }
+                    if (ysSonTask.getStatus() == 0){
+                        ysSonTask.setStatus(1);
+                        ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
+                        return Callback.success("操作成功");
+                    }
+                }
+            }
         }
         if ("executor".equals(currentUserVO.getRoleCode())) {
             YsSonTask ysSonTask = ysSonTaskMapper.selectByIdAndExecutorId(sonTaskId, currentUserVO.getUserId());

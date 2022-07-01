@@ -448,7 +448,8 @@
         t1.receive_id receiveId,
         t1.pressing_level pressingLevel,
         t1.status,
-        t2.status masterStatus
+        t2.status masterStatus,
+        t3.executor_id executorId
     FROM
         ys_son_task t1,
         ys_master_task t2,

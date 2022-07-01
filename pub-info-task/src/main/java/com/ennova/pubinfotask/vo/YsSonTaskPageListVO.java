@@ -75,4 +75,7 @@ public class YsSonTaskPageListVO {
     @ApiModelProperty(value = "主任务是否完成或已完关： true:是  false:不是")
     private boolean masterFinish;
 
+    @ApiModelProperty(value = "执行人ID")
+    private Integer executorId;
+
 }
