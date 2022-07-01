@@ -15,9 +15,6 @@ public class FileVO {
     @ApiModelProperty(value = "真实文件名")
     private String newfileName;
 
-//    @ApiModelProperty(value = "文件类型: 立项文件 - 结项文件件 ...", example = "1")
-//    private Integer ysFileTypeId;
-
     @ApiModelProperty(value = "原文件名")
     private String fileName;
 

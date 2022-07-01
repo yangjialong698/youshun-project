@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfofile.dao.YsExpSugMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfofile.entity.YsExpSug">
+    <!--@mbg.generated-->
+    <!--@Table ys_exp_sug-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="open_file" jdbcType="INTEGER" property="openFile" />
+    <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
+    <result column="ys_master_task_id" jdbcType="INTEGER" property="ysMasterTaskId" />
+    <result column="file_content" jdbcType="VARCHAR" property="fileContent" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="sug_time" jdbcType="TIMESTAMP" property="sugTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap2" type="com.ennova.pubinfofile.vo.YsExpSugVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="fileName" jdbcType="VARCHAR" property="fileName" />
+    <result column="masterTaskName" jdbcType="VARCHAR" property="masterTaskName" />
+    <result column="ysMasterTaskId" jdbcType="INTEGER" property="ysMasterTaskId" />
+    <result column="fileContent" jdbcType="VARCHAR" property="fileContent" />
+    <result column="sugTime" jdbcType="TIMESTAMP" property="sugTime" />
+    <result column="sugContent" jdbcType="VARCHAR" property="sugContent" />
+    <collection ofType="com.ennova.pubinfofile.vo.FileVO" property="fileVOList">
+      <result column="fileId" jdbcType="INTEGER" property="id" />
+      <result column="fileMasterId" jdbcType="INTEGER" property="fileMasterId" />
+      <result column="name" jdbcType="VARCHAR" property="fileName" />
+      <result column="fileMd5" jdbcType="VARCHAR" property="newfileName" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, file_name, open_file, del_flag, ys_master_task_id, file_content, user_id, sug_time, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from ys_exp_sug
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from ys_exp_sug
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfofile.entity.YsExpSug" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_exp_sug (file_name, open_file, del_flag, 
+      ys_master_task_id, file_content, user_id, 
+      sug_time, create_time, update_time
+      )
+    values (#{fileName,jdbcType=VARCHAR}, #{openFile,jdbcType=INTEGER}, #{delFlag,jdbcType=INTEGER}, 
+      #{ysMasterTaskId,jdbcType=INTEGER}, #{fileContent,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{sugTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfofile.entity.YsExpSug" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_exp_sug
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="openFile != null">
+        open_file,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+      <if test="ysMasterTaskId != null">
+        ys_master_task_id,
+      </if>
+      <if test="fileContent != null">
+        file_content,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="sugTime != null">
+        sug_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="openFile != null">
+        #{openFile,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="ysMasterTaskId != null">
+        #{ysMasterTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="fileContent != null">
+        #{fileContent,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="sugTime != null">
+        #{sugTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfofile.entity.YsExpSug">
+    <!--@mbg.generated-->
+    update ys_exp_sug
+    <set>
+      <if test="fileName != null">
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="openFile != null">
+        open_file = #{openFile,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="ysMasterTaskId != null">
+        ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="fileContent != null">
+        file_content = #{fileContent,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="sugTime != null">
+        sug_time = #{sugTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfofile.entity.YsExpSug">
+    <!--@mbg.generated-->
+    update ys_exp_sug
+    set file_name = #{fileName,jdbcType=VARCHAR},
+      open_file = #{openFile,jdbcType=INTEGER},
+      del_flag = #{delFlag,jdbcType=INTEGER},
+      ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER},
+      file_content = #{fileContent,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      sug_time = #{sugTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="delete">
+    update ys_exp_sug
+    set del_flag = 1
+    where id = #{id}
+  </update>
+
+  <select id="selectDetailOne" resultMap="BaseResultMap2">
+    SELECT
+    yes.id,
+    yes.file_name AS fileName,
+    ymt.name AS masterTaskName,
+    ymt.id AS ysMasterTaskId,
+    yes.file_content AS fileContent,
+    yes.sug_time AS sugTime,
+    ysc.sug_content AS sugContent,
+    yesf.id fileId,
+    yesf.exp_sug_id  AS fileMasterId,
+    yesf.name,
+    yesf.file_md5 fileMd5
+    FROM
+    ys_exp_sug yes
+    LEFT JOIN ys_master_task ymt ON yes.ys_master_task_id = ymt.id
+    LEFT JOIN ys_exp_sug_file yesf  ON yes.id = yesf.exp_sug_id
+    LEFT JOIN ys_sug_comment ysc ON ysc.exp_sug_id = yes.id
+    WHERE 1=1
+    <if test="id != null">
+      AND yes.id=#{id}
+    </if>
+  </select>
+
+  <select id="fileDetail" resultType="com.ennova.pubinfofile.vo.FileDownVO">
+    SELECT
+    yesf.id,
+    yesf.name AS fjName,
+    yesf.file_url AS fileUrl,
+    yesf.file_size AS fileSize
+    FROM
+    ys_exp_sug_file yesf
+    LEFT JOIN ys_exp_sug ydr ON ydr.id = yesf.exp_sug_id
+    WHERE
+    ydr.id = #{id}
+    AND yesf.del_flag = 0
+  </select>
+
+  <select id="getFileDetailsForZrw" resultType="com.ennova.pubinfofile.vo.ExpSugDetailVO">
+    SELECT
+    *
+    FROM
+    (
+        SELECT
+        yes.id,
+        yes.file_name AS fileName,
+        yes.sug_time AS sugTime,
+        ymt.name AS masterTaskName,
+        ymt.id AS ysMasterTaskId,
+        tu.username AS username,
+        yes.create_time AS createTime,
+        ysf.id AS fileId,
+        ysc.sug_status AS sugStatus
+        FROM
+        ys_exp_sug yes
+        LEFT JOIN ys_master_task ymt ON yes.ys_master_task_id = ymt.id
+        LEFT JOIN t_user tu ON yes.user_id = tu.id
+        LEFT JOIN ys_exp_sug_file yesf  ON yes.id = yesf.exp_sug_id
+        LEFT JOIN ys_sug_comment ysc ON ysc.exp_sug_id = yes.id
+        WHERE
+        yes.ys_master_task_id IN ( SELECT ys_master_task_id FROM ys_task_receive WHERE receive_id = #{userId} )
+        AND ymf.del_flag = 0
+    UNION
+        SELECT
+        yes.id,
+        yes.file_name AS fileName,
+        yes.sug_time AS sugTime,
+        ymt.name AS masterTaskName,
+        ymt.id AS ysMasterTaskId,
+        tu.username AS username,
+        yes.create_time AS createTime,
+        ysf.id AS fileId,
+        ysc.sug_status AS sugStatus
+        FROM
+        ys_exp_sug yes
+        LEFT JOIN ys_master_task ymt ON yes.ys_master_task_id = ymt.id
+        LEFT JOIN t_user tu ON yes.user_id = tu.id
+        LEFT JOIN ys_exp_sug_file yesf  ON yes.id = yesf.exp_sug_id
+        LEFT JOIN ys_sug_comment ysc ON ysc.exp_sug_id = yes.id
+        WHERE
+        yes.ys_master_task_id IN ( SELECT id FROM ys_master_task WHERE `status` = '1' )
+        AND yes.del_flag = 0
+    ) aa
+    WHERE 1=1
+    <if test="ysMasterTaskId != null">
+      AND ysMasterTaskId = #{ysMasterTaskId}
+    </if>
+    <if test="fileName != null and fileName != ''">
+      AND fileName LIKE CONCAT('%',#{fileName},'%')
+    </if>
+    GROUP BY serialNumber,ysMasterTaskId,ysSonTaskId
+    ORDER BY createTime DESC
+  </select>
+
+  <select id="getDetailsByMaskTaskIds" resultType="com.ennova.pubinfofile.vo.ExpSugDetailVO">
+    SELECT
+    yes.id,
+    yes.file_name AS fileName,
+    yes.sug_time AS sugTime,
+    ymt.name AS masterTaskName,
+    ymt.id AS ysMasterTaskId,
+    tu.username AS username,
+    yes.create_time AS createTime,
+    ysf.id AS fileId,
+    ysc.sug_status AS sugStatus
+    FROM
+    ys_exp_sug yes
+    LEFT JOIN ys_master_task ymt ON yes.ys_master_task_id = ymt.id
+    LEFT JOIN t_user tu ON yes.user_id = tu.id
+    LEFT JOIN ys_exp_sug_file yesf  ON yes.id = yesf.exp_sug_id
+    LEFT JOIN ys_sug_comment ysc ON ysc.exp_sug_id = yes.id
+    WHERE 1=1
+    AND yes.del_flag = 0
+    <if test="ysMasterTaskId != null">
+      AND ymt.id = #{ysMasterTaskId}
+    </if>
+    <if test="fileName != null and fileName != ''">
+      AND yes.file_name like trim(replace(CONCAT('%',#{fileName},'%'),' ',''))
+    </if>
+    AND yes.ys_master_task_id in
+    <foreach close=")" collection="maskTaskIdList" item="item" open="(" separator=", ">
+      #{item}
+    </foreach>
+    GROUP BY serialNumber,ysMasterTaskId,ysSonTaskId
+    ORDER BY yes.create_time DESC
+  </select>
+
+  <select id="getFileDetails" resultType="com.ennova.pubinfofile.vo.ExpSugDetailVO">
+    SELECT
+    yes.id,
+    yes.file_name AS fileName,
+    yes.sug_time AS sugTime,
+    ymt.name AS masterTaskName,
+    ymt.id AS ysMasterTaskId,
+    tu.username AS username,
+    yes.create_time AS createTime,
+    ysf.id AS fileId,
+    ysc.sug_status AS sugStatus
+    FROM
+    ys_exp_sug yes
+    LEFT JOIN ys_master_task ymt ON yes.ys_master_task_id = ymt.id
+    LEFT JOIN t_user tu ON yes.user_id = tu.id
+    LEFT JOIN ys_exp_sug_file yesf  ON yes.id = yesf.exp_sug_id
+    LEFT JOIN ys_sug_comment ysc ON ysc.exp_sug_id = yes.id
+    WHERE 1=1
+    AND yes.del_flag = 0
+    <if test="ysMasterTaskId != null">
+      AND ymt.id = #{ysMasterTaskId}
+    </if>
+    <if test="fileName != null and fileName != ''">
+      AND yes.file_name like trim(replace(CONCAT('%',#{fileName},'%'),' ',''))
+    </if>
+    GROUP BY serialNumber,ysMasterTaskId,ysSonTaskId
+    ORDER BY yes.create_time DESC
+  </select>
+</mapper>
