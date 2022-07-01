@@ -227,7 +227,7 @@
         ymt.id AS ysMasterTaskId,
         tu.username AS username,
         yes.create_time AS createTime,
-        ysf.id AS fileId,
+        yesf.id AS fileId,
         ysc.sug_status AS sugStatus
         FROM
         ys_exp_sug yes
@@ -247,7 +247,7 @@
         ymt.id AS ysMasterTaskId,
         tu.username AS username,
         yes.create_time AS createTime,
-        ysf.id AS fileId,
+        yesf.id AS fileId,
         ysc.sug_status AS sugStatus
         FROM
         ys_exp_sug yes
@@ -266,7 +266,7 @@
     <if test="fileName != null and fileName != ''">
       AND fileName LIKE CONCAT('%',#{fileName},'%')
     </if>
-    GROUP BY serialNumber,ysMasterTaskId,ysSonTaskId
+    GROUP BY id
     ORDER BY createTime DESC
   </select>
 
@@ -279,7 +279,7 @@
     ymt.id AS ysMasterTaskId,
     tu.username AS username,
     yes.create_time AS createTime,
-    ysf.id AS fileId,
+    yesf.id AS fileId,
     ysc.sug_status AS sugStatus
     FROM
     ys_exp_sug yes
@@ -299,8 +299,8 @@
     <foreach close=")" collection="maskTaskIdList" item="item" open="(" separator=", ">
       #{item}
     </foreach>
-    GROUP BY serialNumber,ysMasterTaskId,ysSonTaskId
-    ORDER BY yes.create_time DESC
+    GROUP BY id
+    ORDER BY createTime DESC
   </select>
 
   <select id="getFileDetails" resultType="com.ennova.pubinfofile.vo.ExpSugDetailVO">
@@ -312,7 +312,7 @@
     ymt.id AS ysMasterTaskId,
     tu.username AS username,
     yes.create_time AS createTime,
-    ysf.id AS fileId,
+    yesf.id AS fileId,
     ysc.sug_status AS sugStatus
     FROM
     ys_exp_sug yes
@@ -328,7 +328,7 @@
     <if test="fileName != null and fileName != ''">
       AND yes.file_name like trim(replace(CONCAT('%',#{fileName},'%'),' ',''))
     </if>
-    GROUP BY serialNumber,ysMasterTaskId,ysSonTaskId
-    ORDER BY yes.create_time DESC
+    GROUP BY id
+    ORDER BY createTime DESC
   </select>
 </mapper>
