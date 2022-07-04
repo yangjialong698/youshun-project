@@ -116,16 +116,7 @@ public class YsMasterTaskService {
                 ysMasterTask.setId(task.getId());
                 ysMasterTask.setSerialNumber(task.getSerialNumber());
                 ysMasterTask.setName(task.getName());
-                ysMasterTask.setType(task.getType());
-                ysMasterTask.setSummary(task.getSummary());
-                ysMasterTask.setCheckStandard(task.getCheckStandard());
-                ysMasterTask.setEstimateHour(task.getEstimateHour());
-                ysMasterTask.setTaskEndDate(task.getTaskEndDate());
-                ysMasterTask.setPublishDate(task.getPublishDate());
                 ysMasterTask.setCreateTime(task.getCreateTime());
-                ysMasterTask.setYsMasterFileId(task.getYsMasterFileId());
-                ysMasterTask.setPressingLevel(task.getPressingLevel());
-
                 ysMasterTaskMapper.updateByPrimaryKey(ysMasterTask);
                 //ysMasterTaskMapper.updateByPrimaryKeySelective(ysMasterTask);
                 List<FileVO> fileVOList = record.getFileVOList();

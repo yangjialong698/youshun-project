@@ -379,7 +379,6 @@
              a.task_end_date     taskEndDate,
              a.ys_master_file_id fileMasterId
       FROM ys_master_task a
-
       <where>
           <if test="id != null">
               and a.id = #{id}
@@ -389,6 +388,7 @@
   <select id="selectTaskDetailsOne" resultType="java.util.LinkedHashMap">
       SELECT a.id,
              a.serial_number                          serialNumber,
+             a.pressing_level   pressingLevel,
              a.name,
              a.type,
              a.status,
