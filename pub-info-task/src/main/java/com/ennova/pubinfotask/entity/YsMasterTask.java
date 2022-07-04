@@ -2,20 +2,13 @@ package com.ennova.pubinfotask.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-/**
- * @Auther: shibingyang1990@gmail.com
- * @Date: 2022/4/29
- * @Description: com.ennova.pubinfotask.entity
- * @Version: 1.0
- */
 
 /**
  * 主任务表
@@ -37,6 +30,12 @@ public class YsMasterTask {
      */
     @ApiModelProperty(value = "编号", example = "1")
     private Integer serialNumber;
+
+    /**
+     * 紧急程度：0-  一般、1- 重要、2- 紧急
+     */
+    @ApiModelProperty(value = "紧急程度：0-  一般、1- 重要、2- 紧急")
+    private Integer pressingLevel;
 
     /**
      * 主任务名称
@@ -84,7 +83,7 @@ public class YsMasterTask {
      * 结束日期
      */
     @ApiModelProperty(value = "结束日期")
-    private LocalDate taskEndDate;
+    private LocalDateTime taskEndDate;
 
     /**
      * 进度

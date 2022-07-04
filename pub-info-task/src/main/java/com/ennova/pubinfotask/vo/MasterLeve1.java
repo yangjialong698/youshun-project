@@ -40,6 +40,9 @@ public class MasterLeve1 {
     @ApiModelProperty(value = "主任务名称")
     private String name;
 
+    @ApiModelProperty(value="任务紧急程度：0-  一般、1- 重要、2- 紧急")
+    private Integer pressingLevel;
+
     /**
      * 任务类型： 0- 实验类  1- 研发类
      */

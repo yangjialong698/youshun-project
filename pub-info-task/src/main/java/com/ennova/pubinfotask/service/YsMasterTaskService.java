@@ -124,6 +124,7 @@ public class YsMasterTaskService {
                 ysMasterTask.setPublishDate(task.getPublishDate());
                 ysMasterTask.setCreateTime(task.getCreateTime());
                 ysMasterTask.setYsMasterFileId(task.getYsMasterFileId());
+                ysMasterTask.setPressingLevel(task.getPressingLevel());
 
                 ysMasterTaskMapper.updateByPrimaryKey(ysMasterTask);
                 //ysMasterTaskMapper.updateByPrimaryKeySelective(ysMasterTask);
