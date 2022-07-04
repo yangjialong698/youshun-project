@@ -181,7 +181,7 @@
     yes.id,
     yes.file_name AS fileName,
     ymt.name AS masterTaskName,
-    ymt.id AS ysMasterTaskId,
+    ifnull(ymt.id,yes.ys_master_task_id) AS ysMasterTaskId,
     yes.file_content AS fileContent,
     yes.sug_time AS sugTime,
     ysc.sug_content AS sugContent,
@@ -224,7 +224,7 @@
         yes.file_name AS fileName,
         yes.sug_time AS sugTime,
         ymt.name AS masterTaskName,
-        ymt.id AS ysMasterTaskId,
+        ifnull(ymt.id,yes.ys_master_task_id) AS ysMasterTaskId,
         tu.username AS username,
         yes.create_time AS createTime,
         yesf.id AS fileId,
@@ -244,7 +244,7 @@
         yes.file_name AS fileName,
         yes.sug_time AS sugTime,
         ymt.name AS masterTaskName,
-        ymt.id AS ysMasterTaskId,
+        ifnull(ymt.id,yes.ys_master_task_id) AS ysMasterTaskId,
         tu.username AS username,
         yes.create_time AS createTime,
         yesf.id AS fileId,
@@ -276,7 +276,7 @@
     yes.file_name AS fileName,
     yes.sug_time AS sugTime,
     ymt.name AS masterTaskName,
-    ymt.id AS ysMasterTaskId,
+    ifnull(ymt.id,yes.ys_master_task_id) AS ysMasterTaskId,
     tu.username AS username,
     yes.create_time AS createTime,
     yesf.id AS fileId,
@@ -290,7 +290,7 @@
     WHERE 1=1
     AND yes.del_flag = 0
     <if test="ysMasterTaskId != null">
-      AND ymt.id = #{ysMasterTaskId}
+      AND ifnull(ymt.id,yes.ys_master_task_id) =  #{ysMasterTaskId}
     </if>
     <if test="fileName != null and fileName != ''">
       AND yes.file_name like trim(replace(CONCAT('%',#{fileName},'%'),' ',''))
@@ -309,7 +309,7 @@
     yes.file_name AS fileName,
     yes.sug_time AS sugTime,
     ymt.name AS masterTaskName,
-    ymt.id AS ysMasterTaskId,
+    ifnull(ymt.id,yes.ys_master_task_id) AS ysMasterTaskId,
     tu.username AS username,
     yes.create_time AS createTime,
     yesf.id AS fileId,
@@ -323,7 +323,7 @@
     WHERE 1=1
     AND yes.del_flag = 0
     <if test="ysMasterTaskId != null">
-      AND ymt.id = #{ysMasterTaskId}
+      AND ifnull(ymt.id,yes.ys_master_task_id) = #{ysMasterTaskId}
     </if>
     <if test="fileName != null and fileName != ''">
       AND yes.file_name like trim(replace(CONCAT('%',#{fileName},'%'),' ',''))
