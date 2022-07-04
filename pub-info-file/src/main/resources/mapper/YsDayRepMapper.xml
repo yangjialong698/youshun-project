@@ -177,7 +177,7 @@
     ydr.id,
     ydr.file_name AS fileName,
     ymt.name AS masterTaskName,
-    ymt.id AS ysMasterTaskId,
+    ifnull(ymt.id,ydr.ys_master_task_id) AS ysMasterTaskId,
     ydr.file_content AS fileContent,
     ydr.dayrep_time AS dayrepTime,
     yfb.feed_content AS feedContent,
@@ -247,7 +247,7 @@
         ydr.file_name AS fileName,
         ydr.dayrep_time AS dayrepTime,
         ymt.name AS masterTaskName,
-        ymt.id AS ysMasterTaskId,
+        ifnull(ymt.id,ydr.ys_master_task_id) AS ysMasterTaskId,
         tu.username AS username,
         ydr.create_time AS createTime,
         ysrf.id AS fileId,
@@ -272,7 +272,7 @@
         ydr.file_name AS fileName,
         ydr.dayrep_time AS dayrepTime,
         ymt.name AS masterTaskName,
-        ymt.id AS ysMasterTaskId,
+        ifnull(ymt.id,ydr.ys_master_task_id) AS ysMasterTaskId,
         tu.username AS username,
         ydr.create_time AS createTime,
         ysrf.id AS fileId,
@@ -294,7 +294,7 @@
         ydr.file_name AS fileName,
         ydr.dayrep_time AS dayrepTime,
         ymt.name AS masterTaskName,
-        ymt.id AS ysMasterTaskId,
+        ifnull(ymt.id,ydr.ys_master_task_id) AS ysMasterTaskId,
         tu.username AS username,
         ydr.create_time AS createTime,
         ysrf.id AS fileId,
@@ -342,7 +342,7 @@
       ydr.file_name AS fileName,
       ydr.dayrep_time AS dayrepTime,
       ymt.name AS masterTaskName,
-      ymt.id AS ysMasterTaskId,
+      ifnull(ymt.id,ydr.ys_master_task_id) AS ysMasterTaskId,
       tu.username AS username,
       ydr.create_time AS createTime,
       ysrf.id AS fileId,
@@ -364,7 +364,7 @@
       ydr.file_name AS fileName,
       ydr.dayrep_time AS dayrepTime,
       ymt.name AS masterTaskName,
-      ymt.id AS ysMasterTaskId,
+      ifnull(ymt.id,ydr.ys_master_task_id) AS ysMasterTaskId,
       tu.username AS username,
       ydr.create_time AS createTime,
       ysrf.id AS fileId,
@@ -408,7 +408,7 @@
     ydr.file_name AS fileName,
     ydr.dayrep_time AS dayrepTime,
     ymt.name AS masterTaskName,
-    ymt.id AS ysMasterTaskId,
+    ifnull(ymt.id,ydr.ys_master_task_id) AS ysMasterTaskId,
     tu.username AS username,
     ydr.create_time AS createTime,
     ysrf.id AS fileId,
@@ -425,7 +425,7 @@
     AND ydr.del_flag = 0
     AND ydr.user_id = #{userId}
     <if test="ysMasterTaskId != null">
-      AND ymt.id = #{ysMasterTaskId}
+      AND ifnull(ymt.id,ydr.ys_master_task_id) = #{ysMasterTaskId}
     </if>
     <if test="fileName != null and fileName != ''">
       AND CONCAT(trim(replace(ydr.file_name,' ','')),trim(replace(tu.username,' ',''))) like trim(replace(CONCAT('%',#{fileName},'%'),' ',''))
@@ -446,7 +446,7 @@
     ydr.file_name AS fileName,
     ydr.dayrep_time AS dayrepTime,
     ymt.name AS masterTaskName,
-    ymt.id AS ysMasterTaskId,
+    ifnull(ymt.id,ydr.ys_master_task_id) AS ysMasterTaskId,
     tu.username AS username,
     ydr.create_time AS createTime,
     ysrf.id AS fileId,
@@ -462,7 +462,7 @@
     WHERE 1=1
     AND ydr.del_flag = 0
     <if test="ysMasterTaskId != null">
-      AND ymt.id = #{ysMasterTaskId}
+      AND ifnull(ymt.id,ydr.ys_master_task_id) =  #{ysMasterTaskId}
     </if>
     <if test="fileName != null and fileName != ''">
       AND CONCAT(trim(replace(ydr.file_name,' ','')),trim(replace(tu.username,' ',''))) like trim(replace(CONCAT('%',#{fileName},'%'),' ',''))
