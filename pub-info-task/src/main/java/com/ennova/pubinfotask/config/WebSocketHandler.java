@@ -1,12 +1,15 @@
 package com.ennova.pubinfotask.config;
 
+import cn.hutool.core.util.CharsetUtil;
 import com.alibaba.fastjson.JSON;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
@@ -159,8 +162,29 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         } else if (msg instanceof TextWebSocketFrame) {
             // 调试信息
             TextWebSocketFrame frame = (TextWebSocketFrame) msg;
-            ctx.channel().writeAndFlush(frame.text());
+            ctx.channel().writeAndFlush("pong");
+            log.info("netty: 接收到消息：{}", ctx.channel().id());
             log.info("收到消息：" + frame.text());
+
+
+
+
+            Map<String, Channel> getConnects = ChannelHandlerPool.getConnects;
+            getConnects.forEach((k, v) -> {
+                if (v.equals(ctx.channel())) {
+                    log.info("netty: 接收到消息：{}", v.id());
+                    log.info("收到消息：" + frame.text());
+                }
+            });
+
+
+
+//            getConnects.forEach((k, v) -> {
+//                log.info("推送消息a1：" + k);
+//                log.info("推送消息b1：" + v.id());
+//                log.info("推送消息b1：" + frame.text());
+//            });
+
         }
         super.channelRead(ctx, msg);
 

@@ -1113,6 +1113,7 @@ public class YsSonTaskService {
 
     /**
      * 子任务状态为未开始，点击开始按钮，子任务状态改为进行中
+     *  v2.0 更改为只有子任务管理员，才可以修改子任务状态
      */
     public Callback updateStatusBySonTaskId(Integer sonTaskId) {
         String token = req.getHeader("Authorization");
@@ -1120,35 +1121,38 @@ public class YsSonTaskService {
         assert userVo != null;
         CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
         log.info("当前用户角色：{}", currentUserVO.getRoleCode());
-        if(!"executor".equals(currentUserVO.getRoleCode())){
-            YsSonTask ysSonTask = ysSonTaskMapper.selectByPrimaryKey(sonTaskId);
+        if("sub_task_manage".equals(currentUserVO.getRoleCode())){
+            YsSonTask ysSonTask = ysSonTaskMapper.selectByIdAndReceiveId(sonTaskId, userVo.getId());
+            //YsSonTask ysSonTask = ysSonTaskMapper.selectByPrimaryKey(sonTaskId);
             if(ysSonTask != null){
-                YsTeam ysTeam = ysTeamMapper.selectByPrimaryKey(ysSonTask.getYsTeamId());
-                if(ysTeam != null){
-                    if(!currentUserVO.getUserId().equals(ysTeam.getExecutorId())){
-                        return Callback.error(2,"无权限操作此任务");
-                    }
+//                YsTeam ysTeam = ysTeamMapper.selectByPrimaryKey(ysSonTask.getYsTeamId());
+//                if(ysTeam != null){
+//                    if(!currentUserVO.getUserId().equals(ysTeam.getExecutorId())){
+//                        return Callback.error(2,"无权限操作此任务");
+//                    }
                     if (ysSonTask.getStatus() == 0){
                         ysSonTask.setStatus(1);
                         ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
                         return Callback.success("操作成功");
                     }
-                }
+//                }
             }
+        }else{
+            return Callback.error(2,"无权限操作此任务");
         }
-        if ("executor".equals(currentUserVO.getRoleCode())) {
-            YsSonTask ysSonTask = ysSonTaskMapper.selectByIdAndExecutorId(sonTaskId, currentUserVO.getUserId());
-            if (ysSonTask == null) {
-                return Callback.error(2, "无权限查看此任务");
-            }
-            if (ysSonTask.getStatus() == 0) {
-                ysSonTask.setStatus(1);
-                ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
-                return Callback.success();
-            }else{
-                return Callback.error(2, "只有未开始的任务才能开始");
-            }
-        }
+//        if ("executor".equals(currentUserVO.getRoleCode())) {
+//            YsSonTask ysSonTask = ysSonTaskMapper.selectByIdAndExecutorId(sonTaskId, currentUserVO.getUserId());
+//            if (ysSonTask == null) {
+//                return Callback.error(2, "无权限查看此任务");
+//            }
+//            if (ysSonTask.getStatus() == 0) {
+//                ysSonTask.setStatus(1);
+//                ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
+//                return Callback.success();
+//            }else{
+//                return Callback.error(2, "只有未开始的任务才能开始");
+//            }
+//        }
         return Callback.error(2, "更新状态失败！");
     }
 
