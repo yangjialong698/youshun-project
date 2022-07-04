@@ -98,4 +98,10 @@ public class UserController {
         return userService.resetPassword(userDTO);
     }
 
+    @ApiOperation(value = "网站总访问记录数",  tags = "用户API")
+    @GetMapping("/getTotalVisit")
+    public Callback<Integer> getTotalVisit() {
+        return userService.getTotalVisit();
+    }
+
 }

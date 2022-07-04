@@ -4,26 +4,28 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.IdUtil;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
-import com.ennova.pubinfouser.dao.BaseDao;
-import com.ennova.pubinfouser.dao.UserDao;
-import com.ennova.pubinfouser.dao.UserDeptMapper;
+import com.ennova.pubinfouser.dao.*;
 import com.ennova.pubinfouser.dto.BaseDTO;
 import com.ennova.pubinfouser.dto.UserDTO;
-import com.ennova.pubinfouser.dao.UserRoleMapper;
+import com.ennova.pubinfouser.entity.LoginLog;
 import com.ennova.pubinfouser.entity.UserDept;
 import com.ennova.pubinfouser.entity.UserEntity;
 import com.ennova.pubinfouser.entity.UserRole;
 import com.ennova.pubinfouser.service.feign.PubInfoTaskClient;
+import com.ennova.pubinfouser.utils.AddressUtil;
 import com.ennova.pubinfouser.vo.CheckCodeVO;
 import com.ennova.pubinfouser.vo.DeptNumVO;
 import com.ennova.pubinfouser.vo.PerDeptNumVO;
 import com.ennova.pubinfouser.vo.UserVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
@@ -32,9 +34,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotBlank;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +79,12 @@ public class UserService extends BaseService<UserEntity> {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Resource
+    private HttpServletRequest request;
+
+    @Autowired
+    private LoginLogMapper loginLogMapper;
 
 
     public Callback<UserVO> login(String account, String password) {
@@ -119,6 +134,16 @@ public class UserService extends BaseService<UserEntity> {
         userVO.setRefreshToken(refreshToken);
         userVO.setPassword("");
         userVO.setMenu(roleService.getMenu(userRole.getRoleId()));
+
+        //登陆成功，记录登陆日志
+        String ua = StrUtil.sub(this.request.getHeader("user-agent"), 0, 500);
+        String ip = ServletUtil.getClientIP(this.request);
+        String location = AddressUtil.getRegion(ip);
+
+        LoginLog loginLog = LoginLog.builder().requestIp(ip).userId(userVO.getId()).userName(userVO.getUsername()).account(userVO.getMobile())
+                .description("用户登陆").loginDate(new Date()).ua(ua).location(location).createTime(new Date()).build();
+
+        loginLogMapper.insert(loginLog);
         return Callback.success(userVO);
     }
 
@@ -312,5 +337,9 @@ public class UserService extends BaseService<UserEntity> {
         return Callback.success("验证成功");
     }
 
+    public Callback<Integer> getTotalVisit() {
+        Integer totalVisit = loginLogMapper.getTotalVisit();
+        return Callback.success(totalVisit);
+    }
 
 }
