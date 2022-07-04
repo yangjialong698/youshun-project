@@ -33,6 +33,12 @@ public class EditMasterTaskAndFileVO {
     @ApiModelProperty(value = "主任务名称")
     private String name;
 
+   /**
+    * 紧急程度：0-  一般、1- 重要、2- 紧急
+    */
+   @ApiModelProperty(value = "紧急程度：0-  一般、1- 重要、2- 紧急")
+   private Integer pressingLevel;
+
     /**
      * 任务类型： 0- 实验类  1- 研发类
      */

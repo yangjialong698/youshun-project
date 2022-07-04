@@ -3,6 +3,7 @@ package com.ennova.pubinfotask.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.AllArgsConstructor;
@@ -83,7 +84,7 @@ public class YsMasterTask {
      * 结束日期
      */
     @ApiModelProperty(value = "结束日期")
-    private LocalDateTime taskEndDate;
+    private LocalDate taskEndDate;
 
     /**
      * 进度

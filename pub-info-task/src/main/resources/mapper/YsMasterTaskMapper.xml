@@ -368,6 +368,7 @@
   <select id="selectTaskAndFileOne" resultType="com.ennova.pubinfotask.vo.EditMasterTaskAndFileVO">
       SELECT a.id,
              a.serial_number     serialNumber,
+             a.pressing_level   pressingLevel,
              a.name,
              a.type,
              a.status,
