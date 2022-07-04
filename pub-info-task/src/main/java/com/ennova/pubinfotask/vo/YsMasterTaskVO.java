@@ -47,6 +47,10 @@ public class YsMasterTaskVO {
     @NotNull(message = "任务类型(type): 不能为空!")
     private Integer type;
 
+    @ApiModelProperty(value = "紧急程度：0-  一般、1- 重要、2- 紧急")
+    @NotNull(message = "紧急程度(pressingLevel): 不能为空!")
+    private Integer pressingLevel;
+
     /**
      * 任务状态： 0- 未发布 1- 待认领  2- 未开始  3- 进行中 4- 已完成 5- 已关闭
      */
