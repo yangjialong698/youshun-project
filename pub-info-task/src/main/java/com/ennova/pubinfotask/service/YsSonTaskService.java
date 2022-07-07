@@ -368,9 +368,11 @@ public class YsSonTaskService {
                 if (ysSonTaskPageListVO.getStartTime() != null) {
                     // 判断当startTime等于或小于now时，更新子任务列表
                     if (ysSonTaskPageListVO.getStartTime().compareTo(LocalDateTime.now()) <= 0) {
-                        ysSonTaskPageListVO.setStatus(1);
-                        YsSonTask ysSonTask = BeanConvertUtils.convertTo(ysSonTaskPageListVO, YsSonTask::new);
-                        ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
+                        if (ysSonTaskPageListVO.getStatus() == 0) {
+                            ysSonTaskPageListVO.setStatus(1);
+                            YsSonTask ysSonTask = BeanConvertUtils.convertTo(ysSonTaskPageListVO, YsSonTask::new);
+                            ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
+                        }
                     }
                 }
             }
