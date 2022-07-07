@@ -1,5 +1,6 @@
 package com.ennova.pubinfotask.service;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
@@ -11,6 +12,7 @@ import com.ennova.pubinfotask.dto.MasterTeamGroupDTO;
 import com.ennova.pubinfotask.dto.UserMasterDTO;
 import com.ennova.pubinfotask.dto.WorkTimeResidueDTO;
 import com.ennova.pubinfotask.entity.*;
+import com.ennova.pubinfotask.utils.BeanConvertUtils;
 import com.ennova.pubinfotask.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -361,7 +363,19 @@ public class YsSonTaskService {
         Page<YsSonTaskPageListVO> startPage = PageHelper.startPage(page, pageSize);
         //List<YsSonTaskPageListVO> list = ysSonTaskMapper.selectSonTaskPagelist(status, teamUserId, sonTaskName, dto, masterTaskName);
         List<YsSonTaskPageListVO> list = ysSonTaskMapper.selectSonTaskPagelist(status, teamUserId, sonTaskName, dto, masterTaskId);
-        if (list != null && !list.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (YsSonTaskPageListVO ysSonTaskPageListVO : list) {
+                if (ysSonTaskPageListVO.getStartTime() != null) {
+                    // 判断当startTime等于或小于now时，更新子任务列表
+                    if (ysSonTaskPageListVO.getStartTime().compareTo(LocalDateTime.now()) <= 0) {
+                        ysSonTaskPageListVO.setStatus(1);
+                        YsSonTask ysSonTask = BeanConvertUtils.convertTo(ysSonTaskPageListVO, YsSonTask::new);
+                        ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
+                    }
+                }
+            }
+        }
+        if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(x -> {
                 List<YsMasterFile> masterFiles = ysMasterFileMapper.selectAllByYsSonTaskId(x.getId());
                 for (YsMasterFile masterFile : masterFiles) {
