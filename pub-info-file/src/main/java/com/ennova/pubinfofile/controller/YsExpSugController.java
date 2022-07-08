@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
@@ -80,5 +81,11 @@ public class YsExpSugController {
     @PostMapping("/delFiles")
     public Callback delFiles(@RequestBody ExpSugDelVO expSugDelVO) {
         return ysExpSugService.delFiles(expSugDelVO);
+    }
+
+    @ApiOperation(value = "经验建议搜索 - 获取主任务下拉",tags = "经验建议API")
+    @GetMapping("/queryMasterTask")
+    public Callback<List<LinkedHashMap>> queryMasterTask(){
+        return ysExpSugService.queryMasterTask();
     }
 }

@@ -331,4 +331,16 @@
     GROUP BY id
     ORDER BY createTime DESC
   </select>
+
+  <select id="queryMasterTask" resultType="java.util.LinkedHashMap">
+    SELECT DISTINCT
+      t4.id,
+      t4.NAME
+    FROM
+      ys_exp_sug yes
+        LEFT JOIN ys_master_task t4 ON yes.ys_master_task_id = t4.id
+    WHERE
+      yes.ys_master_task_id != 0
+    ORDER BY t4.create_time DESC
+  </select>
 </mapper>

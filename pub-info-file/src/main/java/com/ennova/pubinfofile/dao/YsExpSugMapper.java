@@ -7,6 +7,7 @@ import com.ennova.pubinfofile.vo.YsExpSugVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Mapper
@@ -40,4 +41,7 @@ public interface YsExpSugMapper {
     List<ExpSugDetailVO> getFileDetails( @Param("ysMasterTaskId")Integer ysMasterTaskId,
                                          @Param("fileName")String fileName,
                                          @Param("userId")Integer userId);
+
+    List<LinkedHashMap> queryMasterTask();
+
 }

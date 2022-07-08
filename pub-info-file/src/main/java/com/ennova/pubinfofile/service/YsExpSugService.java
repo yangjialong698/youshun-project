@@ -244,43 +244,48 @@ public class YsExpSugService {
         if (pageSize == null || pageSize < 1) {
             pageSize = 10;
         }
-//        Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
-//        List<ExpSugDetailVO> list = ysExpSugMapper.getFileDetails(ysMasterTaskId,fileName,userId);
-//        BaseVO<ExpSugDetailVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
-//        return Callback.success(baseVO);
-        if (roleCode.equals("sub_task_manage")){
-            //角色是子任务管理
-            Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
-            List<ExpSugDetailVO> list = ysExpSugMapper.getFileDetailsForZrw(ysMasterTaskId,fileName,userId);
-            BaseVO<ExpSugDetailVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
-            return Callback.success(baseVO);
-        }else if(roleCode.equals("executor")){
-            //角色是普通用户
-            List<YsTeam> ysTeams = ysTeamMapper.selectAllByExecutorId(userId);
-            if (CollectionUtil.isNotEmpty(ysTeams)){
-                List<Integer> teamIds = ysTeams.stream().map(e -> e.getId()).collect(Collectors.toList());
-                List<YsSonTask> ysSonTaskList = ysSonTaskMapper.selectAllByYsTeamIds(teamIds);
-                if (CollectionUtil.isNotEmpty(ysSonTaskList)){
-                    List<Integer> maskTaskIdList = ysSonTaskList.stream().map(e -> e.getYsMasterTaskId()).distinct().collect(Collectors.toList());
-                    if (CollectionUtil.isNotEmpty(maskTaskIdList)){
-                        Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
-                        List<ExpSugDetailVO> list = ysExpSugMapper.getDetailsByMaskTaskIds(maskTaskIdList,ysMasterTaskId,fileName);
-                        BaseVO<ExpSugDetailVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
-                        return Callback.success(baseVO);
-                    }else {
-                        return null;
-                    }
-                }
-                return null;
-            }else {
-                return null;
-            }
-        }else {
-            //角色不是子任务管理和普通用户
-            Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
-            List<ExpSugDetailVO> list = ysExpSugMapper.getFileDetails(ysMasterTaskId,fileName,userId);
-            BaseVO<ExpSugDetailVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
-            return Callback.success(baseVO);
-        }
+        Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
+        List<ExpSugDetailVO> list = ysExpSugMapper.getFileDetails(ysMasterTaskId,fileName,userId);
+        BaseVO<ExpSugDetailVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        return Callback.success(baseVO);
+//        if (roleCode.equals("sub_task_manage")){
+//            //角色是子任务管理
+//            Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
+//            List<ExpSugDetailVO> list = ysExpSugMapper.getFileDetailsForZrw(ysMasterTaskId,fileName,userId);
+//            BaseVO<ExpSugDetailVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+//            return Callback.success(baseVO);
+//        }else if(roleCode.equals("executor")){
+//            //角色是普通用户
+//            List<YsTeam> ysTeams = ysTeamMapper.selectAllByExecutorId(userId);
+//            if (CollectionUtil.isNotEmpty(ysTeams)){
+//                List<Integer> teamIds = ysTeams.stream().map(e -> e.getId()).collect(Collectors.toList());
+//                List<YsSonTask> ysSonTaskList = ysSonTaskMapper.selectAllByYsTeamIds(teamIds);
+//                if (CollectionUtil.isNotEmpty(ysSonTaskList)){
+//                    List<Integer> maskTaskIdList = ysSonTaskList.stream().map(e -> e.getYsMasterTaskId()).distinct().collect(Collectors.toList());
+//                    if (CollectionUtil.isNotEmpty(maskTaskIdList)){
+//                        Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
+//                        List<ExpSugDetailVO> list = ysExpSugMapper.getDetailsByMaskTaskIds(maskTaskIdList,ysMasterTaskId,fileName);
+//                        BaseVO<ExpSugDetailVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+//                        return Callback.success(baseVO);
+//                    }else {
+//                        return null;
+//                    }
+//                }
+//                return null;
+//            }else {
+//                return null;
+//            }
+//        }else {
+//            //角色不是子任务管理和普通用户
+//            Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
+//            List<ExpSugDetailVO> list = ysExpSugMapper.getFileDetails(ysMasterTaskId,fileName,userId);
+//            BaseVO<ExpSugDetailVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+//            return Callback.success(baseVO);
+//        }
+    }
+
+    public Callback<List<LinkedHashMap>> queryMasterTask() {
+        List<LinkedHashMap> list =ysExpSugMapper.queryMasterTask();
+        return Callback.success(list);
     }
 }
