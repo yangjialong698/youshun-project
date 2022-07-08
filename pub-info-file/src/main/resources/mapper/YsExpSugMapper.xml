@@ -335,7 +335,7 @@
   <select id="queryMasterTask" resultType="java.util.LinkedHashMap">
     SELECT DISTINCT
       t4.id,
-      t4.NAME
+      t4.name
     FROM
       ys_exp_sug yes
         LEFT JOIN ys_master_task t4 ON yes.ys_master_task_id = t4.id
