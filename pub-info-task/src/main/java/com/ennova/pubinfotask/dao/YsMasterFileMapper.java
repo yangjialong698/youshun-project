@@ -42,7 +42,13 @@ public interface YsMasterFileMapper {
     /**
      * 查看主任务是否有日报上传记录
      **/
-    Integer selectHasJyjyById(@Param("ysMasterTaskId") Integer ysMasterTaskId);
+//    Integer selectHasJyjyById(@Param("ysMasterTaskId") Integer ysMasterTaskId);
+
+
+    // 是否存在经验建议
+    Integer selectExpSugByYsMasterTaskId(@Param("ysMasterTaskId") Integer ysMasterTaskId);
+
+
 
     List<YsMasterFile> selectAllByYsSonTaskId(@Param("ysSonTaskId")Integer ysSonTaskId);
 

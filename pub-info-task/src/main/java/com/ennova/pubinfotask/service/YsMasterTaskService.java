@@ -579,11 +579,18 @@ public class YsMasterTaskService {
             }
 
             // 是否存在经验建议记录
-            Integer hasJyjyId = ysMasterFileMapper.selectHasJyjyById(x.getId());
+//            Integer hasJyjyId = ysMasterFileMapper.selectHasJyjyById(x.getId());
+//            x.setExperienceStatus(1);
+//            if (hasJyjyId != null && hasJyjyId != 0) {
+//                x.setExperienceStatus(0);
+//            }
+
+            Integer hasJyJy = ysMasterFileMapper.selectExpSugByYsMasterTaskId(x.getId());
             x.setExperienceStatus(1);
-            if (hasJyjyId != null && hasJyjyId != 0) {
+            if (hasJyJy != null && hasJyJy != 0) {
                 x.setExperienceStatus(0);
             }
+
 
             List<YsMasterFile> masterFiles = ysMasterFileMapper.selectAllByYsMasterTaskId(x.getId());
             x.setButtonStatus(1);

@@ -297,16 +297,19 @@
 <!--          and t1.ys_son_task_id is null limit 1-->
         SELECT count(1) FROM ys_day_rep where ys_master_task_id=#{ysMasterTaskId,jdbcType=INTEGER}
     </select>
-    <select id="selectHasJyjyById" resultType="java.lang.Integer">
-        SELECT t1.id
-        FROM ys_master_file t1,
-             ys_file_type t2
-        where t1.ys_file_type_id = t2.id
-          and t1.del_flag = 0
-          and t2.del_flag = 0
-          and t2.file_prefix = 'jyjy'
-          and t1.ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER}
-          and t1.ys_son_task_id is null limit 1
+<!--    <select id="selectHasJyjyById" resultType="java.lang.Integer">-->
+<!--        SELECT t1.id-->
+<!--        FROM ys_master_file t1,-->
+<!--             ys_file_type t2-->
+<!--        where t1.ys_file_type_id = t2.id-->
+<!--          and t1.del_flag = 0-->
+<!--          and t2.del_flag = 0-->
+<!--          and t2.file_prefix = 'jyjy'-->
+<!--          and t1.ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER}-->
+<!--          and t1.ys_son_task_id is null limit 1-->
+<!--    </select>-->
+    <select id="selectExpSugByYsMasterTaskId" resultType="java.lang.Integer">
+        select count(1) from ys_exp_sug where ys_master_task_id=#{ysMasterTaskId,jdbcType=INTEGER}
     </select>
 
   <select id="selectAllByYsSonTaskId" resultMap="BaseResultMap">
