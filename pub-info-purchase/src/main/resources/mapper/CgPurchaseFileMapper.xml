@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ennova.pubinfopurchase.dao.CgPurchaseFileMapper">
+
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfopurchase.entity.CgPurchaseFile">
+        <!--@mbg.generated-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="purchase_info_id" jdbcType="INTEGER" property="purchaseInfoId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="file_md5" jdbcType="VARCHAR" property="fileMd5"/>
+        <result column="file_size" jdbcType="VARCHAR" property="fileSize"/>
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="open_file" jdbcType="INTEGER" property="openFile"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, purchase_info_id, `name`, file_md5, file_size, file_url, del_flag, open_file, create_time,
+        update_time, user_id
+    </sql>
+
+    <insert id="insertFileSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfopurchase.entity.CgPurchaseFile"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into cg_purchase_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="purchaseInfoId != null">
+                purchase_info_id,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="fileMd5 != null">
+                file_md5,
+            </if>
+            <if test="fileSize != null">
+                file_size,
+            </if>
+            <if test="fileUrl != null">
+                file_url,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="openFile != null">
+                open_file,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="purchaseInfoId != null">
+                #{purchaseInfoId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="fileMd5 != null">
+                #{fileMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="fileSize != null">
+                #{fileSize,jdbcType=VARCHAR},
+            </if>
+            <if test="fileUrl != null">
+                #{fileUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="openFile != null">
+                #{openFile,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectAllByFileMd5AndUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cg_purchase_file
+        <where>
+            del_flag = 0
+            <if test="fileMd5 != null">
+                and file_md5 = #{fileMd5,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByFileMd5" resultType="java.lang.Integer">
+        select count(id)
+        from cg_purchase_file
+        where del_flag = 0 and file_md5 = #{fileMd5}
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from cg_purchase_file
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from cg_purchase_file
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfopurchase.entity.CgPurchaseFile">
+        <!--@mbg.generated-->
+        update cg_purchase_file
+        <set>
+            <if test="purchaseInfoId != null">
+                purchase_info_id = #{purchaseInfoId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="fileMd5 != null">
+                file_md5 = #{fileMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="fileSize != null">
+                file_size = #{fileSize,jdbcType=VARCHAR},
+            </if>
+            <if test="fileUrl != null">
+                file_url = #{fileUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="openFile != null">
+                open_file = #{openFile,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByPurchaseInfoId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from cg_purchase_file
+        where purchase_info_id = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

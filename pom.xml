@@ -21,6 +21,7 @@
         <module>pub-info-user</module>
         <module>pub-info-file</module>
         <module>pub-info-task</module>
+        <module>pub-info-purchase</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

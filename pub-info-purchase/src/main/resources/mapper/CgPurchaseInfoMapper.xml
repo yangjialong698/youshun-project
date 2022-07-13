@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ennova.pubinfopurchase.dao.CgPurchaseInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfopurchase.entity.CgPurchaseInfo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="apply_name" jdbcType="INTEGER" property="applyName" />
+        <result column="task_number" jdbcType="VARCHAR" property="taskNumber" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="purchase_requirements" jdbcType="VARCHAR" property="purchaseRequirements" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, serial_number, `name`, apply_name, task_number, create_time, purchase_requirements, update_time
+    </sql>
+
+    <insert id="insertInfoSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfopurchase.entity.CgPurchaseInfo" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into cg_purchase_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">
+                serial_number,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="applyName != null">
+                apply_name,
+            </if>
+            <if test="taskNumber != null">
+                task_number,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="purchaseRequirements != null">
+                purchase_requirements,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">
+                #{serialNumber,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="applyName != null">
+                #{applyName,jdbcType=INTEGER},
+            </if>
+            <if test="taskNumber != null">
+                #{taskNumber,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="purchaseRequirements != null">
+                #{purchaseRequirements,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectLastSerialNumber" resultType="java.lang.Integer">
+        select serial_number
+        from cg_purchase_info
+        ORDER BY id desc LIMIT 1
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List" />
+        from cg_purchase_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfopurchase.entity.CgPurchaseInfo">
+        <!--@mbg.generated-->
+        update cg_purchase_info
+        set serial_number = #{serialNumber,jdbcType=INTEGER},
+        `name` = #{name,jdbcType=VARCHAR},
+        apply_name = #{applyName,jdbcType=VARCHAR},
+        task_number = #{taskNumber,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        purchase_requirements = #{purchaseRequirements,jdbcType=VARCHAR},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectPurchaseInfo" resultType="com.ennova.pubinfopurchase.vo.CgPurchaseInfoVO">
+        select
+        cpf.id,
+        cpf.serial_number AS serialNumber,
+        cpf.name AS name,
+        cpf.apply_name AS applyName,
+        cpf.task_number AS taskNumber,
+        cpf.create_time AS createTime,
+        cpf.purchase_requirements AS purchaseRequirements
+        from cg_purchase_info cpf
+        <where>
+            <if test="name != null and name != ''">
+                and `name` like CONCAT('%', trim(#{name}), '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
