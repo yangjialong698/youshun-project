@@ -1,5 +1,6 @@
 package com.ennova.pubinfopurchase.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -7,7 +8,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,5 +65,6 @@ public class CgPurchaseInfoVO {
      * 发布时间
      */
     @ApiModelProperty(value = "发布时间")
-    private LocalDateTime createTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 }

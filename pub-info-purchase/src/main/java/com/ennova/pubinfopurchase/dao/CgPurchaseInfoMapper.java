@@ -24,4 +24,5 @@ public interface CgPurchaseInfoMapper {
 
     List<CgPurchaseInfoVO> selectPurchaseInfo(@Param("name") String name);
 
+    int deleteByPrimaryKey(Integer id);
 }

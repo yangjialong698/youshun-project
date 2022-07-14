@@ -1,6 +1,7 @@
 package com.ennova.pubinfopurchase.dao;
 
 import com.ennova.pubinfopurchase.entity.CgPurchaseFile;
+import com.ennova.pubinfopurchase.vo.CgPurchaseFileVO;
 import com.ennova.pubinfopurchase.vo.FileVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,4 +28,6 @@ public interface CgPurchaseFileMapper {
     int updateByPrimaryKeySelective(CgPurchaseFile cgPurchaseFile);
 
     List<FileVO> selectByPurchaseInfoId(Integer id);
+
+    List<CgPurchaseFileVO> selectAllByPurchaseInfoId(Integer id);
 }

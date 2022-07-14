@@ -15,6 +15,7 @@ import com.ennova.pubinfopurchase.dto.FileDelDTO;
 import com.ennova.pubinfopurchase.entity.CgContactInformation;
 import com.ennova.pubinfopurchase.entity.CgPurchaseFile;
 import com.ennova.pubinfopurchase.entity.CgPurchaseInfo;
+import com.ennova.pubinfopurchase.vo.CgPurchaseFileVO;
 import com.ennova.pubinfopurchase.vo.CgPurchaseInfoVO;
 import com.ennova.pubinfopurchase.vo.FileVO;
 import com.github.pagehelper.Page;
@@ -39,7 +40,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -91,7 +91,7 @@ public class CgPurchaseInfoService {
         String subname = map.get("year") + "/" + map.get("month") + "/" + map.get("newfileName");
 
         CgPurchaseFile purchaseFile = CgPurchaseFile.builder().fileMd5(subname).fileUrl(localUrl + "/file/" + subname).name(map.get("fileName"))
-                .fileSize(map.get("fileSize")).openFile(0).delFlag(0).userId(userVo.getId()).createTime(LocalDateTime.now()).build();
+                .fileSize(map.get("fileSize")).openFile(0).delFlag(0).userId(userVo.getId()).createTime(new Date()).build();
         int count = cgPurchaseFileMapper.insertFileSelective(purchaseFile);
         if (count > 0) {
             FileVO fileVo = FileVO.builder().id(purchaseFile.getId()).fileName(map.get("fileName")).newfileName(subname).build();
@@ -151,7 +151,7 @@ public class CgPurchaseInfoService {
                 }
             }
         });
-        return Callback.success(true);
+        return Callback.success("附件删除成功");
     }
 
     public Callback insertOrUpdate(CgPurchaseInfoVO cgPurchaseInfoVO) {
@@ -167,7 +167,7 @@ public class CgPurchaseInfoService {
         if (cgPurchaseInfoVO.getId() != null) {
             CgPurchaseInfo purchaseInfo = cgPurchaseInfoMapper.selectByPrimaryKey(cgPurchaseInfoVO.getId());
             if (purchaseInfo != null) {
-                cgPurchaseInfo.setUpdateTime(LocalDateTime.now());
+                cgPurchaseInfo.setUpdateTime(new Date());
                 cgPurchaseInfo.setSerialNumber(purchaseInfo.getSerialNumber());
                 cgPurchaseInfo.setCreateTime(purchaseInfo.getCreateTime());
                 cgPurchaseInfo.setId(purchaseInfo.getId());
@@ -176,7 +176,7 @@ public class CgPurchaseInfoService {
                     for (FileVO fileVO : cgPurchaseInfoVO.getFileVOList()) {
                         CgPurchaseFile cgPurchaseFile = cgPurchaseFileMapper.selectByPrimaryKey(fileVO.getId());
                         Optional.ofNullable(cgPurchaseFile).ifPresent(cgPurchaseFile1 -> {
-                            CgPurchaseFile cgPurchaseFile2 = CgPurchaseFile.builder().id(fileVO.getId()).updateTime(LocalDateTime.now()).purchaseInfoId(cgPurchaseInfo.getId()).build();
+                            CgPurchaseFile cgPurchaseFile2 = CgPurchaseFile.builder().id(fileVO.getId()).updateTime(new Date()).purchaseInfoId(cgPurchaseInfo.getId()).build();
                             cgPurchaseFileMapper.updateByPrimaryKeySelective(cgPurchaseFile2);
                         });
                     }
@@ -187,13 +187,13 @@ public class CgPurchaseInfoService {
             Integer number = cgPurchaseInfoMapper.selectLastSerialNumber();
             Integer serialNumber = getSerialNumber(number);
             cgPurchaseInfo.setSerialNumber(serialNumber);
-            cgPurchaseInfo.setCreateTime(LocalDateTime.now());
+            cgPurchaseInfo.setCreateTime(new Date());
             cgPurchaseInfoMapper.insertInfoSelective(cgPurchaseInfo);
             if (cgPurchaseInfoVO.getFileVOList() != null && !cgPurchaseInfoVO.getFileVOList().isEmpty()) {
                 for (FileVO fileVO : cgPurchaseInfoVO.getFileVOList()) {
                     CgPurchaseFile cgPurchaseFile = cgPurchaseFileMapper.selectByPrimaryKey(fileVO.getId());
                     Optional.ofNullable(cgPurchaseFile).ifPresent(cgPurchaseFile1 -> {
-                        CgPurchaseFile cgPurchaseFile2 = CgPurchaseFile.builder().id(fileVO.getId()).updateTime(LocalDateTime.now()).purchaseInfoId(cgPurchaseInfo.getId()).build();
+                        CgPurchaseFile cgPurchaseFile2 = CgPurchaseFile.builder().id(fileVO.getId()).updateTime(new Date()).purchaseInfoId(cgPurchaseInfo.getId()).build();
                         cgPurchaseFileMapper.updateByPrimaryKeySelective(cgPurchaseFile2);
                     });
                 }
@@ -201,6 +201,25 @@ public class CgPurchaseInfoService {
             return Callback.success(true);
         }
         return Callback.success();
+    }
+
+    public Callback delete(Integer id) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        CgPurchaseInfo cgPurchaseInfo = cgPurchaseInfoMapper.selectByPrimaryKey(id);
+        List<CgPurchaseFileVO> cgPurchaseFileVOS = cgPurchaseFileMapper.selectAllByPurchaseInfoId(id);
+        if (cgPurchaseInfo != null) {
+            int i = cgPurchaseInfoMapper.deleteByPrimaryKey(id);
+            if (cgPurchaseFileVOS != null){
+                cgPurchaseFileVOS.forEach(cgPurchaseFileVO -> {
+                    cgPurchaseFileMapper.deleteByPrimaryKey(cgPurchaseFileVO.getId());
+                });
+            }
+            if (i > 0) {
+                return Callback.success(true);
+            }
+        }
+        return Callback.error(2, "删除失败");
     }
 
     private Integer getSerialNumber(Integer serialNumber) {
@@ -234,8 +253,20 @@ public class CgPurchaseInfoService {
         assert userVo != null;
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
         List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name);
+        cgPurchaseInfos.forEach(cgPurchaseInfoVO -> {
+            List<FileVO> fileVOS = cgPurchaseFileMapper.selectByPurchaseInfoId(cgPurchaseInfoVO.getId());
+            cgPurchaseInfoVO.setFileVOList(fileVOS);
+        });
         BaseVO<CgPurchaseInfoVO> baseVO = new BaseVO<>(cgPurchaseInfos, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
+    }
+
+    public Callback<List<CgPurchaseInfoVO>> selectAllPurchaseInfo(String name) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name);
+        return Callback.success(cgPurchaseInfos);
     }
 
     public Callback<CgPurchaseInfoVO> getDetail(Integer id) {

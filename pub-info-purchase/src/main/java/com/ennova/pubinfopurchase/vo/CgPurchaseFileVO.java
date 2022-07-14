@@ -1,29 +1,20 @@
-package com.ennova.pubinfopurchase.entity;
+package com.ennova.pubinfopurchase.vo;
 
-/**
- * @author yangjialong
- * @version 1.0
- * @date 2022/7/12
- */
-
-import io.swagger.annotations.ApiModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 /**
- * 采购信息文件表
+ * @author yangjialong
+ * @version 1.0
+ * @date 2022/7/14
  */
-@ApiModel(value = "采购信息文件表")
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class CgPurchaseFile {
+public class CgPurchaseFileVO {
     /**
      * ID
      */
@@ -76,12 +67,14 @@ public class CgPurchaseFile {
      * 创建日期
      */
     @ApiModelProperty(value = "创建日期")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 更新日期
      */
     @ApiModelProperty(value = "更新日期")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     /**

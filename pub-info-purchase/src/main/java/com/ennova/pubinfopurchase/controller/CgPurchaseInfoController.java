@@ -7,10 +7,7 @@ import com.ennova.pubinfopurchase.entity.CgContactInformation;
 import com.ennova.pubinfopurchase.service.CgPurchaseInfoService;
 import com.ennova.pubinfopurchase.vo.CgPurchaseInfoVO;
 import com.ennova.pubinfopurchase.vo.FileVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author yangjialong
@@ -56,7 +54,13 @@ public class CgPurchaseInfoController {
         return cgPurchaseInfoService.insertOrUpdate(cgPurchaseInfoVO);
     }
 
-    @ApiOperation(value = "采购信息 - 采购信息首页列表")
+    @ApiOperation(value = "采购信息 - 删除")
+    @GetMapping("/delete")
+    public Callback delete(Integer id) {
+        return cgPurchaseInfoService.delete(id);
+    }
+
+    @ApiOperation(value = "采购信息 - 采购信息首页分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "开始页"),
             @ApiImplicitParam(name = "pageSize", value = "显示条数"),
@@ -68,11 +72,20 @@ public class CgPurchaseInfoController {
         return cgPurchaseInfoService.selectPurchaseInfo(page, pageSize, name);
     }
 
+    @ApiOperation(value = "采购信息 - 采购信息首页不分页列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "物料名称")
+    })
+    @GetMapping("/selectAllPurchaseInfo")
+    public Callback<List<CgPurchaseInfoVO>> selectAllPurchaseInfo(String name){
+        return cgPurchaseInfoService.selectAllPurchaseInfo(name);
+    }
+
     @ApiOperation(value = "采购信息 - 采购信息查看详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "采购信息ID", required = true)
     })
-    @GetMapping("/downDetail")
+    @GetMapping("/getDetail")
     public Callback<CgPurchaseInfoVO> getDetail(Integer id){
         return cgPurchaseInfoService.getDetail(id);
     }

@@ -113,4 +113,10 @@
         </where>
     </select>
 
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from `cg_purchase_info`
+        where `id` = #{id,jdbcType=INTEGER}
+    </delete>
+
 </mapper>

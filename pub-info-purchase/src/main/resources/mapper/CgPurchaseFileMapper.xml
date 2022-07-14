@@ -174,4 +174,12 @@
         from cg_purchase_file
         where purchase_info_id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="selectAllByPurchaseInfoId" parameterType="java.lang.Integer" resultType="com.ennova.pubinfopurchase.vo.CgPurchaseFileVO">
+        select
+        <include refid="Base_Column_List"/>
+        from cg_purchase_file
+        where purchase_info_id = #{id,jdbcType=INTEGER}
+    </select>
+
 </mapper>
