@@ -2,8 +2,6 @@ package com.ennova.pubinfouser.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Validator;
-import cn.hutool.core.util.IdUtil;
-
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.ennova.pubinfocommon.entity.Callback;
@@ -25,25 +23,17 @@ import com.ennova.pubinfouser.vo.PerDeptNumVO;
 import com.ennova.pubinfouser.vo.UserVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotBlank;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -340,6 +330,11 @@ public class UserService extends BaseService<UserEntity> {
     public Callback<Integer> getTotalVisit() {
         Integer totalVisit = loginLogMapper.getTotalVisit();
         return Callback.success(totalVisit);
+    }
+
+    public Callback<List<UserVO>> listAllUsers(Integer company,Integer roleId,Integer department, String searchKey) {
+        List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey);
+        return Callback.success(userVOList);
     }
 
 }

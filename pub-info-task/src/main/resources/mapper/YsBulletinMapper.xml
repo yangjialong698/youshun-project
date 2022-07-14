@@ -309,4 +309,30 @@
       <if test="createId != null">and `create_id`=#{createId,jdbcType=INTEGER}</if>
     </where>
   </select>
+  <select id="selectAll" resultType="com.ennova.pubinfotask.vo.YsBulletinVO">
+  select
+  t1.id id,
+  t1.title title,
+  t1.content content,
+  t1.type type,
+  t1.status status,
+  t1.create_id createId,
+  (select username from t_user where id=t1.create_id) createName,
+  t1.check_user_id checkUserId,
+  (select username from t_user where id=t1.check_user_id) checkName,
+  t1.check_time checkTime,
+  t1.is_delete isDelete,
+  t1.create_time createTime,
+  t1.update_time updateTime
+  from
+  ys_bulletin t1
+  <where>
+    <if test="status != null">
+      and `status`=#{status,jdbcType=INTEGER}
+    </if>
+  </where>
+  <if test="orderBy != null">
+    order by ${orderBy}
+  </if>
+  </select>
 </mapper>

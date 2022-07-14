@@ -1,11 +1,12 @@
 package com.ennova.pubinfotask.dao;
 
 import com.ennova.pubinfotask.entity.YsBulletin;
-import java.util.List;
 import com.ennova.pubinfotask.vo.ReviewerVO;
 import com.ennova.pubinfotask.vo.YsBulletinVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface YsBulletinMapper {
@@ -40,7 +41,8 @@ public interface YsBulletinMapper {
     // 查询数据库中是否存在该公告，排除当前id
     List<YsBulletin> selectByTitleAndContentAndIdNot(@Param("title")String title,@Param("content")String content,@Param("notId")Integer notId);
 
-
+    //公告列表已发布不分页
+    List<YsBulletinVO> selectAll(@Param("status") Integer status, @Param("orderBy") String orderBy);
 
 
 }

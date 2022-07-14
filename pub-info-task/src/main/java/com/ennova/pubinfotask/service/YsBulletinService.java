@@ -4,25 +4,22 @@ import com.alibaba.fastjson.JSONObject;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
-import com.ennova.pubinfocommon.vo.MenuVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
+import com.ennova.pubinfotask.config.ChannelHandlerPool;
 import com.ennova.pubinfotask.dao.UserMapper;
 import com.ennova.pubinfotask.dao.YsBulletinMapper;
 import com.ennova.pubinfotask.dao.YsMessageMapper;
 import com.ennova.pubinfotask.dto.PublishDTO;
 import com.ennova.pubinfotask.entity.YsBulletin;
 import com.ennova.pubinfotask.entity.YsFileType;
-import com.ennova.pubinfotask.config.ChannelHandlerPool;
 import com.ennova.pubinfotask.entity.YsMessage;
 import com.ennova.pubinfotask.utils.BeanConvertUtils;
 import com.ennova.pubinfotask.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import io.netty.channel.Channel;
-import io.netty.channel.group.ChannelMatcher;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.util.AttributeKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -31,16 +28,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.ennova.pubinfotask.config.ChannelHandlerPool.channelGroup;
 
 @Slf4j
 @Service
@@ -431,6 +425,13 @@ public class YsBulletinService {
         return Callback.success(list.size());
     }
 
+    // 查询当前用户创建和审核的公告列表
+    public Callback<List<YsBulletinVO>> getAllBulletinList(Integer status) {
+
+        List<YsBulletinVO> list = ysBulletinMapper.selectAll(status, "id desc");
+
+        return Callback.success(list);
+    }
 
 }
 

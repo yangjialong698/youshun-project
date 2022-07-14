@@ -104,4 +104,10 @@ public class UserController {
         return userService.getTotalVisit();
     }
 
+    @ApiOperation(value = "集成页面-用户管理-获取用户列表", tags = "用户API")
+    @GetMapping("/listAllUsers")
+    public Callback listAllUsers(Integer company,Integer roleId,Integer department, String searchKey) {
+        return userService.listAllUsers(company,roleId,department, searchKey);
+    }
+
 }

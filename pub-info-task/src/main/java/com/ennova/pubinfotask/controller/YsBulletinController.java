@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @ApiSort(value = 1)
 @Api(tags = "公共信息平台-公告")
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
@@ -125,5 +127,14 @@ public class YsBulletinController {
         return ysBulletinService.unreadMessageCount();
     }
 
-
+    @ApiOperation(value = "公告不分页 - 列表")
+    @ApiOperationSort(value = 12)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "status", value = "状态   0:待审核 1:审核通过 2:审核不通过 - 驳回"),
+            @ApiImplicitParam(name = "likeTitle", value = "公告名称或ID")
+    })
+    @GetMapping("/getAllBulletinList")
+    public Callback<List<YsBulletinVO>> getAllBulletinList(Integer status) {
+        return ysBulletinService.getAllBulletinList(status);
+    }
 }

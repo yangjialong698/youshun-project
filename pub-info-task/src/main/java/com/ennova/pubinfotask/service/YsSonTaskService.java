@@ -1,6 +1,5 @@
 package com.ennova.pubinfotask.service;
 
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
@@ -34,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -821,7 +819,6 @@ public class YsSonTaskService {
                 AtomicInteger idi = new AtomicInteger();
                 Stream.iterate(0, i -> i + 1).limit(ysWorkTimes.size()).forEach(i -> {
                     if (ysWorkTime.equals(ysWorkTimes.get(i))) {
-                        ;
                         idi.set(i);
                     }
                 });
