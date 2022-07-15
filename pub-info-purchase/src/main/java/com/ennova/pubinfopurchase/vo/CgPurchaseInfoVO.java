@@ -67,4 +67,16 @@ public class CgPurchaseInfoVO {
     @ApiModelProperty(value = "发布时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+    /**
+     * 发布人id
+     */
+    @ApiModelProperty(value = "发布人id", example = "1")
+    private Integer issuerId;
+
+    /**
+     * 采购编号
+     */
+    @ApiModelProperty(value = "采购编号", example = "1")
+    private Integer serialNumber;
 }

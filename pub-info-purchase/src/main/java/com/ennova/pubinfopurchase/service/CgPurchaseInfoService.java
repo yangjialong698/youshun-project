@@ -165,6 +165,7 @@ public class CgPurchaseInfoService {
             return Callback.error("采购人填写有误，应与登录用户名一致");
         }*/
         if (cgPurchaseInfoVO.getId() != null) {
+            //修改采集信息
             CgPurchaseInfo purchaseInfo = cgPurchaseInfoMapper.selectByPrimaryKey(cgPurchaseInfoVO.getId());
             if (purchaseInfo != null) {
                 cgPurchaseInfo.setUpdateTime(new Date());
@@ -188,6 +189,7 @@ public class CgPurchaseInfoService {
             Integer serialNumber = getSerialNumber(number);
             cgPurchaseInfo.setSerialNumber(serialNumber);
             cgPurchaseInfo.setCreateTime(new Date());
+            cgPurchaseInfo.setIssuerId(userVo.getId());
             cgPurchaseInfoMapper.insertInfoSelective(cgPurchaseInfo);
             if (cgPurchaseInfoVO.getFileVOList() != null && !cgPurchaseInfoVO.getFileVOList().isEmpty()) {
                 for (FileVO fileVO : cgPurchaseInfoVO.getFileVOList()) {
@@ -206,6 +208,7 @@ public class CgPurchaseInfoService {
     public Callback delete(Integer id) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
         CgPurchaseInfo cgPurchaseInfo = cgPurchaseInfoMapper.selectByPrimaryKey(id);
         List<CgPurchaseFileVO> cgPurchaseFileVOS = cgPurchaseFileMapper.selectAllByPurchaseInfoId(id);
         if (cgPurchaseInfo != null) {
@@ -270,6 +273,9 @@ public class CgPurchaseInfoService {
     }
 
     public Callback<CgPurchaseInfoVO> getDetail(Integer id) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
         List<FileVO> cgPurchaseFiles = cgPurchaseFileMapper.selectByPurchaseInfoId(id);
         CgPurchaseInfo cgPurchaseInfo = cgPurchaseInfoMapper.selectByPrimaryKey(id);
         CgPurchaseInfoVO cgPurchaseInfoVO = CgPurchaseInfoVO.builder()
@@ -279,6 +285,7 @@ public class CgPurchaseInfoService {
                 .taskNumber(cgPurchaseInfo.getTaskNumber())
                 .createTime(cgPurchaseInfo.getCreateTime())
                 .purchaseRequirements(cgPurchaseInfo.getPurchaseRequirements())
+                .issuerId(cgPurchaseInfo.getIssuerId())
                 .fileVOList(cgPurchaseFiles).build();
         return Callback.success(cgPurchaseInfoVO);
     }

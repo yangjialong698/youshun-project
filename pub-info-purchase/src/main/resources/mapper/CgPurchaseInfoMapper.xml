@@ -6,16 +6,17 @@
         <id column="id" jdbcType="INTEGER" property="id" />
         <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
         <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="apply_name" jdbcType="INTEGER" property="applyName" />
+        <result column="apply_name" jdbcType="VARCHAR" property="applyName" />
         <result column="task_number" jdbcType="VARCHAR" property="taskNumber" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
         <result column="purchase_requirements" jdbcType="VARCHAR" property="purchaseRequirements" />
+        <result column="issuer_id" javaType="INTEGER" property="issuerId" />
     </resultMap>
 
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, serial_number, `name`, apply_name, task_number, create_time, purchase_requirements, update_time
+        id, serial_number, `name`, apply_name, task_number, create_time, purchase_requirements, update_time, issuer_id
     </sql>
 
     <insert id="insertInfoSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfopurchase.entity.CgPurchaseInfo" useGeneratedKeys="true">
@@ -43,6 +44,9 @@
             <if test="purchaseRequirements != null">
                 purchase_requirements,
             </if>
+            <if test="issuerId != null">
+                issuer_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNumber != null">
@@ -52,7 +56,7 @@
                 #{name,jdbcType=VARCHAR},
             </if>
             <if test="applyName != null">
-                #{applyName,jdbcType=INTEGER},
+                #{applyName,jdbcType=VARCHAR},
             </if>
             <if test="taskNumber != null">
                 #{taskNumber,jdbcType=INTEGER},
@@ -65,6 +69,9 @@
             </if>
             <if test="purchaseRequirements != null">
                 #{purchaseRequirements,jdbcType=VARCHAR},
+            </if>
+            <if test="issuerId != null">
+                #{issuerId,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -104,13 +111,15 @@
         cpf.apply_name AS applyName,
         cpf.task_number AS taskNumber,
         cpf.create_time AS createTime,
-        cpf.purchase_requirements AS purchaseRequirements
+        cpf.purchase_requirements AS purchaseRequirements,
+        cpf.issuer_id AS issuerId
         from cg_purchase_info cpf
         <where>
             <if test="name != null and name != ''">
                 and `name` like CONCAT('%', trim(#{name}), '%')
             </if>
         </where>
+        order by cpf.create_time desc
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

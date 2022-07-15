@@ -71,4 +71,10 @@ public class CgPurchaseInfo {
      */
     @ApiModelProperty(value = "修改时间")
     private Date updateTime;
+
+    /**
+     * 发布人id
+     */
+    @ApiModelProperty(value = "发布人id", example = "1")
+    private Integer issuerId;
 }
