@@ -222,6 +222,39 @@
     </foreach>
   </insert>
   <select id="getTotalVisit" resultType="java.lang.Integer">
-    select count(*) from t_login_log
+    select count(*) from t_login_log where DATE_SUB(curdate(),INTERVAL 0 DAY) = DATE_FORMAT(login_date,'%Y-%m-%d')
+  </select>
+
+  <select id="loginLogList" resultType="com.ennova.pubinfouser.vo.LoginLogVO">
+    select
+      t.user_id as userId,
+      t.user_name as userName,
+      count(*) as count,
+      date_format(t.login_date, '%Y-%m') as loginDate
+    from (
+           -- 计算用户每天的登陆记录
+           select user_id,
+                  user_name,
+                  count(*)                            as count,
+                  date_format(login_date, '%Y-%m-%d') as login_date
+           from t_login_log
+           <where>
+             <if test="loginDate != null and loginDate !=''">
+               and date_format(login_date, '%Y-%m') =#{loginDate}
+             </if>
+             <if test="userId != null">
+               and user_id = #{userId}
+             </if>
+           </where>
+           group by date_format(login_date, '%Y-%m-%d'),
+                    user_id
+         ) as t
+    <where>
+      <if test="loginDate != null and loginDate !=''">
+        and date_format(login_date, '%Y-%m') =#{loginDate}
+      </if>
+    </where>
+    group by loginDate, t.user_id
+    order by user_id
   </select>
 </mapper>

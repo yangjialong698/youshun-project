@@ -1,10 +1,12 @@
 package com.ennova.pubinfouser.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfouser.dto.UserDTO;
 import com.ennova.pubinfouser.service.UserService;
 import com.ennova.pubinfouser.vo.CheckCodeVO;
 import com.ennova.pubinfouser.vo.DeptNumVO;
+import com.ennova.pubinfouser.vo.LoginLogVO;
 import com.ennova.pubinfouser.vo.UserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 
 @Api(tags = "用户API")
@@ -27,6 +30,11 @@ public class UserController {
     public Callback login(String account, String password) {
         return userService.login(account,password);
     }
+//
+//    @GetMapping("/info")
+//    public String info(HttpSession session) {
+//        return "当前登录的是：" + session.getAttribute("login_user");
+//    }
 
     @ApiOperation(value = "刷新token", tags = "用户API")
     @GetMapping("/refreshToken")
@@ -104,10 +112,27 @@ public class UserController {
         return userService.getTotalVisit();
     }
 
+
     @ApiOperation(value = "集成页面-用户管理-获取用户列表", tags = "用户API")
     @GetMapping("/listAllUsers")
     public Callback listAllUsers(Integer company,Integer roleId,Integer department, String searchKey) {
-        return userService.listAllUsers(company,roleId,department, searchKey);
+        return userService.listAllUsers(company, roleId, department, searchKey);
+    }
+
+    @ApiOperation(value = "日志访问记录",  tags = "用户API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "开始页"),
+            @ApiImplicitParam(name = "pageSize", value = "显示条数"),
+            @ApiImplicitParam(name = "userId", value = "用户id"),
+            @ApiImplicitParam(name = "loginDate", value = "yyyy-MM"),
+
+    })
+    @GetMapping("/loginLogList")
+    public Callback<BaseVO<LoginLogVO>> loginLogList(@RequestParam(defaultValue = "1") Integer page,
+                                                     @RequestParam(defaultValue = "10") Integer pageSize,
+                                                     Integer userId, String loginDate){
+        return userService.loginLogList(page,pageSize,userId,loginDate);
+
     }
 
 }

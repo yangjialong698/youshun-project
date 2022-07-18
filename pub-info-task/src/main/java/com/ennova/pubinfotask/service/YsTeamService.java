@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -80,7 +81,10 @@ public class YsTeamService{
                 ysTeam.setCreateTime(old.getCreateTime());
                 ysTeam.setId(old.getId());
                 ysTeam.setIsDelete(old.getIsDelete());
+                // 原来的任务ID不能修改
                 ysTeam.setYsMasterTaskId(old.getYsMasterTaskId());
+                // 因为任务ID不能修改，所以任务组、非任务组也不能修改
+                ysTeam.setTaskFlag(old.getTaskFlag());
 
                 //int count = ysTeamMapper.updateByPrimaryKeySelective(ysTeam);
                 int count = ysTeamMapper.updateByPrimaryKey(ysTeam);
@@ -89,7 +93,8 @@ public class YsTeamService{
                 }
             }else{
                 //新增，查重
-                List<EditYsTeamVO> list = ysTeamMapper.selectAllByUserIdAndExecutorId(userVo.getId(), record.getYsMasterTaskId(), record.getExecutorId());
+                List<EditYsTeamVO> list = ysTeamMapper.selectAllByUserIdAndExecutorId(
+                        userVo.getId(), record.getYsMasterTaskId(), record.getExecutorId(),record.getTaskFlag());
                 if (!list.isEmpty()){
                     return Callback.error(2,"此主任务，已存在当前执行人，请勿重复添加");
                 }
@@ -144,14 +149,17 @@ public class YsTeamService{
             userList.add(userId);
         }
         if ("executor".equals(currentUserVO.getRoleCode())) {
-            List<YsTeam> ysTeams = ysTeamMapper.selectAllByYsMasterTaskIdAndExecutorId(userVo.getId(), ysMasterTaskId);
-            if (CollectionUtils.isEmpty(ysTeams)){
-                log.info("团队管理列表页面，没有子任务，无法查询");
-                List<YsTeamPageListVO> newList = new ArrayList<>();
-                BaseVO<YsTeamPageListVO> pageListVO = new BaseVO<>(newList, new PageUtil(0, 0, 0));
-                return Callback.success(pageListVO);
+            if (ysMasterTaskId != null && ysMasterTaskId !=0){
+                List<YsTeam> ysTeams = ysTeamMapper.selectAllByYsMasterTaskIdAndExecutorId(userVo.getId(), ysMasterTaskId);
+                if (CollectionUtils.isEmpty(ysTeams)){
+                    log.info("团队管理列表页面，没有子任务，无法查询");
+                    List<YsTeamPageListVO> newList = new ArrayList<>();
+                    BaseVO<YsTeamPageListVO> pageListVO = new BaseVO<>(newList, new PageUtil(0, 0, 0));
+                    return Callback.success(pageListVO);
+                }
+                masterIds = ysTeams.stream().map(YsTeam::getYsMasterTaskId).collect(Collectors.toSet());
+                userList.add(userVo.getId());
             }
-            masterIds = ysTeams.stream().map(YsTeam::getYsMasterTaskId).collect(Collectors.toSet());
         }
         userList.removeIf(Objects::isNull);
         masterIds.removeIf(Objects::isNull);

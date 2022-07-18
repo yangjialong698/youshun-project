@@ -2,19 +2,13 @@ package com.ennova.pubinfotask.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-
-/**
- * @Auther: shibingyang1990@gmail.com
- * @Date: 2022/5/20
- * @Description: com.ennova.pubinfotask.entity
- * @Version: 1.0
- */
 
 /**
  * 团队管理
@@ -30,6 +24,12 @@ public class YsTeam {
      */
     @ApiModelProperty(value = "ID")
     private Integer id;
+
+    /**
+     * 任务组：1 非任务组：0
+     */
+    @ApiModelProperty(value = "任务组：1 非任务组：0")
+    private Integer taskFlag;
 
     /**
      * 成本：  元/每小时

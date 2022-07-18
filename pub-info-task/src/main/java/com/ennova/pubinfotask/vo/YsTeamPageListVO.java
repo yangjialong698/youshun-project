@@ -13,79 +13,82 @@ import java.time.LocalDateTime;
  * @Description: com.ennova.pubinfotask.vo
  * @Version: 1.0
  */
-@ApiModel(value="团队管理")
+@ApiModel(value = "团队管理")
 @Data
 @Builder
 public class YsTeamPageListVO {
 
 
-  /**
-    * ID
-    */
-    @ApiModelProperty(value="ID")
+    /**
+     * ID
+     */
+    @ApiModelProperty(value = "ID")
     private Integer id;
 
     /**
-    * 姓名
-    */
-    @ApiModelProperty(value="姓名")
+     * 姓名
+     */
+    @ApiModelProperty(value = "姓名")
     private String name;
 
     /**
-    * 部门ID
-    */
-    @ApiModelProperty(value="部门ID")
+     * 部门ID
+     */
+    @ApiModelProperty(value = "部门ID")
     private Integer deptId;
 
     /**
-    * 部门名称
-    */
-    @ApiModelProperty(value="部门名称")
+     * 部门名称
+     */
+    @ApiModelProperty(value = "部门名称")
     private String deptName;
 
     /**
-    * 主任务ID
-    */
-    @ApiModelProperty(value="主任务ID")
+     * 主任务ID
+     */
+    @ApiModelProperty(value = "主任务ID")
     private Integer ysMasterTaskId;
 
     /**
-    * 主任务名称
-    */
-    @ApiModelProperty(value="主任务名称")
+     * 主任务名称
+     */
+    @ApiModelProperty(value = "主任务名称")
     private String masterTaskName;
 
     /**
-    * 职务
-    */
-    @ApiModelProperty(value="职务")
+     * 职务
+     */
+    @ApiModelProperty(value = "职务")
     private String jobTitle;
 
     /**
-    * 手机
-    */
-    @ApiModelProperty(value="手机")
+     * 手机
+     */
+    @ApiModelProperty(value = "手机")
     private String phone;
 
     /**
-    * 成本：  元/每小时
-    */
-    @ApiModelProperty(value="成本：  元/每小时")
+     * 成本：  元/每小时
+     */
+    @ApiModelProperty(value = "成本：  元/每小时")
     private Double cost;
 
 
     /**
-    * 创建时间
-    */
-    @ApiModelProperty(value="创建时间")
+     * 创建时间
+     */
+    @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 
     /**
-    * 更新时间
-    */
-    @ApiModelProperty(value="更新时间")
+     * 更新时间
+     */
+    @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+
+    @ApiModelProperty(value = "任务组：1 非任务组：0")
+    private Integer taskFlag;
 
 
 }

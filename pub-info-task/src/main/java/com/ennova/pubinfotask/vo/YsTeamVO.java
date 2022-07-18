@@ -46,8 +46,13 @@ public class YsTeamVO {
     /**
     * ysMasterTaskId
     */
-    @NotNull(message = "主任务ID(ysMasterTaskId): 不能为空")
+   // @NotNull(message = "主任务ID(ysMasterTaskId): 不能为空")
     @ApiModelProperty(value="主任务ID", example = "1")
     private Integer ysMasterTaskId;
+
+
+    @ApiModelProperty(value = "任务组：1 非任务组：0")
+    private Integer taskFlag;
+
 
 }

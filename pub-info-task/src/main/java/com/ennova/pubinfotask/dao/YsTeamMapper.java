@@ -1,11 +1,8 @@
 package com.ennova.pubinfotask.dao;
 
-import com.ennova.pubinfotask.dto.UserMasterDTO;
-import com.ennova.pubinfotask.entity.YsTeam;
-import com.ennova.pubinfotask.vo.EditYsTeamVO;
-import com.ennova.pubinfotask.vo.ExecutorVO;
-import com.ennova.pubinfotask.vo.YsTeamPageListVO;
-import org.apache.ibatis.annotations.Mapper;
+import com.ennova.pubinfotask.dto.UserMasterDTO;import com.ennova.pubinfotask.entity.YsTeam;
+import java.util.LinkedHashMap;import java.util.List;
+import com.ennova.pubinfotask.vo.EditYsTeamVO;import com.ennova.pubinfotask.vo.ExecutorVO;import com.ennova.pubinfotask.vo.YsTeamPageListVO;import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
@@ -18,7 +15,7 @@ import java.util.List;
  * @Version: 1.0
  */
 @Mapper
-public interface YsTeamMapper<selectByExecutorId> {
+public interface YsTeamMapper {
     int deleteByPrimaryKey(Integer id);
 
     int insert(YsTeam record);
@@ -41,7 +38,8 @@ public interface YsTeamMapper<selectByExecutorId> {
 
     List<EditYsTeamVO> selectAllByUserId(@Param("userId") Integer userId, @Param("masterTaskId") Integer masterTaskId);
 
-    List<EditYsTeamVO> selectAllByUserIdAndExecutorId(@Param("userId") Integer userId, @Param("masterTaskId") Integer masterTaskId, @Param("executorId") Integer executorId);
+    List<EditYsTeamVO> selectAllByUserIdAndExecutorId(@Param("userId") Integer userId, @Param("masterTaskId") Integer masterTaskId,
+                                                      @Param("executorId") Integer executorId, @Param("taskFlag") Integer taskFlag);
 
     List<LinkedHashMap> selectTeamGroup(@Param("dto")UserMasterDTO dto);
 
@@ -50,6 +48,9 @@ public interface YsTeamMapper<selectByExecutorId> {
     List<YsTeam> selectByUserIdAndYsMasterTaskId(@Param("userId")Integer userId,@Param("ysMasterTaskId")Integer ysMasterTaskId);
 
     List<YsTeam> selectAllByYsMasterTaskIdAndExecutorId(@Param("executorId")Integer executorId, @Param("ysMasterTaskId")Integer ysMasterTaskId);
+
+    // 团队列表查询时，ysMasterTaskId为0时，查询非任务组
+    List<YsTeam> selectAllByYsMasterTaskIdAndExecutorId2(@Param("executorId")Integer executorId, @Param("ysMasterTaskId")Integer ysMasterTaskId);
 
     String selectUserNameByTeamId(@Param("teamId") Integer teamId);
 

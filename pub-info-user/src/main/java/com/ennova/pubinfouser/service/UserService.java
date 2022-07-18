@@ -17,12 +17,10 @@ import com.ennova.pubinfouser.entity.UserEntity;
 import com.ennova.pubinfouser.entity.UserRole;
 import com.ennova.pubinfouser.service.feign.PubInfoTaskClient;
 import com.ennova.pubinfouser.utils.AddressUtil;
-import com.ennova.pubinfouser.vo.CheckCodeVO;
-import com.ennova.pubinfouser.vo.DeptNumVO;
-import com.ennova.pubinfouser.vo.PerDeptNumVO;
-import com.ennova.pubinfouser.vo.UserVO;
+import com.ennova.pubinfouser.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.page.PageMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -124,6 +122,10 @@ public class UserService extends BaseService<UserEntity> {
         userVO.setRefreshToken(refreshToken);
         userVO.setPassword("");
         userVO.setMenu(roleService.getMenu(userRole.getRoleId()));
+
+//        String s = JSONObject.toJSONString(userVO);
+//        HttpSession session = request.getSession();
+//        session.setAttribute("login_user", s);
 
         //登陆成功，记录登陆日志
         String ua = StrUtil.sub(this.request.getHeader("user-agent"), 0, 500);
@@ -332,9 +334,16 @@ public class UserService extends BaseService<UserEntity> {
         return Callback.success(totalVisit);
     }
 
+
     public Callback<List<UserVO>> listAllUsers(Integer company,Integer roleId,Integer department, String searchKey) {
         List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey);
         return Callback.success(userVOList);
+    }
+    public Callback<BaseVO<LoginLogVO>> loginLogList(Integer page, Integer pageSize, Integer userId, String loginDate){
+        Page<LoginLogVO> startPage = PageMethod.startPage(page, pageSize);
+        List<LoginLogVO> loginLogVOList = loginLogMapper.loginLogList(userId,loginDate);
+        BaseVO<LoginLogVO> baseVO = new BaseVO<>(loginLogVOList, new PageUtil(pageSize, (int)startPage.getTotal(), page));
+        return Callback.success(baseVO);
     }
 
 }

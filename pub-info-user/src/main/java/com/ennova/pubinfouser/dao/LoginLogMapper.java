@@ -2,6 +2,8 @@ package com.ennova.pubinfouser.dao;
 
 import com.ennova.pubinfouser.entity.LoginLog;
 import java.util.List;
+
+import com.ennova.pubinfouser.vo.LoginLogVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,4 +26,6 @@ public interface LoginLogMapper {
     int batchInsert(@Param("list") List<LoginLog> list);
 
     Integer getTotalVisit();
+
+    List<LoginLogVO> loginLogList(@Param("userId") Integer userId, @Param("loginDate") String loginDate);
 }

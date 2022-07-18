@@ -18,4 +18,11 @@ import java.util.Set;
 public class UserMasterDTO {
      private Set<Integer> userList;
      private Set<Integer> masterIds;
+
+
+     public static Integer getMasterIdOne(Set<Integer> masterIds){
+    	    //获取第一条主任务ID
+          return  masterIds.stream().findFirst().get();
+     }
+
 }
