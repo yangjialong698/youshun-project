@@ -11,10 +11,7 @@ import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfouser.dao.*;
 import com.ennova.pubinfouser.dto.BaseDTO;
 import com.ennova.pubinfouser.dto.UserDTO;
-import com.ennova.pubinfouser.entity.LoginLog;
-import com.ennova.pubinfouser.entity.UserDept;
-import com.ennova.pubinfouser.entity.UserEntity;
-import com.ennova.pubinfouser.entity.UserRole;
+import com.ennova.pubinfouser.entity.*;
 import com.ennova.pubinfouser.service.feign.PubInfoTaskClient;
 import com.ennova.pubinfouser.utils.AddressUtil;
 import com.ennova.pubinfouser.vo.*;
@@ -74,6 +71,9 @@ public class UserService extends BaseService<UserEntity> {
     @Autowired
     private LoginLogMapper loginLogMapper;
 
+    @Autowired
+    private TUserSystemMapper tUserSystemMapper;
+
 
     public Callback<UserVO> login(String account, String password) {
         System.out.println("*****************路由测试***************"+account+" -- "+password);
@@ -114,12 +114,14 @@ public class UserService extends BaseService<UserEntity> {
         if(userVO.getStatus().equals("1")) {
             return Callback.error("账号已被禁用，请确认");
         }
+        List<TUserSystem> tUserSystems = tUserSystemMapper.queryByUserId(userVO.getId());
         //生成token
         String token = JWTUtil.generateTokenForLog(account,userVO.getId(), userVO.getCompany().toString());
         //生成刷新token
         String refreshToken = JWTUtil.generateRefToken(account,userVO.getId(), userVO.getCompany().toString());
         userVO.setToken(token);
         userVO.setRefreshToken(refreshToken);
+        userVO.setTUserSystems(tUserSystems);
         userVO.setPassword("");
         userVO.setMenu(roleService.getMenu(userRole.getRoleId()));
 

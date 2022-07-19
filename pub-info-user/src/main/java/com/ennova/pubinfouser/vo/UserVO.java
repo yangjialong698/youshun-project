@@ -1,5 +1,6 @@
 package com.ennova.pubinfouser.vo;
 
+import com.ennova.pubinfouser.entity.TUserSystem;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -112,6 +113,9 @@ public class UserVO {
 
     @ApiModelProperty(value = "refreshToken过期刷新token")
     private String refreshToken;
+
+    @ApiModelProperty(value = "一级菜单")
+    private List<TUserSystem> tUserSystems;
 
     @ApiModelProperty(notes = "菜单")
     private List<MenuVO> menu;
