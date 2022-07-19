@@ -52,6 +52,7 @@ public class CgPurchaseInfoVO {
      * 采购要求
      */
     @ApiModelProperty(value = "采购要求")
+    @NotBlank(message = "采购要求(summary): 不能为空!")
     @Length(max = 2000,message = "采购要求(checkStandard):请输入2000个以内的中文字符")
     private String purchaseRequirements;
 

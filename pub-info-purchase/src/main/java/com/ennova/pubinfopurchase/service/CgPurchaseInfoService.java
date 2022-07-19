@@ -182,6 +182,7 @@ public class CgPurchaseInfoService {
                         });
                     }
                 }
+                return Callback.success(true);
             }
         } else {
             //发布采集信息
@@ -202,7 +203,7 @@ public class CgPurchaseInfoService {
             }
             return Callback.success(true);
         }
-        return Callback.success();
+        return Callback.error(2, "数据处理失败!");
     }
 
     public Callback delete(Integer id) {
