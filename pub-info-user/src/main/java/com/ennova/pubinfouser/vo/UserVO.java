@@ -114,11 +114,14 @@ public class UserVO {
     @ApiModelProperty(value = "refreshToken过期刷新token")
     private String refreshToken;
 
-    @ApiModelProperty(value = "一级菜单")
-    private List<TUserSystem> tUserSystems;
+//    @ApiModelProperty(value = "一级菜单")
+//    private List<TUserSystem> tUserSystems;
 
     @ApiModelProperty(notes = "菜单")
     private List<MenuVO> menu;
+
+    @ApiModelProperty(notes = "新菜单")
+    private List<NewMenuVO> newMenu;
 
     @ApiModelProperty(notes = "权限模块")
     private List<MenuVO> permissionsModule;

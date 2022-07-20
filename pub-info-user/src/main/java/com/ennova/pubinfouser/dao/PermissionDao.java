@@ -1,4 +1,5 @@
 package com.ennova.pubinfouser.dao;
+import com.ennova.pubinfouser.entity.PermissionEntity;
 
 import com.ennova.pubinfouser.entity.RolePermissionEntity;
 import com.ennova.pubinfouser.vo.PermissionVO;
@@ -19,4 +20,8 @@ public interface PermissionDao {
     int delRolePermission(Integer roleId);
 
     int addRolePermission(@Param("roleId") int roleId, @Param("list") List<Integer> list);
+
+    List<PermissionEntity> queryAllBySystemNo(@Param("systemNo")String systemNo);
+
+
 }

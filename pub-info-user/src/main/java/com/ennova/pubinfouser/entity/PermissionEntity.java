@@ -51,6 +51,8 @@ public class PermissionEntity {
     private Integer hidden;
     @ApiModelProperty(example = "1", notes = "激活")
     private String active;
+    @ApiModelProperty(example = "1", notes = "系统编号")
+    private String systemNo;
 
 
 

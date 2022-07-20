@@ -30,6 +30,11 @@ public class UserController {
     public Callback login(String account, String password) {
         return userService.login(account,password);
     }
+
+    @PostMapping("/loginAll")
+    public Callback loginAll(String account, String password) {
+        return userService.loginAll(account,password);
+    }
 //
 //    @GetMapping("/info")
 //    public String info(HttpSession session) {

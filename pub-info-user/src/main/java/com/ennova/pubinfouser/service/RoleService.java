@@ -9,6 +9,7 @@ import com.ennova.pubinfouser.dao.RoleDao;
 import com.ennova.pubinfouser.dao.RolePermissionMapper;
 import com.ennova.pubinfouser.dao.UserDao;
 import com.ennova.pubinfouser.dao.UserRoleMapper;
+import com.ennova.pubinfouser.entity.PermissionEntity;
 import com.ennova.pubinfouser.entity.RoleEntity;
 import com.ennova.pubinfouser.entity.RolePermissionEntity;
 import com.ennova.pubinfouser.entity.UserRole;
@@ -334,5 +335,80 @@ public class RoleService extends BaseService<RoleEntity> {
     public Callback<List<RoleEntity>> listRoleList(Integer company) {
         List<RoleEntity>  roleEntityList = roleDao.listRoleList(company);
         return Callback.success(roleEntityList);
+    }
+
+    public List<MenuVO> getMenuBySysNum(String sysNum) {
+        List<PermissionEntity> permissionEntities = permissionDao.queryAllBySystemNo(sysNum);
+        List<PermissionVO> permissionResponse = new ArrayList<>();
+        permissionResponse = permissionDao.getPermissions();
+//        List<RolePermissionEntity> rolePermissions = permissionDao.getRolePermissions(roleId);
+        List<MenuVO> menuVOList = new ArrayList<>();
+        // 获取一级菜单
+        for (PermissionVO permissionVO : permissionResponse) {
+            if (permissionVO.getLevel() == 1) {
+                for (PermissionEntity permissionEntity : permissionEntities) {
+                    if (permissionEntity.getId().equals(permissionVO.getId())) {
+                        MenuVO menuVO = new MenuVO();
+                        menuVO.setId(permissionVO.getId());
+                        menuVO.setPath(permissionVO.getUrl());
+                        menuVO.setIcon(permissionVO.getIcon());
+                        menuVO.setName(permissionVO.getPermissionName());
+                        menuVO.setId(permissionVO.getId());
+                        menuVO.setRedirect(permissionVO.getRedirect());
+                        menuVO.setComponent(permissionVO.getComponent());
+                        menuVO.setHidden(permissionVO.getHidden());
+                        menuVO.setVal(permissionVO.getVal());
+                        menuVO.setActive(permissionVO.getActive());
+                        menuVOList.add(menuVO);
+                    }
+                }
+            }
+        }
+        // 获取二级菜单
+        for (PermissionVO permissionVO : permissionResponse) {
+            if (permissionVO.getLevel() == 2) {
+                for (MenuVO menuVO : menuVOList) {
+                    if (menuVO.getId() == permissionVO.getParentId()) {
+                        for (PermissionEntity permissionEntity : permissionEntities) {
+                            if (permissionEntity.getId().equals(permissionVO.getId())) {
+                                MenuVO.MenuBan menuBan = new MenuVO.MenuBan();
+                                menuBan.setId(permissionVO.getId());
+                                menuBan.setPath(permissionVO.getUrl());
+                                menuBan.setName(permissionVO.getPermissionName());
+                                menuBan.setIcon(permissionVO.getIcon());
+                                menuBan.setRedirect(permissionVO.getRedirect());
+                                menuBan.setComponent(permissionVO.getComponent());
+                                menuBan.setHidden(permissionVO.getHidden());
+                                menuBan.setVal(permissionVO.getVal());
+                                menuBan.setActive(permissionVO.getActive());
+                                menuVO.getChildren().add(menuBan);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        // 获取三级权限
+        for (PermissionVO p1 : permissionResponse) {
+            if (p1.getLevel() == 3) {
+                for (MenuVO menuVO : menuVOList) {
+                    List<MenuVO.MenuBan> secondMenuVOs = menuVO.getChildren();
+                    if (secondMenuVOs == null || secondMenuVOs.size() == 0) {
+                        continue;
+                    }
+                    for (MenuVO.MenuBan secondMenu : secondMenuVOs) {
+                        if (secondMenu.getId() == p1.getParentId()) {
+                            for (PermissionEntity permissionEntity : permissionEntities) {
+                                if (permissionEntity.getId().equals(p1.getId())) {
+                                    secondMenu.getBtnName().add(p1.getVal());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return menuVOList;
     }
 }

@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -114,6 +115,66 @@ public class UserService extends BaseService<UserEntity> {
         if(userVO.getStatus().equals("1")) {
             return Callback.error("账号已被禁用，请确认");
         }
+        //生成token
+        String token = JWTUtil.generateTokenForLog(account,userVO.getId(), userVO.getCompany().toString());
+        //生成刷新token
+        String refreshToken = JWTUtil.generateRefToken(account,userVO.getId(), userVO.getCompany().toString());
+        userVO.setToken(token);
+        userVO.setRefreshToken(refreshToken);
+        userVO.setPassword("");
+        userVO.setMenu(roleService.getMenu(userRole.getRoleId()));
+        //登陆成功，记录登陆日志
+        String ua = StrUtil.sub(this.request.getHeader("user-agent"), 0, 500);
+        String ip = ServletUtil.getClientIP(this.request);
+        String location = AddressUtil.getRegion(ip);
+
+        LoginLog loginLog = LoginLog.builder().requestIp(ip).userId(userVO.getId()).userName(userVO.getUsername()).account(userVO.getMobile())
+                .description("用户登陆").loginDate(new Date()).ua(ua).location(location).createTime(new Date()).build();
+
+        loginLogMapper.insert(loginLog);
+        return Callback.success(userVO);
+    }
+
+
+    public Callback<UserVO> loginAll(String account, String password) {
+        System.out.println("*****************路由测试***************"+account+" -- "+password);
+        if(account == null || "".equals(account)) {
+            return Callback.error("请输入账号");
+        }
+        if(password == null || "".equals(password)) {
+            return Callback.error("请输入密码");
+        }
+        UserVO userVO = null;
+        if (Validator.isMobile(account)) {
+            userVO = userDao.getUserInfoByMobile(account);
+            if (userVO == null) {
+                return Callback.error("手机号码未注册");
+            }
+        }else if (account.startsWith("U") && account.length() == 8){
+            userVO = userDao.getUserInfoByJobNum(account);
+            if (userVO == null) {
+                return Callback.error("工号未注册");
+            }
+        }
+        List<UserRole>  userRoleList = userRoleMapper.selectByUserId(userVO.getId());
+        UserRole userRole = null ;
+        if (CollectionUtil.isNotEmpty(userRoleList)){
+            userRole = userRoleList.get(0);
+        }else {
+            return Callback.error("用户无角色,无法登入");
+        }
+        // 验证密码是否正确
+        try {
+            password = md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!password.equals(userVO.getPassword())) {
+            return Callback.error("手机号或密码错误，请重试");
+        }
+        if(userVO.getStatus().equals("1")) {
+            return Callback.error("账号已被禁用，请确认");
+        }
         List<TUserSystem> tUserSystems = tUserSystemMapper.queryByUserId(userVO.getId());
         //生成token
         String token = JWTUtil.generateTokenForLog(account,userVO.getId(), userVO.getCompany().toString());
@@ -121,14 +182,29 @@ public class UserService extends BaseService<UserEntity> {
         String refreshToken = JWTUtil.generateRefToken(account,userVO.getId(), userVO.getCompany().toString());
         userVO.setToken(token);
         userVO.setRefreshToken(refreshToken);
-        userVO.setTUserSystems(tUserSystems);
         userVO.setPassword("");
-        userVO.setMenu(roleService.getMenu(userRole.getRoleId()));
-
-//        String s = JSONObject.toJSONString(userVO);
-//        HttpSession session = request.getSession();
-//        session.setAttribute("login_user", s);
-
+        ArrayList<NewMenuVO> newMenuVOS = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(tUserSystems)){
+            for (TUserSystem tUserSystem : tUserSystems) {
+                NewMenuVO newMenuVO = new NewMenuVO();
+                String sysNum = tUserSystem.getSysNum();
+                if (sysNum.equals("1001")){
+                    List<MenuVO> menuList = roleService.getMenu(userRole.getRoleId());
+                    newMenuVO.setSysNum(sysNum);
+                    newMenuVO.setSysName(tUserSystem.getSysName());
+                    newMenuVO.setMenu(menuList);
+                    newMenuVOS.add(newMenuVO);
+                }
+                if (sysNum.equals("1002")){
+                    List<MenuVO> menuList = roleService.getMenuBySysNum("1002");
+                    newMenuVO.setSysNum(sysNum);
+                    newMenuVO.setSysName(tUserSystem.getSysName());
+                    newMenuVO.setMenu(menuList);
+                    newMenuVOS.add(newMenuVO);
+                }
+            }
+        }
+        userVO.setNewMenu(newMenuVOS);
         //登陆成功，记录登陆日志
         String ua = StrUtil.sub(this.request.getHeader("user-agent"), 0, 500);
         String ip = ServletUtil.getClientIP(this.request);
