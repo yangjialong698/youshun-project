@@ -1,5 +1,6 @@
 package com.ennova.pubinfopurchase.service;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.FileUtils;
@@ -259,7 +260,11 @@ public class CgPurchaseInfoService {
         List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name);
         cgPurchaseInfos.forEach(cgPurchaseInfoVO -> {
             List<FileVO> fileVOS = cgPurchaseFileMapper.selectByPurchaseInfoId(cgPurchaseInfoVO.getId());
-            cgPurchaseInfoVO.setFileVOList(fileVOS);
+            if (CollectionUtil.isNotEmpty(fileVOS)){
+                cgPurchaseInfoVO.setFileVOList(fileVOS);
+            }else {
+                cgPurchaseInfoVO.setFileVOList(null);
+            }
         });
         BaseVO<CgPurchaseInfoVO> baseVO = new BaseVO<>(cgPurchaseInfos, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
@@ -287,6 +292,7 @@ public class CgPurchaseInfoService {
                 .createTime(cgPurchaseInfo.getCreateTime())
                 .purchaseRequirements(cgPurchaseInfo.getPurchaseRequirements())
                 .issuerId(cgPurchaseInfo.getIssuerId())
+                .deliveryTime(cgPurchaseInfo.getDeliveryTime())
                 .fileVOList(cgPurchaseFiles).build();
         return Callback.success(cgPurchaseInfoVO);
     }

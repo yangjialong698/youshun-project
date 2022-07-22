@@ -120,8 +120,8 @@ public class UserController {
 
     @ApiOperation(value = "集成页面-用户管理-获取用户列表", tags = "用户API")
     @GetMapping("/listAllUsers")
-    public Callback listAllUsers(Integer company,Integer roleId,Integer department, String searchKey) {
-        return userService.listAllUsers(company, roleId, department, searchKey);
+    public Callback listAllUsers(Integer page, Integer pageSize,Integer company,Integer roleId,Integer department, String searchKey) {
+        return userService.listAllUsers(page, pageSize, company, roleId, department, searchKey);
     }
 
     @ApiOperation(value = "日志访问记录",  tags = "用户API")

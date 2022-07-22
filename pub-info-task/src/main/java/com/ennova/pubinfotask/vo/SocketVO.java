@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 public class SocketVO<T> {
 
-    //来源：0 公告
+    //来源：0 公告 1 供应商认证
     private int sourceType;
 
     //类型 0 - 新增  1- 审核通过 2-审核不通过  3-修改

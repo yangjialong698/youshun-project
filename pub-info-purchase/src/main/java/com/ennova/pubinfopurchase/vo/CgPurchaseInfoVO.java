@@ -80,4 +80,11 @@ public class CgPurchaseInfoVO {
      */
     @ApiModelProperty(value = "采购编号", example = "1")
     private Integer serialNumber;
+
+    /**
+     * 到货日期
+     */
+    @ApiModelProperty(value = "到货日期")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    private Date deliveryTime;
 }

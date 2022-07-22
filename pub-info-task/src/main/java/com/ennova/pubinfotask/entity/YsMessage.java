@@ -2,11 +2,12 @@ package com.ennova.pubinfotask.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 /**
  * 消息列表
@@ -30,15 +31,21 @@ public class YsMessage {
     private Integer ysBulletin;
 
     /**
+     * 供应商ID
+     */
+    @ApiModelProperty(value = "供应商ID")
+    private Integer CgSupplier;
+
+    /**
      * 接收人ID
      */
     @ApiModelProperty(value = "接收人ID")
     private Integer receiveId;
 
     /**
-     * 消息来源：0 - 公告
+     * 消息来源：0 - 公告 , 1 - 供应商认证
      */
-    @ApiModelProperty(value = "消息来源：0 - 公告")
+    @ApiModelProperty(value = "消息来源：0 - 公告 , 1 - 供应商认证")
     private Integer sourceType;
 
     /**

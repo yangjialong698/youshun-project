@@ -193,7 +193,7 @@
         <if test="searchKey != null and searchKey != ''">
             and CONCAT(trim(replace(u.username,' ','')),trim(replace(u.mobile,' ','')))  like trim(replace(CONCAT('%',#{searchKey},'%'),' ',''))
         </if>
-        ORDER BY u.create_time DESC
+        order by CONVERT( u.username USING gbk ) COLLATE gbk_chinese_ci ASC
     </select>
 
     <select id="getCouPerDept" resultType="com.ennova.pubinfouser.vo.PerDeptNumVO">

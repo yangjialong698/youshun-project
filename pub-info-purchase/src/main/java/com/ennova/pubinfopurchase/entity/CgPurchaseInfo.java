@@ -77,4 +77,10 @@ public class CgPurchaseInfo {
      */
     @ApiModelProperty(value = "发布人id", example = "1")
     private Integer issuerId;
+
+    /**
+     * 到货日期
+     */
+    @ApiModelProperty(value = "到货日期")
+    private Date deliveryTime;
 }

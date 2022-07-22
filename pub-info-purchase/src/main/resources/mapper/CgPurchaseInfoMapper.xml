@@ -12,11 +12,12 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
         <result column="purchase_requirements" jdbcType="VARCHAR" property="purchaseRequirements" />
         <result column="issuer_id" javaType="INTEGER" property="issuerId" />
+        <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
     </resultMap>
 
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, serial_number, `name`, apply_name, task_number, create_time, purchase_requirements, update_time, issuer_id
+        id, serial_number, `name`, apply_name, task_number, create_time, purchase_requirements, update_time, issuer_id, delivery_time
     </sql>
 
     <insert id="insertInfoSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfopurchase.entity.CgPurchaseInfo" useGeneratedKeys="true">
@@ -47,6 +48,9 @@
             <if test="issuerId != null">
                 issuer_id,
             </if>
+            <if test="deliveryTime != null">
+                delivery_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNumber != null">
@@ -72,6 +76,9 @@
             </if>
             <if test="issuerId != null">
                 #{issuerId,jdbcType=INTEGER},
+            </if>
+            <if test="deliveryTime != null">
+                #{deliveryTime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -99,7 +106,8 @@
         task_number = #{taskNumber,jdbcType=VARCHAR},
         create_time = #{createTime,jdbcType=TIMESTAMP},
         purchase_requirements = #{purchaseRequirements,jdbcType=VARCHAR},
-        update_time = #{updateTime,jdbcType=TIMESTAMP}
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        delivery_time = #{deliveryTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -112,7 +120,8 @@
         cpf.task_number AS taskNumber,
         cpf.create_time AS createTime,
         cpf.purchase_requirements AS purchaseRequirements,
-        cpf.issuer_id AS issuerId
+        cpf.issuer_id AS issuerId,
+        cpf.delivery_time AS delivery_time
         from cg_purchase_info cpf
         <where>
             <if test="name != null and name != ''">

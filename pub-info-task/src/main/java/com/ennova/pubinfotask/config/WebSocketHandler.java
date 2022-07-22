@@ -1,15 +1,12 @@
 package com.ennova.pubinfotask.config;
 
-import cn.hutool.core.util.CharsetUtil;
 import com.alibaba.fastjson.JSON;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
@@ -150,6 +147,41 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
                     rejectIds.stream().forEach(bulletinId -> {
                         channel.writeAndFlush(new TextWebSocketFrame(bulletinId));
                         redisTemplate.opsForList().remove("bulletin:reject:" + paramMap.get("userId"), 0, bulletinId);
+                    });
+                }
+            }
+
+            //供应商新增时
+            List<String> supplierIds = redisTemplate.opsForList().range("supplier:add:" + paramMap.get("userId"), 0, -1);
+            if (null != supplierIds && supplierIds.size() > 0) {
+                Channel channel = userMap.get(paramMap.get("userId")); //获取用户的channel
+                if (null != channel) {
+                    supplierIds.stream().forEach(supplierId -> {
+                        channel.writeAndFlush(new TextWebSocketFrame(supplierId));
+                        redisTemplate.opsForList().remove("supplier:add:" + paramMap.get("userId"), 0, supplierId);
+                    });
+                };
+            }
+
+            //供应商审核通过时
+            List<String> checkIds = redisTemplate.opsForList().range("supplier:check:" + paramMap.get("userId"), 0, -1);
+            if (null != checkIds && checkIds.size() > 0) {
+                Channel channel = userMap.get(paramMap.get("userId")); //获取用户的channel
+                if (null != channel) {
+                    checkIds.stream().forEach(content -> {
+                        channel.writeAndFlush(new TextWebSocketFrame(content));
+                        redisTemplate.opsForList().remove("supplier:check:" + paramMap.get("userId"), 0, content);
+                    });
+                }
+            }
+            //供应商审核不通过时
+            List<String> refuseIds = redisTemplate.opsForList().range("supplier:refuse:" + paramMap.get("userId"), 0, -1);
+            if (null != refuseIds && refuseIds.size() > 0) {
+                Channel channel = userMap.get(paramMap.get("userId")); //获取用户的channel
+                if (null != channel) {
+                    refuseIds.stream().forEach(refuseId -> {
+                        channel.writeAndFlush(new TextWebSocketFrame(refuseId));
+                        redisTemplate.opsForList().remove("supplier:refuse:" + paramMap.get("userId"), 0, refuseId);
                     });
                 }
             }
