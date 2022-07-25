@@ -55,7 +55,7 @@ public class CgSupplierCertificationController {
         return cgSupplierCertificationService.insert(cgSupplierCertificationDTO);
     }
 
-    @ApiOperation(value = "供应商 - 新增 - 审核人")
+    @ApiOperation(value = "供应商 - 新增 - 选择审核人")
     @GetMapping("/selectCheckPerson")
     public Callback<List<CurrentUserVO>> selectCheckPerson(){
         return cgSupplierCertificationService.selectCheckPerson();
