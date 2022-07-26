@@ -269,4 +269,67 @@
           </if>
       </where>
   </select>
+
+
+  <select id="selectByStatusAndDayRepLike" resultType="com.ennova.pubinfotask.vo.YsMessageVO">
+        SELECT
+        t1.id id,
+        t2.file_name title,
+        t2.file_content content,
+        t1.source_type sourceType,
+        t2.user_id createId,
+        t3.username userName,
+        t2.dayrep_time checkTime,
+        t1.STATUS STATUS
+        FROM
+        ys_message t1,
+        ys_day_rep t2,
+        t_user t3
+        <where>
+            AND t1.ys_bulletin = t2.id
+            AND t2.user_id = t3.id
+            AND t1.source_type = 2
+            <if test="status != null">
+                and t1.status = #{status,jdbcType=BOOLEAN}
+            </if>
+            <if test="title != null and title != ''">
+                and t2.file_name like concat('%', #{title}, '%')
+            </if>
+            <if test="receiveId != null">
+                and t1.receive_id = #{receiveId}
+            </if>
+        </where>
+        order by t1.id desc
+  </select>
+
+    <select id="selectByStatusAndExpSugLike" resultType="com.ennova.pubinfotask.vo.YsMessageVO">
+        SELECT
+        t1.id id,
+        t2.file_name title,
+        t2.file_content content,
+        t1.source_type sourceType,
+        t2.user_id createId,
+        t3.username userName,
+        t2.sug_time checkTime,
+        t1.STATUS STATUS
+        FROM
+        ys_message t1,
+        ys_exp_sug t2,
+        t_user t3
+        <where>
+            AND t1.ys_bulletin = t2.id
+            AND t2.user_id = t3.id
+            AND t1.source_type = 3
+            <if test="status != null">
+                and t1.status = #{status,jdbcType=BOOLEAN}
+            </if>
+            <if test="title != null and title != ''">
+                and t2.file_name like concat('%', #{title}, '%')
+            </if>
+            <if test="receiveId != null">
+                and t1.receive_id = #{receiveId}
+            </if>
+        </where>
+        order by t1.id desc
+    </select>
 </mapper>

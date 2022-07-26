@@ -370,13 +370,37 @@ public class YsBulletinService {
     public Callback<BaseVO<YsMessageVO>> getMessageList(Integer page, Integer pageSize, Boolean status, String likeTitle) {
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
-
-        Page<YsFileType> startPage = PageMethod.startPage(page, pageSize);
+        if(page==null || page<1){
+            page = 1;
+        }
+        if(pageSize==null || pageSize<1){
+            pageSize = 10;
+        }
+        int index = (page - 1) * pageSize;
+        //Page<YsFileType> startPage = PageMethod.startPage(page, pageSize);
         List<YsMessageVO> list = ysMessageMapper.selectByStatusAndYsBulletinLike(status, likeTitle, userVo.getId());
         List<YsMessageVO> ysMessageVOS = ysMessageMapper.selectByStatusAndSupplierLike(status, likeTitle, userVo.getId());
+        List<YsMessageVO> dayRepList =ysMessageMapper.selectByStatusAndDayRepLike(status, likeTitle, userVo.getId());
+        List<YsMessageVO> expSugList =ysMessageMapper.selectByStatusAndExpSugLike(status, likeTitle, userVo.getId());
         list.addAll(ysMessageVOS);
-        BaseVO<YsMessageVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        list.addAll(dayRepList);
+        list.addAll(expSugList);
+        //BaseVO<YsMessageVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        BaseVO<YsMessageVO> baseVO = new BaseVO<>(getPaging(index,pageSize,list), new PageUtil(pageSize, list.size(), page));
+        //return Callback.success(baseVO);
         return Callback.success(baseVO);
+    }
+
+    public List<YsMessageVO> getPaging(int index, int pageSize, List<YsMessageVO> list){
+        if (index < 0 || index >= list.size() || pageSize <= 0) {
+            return null;
+        }
+        int lastIndex = index + pageSize;
+        if (lastIndex > list.size()) {
+            lastIndex = list.size();
+        }
+        list = list.subList(index, lastIndex);
+        return list;
     }
 
     // 只能修改自己的任务为已读状态

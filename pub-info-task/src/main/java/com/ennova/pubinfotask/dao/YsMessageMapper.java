@@ -34,5 +34,7 @@ public interface YsMessageMapper {
     List<YsMessage> selectByReceiveIdAndStatus(@Param("receiveId")Integer receiveId,@Param("status")Boolean status);
 
 
+    List<YsMessageVO> selectByStatusAndDayRepLike(@Param("status") Boolean status, @Param("title") String title, @Param("receiveId") Integer receiveId);
 
+    List<YsMessageVO> selectByStatusAndExpSugLike(@Param("status") Boolean status, @Param("title") String title, @Param("receiveId") Integer receiveId);
 }
