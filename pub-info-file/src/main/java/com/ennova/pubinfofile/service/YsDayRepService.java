@@ -11,10 +11,12 @@ import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfofile.dao.*;
 import com.ennova.pubinfofile.entity.*;
+import com.ennova.pubinfofile.service.feign.PubInfoTaskClient;
 import com.ennova.pubinfofile.service.feign.PubInfoUserClient;
 import com.ennova.pubinfofile.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -50,6 +52,8 @@ public class YsDayRepService {
     private YsTeamMapper ysTeamMapper;
     @Autowired
     private YsFeedBackMapper ysFeedBackMapper;
+    @Autowired
+    private PubInfoTaskClient pubInfoTaskClient;
 
     /**
      * 访问url
@@ -153,6 +157,12 @@ public class YsDayRepService {
                 .userId(Integer.parseInt(feedBackVO.getUserId())).build();
         int i = ysFeedBackMapper.insertSelective(record);
         if (i > 0){
+            //推送
+            Integer drId = feedBackVO.getId();
+            YsDayRep ysDayRep = ysDayRepMapper.selectByPrimaryKey(drId);
+            Integer userId = ysDayRep.getUserId();//创建日报用户ID
+            MessageVO<Object> messageVO = MessageVO.builder().sourceType(2).type(4).content("你的日报被反馈!").userId(userId).build();
+            pubInfoTaskClient.sendMessByMessageVO(messageVO);
             return Callback.success("反馈成功!");
         }
         return Callback.error("反馈失败!");

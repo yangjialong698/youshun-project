@@ -433,5 +433,18 @@ public class YsBulletinService {
         return Callback.success(list);
     }
 
+    public void sendMessByMessageVO(MessageVO messageVO) {
+        Map<String, Channel> getConnects = ChannelHandlerPool.getConnects;
+        Channel channel = getConnects.get(messageVO.getUserId());
+        if (null == channel) {
+            if (messageVO.getType()==4){
+                redisTemplate.opsForList().rightPush("dayrep:send:" + messageVO.getUserId(), JSONObject.toJSONString(messageVO));
+            }else if (messageVO.getType()==5){
+                redisTemplate.opsForList().rightPush("expsug:send:" + messageVO.getUserId(), JSONObject.toJSONString(messageVO));
+            }
+        } else {
+            channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(messageVO)));
+        }
+    }
 }
 

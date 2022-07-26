@@ -9,6 +9,7 @@ import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfofile.dao.*;
 import com.ennova.pubinfofile.entity.*;
+import com.ennova.pubinfofile.service.feign.PubInfoTaskClient;
 import com.ennova.pubinfofile.service.feign.PubInfoUserClient;
 import com.ennova.pubinfofile.vo.*;
 import com.github.pagehelper.Page;
@@ -47,6 +48,8 @@ public class YsExpSugService {
     private YsTeamMapper ysTeamMapper;
     @Autowired
     private YsSonTaskMapper ysSonTaskMapper;
+    @Autowired
+    private PubInfoTaskClient pubInfoTaskClient;
 
     /**
      * 访问url
@@ -151,6 +154,12 @@ public class YsExpSugService {
                 .userId(Integer.parseInt(sugCommentVO.getUserId())).build();
         int i = ysSugCommentMapper.insertSelective(record);
         if (i > 0){
+            //推送
+            Integer drId = sugCommentVO.getId();
+            YsExpSug ysExpSug = ysExpSugMapper.selectByPrimaryKey(drId);
+            Integer userId = ysExpSug.getUserId();//创建经验建议用户ID
+            MessageVO<Object> messageVO = MessageVO.builder().sourceType(3).type(5).content("你的经验建议被评论!").userId(userId).build();
+            pubInfoTaskClient.sendMessByMessageVO(messageVO);
             return Callback.success("评论成功!");
         }
         return Callback.error("评论失败!");

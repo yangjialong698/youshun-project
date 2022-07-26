@@ -186,6 +186,30 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
                 }
             }
 
+            //日报推送
+            List<String> dayrepIds = redisTemplate.opsForList().range("dayrep:send:" + paramMap.get("userId"), 0, -1);
+            if (null != dayrepIds && dayrepIds.size() > 0) {
+                Channel channel = userMap.get(paramMap.get("userId")); //获取用户的channel
+                if (null != channel) {
+                    dayrepIds.stream().forEach(content -> {
+                        channel.writeAndFlush(new TextWebSocketFrame(content));
+                        redisTemplate.opsForList().remove("dayrep:send:" + paramMap.get("userId"), 0, content);
+                    });
+                }
+            }
+
+            //经验建议推送
+            List<String> expsugIds = redisTemplate.opsForList().range("expsug:send:" + paramMap.get("userId"), 0, -1);
+            if (null != expsugIds && expsugIds.size() > 0) {
+                Channel channel = userMap.get(paramMap.get("userId")); //获取用户的channel
+                if (null != channel) {
+                    expsugIds.stream().forEach(content -> {
+                        channel.writeAndFlush(new TextWebSocketFrame(content));
+                        redisTemplate.opsForList().remove("expsug:send:" + paramMap.get("userId"), 0, content);
+                    });
+                }
+            }
+
             // 如果url包含参数，需要处理
             if (uri.contains("?")) {
                 String newUri = uri.substring(0, uri.indexOf("?"));

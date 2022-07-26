@@ -4,13 +4,16 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfotask.dto.PublishDTO;
 import com.ennova.pubinfotask.service.YsBulletinService;
+import com.ennova.pubinfotask.vo.MessageVO;
 import com.ennova.pubinfotask.vo.YsBulletinVO;
 import com.ennova.pubinfotask.vo.YsMessageVO;
+import io.netty.channel.Channel;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -137,4 +140,12 @@ public class YsBulletinController {
     public Callback<List<YsBulletinVO>> getAllBulletinList(Integer status) {
         return ysBulletinService.getAllBulletinList(status);
     }
+
+    @ApiOperation(value = "根据MessageVO推送消息")
+    @PostMapping("/sendMessByMessageVO")
+    public Callback<String> sendMessByMessageVO(@RequestBody MessageVO messageVO) {
+      ysBulletinService.sendMessByMessageVO(messageVO);
+      return Callback.success("推送成功");
+    }
+
 }
