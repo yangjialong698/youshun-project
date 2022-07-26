@@ -54,7 +54,8 @@ public class YsDayRepService {
     private YsFeedBackMapper ysFeedBackMapper;
     @Autowired
     private PubInfoTaskClient pubInfoTaskClient;
-
+    @Autowired
+    private  HttpServletRequest req;
     /**
      * 访问url
      */
@@ -161,7 +162,7 @@ public class YsDayRepService {
             Integer drId = feedBackVO.getId();
             YsDayRep ysDayRep = ysDayRepMapper.selectByPrimaryKey(drId);
             Integer userId = ysDayRep.getUserId();//创建日报用户ID
-            MessageVO<Object> messageVO = MessageVO.builder().sourceType(2).type(4).content("你的日报被反馈!").userId(userId).build();
+            MessageVO<Object> messageVO = MessageVO.builder().sourceType(2).type(4).content("你的日报被反馈!").userId(userId).backId(ysDayRep.getId()).build();
             pubInfoTaskClient.sendMessByMessageVO(messageVO);
             return Callback.success("反馈成功!");
         }

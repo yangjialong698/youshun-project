@@ -15,5 +15,9 @@ public class MessageVO<T> {
     //内容
     private T content;
 
+    //创建用户
     private Integer userId;
+
+    //源Id
+    private Integer backId;
 }
