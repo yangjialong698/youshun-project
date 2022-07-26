@@ -373,6 +373,8 @@ public class YsBulletinService {
 
         Page<YsFileType> startPage = PageMethod.startPage(page, pageSize);
         List<YsMessageVO> list = ysMessageMapper.selectByStatusAndYsBulletinLike(status, likeTitle, userVo.getId());
+        List<YsMessageVO> ysMessageVOS = ysMessageMapper.selectByStatusAndSupplierLike(status, likeTitle, userVo.getId());
+        list.addAll(ysMessageVOS);
         BaseVO<YsMessageVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
@@ -447,6 +449,29 @@ public class YsBulletinService {
         } else {
             channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(messageVO)));
         }
+    }
+    public Callback addSupplierPursh(MessageVO messageVO){
+        Map<String, Channel> getConnects = ChannelHandlerPool.getConnects;
+        Channel channel = getConnects.get(messageVO.getUserId());
+
+        log.info("新增供应商时的审核人：" + String.valueOf(messageVO.getUserId()));
+        log.info("新增供应商时channel" + channel);
+
+        if (null == channel) {
+            if (messageVO.getType()==0 || messageVO.getType()==3){
+                redisTemplate.opsForList().rightPush("supplier:add:" + messageVO.getUserId(), JSONObject.toJSONString(messageVO));
+                log.info("用户: " + messageVO.getUserId() + " 没有登录，添加到redis队列");
+            }else if (messageVO.getType()==1){
+                redisTemplate.opsForList().rightPush("supplier:check:" + messageVO.getUserId(), JSONObject.toJSONString(messageVO));
+                log.info("用户: " + messageVO.getUserId() + " 没有登录，添加到redis队列");
+            }else if (messageVO.getType()==2){
+                redisTemplate.opsForList().rightPush("supplier:refuse:" + messageVO.getUserId(), JSONObject.toJSONString(messageVO));
+            }
+            return Callback.success();
+        } else {
+            channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(messageVO)));
+        }
+        return Callback.success(true);
     }
 }
 

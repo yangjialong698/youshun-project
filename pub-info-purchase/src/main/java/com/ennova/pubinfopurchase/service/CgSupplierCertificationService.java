@@ -1,39 +1,36 @@
-package com.ennova.pubinfotask.service;
+package com.ennova.pubinfopurchase.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.FileUtils;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
-import com.ennova.pubinfotask.dao.CgSupplierCertificationMapper;
-import com.ennova.pubinfotask.dao.CgSupplierFileMapper;
-import com.ennova.pubinfotask.dao.UserMapper;
-import com.ennova.pubinfotask.dao.YsMessageMapper;
-import com.ennova.pubinfotask.dto.CgSupplierCertificationDTO;
-import com.ennova.pubinfotask.dto.FileDelDTO;
-import com.ennova.pubinfotask.entity.CgSupplierCertification;
-import com.ennova.pubinfotask.entity.CgSupplierFile;
-import com.ennova.pubinfotask.entity.YsMessage;
-import com.ennova.pubinfotask.utils.BeanConvertUtils;
-import com.ennova.pubinfotask.vo.CgSupplierCertificationVO;
-import com.ennova.pubinfotask.vo.CurrentUserVO;
-import com.ennova.pubinfotask.vo.FileVO;
-import com.ennova.pubinfotask.vo.SocketVO;
+import com.ennova.pubinfopurchase.dao.CgSupplierCertificationMapper;
+import com.ennova.pubinfopurchase.dao.CgSupplierFileMapper;
+import com.ennova.pubinfopurchase.dao.UserMapper;
+import com.ennova.pubinfopurchase.dao.YsMessageMapper;
+import com.ennova.pubinfopurchase.dto.CgSupplierCertificationDTO;
+import com.ennova.pubinfopurchase.dto.FileDelDTO;
+import com.ennova.pubinfopurchase.entity.CgSupplierCertification;
+import com.ennova.pubinfopurchase.entity.CgSupplierFile;
+import com.ennova.pubinfopurchase.entity.YsMessage;
+import com.ennova.pubinfopurchase.service.fegin.PubInfoTaskClient;
+import com.ennova.pubinfopurchase.utils.BeanConvertUtils;
+import com.ennova.pubinfopurchase.vo.CgSupplierCertificationVO;
+import com.ennova.pubinfopurchase.vo.CurrentUserVO;
+import com.ennova.pubinfopurchase.vo.FileVO;
+import com.ennova.pubinfopurchase.vo.MessageVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
-import io.netty.channel.Channel;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,7 +46,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author yangjialong
@@ -64,9 +60,8 @@ public class CgSupplierCertificationService {
 
     private final HttpServletRequest req;
     private final CgSupplierCertificationMapper cgSupplierCertificationMapper;
-    private final YsBulletinService ysBulletinService;
-    private final RedisTemplate redisTemplate;
     private final CgSupplierFileMapper cgSupplierFileMapper;
+    private final PubInfoTaskClient pubInfoTaskClient;
     private final UserMapper userMapper;
     private final YsMessageMapper ysMessageMapper;
 
@@ -103,7 +98,7 @@ public class CgSupplierCertificationService {
         String subname = map.get("year") + "/" + map.get("month") + "/" + map.get("newfileName");
 
         CgSupplierFile slave = CgSupplierFile.builder().fileMd5(subname).fileUrl(localUrl + "/file/" + subname).name(map.get("fileName"))
-                .fileSize(map.get("fileSize")).openFile(0).delFlag(0).userId(userVo.getId()).createTime(LocalDateTime.now()).build();
+                .fileSize(map.get("fileSize")).openFile(0).delFlag(0).userId(userVo.getId()).createTime(new Date()).build();
         int count = cgSupplierFileMapper.insertSelective(slave);
         if (count > 0) {
             FileVO fileVo = FileVO.builder().id(slave.getId()).fileName(map.get("fileName")).newfileName(subname).build();
@@ -175,7 +170,7 @@ public class CgSupplierCertificationService {
         CgSupplierCertification cgSupplierCertification = BeanConvertUtils.convertTo(cgSupplierCertificationDTO, CgSupplierCertification::new);
         cgSupplierCertification.setCreateUserId(userVo.getId());
         cgSupplierCertification.setStatus(0);
-        cgSupplierCertification.setCreateTime(LocalDateTime.now());
+        cgSupplierCertification.setCreateTime(new Date());
         Integer number = cgSupplierCertificationMapper.selectLastSerialNumber();
         Integer serialNumber = getSerialNumber(number);
         cgSupplierCertification.setSupplierNumber(serialNumber);
@@ -184,34 +179,17 @@ public class CgSupplierCertificationService {
             for (FileVO fileVO : cgSupplierCertificationDTO.getFileVOList()) {
                 CgSupplierFile cgSupplierFile = cgSupplierFileMapper.selectByPrimaryKey(fileVO.getId());
                 Optional.ofNullable(cgSupplierFile).ifPresent(cgSupplierFile1 -> {
-                    CgSupplierFile cgSupplierFile2 = cgSupplierFile.builder().id(fileVO.getId()).updateTime(LocalDateTime.now()).cgSupplierId(cgSupplierCertification.getId()).build();
+                    CgSupplierFile cgSupplierFile2 = cgSupplierFile.builder().id(fileVO.getId()).updateTime(new Date()).cgSupplierId(cgSupplierCertification.getId()).build();
                     cgSupplierFileMapper.updateByPrimaryKeySelective(cgSupplierFile2);
                 });
             }
         }
         if (i > 0) {
-            SocketVO<Object> content = SocketVO.builder().sourceType(1).type(0).content(cgSupplierCertification).build();
-            Channel channel = ysBulletinService.getChannel(String.valueOf(cgSupplierCertificationDTO.getCheckUserId()));
-
-            log.info("新增供应商时的审核人：" + cgSupplierCertificationDTO.getCheckUserId());
-            log.info("新增供应商时channel" + channel);
-
-            if (null == channel) {
-                redisTemplate.opsForList().rightPush("supplier:add:" + cgSupplierCertificationDTO.getCheckUserId(), JSONObject.toJSONString(content));
-                log.info("用户: " + cgSupplierCertificationDTO.getCheckUserId() + " 没有登录，添加到redis队列");
-                return Callback.success();
-            } else {
-                channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(content)));
-            }
-            return Callback.success(true);
+            MessageVO<Object> content = MessageVO.builder().userId(cgSupplierCertification.getCheckUserId()).sourceType(1).type(0).content(cgSupplierCertification).build();
+            pubInfoTaskClient.addSupplierPursh(content);
+            return Callback.success("新增供应商成功");
         }
         return Callback.error(2, "新增失败");
-    }
-
-    public Callback<List<CurrentUserVO>> selectCheckPerson(){
-        List<CurrentUserVO> currentUserVOS = userMapper.selectAllUser();
-        List<CurrentUserVO> checkPerson = currentUserVOS.stream().filter(v -> v.getUsername().equals("王大祥")).collect(Collectors.toList());
-        return Callback.success(checkPerson);
     }
 
     private Integer getSerialNumber(Integer serialNumber) {
@@ -240,11 +218,16 @@ public class CgSupplierCertificationService {
         return Integer.parseInt(newNumber);
     }
 
-    public Callback update(CgSupplierCertificationDTO cgSupplierCertificationDTO){
+    public Callback<CurrentUserVO> selectCheckPerson() {
+        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(80);
+        return Callback.success(currentUserVO);
+    }
+
+    public Callback update(CgSupplierCertificationDTO cgSupplierCertificationDTO) {
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
-        CgSupplierCertification old = cgSupplierCertificationMapper.selectbyIdAndCreateId(cgSupplierCertificationDTO.getId(), userVo.getId());
+        CgSupplierCertification old = cgSupplierCertificationMapper.selectbyIdAndCreateUserId(cgSupplierCertificationDTO.getId(), userVo.getId());
         // 只有待审核、驳回状态才能修改
         if (old.getStatus().equals(1)) {
             return Callback.error(2, "当前供应商认证已审核，不能修改");
@@ -252,50 +235,40 @@ public class CgSupplierCertificationService {
         CgSupplierCertification cgSupplierCertification = BeanConvertUtils.convertTo(cgSupplierCertificationDTO, CgSupplierCertification::new);
         cgSupplierCertification.setStatus(0);
         cgSupplierCertification.setCheckUserId(cgSupplierCertificationDTO.getCheckUserId());
-        cgSupplierCertification.setUpdateTime(LocalDateTime.now());
+        cgSupplierCertification.setUpdateTime(new Date());
         int i = cgSupplierCertificationMapper.updateByPrimaryKeySelective(cgSupplierCertification); // 更新主表
         if (cgSupplierCertificationDTO.getFileVOList() != null && !cgSupplierCertificationDTO.getFileVOList().isEmpty()) {
             for (FileVO fileVO : cgSupplierCertificationDTO.getFileVOList()) {
                 CgSupplierFile cgSupplierFile = cgSupplierFileMapper.selectByPrimaryKey(fileVO.getId());
                 Optional.ofNullable(cgSupplierFile).ifPresent(cgSupplierFile1 -> {
-                    CgSupplierFile cgSupplierFile2 = cgSupplierFile.builder().id(fileVO.getId()).updateTime(LocalDateTime.now()).cgSupplierId(cgSupplierCertification.getId()).build();
+                    CgSupplierFile cgSupplierFile2 = cgSupplierFile.builder().id(fileVO.getId()).updateTime(new Date()).cgSupplierId(cgSupplierCertification.getId()).build();
                     cgSupplierFileMapper.updateByPrimaryKeySelective(cgSupplierFile2);
                 });
             }
         }
-        log.info("新增供应商时的审核人: " + cgSupplierCertificationDTO.getCheckUserId() );
+        log.info("新增供应商时的审核人: " + cgSupplierCertificationDTO.getCheckUserId());
 
         if (i > 0) {
             //推送:sourceType=1 供应商认证,type=3 修改
-            SocketVO<Object> socketVO = SocketVO.builder().sourceType(1).type(3).content(cgSupplierCertification).build();
-            Channel channel = ysBulletinService.getChannel(String.valueOf(cgSupplierCertificationDTO.getCheckUserId()));
-
-            log.info("修改供应商时channel: " + channel );
-
-            if (null == channel) {
-                redisTemplate.opsForList().rightPush("supplier:add:" + cgSupplierCertificationDTO.getCheckUserId(), JSONObject.toJSONString(socketVO));
-                log.info("用户: " + cgSupplierCertificationDTO.getCheckUserId() + " 没有登录，添加到redis队列");
-                return Callback.success();
-            } else {
-                channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
-            }
-            return Callback.success(true);
+            MessageVO<Object> messageVO = MessageVO.builder().userId(cgSupplierCertification.getCheckUserId()).sourceType(1).type(3).content(cgSupplierCertification).build();
+            pubInfoTaskClient.addSupplierPursh(messageVO);
+            return Callback.success("修改供应商成功");
         }
         return Callback.error(2, "修改失败");
     }
 
-    public Callback<BaseVO<CgSupplierCertificationVO>> getSupplierList(Integer page, Integer pageSize, Integer status, String likeTitle) {
+    public Callback<BaseVO<CgSupplierCertificationVO>> getSupplierList(Integer page, Integer pageSize, Integer status, String supplierName) {
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
-        List<CgSupplierCertificationVO> cgSupplierCertificationVOS = cgSupplierCertificationMapper.selectByStatusAndSupplierName(status, likeTitle);
+        List<CgSupplierCertificationVO> cgSupplierCertificationVOS = cgSupplierCertificationMapper.selectByStatusAndSupplierName(status, supplierName);
         cgSupplierCertificationVOS.forEach(v -> {
             List<FileVO> fileVOS = cgSupplierFileMapper.selectByCgSupplierId(v.getId());
-            if (CollectionUtil.isNotEmpty(fileVOS)){
+            if (CollectionUtil.isNotEmpty(fileVOS)) {
                 v.setFileVOList(fileVOS);
-            }else {
+            } else {
                 v.setFileVOList(null);
             }
         });
@@ -330,48 +303,32 @@ public class CgSupplierCertificationService {
         }
 
         cgSupplierCertification.setStatus(status);
-        cgSupplierCertification.setUpdateTime(LocalDateTime.now());
+        cgSupplierCertification.setUpdateTime(new Date());
 
 
         //审核通过
         if (status == 1) {
             cgSupplierCertification.setStatus(1);
-            cgSupplierCertification.setCheckTime(LocalDateTime.now());
+            cgSupplierCertification.setCheckTime(new Date());
 
             //TODO 审核通过
             //保存到数据库
-            YsMessage message = YsMessage.builder().sourceType(1).receiveId(cgSupplierCertification.getCreateUserId()).CgSupplier(cgSupplierCertification.getId()).status(false).createTime(LocalDateTime.now()).build();
+            YsMessage message = YsMessage.builder().sourceType(1).receiveId(cgSupplierCertification.getCreateUserId()).ysBulletin(cgSupplierCertification.getId()).status(false).createTime(LocalDateTime.now()).build();
             ysMessageMapper.insert(message);
 
             //推送:sourceType=1 供应商认证,type=1 审核通过了
-            SocketVO<Object> socketVO = SocketVO.builder().sourceType(1).type(1).content(cgSupplierCertification).build();
-            Channel channel = ysBulletinService.getChannel(String.valueOf(cgSupplierCertification.getCreateUserId()));
-            log.info("审核通过用户：" + cgSupplierCertification.getCreateUserId());
-            if (null == channel) {
-                redisTemplate.opsForList().rightPush("supplier:check:" + cgSupplierCertification.getCreateUserId(), JSONObject.toJSONString(socketVO));
-            } else {
-                channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
-                log.info("审核通过的用户："+ cgSupplierCertification.getCreateUserId() + " channel:" + channel);
-            }
-
+            MessageVO<Object> messageVO = MessageVO.builder().userId(cgSupplierCertification.getCreateUserId()).sourceType(1).type(1).content(cgSupplierCertification).build();
+            pubInfoTaskClient.addSupplierPursh(messageVO);
         }
         //审核不通过
         if (status == 2) {
             cgSupplierCertification.setStatus(2);
-            cgSupplierCertification.setUpdateTime(LocalDateTime.now());
+            cgSupplierCertification.setUpdateTime(new Date());
 
             //TODO 审核不通过
-            //推送:sourceType=1 供应商认证,type=1 审核不通过
-            SocketVO<Object> socketVO = SocketVO.builder().sourceType(1).type(2).content(cgSupplierCertification).build();
-
-            Channel channel = ysBulletinService.getChannel(String.valueOf(cgSupplierCertification.getCreateUserId()));
-            log.info("审核不通过用户：" + cgSupplierCertification.getCreateUserId());
-            if (null == channel) {
-                redisTemplate.opsForList().rightPush("supplier:refuse:" + cgSupplierCertification.getCreateUserId(), JSONObject.toJSONString(socketVO));
-            } else {
-                channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
-                log.info("审核不通过的用户："+ cgSupplierCertification.getCreateUserId() + " channel:" + channel);
-            }
+            //推送:sourceType=1 供应商认证,type=2 审核不通过
+            MessageVO<Object> messageVO = MessageVO.builder().userId(cgSupplierCertification.getCreateUserId()).sourceType(1).type(2).content(cgSupplierCertification).build();
+            pubInfoTaskClient.addSupplierPursh(messageVO);
         }
 
         int i = cgSupplierCertificationMapper.updateByPrimaryKeySelective(cgSupplierCertification); // 更新主表
@@ -380,11 +337,12 @@ public class CgSupplierCertificationService {
         }
         return Callback.error(2, "审核失败");
     }
-
     //查询供应商详情
     public Callback<CgSupplierCertificationVO> getSupplierDetail(Integer id) {
         CgSupplierCertification cgSupplierCertification = cgSupplierCertificationMapper.selectByPrimaryKey(id);
+        List<FileVO> fileVOS = cgSupplierFileMapper.selectByCgSupplierId(cgSupplierCertification.getId());
         CgSupplierCertificationVO cgSupplierCertificationVO = BeanConvertUtils.convertTo(cgSupplierCertification, CgSupplierCertificationVO::new);
+        cgSupplierCertificationVO.setFileVOList(fileVOS);
         cgSupplierCertificationVO.setCreateName(userMapper.selectById(cgSupplierCertificationVO.getCreateUserId()).getUserName());
         cgSupplierCertificationVO.setCheckName(userMapper.selectById(cgSupplierCertificationVO.getCheckUserId()).getUserName());
         return Callback.success(cgSupplierCertificationVO);
@@ -403,7 +361,5 @@ public class CgSupplierCertificationService {
         }
         return Callback.error(2, "删除失败");
     }
-
-
-
 }
+

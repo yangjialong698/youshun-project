@@ -1,5 +1,6 @@
-package com.ennova.pubinfotask.vo;
+package com.ennova.pubinfopurchase.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -89,19 +90,22 @@ public class CgSupplierCertificationVO {
      *审核日期
      */
     @ApiModelProperty(value = "审核日期")
-    private LocalDateTime checkTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date checkTime;
 
     /**
      *填报日期
      */
     @ApiModelProperty(value = "填报日期")
-    private LocalDateTime createTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     /**
      *更新日期
      */
     @ApiModelProperty(value = "更新日期")
-    private LocalDateTime updateTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
 
     /**
      * 上传的附件

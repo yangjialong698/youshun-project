@@ -190,6 +190,7 @@
       <where>
           t1.ys_bulletin = t2.id
             and t2.create_id = t3.id
+            and t1.source_type = 0
           <if test="status != null">
               and t1.status = #{status,jdbcType=BOOLEAN}
           </if>
@@ -202,6 +203,33 @@
       </where>
       order by t1.id desc
   </select>
+    <select id="selectByStatusAndSupplierLike" resultType="com.ennova.pubinfotask.vo.YsMessageVO">
+        SELECT t1.id          id,
+        t2.supplier_name  title,
+        t1.source_type sourceType,
+        t2.create_user_id   createId,
+        t3.username    userName,
+        t2.check_time  checkTime,
+        t1.status      status
+        FROM ys_message t1,
+        cg_supplier_certification t2,
+        t_user t3
+        <where>
+            t1.ys_bulletin = t2.id
+            and t2.create_user_id = t3.id
+            and t1.source_type = 1
+            <if test="status != null">
+                and t1.status = #{status,jdbcType=BOOLEAN}
+            </if>
+            <if test="title != null and title != ''">
+                and t2.supplier_name like concat('%', #{title}, '%')
+            </if>
+            <if test="receiveId != null">
+                and t1.receive_id = #{receiveId}
+            </if>
+        </where>
+        order by t1.id desc
+    </select>
   <select id="selectBybulletinIdAndReceiveId" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List"/>

@@ -1,8 +1,10 @@
 package com.ennova.pubinfotask.dao;
 
 import com.ennova.pubinfotask.entity.YsMessage;
+import com.ennova.pubinfotask.vo.YsMessageVO;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
-import com.ennova.pubinfotask.vo.YsMessageVO;import org.apache.ibatis.annotations.Param;
 
 public interface YsMessageMapper {
     int deleteByPrimaryKey(Integer id);
@@ -22,6 +24,8 @@ public interface YsMessageMapper {
     int batchInsert(@Param("list") List<YsMessage> list);
 
     List<YsMessageVO> selectByStatusAndYsBulletinLike(@Param("status") Boolean status, @Param("title") String title, @Param("receiveId") Integer receiveId);
+
+    List<YsMessageVO> selectByStatusAndSupplierLike(@Param("status") Boolean status, @Param("title") String title, @Param("receiveId") Integer receiveId);
 
     YsMessage selectBybulletinIdAndReceiveId(@Param("bulletinId")Integer bulletinId,@Param("receiveId")Integer receiveId);
 

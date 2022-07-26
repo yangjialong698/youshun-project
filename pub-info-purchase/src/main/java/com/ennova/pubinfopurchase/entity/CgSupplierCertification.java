@@ -1,4 +1,4 @@
-package com.ennova.pubinfotask.entity;
+package com.ennova.pubinfopurchase.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,14 +7,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 供应商认证表
  */
 @ApiModel(value = "供应商认证表")
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CgSupplierCertification {
@@ -70,17 +70,17 @@ public class CgSupplierCertification {
      *审核日期
      */
     @ApiModelProperty(value = "审核日期")
-    private LocalDateTime checkTime;
+    private Date checkTime;
 
     /**
      *填报日期
      */
     @ApiModelProperty(value = "填报日期")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      *更新日期
      */
     @ApiModelProperty(value = "更新日期")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 }

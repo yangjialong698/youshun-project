@@ -1,7 +1,8 @@
-package com.ennova.pubinfotask.dao;
+package com.ennova.pubinfopurchase.dao;
 
-import com.ennova.pubinfotask.entity.CgSupplierCertification;
-import com.ennova.pubinfotask.vo.CgSupplierCertificationVO;
+
+import com.ennova.pubinfopurchase.entity.CgSupplierCertification;
+import com.ennova.pubinfopurchase.vo.CgSupplierCertificationVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface CgSupplierCertificationMapper {
     Integer selectLastSerialNumber();
 
     //当前创建人的供应商认证
-    CgSupplierCertification selectbyIdAndCreateId(@Param("id")Integer id, @Param("createId")Integer createUserId);
+    CgSupplierCertification selectbyIdAndCreateUserId(@Param("id")Integer id, @Param("createUserId")Integer createUserId);
 
     //供应商列表
     List<CgSupplierCertificationVO> selectByStatusAndSupplierName(@Param("status") Integer status, @Param("supplierName") String supplierName);

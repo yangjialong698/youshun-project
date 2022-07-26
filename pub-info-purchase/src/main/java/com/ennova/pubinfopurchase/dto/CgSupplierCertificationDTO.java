@@ -1,6 +1,6 @@
-package com.ennova.pubinfotask.dto;
+package com.ennova.pubinfopurchase.dto;
 
-import com.ennova.pubinfotask.vo.FileVO;
+import com.ennova.pubinfopurchase.vo.FileVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

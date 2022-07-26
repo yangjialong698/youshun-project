@@ -1,7 +1,8 @@
-package com.ennova.pubinfotask.dao;
+package com.ennova.pubinfopurchase.dao;
 
-import com.ennova.pubinfotask.entity.CgSupplierFile;
-import com.ennova.pubinfotask.vo.FileVO;
+
+import com.ennova.pubinfopurchase.entity.CgSupplierFile;
+import com.ennova.pubinfopurchase.vo.FileVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

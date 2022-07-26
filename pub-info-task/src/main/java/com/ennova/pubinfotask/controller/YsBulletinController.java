@@ -7,13 +7,11 @@ import com.ennova.pubinfotask.service.YsBulletinService;
 import com.ennova.pubinfotask.vo.MessageVO;
 import com.ennova.pubinfotask.vo.YsBulletinVO;
 import com.ennova.pubinfotask.vo.YsMessageVO;
-import io.netty.channel.Channel;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -146,6 +144,12 @@ public class YsBulletinController {
     public Callback<String> sendMessByMessageVO(@RequestBody MessageVO messageVO) {
       ysBulletinService.sendMessByMessageVO(messageVO);
       return Callback.success("推送成功");
+    }
+
+    @ApiOperation(value = "采购根据MessageVO推送消息")
+    @PostMapping("/addSupplierPursh")
+    public Callback addSupplierPursh(@RequestBody MessageVO messageVO) {
+        return Callback.success(ysBulletinService.addSupplierPursh(messageVO));
     }
 
 }

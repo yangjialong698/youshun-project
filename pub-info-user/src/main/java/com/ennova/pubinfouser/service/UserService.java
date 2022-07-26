@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.util.DigestUtils.md5DigestAsHex;
 
@@ -422,7 +423,8 @@ public class UserService extends BaseService<UserEntity> {
         }
         Page<UserVO> startPage = PageHelper.startPage(page, pageSize);
         List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey);
-        BaseVO<UserVO> baseVO = new BaseVO<>(userVOList, new PageUtil(pageSize, (int)startPage.getTotal(), page));
+        List<UserVO> collect = userVOList.stream().filter(v -> v.getUsername().equals("奚勇") || v.getUsername().equals("奚正")).collect(Collectors.toList());
+        BaseVO<UserVO> baseVO = new BaseVO<>(collect, new PageUtil(pageSize, (int)startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
     public Callback<BaseVO<LoginLogVO>> loginLogList(Integer page, Integer pageSize, Integer userId, String loginDate){

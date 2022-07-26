@@ -1,13 +1,13 @@
-package com.ennova.pubinfotask.controller;
+package com.ennova.pubinfopurchase.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
-import com.ennova.pubinfotask.dto.CgSupplierCertificationDTO;
-import com.ennova.pubinfotask.dto.FileDelDTO;
-import com.ennova.pubinfotask.service.CgSupplierCertificationService;
-import com.ennova.pubinfotask.vo.CgSupplierCertificationVO;
-import com.ennova.pubinfotask.vo.CurrentUserVO;
-import com.ennova.pubinfotask.vo.FileVO;
+import com.ennova.pubinfopurchase.dto.CgSupplierCertificationDTO;
+import com.ennova.pubinfopurchase.dto.FileDelDTO;
+import com.ennova.pubinfopurchase.service.CgSupplierCertificationService;
+import com.ennova.pubinfopurchase.vo.CgSupplierCertificationVO;
+import com.ennova.pubinfopurchase.vo.CurrentUserVO;
+import com.ennova.pubinfopurchase.vo.FileVO;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * @author yangjialong
@@ -57,7 +56,7 @@ public class CgSupplierCertificationController {
 
     @ApiOperation(value = "供应商 - 新增 - 选择审核人")
     @GetMapping("/selectCheckPerson")
-    public Callback<List<CurrentUserVO>> selectCheckPerson(){
+    public Callback<CurrentUserVO> selectCheckPerson(){
         return cgSupplierCertificationService.selectCheckPerson();
     }
 

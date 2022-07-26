@@ -1,4 +1,4 @@
-package com.ennova.pubinfotask.entity;
+package com.ennova.pubinfopurchase.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author yangjialong
@@ -72,13 +72,13 @@ public class CgSupplierFile {
      * 创建日期
      */
     @ApiModelProperty(value = "创建日期")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 更新日期
      */
     @ApiModelProperty(value = "更新日期")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     /**
      * 上传人ID
