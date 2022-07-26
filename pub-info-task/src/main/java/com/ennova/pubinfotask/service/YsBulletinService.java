@@ -436,7 +436,7 @@ public class YsBulletinService {
     public void sendMessByMessageVO(MessageVO messageVO) {
         Map<String, Channel> getConnects = ChannelHandlerPool.getConnects;
         Channel channel = getConnects.get(messageVO.getUserId());
-        YsMessage message = YsMessage.builder().sourceType(0).receiveId(Integer.parseInt(messageVO.getUserId())).ysBulletin(messageVO.getBackId()).status(false).createTime(LocalDateTime.now()).build();
+        YsMessage message = YsMessage.builder().sourceType(messageVO.getSourceType()).receiveId(Integer.parseInt(messageVO.getUserId())).ysBulletin(messageVO.getBackId()).status(false).createTime(LocalDateTime.now()).build();
         ysMessageMapper.insert(message);
         if (null == channel) {
             if (messageVO.getType()==4){
