@@ -101,10 +101,10 @@
         `status`=#{status,jdbcType=INTEGER}
       </if>
       <if test="supplierName != null and supplierName != ''">
-        and `supplier_name` like concat('%',trim(#{supplierName}),'%')
+        and `supplier_name` like concat('%',trim(#{supplierName}),'%') or id like trim(#{supplierName})
       </if>
     </where>
-    order by t1.id desc
+     order by id desc
   </select>
 
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfopurchase.entity.CgSupplierCertification" useGeneratedKeys="true">
