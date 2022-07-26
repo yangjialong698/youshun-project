@@ -184,6 +184,7 @@
         WHERE
         u.is_delete = 0
         AND r.role_code != "ADMIN"
+        AND u.is_show != 0
         <if test="roleId != null">
             and r.id = #{roleId}
         </if>

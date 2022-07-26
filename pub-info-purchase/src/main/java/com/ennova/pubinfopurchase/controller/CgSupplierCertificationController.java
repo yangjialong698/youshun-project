@@ -71,7 +71,7 @@ public class CgSupplierCertificationController {
             @ApiImplicitParam(name = "page", value = "开始页"),
             @ApiImplicitParam(name = "pageSize", value = "显示条数"),
             @ApiImplicitParam(name = "status", value = "状态   0:待审核 1:审核通过 2:审核不通过 - 驳回"),
-            @ApiImplicitParam(name = "supplierName", value = "供应商名称")
+            @ApiImplicitParam(name = "supplierName", value = "供应商名称 或者 供应商id")
     })
     @GetMapping("/getSupplierList")
     public Callback<BaseVO<CgSupplierCertificationVO>> getSupplierList(@RequestParam(defaultValue = "1") Integer page,

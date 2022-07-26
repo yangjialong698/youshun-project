@@ -277,7 +277,7 @@
         and `status`=#{status,jdbcType=INTEGER}
       </if>
       <if test="likeTitle != null and likeTitle != ''">
-        and  (`title` like concat('%',trim(#{likeTitle}),'%')
+        and  (`title` like concat('%',trim(#{likeTitle}),'%') or id like trim(#{likeTitle}))
       </if>
     </where>
     <if test="orderBy != null">
