@@ -206,6 +206,7 @@
     <select id="selectByStatusAndSupplierLike" resultType="com.ennova.pubinfotask.vo.YsMessageVO">
         SELECT t1.id          id,
         t2.supplier_name  title,
+        t2.id     content,
         t1.source_type sourceType,
         t2.create_user_id   createId,
         t3.username    userName,
