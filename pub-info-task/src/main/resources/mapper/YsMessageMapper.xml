@@ -311,7 +311,7 @@
         t1.source_type sourceType,
         t2.user_id createId,
         t3.username userName,
-        t2.sug_time checkTime,
+        t2.create_time checkTime,
         t1.STATUS STATUS
         FROM
         ys_message t1,
