@@ -377,7 +377,6 @@ public class YsBulletinService {
             pageSize = 10;
         }
         int index = (page - 1) * pageSize;
-        //Page<YsFileType> startPage = PageMethod.startPage(page, pageSize);
         List<YsMessageVO> list = ysMessageMapper.selectByStatusAndYsBulletinLike(status, likeTitle, userVo.getId());
         List<YsMessageVO> ysMessageVOS = ysMessageMapper.selectByStatusAndSupplierLike(status, likeTitle, userVo.getId());
         List<YsMessageVO> dayRepList =ysMessageMapper.selectByStatusAndDayRepLike(status, likeTitle, userVo.getId());
@@ -385,9 +384,7 @@ public class YsBulletinService {
         list.addAll(ysMessageVOS);
         list.addAll(dayRepList);
         list.addAll(expSugList);
-        //BaseVO<YsMessageVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         BaseVO<YsMessageVO> baseVO = new BaseVO<>(getPaging(index,pageSize,list), new PageUtil(pageSize, list.size(), page));
-        //return Callback.success(baseVO);
         return Callback.success(baseVO);
     }
 
