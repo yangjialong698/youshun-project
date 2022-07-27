@@ -121,7 +121,7 @@
         cpf.create_time AS createTime,
         cpf.purchase_requirements AS purchaseRequirements,
         cpf.issuer_id AS issuerId,
-        cpf.delivery_time AS delivery_time
+        cpf.delivery_time AS deliveryTime
         from cg_purchase_info cpf
         <where>
             <if test="name != null and name != ''">

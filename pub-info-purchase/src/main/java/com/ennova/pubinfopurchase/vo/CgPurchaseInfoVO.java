@@ -85,6 +85,6 @@ public class CgPurchaseInfoVO {
      * 到货日期
      */
     @ApiModelProperty(value = "到货日期")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date deliveryTime;
 }
