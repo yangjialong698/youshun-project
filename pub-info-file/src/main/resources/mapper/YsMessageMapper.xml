@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfofile.dao.YsMessageMapper">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfofile.entity.YsMessage">
+        <!--@mbg.generated-->
+        <!--@Table `ys_message`-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="ys_bulletin" jdbcType="INTEGER" property="ysBulletin"/>
+    <result column="receive_id" jdbcType="INTEGER" property="receiveId"/>
+    <result column="source_type" jdbcType="TINYINT" property="sourceType"/>
+    <result column="status" jdbcType="BOOLEAN" property="status"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+  <sql id="Base_Column_List">
+      <!--@mbg.generated-->
+      `id`,
+      `ys_bulletin`,
+      `receive_id`,
+      `source_type`,
+      `status`,
+      `create_time`,
+      `update_time`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      <!--@mbg.generated-->
+      select
+      <include refid="Base_Column_List"/>
+      from `ys_message`
+      where `id` = #{id,jdbcType=INTEGER}
+  </select>
+
+
+</mapper>

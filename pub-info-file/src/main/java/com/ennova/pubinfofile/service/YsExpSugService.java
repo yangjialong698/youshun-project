@@ -50,6 +50,10 @@ public class YsExpSugService {
     private YsSonTaskMapper ysSonTaskMapper;
     @Autowired
     private PubInfoTaskClient pubInfoTaskClient;
+    @Autowired
+    private YsMessageMapper ysMessageMapper;
+    @Autowired
+    private YsDayRepMapper ysDayRepMapper;
 
     /**
      * 访问url
@@ -296,5 +300,23 @@ public class YsExpSugService {
     public Callback<List<LinkedHashMap>> queryMasterTask() {
         List<LinkedHashMap> list =ysExpSugMapper.queryMasterTask();
         return Callback.success(list);
+    }
+
+    public Callback<ExpSugDayRepVO> getOne(String messageId, String typeId) {
+        ExpSugDayRepVO expSugDayRepVO = new ExpSugDayRepVO();
+        //根据消息ID查消息实体拿到ys_bulletin
+        YsMessage ysMessage = ysMessageMapper.selectByPrimaryKey(Integer.parseInt(messageId));
+        if (null != ysMessage){
+            Integer ysBulletin = ysMessage.getYsBulletin();
+            // 2 日报  3 经验建议
+            if (StringUtils.isNotBlank(typeId) && typeId.equals("2")){
+                YsDayRepVO ysDayRepVO = ysDayRepMapper.selectDetailOne(ysBulletin);
+                expSugDayRepVO.setYsDayRepVO(ysDayRepVO);
+            }else if (StringUtils.isNotBlank(typeId) && typeId.equals("3")) {
+                YsExpSugVO ysExpSugVO = ysExpSugMapper.selectDetailOne(ysBulletin);
+                expSugDayRepVO.setYsExpSugVO(ysExpSugVO);
+            }
+        }
+        return Callback.success(expSugDayRepVO);
     }
 }

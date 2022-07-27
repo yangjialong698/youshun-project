@@ -88,4 +88,15 @@ public class YsExpSugController {
     public Callback<List<LinkedHashMap>> queryMasterTask(){
         return ysExpSugService.queryMasterTask();
     }
+
+    @ApiOperation(value = "经验建议/日报 - 根据消息ID和类型查详情",tags = "经验建议API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "messageId", value = "消息ID"),
+            @ApiImplicitParam(name = "typeId", value = "类型ID:2 日报 3 经验建议")
+    })
+    @GetMapping("/getOne")
+    public Callback<ExpSugDayRepVO> getOne(String messageId, String typeId){
+        return ysExpSugService.getOne(messageId,typeId);
+    }
+
 }
