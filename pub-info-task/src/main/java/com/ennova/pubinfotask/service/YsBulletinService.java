@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -384,7 +385,8 @@ public class YsBulletinService {
         list.addAll(ysMessageVOS);
         list.addAll(dayRepList);
         list.addAll(expSugList);
-        BaseVO<YsMessageVO> baseVO = new BaseVO<>(getPaging(index,pageSize,list), new PageUtil(pageSize, list.size(), page));
+        List<YsMessageVO> filterList = list.stream().sorted(Comparator.comparing(YsMessageVO::getId).reversed()).collect(Collectors.toList());
+        BaseVO<YsMessageVO> baseVO = new BaseVO<>(getPaging(index,pageSize,filterList), new PageUtil(pageSize, filterList.size(), page));
         return Callback.success(baseVO);
     }
 
