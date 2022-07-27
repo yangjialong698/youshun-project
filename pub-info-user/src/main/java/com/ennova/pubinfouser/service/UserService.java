@@ -32,7 +32,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.util.DigestUtils.md5DigestAsHex;
 
@@ -413,20 +412,6 @@ public class UserService extends BaseService<UserEntity> {
         return Callback.success(totalVisit);
     }
 
-
-    public Callback<BaseVO<UserVO>> listAllUsers(Integer page, Integer pageSize,Integer company,Integer roleId,Integer department, String searchKey) {
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (pageSize == null || pageSize < 1) {
-            pageSize = 10;
-        }
-        Page<UserVO> startPage = PageHelper.startPage(page, pageSize);
-        List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey);
-        List<UserVO> collect = userVOList.stream().filter(v -> v.getUsername().equals("奚勇") || v.getUsername().equals("奚正")).collect(Collectors.toList());
-        BaseVO<UserVO> baseVO = new BaseVO<>(collect, new PageUtil(pageSize, (int)startPage.getTotal(), page));
-        return Callback.success(baseVO);
-    }
     public Callback<BaseVO<LoginLogVO>> loginLogList(Integer page, Integer pageSize, Integer userId, String loginDate){
         Page<LoginLogVO> startPage = PageMethod.startPage(page, pageSize);
         List<LoginLogVO> loginLogVOList = loginLogMapper.loginLogList(userId,loginDate);
