@@ -158,7 +158,7 @@ public class YsExpSugService {
             Integer drId = sugCommentVO.getId();
             YsExpSug ysExpSug = ysExpSugMapper.selectByPrimaryKey(drId);
             Integer userId = ysExpSug.getUserId();//创建经验建议用户ID
-            MessageVO<Object> messageVO = MessageVO.builder().sourceType(3).type(5).content("你的经验建议被评论!").userId(userId).backId(ysExpSug.getId()).build();
+            MessageVO<Object> messageVO = MessageVO.builder().sourceType(3).type(5).content("你的经验建议被评论!").title(ysExpSug.getFileName()).userId(userId).backId(ysExpSug.getId()).build();
             pubInfoTaskClient.sendMessByMessageVO(messageVO);
             return Callback.success("评论成功!");
         }

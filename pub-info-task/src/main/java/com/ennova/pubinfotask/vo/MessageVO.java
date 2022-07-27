@@ -20,4 +20,7 @@ public class MessageVO<T> {
 
     //源Id
     private Integer backId;
+
+    //标题
+    private String title;
 }
