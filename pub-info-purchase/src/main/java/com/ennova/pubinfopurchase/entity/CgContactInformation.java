@@ -43,10 +43,4 @@ public class CgContactInformation {
     @ApiModelProperty(value = "E-mail")
     private String companyEmail;
 
-    /**
-     * QQ号码
-     */
-    @ApiModelProperty(value = "QQ号码")
-    private Integer qqNumber;
-
 }
