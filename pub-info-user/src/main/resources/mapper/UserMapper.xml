@@ -192,7 +192,7 @@
             and u.department = #{department}
         </if>
         <if test="searchKey != null and searchKey != ''">
-            and CONCAT(trim(replace(u.username,' ','')),trim(replace(u.mobile,' ','')))  like trim(replace(CONCAT('%',#{searchKey},'%'),' ',''))
+            and CONCAT(trim(replace(u.username,' ','')),trim(replace(u.mobile,' ','')),trim(replace(u.job_num,' ','')))  like trim(replace(CONCAT('%',#{searchKey},'%'),' ',''))
         </if>
         order by CONVERT( u.username USING gbk ) COLLATE gbk_chinese_ci ASC
     </select>
