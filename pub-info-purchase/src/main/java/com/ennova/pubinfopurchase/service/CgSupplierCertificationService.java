@@ -219,7 +219,7 @@ public class CgSupplierCertificationService {
     }
 
     public Callback<CurrentUserVO> selectCheckPerson() {
-        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(80);
+        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(216);
         return Callback.success(currentUserVO);
     }
 

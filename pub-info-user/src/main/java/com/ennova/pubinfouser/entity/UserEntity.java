@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 
@@ -97,5 +96,10 @@ public class UserEntity {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
+    /**
+     * 是否删除（0-；1-已删除）
+     */
+    @ApiModelProperty(value = "登录后默认密码是否修改")
+    private Integer isUpdate;
 }
 

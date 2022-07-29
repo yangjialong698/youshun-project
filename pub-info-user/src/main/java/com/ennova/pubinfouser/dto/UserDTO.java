@@ -52,7 +52,7 @@ public class UserDTO {
     @ApiModelProperty(value = "单位id")
     private Integer company;
 
-
-
+    @ApiModelProperty(value = "登录后默认密码是否修改")
+    private Integer isUpdate;
 
 }

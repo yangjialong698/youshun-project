@@ -1,13 +1,11 @@
 package com.ennova.pubinfouser.vo;
 
-import com.ennova.pubinfouser.entity.TUserSystem;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 import java.util.List;
@@ -125,5 +123,11 @@ public class UserVO {
 
     @ApiModelProperty(notes = "权限模块")
     private List<MenuVO> permissionsModule;
+
+    /**
+     * 是否修改默认密码（0-未修改；1-已修改）
+     */
+    @ApiModelProperty(value = "是否修改（0-未修改；1-已修改）")
+    private Integer isUpdate;
 }
 

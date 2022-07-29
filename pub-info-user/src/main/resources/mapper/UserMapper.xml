@@ -37,7 +37,8 @@
                u.update_time as updateTime,
                u.is_delete   as isDelete,
                r.role_name   as roleName,
-               r.role_code        as roleCode
+               r.role_code   as roleCode,
+               u.is_update   as isUpdate
         from t_user u
                  left join t_user_role t on u.id = t.user_id
                  left join t_role r on t.role_id = r.id
@@ -148,7 +149,7 @@
             u.create_time AS createTime
         FROM
             t_user u
-                LEFT JOIN t_dept d ON u.department = d.id
+                LEFT JOIN t_dept d ON u.department = d.dept_id
                 LEFT JOIN t_user_role ur ON ur.user_id = u.id
                 LEFT JOIN t_role r ON ur.role_id = r.id
         WHERE
@@ -253,6 +254,9 @@
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="isUpdate != null">
+                is_update = #{isUpdate,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -308,7 +312,8 @@
         u.update_time as updateTime,
         u.is_delete   as isDelete,
         r.role_name   as roleName,
-        r.role_code        as roleCode
+        r.role_code   as roleCode,
+        u.is_update   as isUpdate
         from t_user u
         left join t_user_role t on u.id = t.user_id
         left join t_role r on t.role_id = r.id
@@ -317,5 +322,32 @@
         where u.is_delete = 0
         and u.job_num = #{jobNum}
         limit 1
+    </select>
+
+    <select id="listAllUsers" resultType="com.ennova.pubinfouser.vo.UserVO">
+        SELECT
+        u.id,
+        u.mobile,
+        u.job_num AS jobNum,
+        u.username,
+        u.department,
+        u.wechat_no AS wechatNo,
+        d.dept_name deptName,
+        u.position,
+        u.STATUS,
+        u.create_time AS createTime
+        FROM
+        t_user u
+        LEFT JOIN t_dept d ON u.department = d.dept_id
+        WHERE
+        u.is_delete = 0
+        AND u.is_show != 0
+        <if test="department != null">
+            and u.department = #{department}
+        </if>
+        <if test="searchKey != null and searchKey != ''">
+            and CONCAT(trim(replace(u.username,' ','')),trim(replace(u.mobile,' ','')),trim(replace(u.job_num,' ','')))  like trim(replace(CONCAT('%',#{searchKey},'%'),' ',''))
+        </if>
+        order by CONVERT( u.username USING gbk ) COLLATE gbk_chinese_ci ASC
     </select>
 </mapper>
