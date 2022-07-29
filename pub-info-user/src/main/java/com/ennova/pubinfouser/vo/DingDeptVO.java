@@ -14,5 +14,6 @@ public class DingDeptVO {
     private Boolean createDeptGroup;
     private Long deptId;
     private String name;
-    private Integer parentId;
+    private Long parentId;
+    private String manageId;
 }

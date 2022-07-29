@@ -60,4 +60,6 @@ public class DingUserVO {
 
     private Boolean exclusiveAccount;
 
+
+
 }

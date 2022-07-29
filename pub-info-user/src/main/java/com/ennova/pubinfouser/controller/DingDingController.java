@@ -2,6 +2,7 @@ package com.ennova.pubinfouser.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfouser.service.DingDingService;
+import com.ennova.pubinfouser.vo.DingDeptVO;
 import com.ennova.pubinfouser.vo.DingUserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,5 +30,11 @@ public class DingDingController {
     @GetMapping("/userDetails")
     public Callback<List<DingUserVO>> userDetails() {
         return dingDingService.userDetails();
+    }
+
+    @ApiOperation(value = "钉钉-根据部门集合获取钉钉所有部门详情", tags = "钉钉API")
+    @GetMapping("/deptDetails")
+    public Callback<List<DingDeptVO>> deptDetails() {
+        return dingDingService.deptDetails();
     }
 }
