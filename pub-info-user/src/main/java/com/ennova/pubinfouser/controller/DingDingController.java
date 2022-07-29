@@ -26,6 +26,12 @@ public class DingDingController {
         return dingDingService.listDeptIds();
     }
 
+    @ApiOperation(value = "钉钉-获取所有部门ID列表", tags = "钉钉API")
+    @GetMapping("/listDeptAllIds")
+    public Callback<List<Long>> listDeptAllIds() {
+        return dingDingService.listDeptAllIds();
+    }
+
     @ApiOperation(value = "钉钉-根据部门集合获取钉钉所有用户详情", tags = "钉钉API")
     @GetMapping("/userDetails")
     public Callback<List<DingUserVO>> userDetails() {

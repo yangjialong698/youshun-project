@@ -2,6 +2,7 @@ package com.ennova.pubinfouser.service;
 
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.*;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfouser.dao.TDeptDingMapper;
@@ -15,9 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -29,7 +32,10 @@ public class DingDingService  {
     private TUserDingMapper tUserDingMapper;
     @Autowired
     private TDeptDingMapper tDeptDingMapper;
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
+    //获取最后一级部门
     public Callback<List<Long>> listDeptIds() {
         String accesstoken = DingDingUtil.getAccess_Token();
         ArrayList<Long> deptListFinal = new ArrayList<>();
@@ -42,6 +48,7 @@ public class DingDingService  {
         //获取最后一级部门列表
         if (CollectionUtil.isNotEmpty(deptParentIds)){
             List<Long> aa = getLastDepts(accesstoken, deptListFinal, deptParentIds);
+            redisTemplate.opsForValue().set("last",JSONObject.toJSONString(aa), 24, TimeUnit.HOURS);
             return Callback.success(aa) ;
         }
         return null;
@@ -65,8 +72,15 @@ public class DingDingService  {
 
     public Callback<List<DingUserVO>> userDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
-        Callback<List<Long>> listCallback = this.listDeptIds();
-        List<Long> deptIds = listCallback.getData();
+        List<Long> deptIds = null ;
+        List<Long> alldeptIds = null ;
+        String lastdepts = redisTemplate.opsForValue().get("lastdepts");
+        if (StringUtils.isNotEmpty(lastdepts)){
+             deptIds = JSONObject.parseArray(lastdepts, Long.class);
+        }else {
+            Callback<List<Long>> listCallback = this.listDeptIds();
+            deptIds = listCallback.getData();
+        }
         ArrayList<DingUserVO> dingUserVOS = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(deptIds)){
             deptIds.forEach(deptId->{
@@ -80,7 +94,14 @@ public class DingDingService  {
                 });
             });
             ArrayList<String> deptManagerUseridList = new ArrayList<>();
-            deptIds.forEach(deptId->{
+            String alldepts = redisTemplate.opsForValue().get("alldepts");
+            if (StringUtils.isNotEmpty(alldepts)){
+                alldeptIds = JSONObject.parseArray(alldepts, Long.class);
+            }else {
+                Callback<List<Long>> listCallback = this.listDeptAllIds();
+                alldeptIds = listCallback.getData();
+            }
+            alldeptIds.forEach(deptId->{
                 OapiV2DepartmentGetResponse.DeptGetResponse deptDetails = DingDingUtil.getDeptDetails(deptId, accesstoken);
                 if (null != deptDetails){
                     List<String> managerUseridList = deptDetails.getDeptManagerUseridList();
@@ -135,7 +156,9 @@ public class DingDingService  {
         //获取最后一级部门列表
         if (CollectionUtil.isNotEmpty(deptParentIds)){
             List<Long> aa = getLastAllDepts(accesstoken, deptListFinal, deptParentIds);
-            return Callback.success(aa) ;
+            List<Long> collect = aa.stream().distinct().collect(Collectors.toList());
+            redisTemplate.opsForValue().set("alldepts",JSONObject.toJSONString(collect), 24, TimeUnit.HOURS);
+            return Callback.success(collect) ;
         }
         return null;
     }
@@ -154,8 +177,7 @@ public class DingDingService  {
                 }
             });
         }
-        List<Long> collect = deptListFinal.stream().distinct().collect(Collectors.toList());
-        return collect;
+        return deptListFinal;
     }
 
     public Callback<List<DingDeptVO>> deptDetails() {
