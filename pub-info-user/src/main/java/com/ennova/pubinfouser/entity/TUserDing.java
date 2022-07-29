@@ -88,4 +88,9 @@ public class TUserDing {
     * 用户ID
     */
     private String userId;
+
+    /**
+    * 登录后默认密码是否修改（0-未修改；1-已修改）
+    */
+    private Integer isUpdate;
 }

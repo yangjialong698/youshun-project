@@ -127,9 +127,14 @@ public class DingDingService  {
             tUserDing.setMobile(e.getMobile());
             tUserDing.setJobNum(e.getJobNumber());
             tUserDing.setPosition(e.getTitle());
-            tUserDing.setDepartment(e.getDeptIdList().toString());
+            tUserDing.setDepartment(e.getDeptIdList().get(0).toString());
             tUserDing.setCreateTime(new Date());
             tUserDing.setCompany("53");
+            tUserDing.setPassword("e10adc3949ba59abbe56e057f20f883e");
+            tUserDing.setStatus("0");
+            tUserDing.setIsDelete(0);
+            tUserDing.setIsShow(1);
+            tUserDing.setIsUpdate(0);
             TUserDings.add(tUserDing);
         });
         List<TUserDing> uniqueList = TUserDings.stream().collect(

@@ -201,18 +201,19 @@
 
     <select id="getCouPerDept" resultType="com.ennova.pubinfouser.vo.PerDeptNumVO">
         SELECT
-            d.dept_name AS deptName,
-            count(*) AS deptCou
+        d.dept_name AS deptName,
+        count(*) AS deptCou
         FROM
-            t_user u
-                LEFT JOIN t_dept d ON u.department = d.id
-                LEFT JOIN t_user_role ur ON ur.user_id = u.id
-                LEFT JOIN t_role r ON ur.role_id = r.id
+        t_user u
+        <!--                LEFT JOIN t_dept d ON u.department = d.id-->
+        LEFT JOIN t_dept d ON u.department = d.dept_id
+        LEFT JOIN t_user_role ur ON ur.user_id = u.id
+        LEFT JOIN t_role r ON ur.role_id = r.id
         WHERE
-            u.is_delete = 0
-        AND r.role_code != "ADMIN"
+        u.is_delete = 0
+        <!--        AND r.role_code != "ADMIN"-->
         GROUP BY
-            d.dept_name
+        d.dept_name
     </select>
 
     <update id="update" parameterType="com.ennova.pubinfouser.entity.UserEntity">

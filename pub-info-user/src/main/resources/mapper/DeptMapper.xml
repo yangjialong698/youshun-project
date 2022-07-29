@@ -132,7 +132,8 @@
 
     <select id="listDeptList" resultType="com.ennova.pubinfouser.vo.DeptVO">
         select
-        t.id,
+<!--        t.id,-->
+        t.dept_id AS id,
         t.dept_name AS deptName,
         t.use_status AS useStatus,
         t.create_time AS createTime
