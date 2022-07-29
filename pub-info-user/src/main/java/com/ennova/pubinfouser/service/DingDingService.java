@@ -48,7 +48,7 @@ public class DingDingService  {
         //获取最后一级部门列表
         if (CollectionUtil.isNotEmpty(deptParentIds)){
             List<Long> aa = getLastDepts(accesstoken, deptListFinal, deptParentIds);
-            redisTemplate.opsForValue().set("last",JSONObject.toJSONString(aa), 24, TimeUnit.HOURS);
+            redisTemplate.opsForValue().set("lastdepts",JSONObject.toJSONString(aa), 24, TimeUnit.HOURS);
             return Callback.success(aa) ;
         }
         return null;
