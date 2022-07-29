@@ -178,12 +178,13 @@
         u.create_time AS createTime
         FROM
         t_user u
-        LEFT JOIN t_dept d ON u.department = d.id
+<!--        LEFT JOIN t_dept d ON u.department = d.id-->
+        LEFT JOIN t_dept d ON u.department = d.dept_id
         LEFT JOIN t_user_role ur ON ur.user_id = u.id
         LEFT JOIN t_role r ON ur.role_id = r.id
         WHERE
         u.is_delete = 0
-        AND r.role_code != "ADMIN"
+<!--        AND r.role_code != "ADMIN"-->
         AND u.is_show != 0
         <if test="roleId != null">
             and r.id = #{roleId}
