@@ -160,9 +160,10 @@ public class UserService extends BaseService<UserEntity> {
         UserRole userRole = null ;
         if (CollectionUtil.isNotEmpty(userRoleList)){
             userRole = userRoleList.get(0);
-        }else {
-            return Callback.error("用户无角色,无法登入");
         }
+//        else {
+//            return Callback.error("用户无角色,无法登入");
+//        }
         // 验证密码是否正确
         try {
             password = md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
