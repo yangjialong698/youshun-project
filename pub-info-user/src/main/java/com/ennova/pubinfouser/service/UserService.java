@@ -378,9 +378,7 @@ public class UserService extends BaseService<UserEntity> {
         if(StringUtils.isNotEmpty(userEntity.getPassword())) {
             userEntity.setPassword(md5DigestAsHex(userEntity.getPassword().getBytes(StandardCharsets.UTF_8)));
         }
-        if (userDTO.getIsUpdate()==0){
-            userEntity.setIsUpdate(1);
-        }
+        userEntity.setIsUpdate(1);
         //更新用户表
         int i = userDao.update(userEntity);
         if (i>0){
