@@ -20,7 +20,7 @@ public class DingDingController {
     @Autowired
     private DingDingService dingDingService;
 
-    @ApiOperation(value = "钉钉-获取钉钉所有部门ID", tags = "钉钉API")
+    @ApiOperation(value = "钉钉-获取最后一级部门ID列表", tags = "钉钉API")
     @GetMapping("/listDeptIds")
     public Callback<List<Long>> listDeptIds() {
         return dingDingService.listDeptIds();
