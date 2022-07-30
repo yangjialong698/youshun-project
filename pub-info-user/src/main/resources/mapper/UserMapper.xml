@@ -325,31 +325,4 @@
         and u.job_num = #{jobNum}
         limit 1
     </select>
-
-    <select id="listAllUsers" resultType="com.ennova.pubinfouser.vo.UserVO">
-        SELECT
-        u.id,
-        u.mobile,
-        u.job_num AS jobNum,
-        u.username,
-        u.department,
-        u.wechat_no AS wechatNo,
-        d.dept_name deptName,
-        u.position,
-        u.STATUS,
-        u.create_time AS createTime
-        FROM
-        t_user u
-        LEFT JOIN t_dept d ON u.department = d.dept_id
-        WHERE
-        u.is_delete = 0
-        AND u.is_show != 0
-        <if test="department != null">
-            and u.department = #{department}
-        </if>
-        <if test="searchKey != null and searchKey != ''">
-            and CONCAT(trim(replace(u.username,' ','')),trim(replace(u.mobile,' ','')),trim(replace(u.job_num,' ','')))  like trim(replace(CONCAT('%',#{searchKey},'%'),' ',''))
-        </if>
-        order by CONVERT( u.username USING gbk ) COLLATE gbk_chinese_ci ASC
-    </select>
 </mapper>

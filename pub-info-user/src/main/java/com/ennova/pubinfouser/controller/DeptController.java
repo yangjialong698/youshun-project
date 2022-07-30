@@ -71,5 +71,10 @@ public class DeptController {
         return deptService.listDeptList(company);
     }
 
+    @ApiOperation(value = "首页-获取所有用户对应的部门-下拉列表", tags = "用户API")
+    @GetMapping("/listUserDeptList")
+    public Callback<List<DeptVO>> listUserDeptList(Integer company) {
+        return deptService.listUserDeptList(company);
+    }
 
 }

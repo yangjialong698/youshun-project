@@ -21,4 +21,6 @@ public interface DeptDao extends BaseDao<DeptEntity>{
     List<DeptVO> listDepts(@Param("company")Integer company, @Param("searchKey")String searchKey);
 
     List<DeptVO> listDeptList(@Param("company")Integer company);
+
+    List<DeptVO> listUserDeptList(@Param("company")Integer company);
 }

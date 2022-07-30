@@ -421,16 +421,4 @@ public class UserService extends BaseService<UserEntity> {
         return Callback.success(baseVO);
     }
 
-    public Callback<BaseVO<UserVO>> listAllUsers(Integer page, Integer pageSize, Integer company,Integer department, String searchKey) {
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (pageSize == null || pageSize < 1) {
-            pageSize = 10;
-        }
-        Page<UserVO> startPage = PageHelper.startPage(page, pageSize);
-        List<UserVO> userVOList = userDao.listAllUsers(company,department,searchKey);
-        BaseVO<UserVO> baseVO = new BaseVO<>(userVOList, new PageUtil(pageSize, (int)startPage.getTotal(), page));
-        return Callback.success(baseVO);
-    }
 }

@@ -133,10 +133,4 @@ public class UserController {
 
     }
 
-    @ApiOperation(value = "首页-获取所有用户分页列表", tags = "用户API")
-    @GetMapping("/listAllUsers")
-    public Callback listAllUsers(Integer page, Integer pageSize, Integer company,Integer department, String searchKey) {
-        return userService.listAllUsers(page,pageSize, company,department, searchKey);
-    }
-
 }

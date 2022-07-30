@@ -144,4 +144,18 @@
 
     </select>
 
+    <select id="listUserDeptList" resultType="com.ennova.pubinfouser.vo.DeptVO">
+        select DISTINCT
+        t.dept_id AS id,
+        t.dept_name AS deptName,
+        t.use_status AS useStatus,
+        t.create_time AS createTime
+        from t_user  u
+        left join t_dept t
+        on t.dept_id = u.department
+        where t.is_delete = 0
+        and t.use_status = 0
+        and u.status = 0
+        and t.company = #{company}
+    </select>
 </mapper>
