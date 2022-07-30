@@ -385,8 +385,12 @@ public class YsBulletinService {
         list.addAll(ysMessageVOS);
         list.addAll(dayRepList);
         list.addAll(expSugList);
+
         List<YsMessageVO> filterList = list.stream().sorted(Comparator.comparing(YsMessageVO::getId).reversed()).collect(Collectors.toList());
-        BaseVO<YsMessageVO> baseVO = new BaseVO<>(getPaging(index,pageSize,filterList), new PageUtil(pageSize, filterList.size(), page));
+        List<YsMessageVO> list2 = filterList.stream().sorted(Comparator.comparing(YsMessageVO::getStatus)).collect(Collectors.toList());
+//        List<YsMessageVO> filterList = list.stream().sorted(Comparator.comparing(YsMessageVO::getId).reversed())
+//                .collect(Collectors.toList());
+        BaseVO<YsMessageVO> baseVO = new BaseVO<>(getPaging(index,pageSize,list2), new PageUtil(pageSize, filterList.size(), page));
         return Callback.success(baseVO);
     }
 
