@@ -461,7 +461,7 @@
              t_dept t4
         <where>
             t1.executor_id = t2.id
-              and t3.dept_id = t4.id
+              and t3.dept_id = t4.dept_id
               and t3.user_id = t2.id
               and t1.is_delete = 0
               and t2.is_delete = 0
