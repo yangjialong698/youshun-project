@@ -43,7 +43,8 @@
                  left join t_user_role t on u.id = t.user_id
                  left join t_role r on t.role_id = r.id
                  left join t_user_dept tud on u.id = tud.user_id
-                 left join t_dept td on tud.dept_id = td.id
+                 left join t_dept td on u.department = td.dept_id
+<!--                 left join t_dept td on tud.dept_id = td.id-->
         where u.is_delete = 0
           and u.mobile = #{mobile}
         limit 1
