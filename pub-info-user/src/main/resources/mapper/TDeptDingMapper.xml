@@ -345,4 +345,11 @@
     <include refid="Base_Column_List" />
     from t_dept_ding
   </select>
+
+  <delete id="deleteAll">
+    truncate table t_dept_ding
+  </delete>
+
+
+
 </mapper>

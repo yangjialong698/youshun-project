@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +45,8 @@ public class DingDingService  {
     @Autowired
     private DeptDao deptDao;
 
-    //获取最后一级部门
-    public Callback<List<Long>> listDeptIds() {
+    //获取最后一级部门接口
+    public Callback<List<Long>> lastDeptIds() {
         String accesstoken = DingDingUtil.getAccess_Token();
         ArrayList<Long> deptListFinal = new ArrayList<>();
         List<Long> deptParentIds = null ;
@@ -78,82 +79,6 @@ public class DingDingService  {
         }
         return deptListFinal;
     }
-    @Scheduled(cron="0 0 10,15/12 * * ?") //每天上午10点下午3点跑一次
-    public void userDetails() {
-        String accesstoken = DingDingUtil.getAccess_Token();
-        List<Long> deptIds = null ;
-        List<Long> alldeptIds = null ;
-        String lastdepts = redisTemplate.opsForValue().get("lastdepts");
-        if (StringUtils.isNotEmpty(lastdepts)){
-             deptIds = JSONObject.parseArray(lastdepts, Long.class);
-        }else {
-            Callback<List<Long>> listCallback = this.listDeptIds();
-            deptIds = listCallback.getData();
-        }
-        ArrayList<DingUserVO> dingUserVOS = new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(deptIds)){
-            deptIds.forEach(deptId->{
-                OapiV2UserListResponse.PageResult departmentUser = DingDingUtil.getDepartmentUser(deptId, 0, 100, accesstoken);
-                List<OapiV2UserListResponse.ListUserResponse> userList = departmentUser.getList();
-                userList.forEach(e->{
-                    DingUserVO dingUserVO = new DingUserVO();
-                    BeanUtils.copyProperties(e,dingUserVO);
-                    dingUserVO.setDeptIdList(e.getDeptIdList());
-                    dingUserVOS.add(dingUserVO);
-                });
-            });
-            ArrayList<String> deptManagerUseridList = new ArrayList<>();
-            String alldepts = redisTemplate.opsForValue().get("alldepts");
-            if (StringUtils.isNotEmpty(alldepts)){
-                alldeptIds = JSONObject.parseArray(alldepts, Long.class);
-            }else {
-                Callback<List<Long>> listCallback = this.listDeptAllIds();
-                alldeptIds = listCallback.getData();
-            }
-            alldeptIds.forEach(deptId->{
-                OapiV2DepartmentGetResponse.DeptGetResponse deptDetails = DingDingUtil.getDeptDetails(deptId, accesstoken);
-                if (null != deptDetails){
-                    List<String> managerUseridList = deptDetails.getDeptManagerUseridList();
-                    if (CollectionUtil.isNotEmpty(managerUseridList)){
-                        deptManagerUseridList.addAll(managerUseridList);
-                    }
-                }
-            });
-            List<String> collect = deptManagerUseridList.stream().distinct().collect(Collectors.toList());
-            collect.forEach(e->{
-                DingUserVO dingUserVO = new DingUserVO();
-                OapiV2UserGetResponse.UserGetResponse userDetail = DingDingUtil.getUserDetail(e, accesstoken);
-                BeanUtils.copyProperties(userDetail,dingUserVO);
-                dingUserVO.setDeptIdList(userDetail.getDeptIdList());
-                dingUserVOS.add(dingUserVO);
-            });
-        }
-        ArrayList<TUserDing> TUserDings = new ArrayList<TUserDing>();
-        dingUserVOS.forEach(e->{
-            TUserDing tUserDing = new TUserDing();
-            tUserDing.setUserId(e.getUserid());
-            tUserDing.setUsername(e.getName());
-            tUserDing.setMobile(e.getMobile());
-            tUserDing.setJobNum(e.getJobNumber());
-            tUserDing.setPosition(e.getTitle());
-            tUserDing.setDepartment(e.getDeptIdList().get(0).toString());
-            tUserDing.setCreateTime(new Date());
-            tUserDing.setCompany("53");
-            tUserDing.setPassword("e10adc3949ba59abbe56e057f20f883e");
-            tUserDing.setStatus("0");
-            tUserDing.setIsDelete(0);
-            tUserDing.setIsShow(1);
-            tUserDing.setIsUpdate(0);
-            TUserDings.add(tUserDing);
-        });
-        List<TUserDing> uniqueList = TUserDings.stream().collect(
-                Collectors.collectingAndThen(
-                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TUserDing::getJobNum))), ArrayList::new)
-        );
-        tUserDingMapper.deleteAll();
-        tUserDingMapper.batchInsert(uniqueList);
-    }
-
 
 
     //获取公司所有的部门
@@ -186,14 +111,96 @@ public class DingDingService  {
                     deptIdList = sunDepIdS.getDeptIdList();
                     deptListFinal.addAll(deptIdList);
                     getLastDepts(accesstoken,deptListFinal,deptIdList);
-                } else {
-                    deptListFinal.add(deptId);
                 }
             });
         }
         return deptListFinal;
     }
 
+//    @Scheduled(cron="0 0 10,15/12 * * ?") //每天上午10点下午3点跑一次获取钉钉用户列表
+    @Scheduled(cron="0 0 1 * * ? ")
+    public void userDetails() {
+        log.info("获取用户的定时任务开启了。。。");
+        String accesstoken = DingDingUtil.getAccess_Token();
+        List<Long> deptIds = null ;
+        List<Long> alldeptIds = null ;
+        String lastdepts = redisTemplate.opsForValue().get("lastdepts");
+        if (StringUtils.isNotEmpty(lastdepts)){
+             deptIds = JSONObject.parseArray(lastdepts, Long.class);
+        }else {
+            Callback<List<Long>> listCallback = this.lastDeptIds();
+            deptIds = listCallback.getData();
+        }
+        ArrayList<DingUserVO> dingUserVOS = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(deptIds)){
+            deptIds.forEach(deptId->{
+                OapiV2UserListResponse.PageResult departmentUser = DingDingUtil.getDepartmentUser(deptId, 0, 100, accesstoken);
+                List<OapiV2UserListResponse.ListUserResponse> userList = departmentUser.getList();
+                userList.forEach(e->{
+                    DingUserVO dingUserVO = new DingUserVO();
+                    BeanUtils.copyProperties(e,dingUserVO);
+                    dingUserVO.setDeptIdList(e.getDeptIdList());
+                    dingUserVOS.add(dingUserVO);
+                });
+            });
+            log.info("获取用户的定时任务开启了1");
+            ArrayList<String> deptManagerUseridList = new ArrayList<>();
+            String alldepts = redisTemplate.opsForValue().get("alldepts");
+            if (StringUtils.isNotEmpty(alldepts)){
+                alldeptIds = JSONObject.parseArray(alldepts, Long.class);
+            }else {
+                Callback<List<Long>> listCallback = this.listDeptAllIds();
+                alldeptIds = listCallback.getData();
+            }
+            alldeptIds.forEach(deptId->{
+                OapiV2DepartmentGetResponse.DeptGetResponse deptDetails = DingDingUtil.getDeptDetails(deptId, accesstoken);
+                if (null != deptDetails){
+                    List<String> managerUseridList = deptDetails.getDeptManagerUseridList();
+                    if (CollectionUtil.isNotEmpty(managerUseridList)){
+                        deptManagerUseridList.addAll(managerUseridList);
+                    }
+                }
+            });
+            List<String> collect = deptManagerUseridList.stream().distinct().collect(Collectors.toList());
+            collect.forEach(e->{
+                DingUserVO dingUserVO = new DingUserVO();
+                OapiV2UserGetResponse.UserGetResponse userDetail = DingDingUtil.getUserDetail(e, accesstoken);
+                BeanUtils.copyProperties(userDetail,dingUserVO);
+                dingUserVO.setDeptIdList(userDetail.getDeptIdList());
+                dingUserVOS.add(dingUserVO);
+            });
+        }
+        log.info("获取用户的定时任务开启了2");
+        ArrayList<TUserDing> TUserDings = new ArrayList<TUserDing>();
+        dingUserVOS.forEach(e->{
+            TUserDing tUserDing = new TUserDing();
+            tUserDing.setUserId(e.getUserid());
+            tUserDing.setUsername(e.getName());
+            tUserDing.setMobile(e.getMobile());
+            tUserDing.setJobNum(e.getJobNumber());
+            tUserDing.setPosition(e.getTitle());
+            tUserDing.setDepartment(e.getDeptIdList().get(0).toString());
+            tUserDing.setCreateTime(new Date());
+            tUserDing.setCompany("53");
+            tUserDing.setPassword("e10adc3949ba59abbe56e057f20f883e");
+            tUserDing.setStatus("0");
+            tUserDing.setIsDelete(0);
+            tUserDing.setIsShow(1);
+            tUserDing.setIsUpdate(0);
+            TUserDings.add(tUserDing);
+        });
+        List<TUserDing> uniqueList = TUserDings.stream().collect(
+                Collectors.collectingAndThen(
+                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TUserDing::getJobNum))), ArrayList::new)
+        );
+        log.info("获取用户的定时任务开启了3");
+        tUserDingMapper.deleteAll();
+        tUserDingMapper.batchInsert(uniqueList);
+    }
+
+
+
+    @Scheduled(cron="0 0 2 * * ? ")
     public Callback<List<DingDeptVO>> deptDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         Callback<List<Long>> listCallback = this.listDeptAllIds();
@@ -227,6 +234,7 @@ public class DingDingService  {
             tDeptDing.setManageId(e.getManageId());
             tDeptDings.add(tDeptDing);
         });
+        tDeptDingMapper.deleteAll();
         tDeptDingMapper.batchInsert(tDeptDings);
         return Callback.success(dingDeptVOS);
     }
