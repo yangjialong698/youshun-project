@@ -339,4 +339,10 @@
       </if>
     </trim>
   </insert>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_dept_ding
+  </select>
 </mapper>

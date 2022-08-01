@@ -24,4 +24,7 @@ public interface TDeptDingMapper {
     int updateByPrimaryKey(TDeptDing record);
 
     int batchInsert(@Param("list") List<TDeptDing> list);
+
+    List<TDeptDing> selectAll();
+
 }

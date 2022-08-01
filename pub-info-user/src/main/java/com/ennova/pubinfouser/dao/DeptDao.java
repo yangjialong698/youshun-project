@@ -5,6 +5,7 @@ import com.ennova.pubinfouser.vo.DeptVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -23,4 +24,8 @@ public interface DeptDao extends BaseDao<DeptEntity>{
     List<DeptVO> listDeptList(@Param("company")Integer company);
 
     List<DeptVO> listUserDeptList(@Param("company")Integer company);
+
+    int deleteAll();
+
+    int insertBatch(@Param("deptEntityList") ArrayList<DeptEntity> deptEntityList);
 }

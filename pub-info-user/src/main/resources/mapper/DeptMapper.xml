@@ -10,9 +10,12 @@
         <result column="company" jdbcType="INTEGER" property="company" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+        <result column="dept_id" jdbcType="BIGINT" property="deptId" />
+        <result column="manage_id" jdbcType="VARCHAR" property="manageId" />
     </resultMap>
     <sql id="Base_Column_List">
-        id, dept_name, use_status, is_operate, is_delete, company, create_time, update_time
+        id, dept_name, use_status, is_operate, is_delete, company, create_time, update_time,parent_id,dept_id,manage_id
     </sql>
 
     <select id="getDeptByName" resultMap="BaseResultMap">
@@ -158,4 +161,18 @@
         and u.status = 0
         and t.company = #{company}
     </select>
+
+    <delete id="deleteAll">
+        TRUNCATE table t_dept
+    </delete>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO t_dept
+        (id, dept_name, use_status, is_operate, is_delete, company, create_time, update_time,parent_id,dept_id,manage_id)
+        VALUES
+        <foreach collection ="deptEntityList" item="deptEntit" separator =",">
+            (#{deptEntit.id}, #{deptEntit.deptName}, #{deptEntit.useStatus}, #{deptEntit.isOperate}, #{deptEntit.isDelete}, #{deptEntit.company}, #{deptEntit.createTime}
+            , #{deptEntit.updateTime}, #{deptEntit.parentId}, #{deptEntit.deptId}, #{deptEntit.manageId})
+        </foreach >
+    </insert>
 </mapper>

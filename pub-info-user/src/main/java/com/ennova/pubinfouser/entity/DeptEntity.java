@@ -65,4 +65,19 @@ public class DeptEntity {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
+    /**
+     * 上级部门ID
+     */
+    private Long parentId;
+
+    /**
+     * 部门ID
+     */
+    private Long deptId;
+
+    /**
+     * 主管用户ID
+     */
+    private String manageId;
+
 }

@@ -5,9 +5,11 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.*;
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfouser.dao.DeptDao;
 import com.ennova.pubinfouser.dao.TDeptDingMapper;
 import com.ennova.pubinfouser.dao.TUserDingMapper;
 import com.ennova.pubinfouser.dao.UserDao;
+import com.ennova.pubinfouser.entity.DeptEntity;
 import com.ennova.pubinfouser.entity.TDeptDing;
 import com.ennova.pubinfouser.entity.TUserDing;
 import com.ennova.pubinfouser.entity.UserEntity;
@@ -39,6 +41,8 @@ public class DingDingService  {
     private RedisTemplate<String,String> redisTemplate;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private DeptDao deptDao;
 
     //获取最后一级部门
     public Callback<List<Long>> listDeptIds() {
@@ -75,7 +79,6 @@ public class DingDingService  {
         return deptListFinal;
     }
     @Scheduled(cron="0 0 10,15/12 * * ?") //每天上午10点下午3点跑一次
-//    public Callback<List<DingUserVO>> userDetails() {
     public void userDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         List<Long> deptIds = null ;
@@ -149,7 +152,6 @@ public class DingDingService  {
         );
         tUserDingMapper.deleteAll();
         tUserDingMapper.batchInsert(uniqueList);
-//        return Callback.success(dingUserVOS);
     }
 
 
@@ -254,6 +256,22 @@ public class DingDingService  {
         }
         //更新最新用户表所有部门
         userDao.updateAllDept();
+    }
+
+    @Scheduled(cron="0 0 0 * * ?")
+    public void updatTdept() {
+        deptDao.deleteAll();
+        List<TDeptDing> tDeptDingList = tDeptDingMapper.selectAll();
+        ArrayList<DeptEntity> deptEntityList = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(tDeptDingList)){
+            tDeptDingList.forEach(tDeptDing -> {
+                DeptEntity deptEntity = new DeptEntity();
+                BeanUtils.copyProperties(tDeptDing,deptEntity);
+                deptEntityList.add(deptEntity);
+            });
+        }
+        deptDao.insertBatch(deptEntityList);
+
     }
 }
 

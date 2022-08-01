@@ -40,10 +40,10 @@ public class DingDingController {
 //        return dingDingService.userDetails();
 //    }
 
-    @PostMapping("/updatTuser")
+    @PostMapping("/updatTdept")
     @ApiOperation(value = "测试", tags = "测试")
-    public void updatTuser() {
-         dingDingService.updatTuser();
+    public void updatTdept() {
+         dingDingService.updatTdept();
     }
 
     @ApiOperation(value = "钉钉-根据部门集合获取钉钉所有部门详情", tags = "钉钉API")
