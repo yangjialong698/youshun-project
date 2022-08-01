@@ -7,8 +7,10 @@ import com.dingtalk.api.response.*;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfouser.dao.TDeptDingMapper;
 import com.ennova.pubinfouser.dao.TUserDingMapper;
+import com.ennova.pubinfouser.dao.UserDao;
 import com.ennova.pubinfouser.entity.TDeptDing;
 import com.ennova.pubinfouser.entity.TUserDing;
+import com.ennova.pubinfouser.entity.UserEntity;
 import com.ennova.pubinfouser.utils.DingDingUtil;
 import com.ennova.pubinfouser.vo.DingDeptVO;
 import com.ennova.pubinfouser.vo.DingUserVO;
@@ -17,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -34,6 +37,8 @@ public class DingDingService  {
     private TDeptDingMapper tDeptDingMapper;
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
+    @Autowired
+    private UserDao userDao;
 
     //获取最后一级部门
     public Callback<List<Long>> listDeptIds() {
@@ -69,8 +74,9 @@ public class DingDingService  {
         }
         return deptListFinal;
     }
-
-    public Callback<List<DingUserVO>> userDetails() {
+    @Scheduled(cron="0 0 10,15/12 * * ?") //每天上午10点下午3点跑一次
+//    public Callback<List<DingUserVO>> userDetails() {
+    public void userDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         List<Long> deptIds = null ;
         List<Long> alldeptIds = null ;
@@ -141,8 +147,9 @@ public class DingDingService  {
                 Collectors.collectingAndThen(
                         Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TUserDing::getJobNum))), ArrayList::new)
         );
+        tUserDingMapper.deleteAll();
         tUserDingMapper.batchInsert(uniqueList);
-        return Callback.success(dingUserVOS);
+//        return Callback.success(dingUserVOS);
     }
 
 
@@ -220,6 +227,33 @@ public class DingDingService  {
         });
         tDeptDingMapper.batchInsert(tDeptDings);
         return Callback.success(dingDeptVOS);
+    }
+
+
+    @Scheduled(cron="0 0 11,16/12 * * ?")
+    public void updatTuser() {
+        //1.查询t_user无,t_user_ding有的数据(新入职)
+        List<TUserDing> tUserDingList = tUserDingMapper.selectEntry();
+        ArrayList<UserEntity> userEntities = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(tUserDingList)){
+           tUserDingList.forEach(tUserDing -> {
+               UserEntity userEntity = new UserEntity();
+               BeanUtils.copyProperties(tUserDing,userEntity);
+               userEntities.add(userEntity);
+           });
+       }
+        userEntities.forEach(e->{
+            userDao.insert(e);
+        });
+        //2.查询t_user有,t_user_ding无的数据(已离职-排除isshow等于0)
+        List<UserEntity> userEntityList = userDao.selectLeave();
+        if (CollectionUtil.isNotEmpty(userEntityList)){
+            userEntityList.forEach(e->{
+                userDao.deleteUser(e.getId());
+            });
+        }
+        //更新最新用户表所有部门
+        userDao.updateAllDept();
     }
 }
 

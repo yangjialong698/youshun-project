@@ -1,5 +1,6 @@
 package com.ennova.pubinfouser.dao;
 
+import com.ennova.pubinfouser.entity.TUserDing;
 import com.ennova.pubinfouser.entity.UserEntity;
 import com.ennova.pubinfouser.vo.PerDeptNumVO;
 import com.ennova.pubinfouser.vo.UserVO;
@@ -14,6 +15,7 @@ public interface UserDao extends BaseDao<UserEntity> {
     UserVO getUserInfoByMobile(@Param("mobile") String mobile);
 
 //    int insertSelective(UserEntity userEntity);
+    int insert(UserEntity userEntity);
 
     UserVO getUserById(@Param("id")Integer id);
 
@@ -27,4 +29,9 @@ public interface UserDao extends BaseDao<UserEntity> {
 
     UserVO getUserInfoByJobNum(@Param("jobNum")String jobNum);
 
+    int deleteUser(Integer id);
+
+    List<UserEntity> selectLeave();
+
+    void updateAllDept();
 }

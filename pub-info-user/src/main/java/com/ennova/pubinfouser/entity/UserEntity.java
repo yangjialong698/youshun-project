@@ -60,7 +60,7 @@ public class UserEntity {
      * 单位
      */
     @ApiModelProperty(value = "部门")
-    private Integer department;
+    private String department;
 
     /**
      * 单位
@@ -95,6 +95,16 @@ public class UserEntity {
     @ApiModelProperty(value = "修改时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+    /**
+     * 首页是否展示（0-不展示）
+     */
+    private Integer isShow;
+
+    /**
+     * 用户ID
+     */
+    private String userId;
 
     /**
      * 是否删除（0-；1-已删除）
