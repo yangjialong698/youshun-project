@@ -34,11 +34,11 @@ public class DingDingController {
         return dingDingService.listDeptAllIds();
     }
 
-//    @ApiOperation(value = "钉钉-根据部门集合获取钉钉所有用户详情", tags = "钉钉API")
-//    @GetMapping("/userDetails")
-//    public Callback<List<DingUserVO>> userDetails() {
-//        return dingDingService.userDetails();
-//    }
+    @ApiOperation(value = "钉钉-根据部门集合获取钉钉所有用户详情", tags = "钉钉API")
+    @GetMapping("/userDetails")
+    public void userDetails() {
+        dingDingService.userDetails();
+    }
 
     @PostMapping("/updatTdept")
     @ApiOperation(value = "测试", tags = "测试")

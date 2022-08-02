@@ -110,7 +110,9 @@ public class DingDingService  {
                 if (sunDepIdS.getDeptIdList().size()>0){
                     deptIdList = sunDepIdS.getDeptIdList();
                     deptListFinal.addAll(deptIdList);
-                    getLastDepts(accesstoken,deptListFinal,deptIdList);
+                    getLastAllDepts(accesstoken,deptListFinal,deptIdList);
+                }else {
+                    deptListFinal.add(deptId);
                 }
             });
         }
@@ -155,9 +157,15 @@ public class DingDingService  {
             alldeptIds.forEach(deptId->{
                 OapiV2DepartmentGetResponse.DeptGetResponse deptDetails = DingDingUtil.getDeptDetails(deptId, accesstoken);
                 if (null != deptDetails){
+                    //部门管理者
                     List<String> managerUseridList = deptDetails.getDeptManagerUseridList();
                     if (CollectionUtil.isNotEmpty(managerUseridList)){
                         deptManagerUseridList.addAll(managerUseridList);
+                    }
+                    //群主
+                    String orgDeptOwner = deptDetails.getOrgDeptOwner();
+                    if (StringUtils.isNotEmpty(orgDeptOwner)){
+                        deptManagerUseridList.add(orgDeptOwner);
                     }
                 }
             });
