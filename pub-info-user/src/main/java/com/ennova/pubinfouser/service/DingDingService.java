@@ -122,7 +122,6 @@ public class DingDingService  {
     //每天上午10点下午3点跑一次获取钉钉用户列表
     @Scheduled(cron="0 0 10,15/12 * * ?")
     public void userDetails() {
-        log.info("获取用户的定时任务开启了。。。");
         String accesstoken = DingDingUtil.getAccess_Token();
         List<Long> deptIds = null ;
         List<Long> alldeptIds = null ;
@@ -145,7 +144,6 @@ public class DingDingService  {
                     dingUserVOS.add(dingUserVO);
                 });
             });
-            log.info("获取用户的定时任务开启了1");
             ArrayList<String> deptManagerUseridList = new ArrayList<>();
             String alldepts = redisTemplate.opsForValue().get("alldepts");
             if (StringUtils.isNotEmpty(alldepts)){
@@ -178,7 +176,6 @@ public class DingDingService  {
                 dingUserVOS.add(dingUserVO);
             });
         }
-        log.info("获取用户的定时任务开启了2");
         ArrayList<TUserDing> TUserDings = new ArrayList<TUserDing>();
         dingUserVOS.forEach(e->{
             TUserDing tUserDing = new TUserDing();
@@ -201,7 +198,6 @@ public class DingDingService  {
                 Collectors.collectingAndThen(
                         Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TUserDing::getJobNum))), ArrayList::new)
         );
-        log.info("获取用户的定时任务开启了3");
         tUserDingMapper.deleteAll();
         tUserDingMapper.batchInsert(uniqueList);
     }
