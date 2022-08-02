@@ -220,7 +220,7 @@ public class DingDingService  {
                 dingDeptVO.setDeptId(depId);
                 dingDeptVO.setName(deptName);
                 dingDeptVO.setParentId(parentId);
-                dingDeptVO.setManageId(null != deptDetails.getDeptManagerUseridList() ? deptDetails.getDeptManagerUseridList().toString() : "");
+                dingDeptVO.setManageId(null != deptDetails.getDeptManagerUseridList() ? StringUtils.strip(deptDetails.getDeptManagerUseridList().toString(),"[]") : "");
                 dingDeptVOS.add(dingDeptVO);
             });
         }
