@@ -117,8 +117,8 @@ public class DingDingService  {
         return deptListFinal;
     }
 
-//    @Scheduled(cron="0 0 10,15/12 * * ?") //每天上午10点下午3点跑一次获取钉钉用户列表
-    @Scheduled(cron="0 0 1 * * ? ")
+    //每天上午10点下午3点跑一次获取钉钉用户列表
+    @Scheduled(cron="0 0 10,15/12 * * ?")
     public void userDetails() {
         log.info("获取用户的定时任务开启了。。。");
         String accesstoken = DingDingUtil.getAccess_Token();
@@ -266,7 +266,7 @@ public class DingDingService  {
         userDao.updateAllDept();
     }
 
-    @Scheduled(cron="0 0 0 * * ?")
+    @Scheduled(cron="0 0 3 * * ? ")
     public void updatTdept() {
         deptDao.deleteAll();
         List<TDeptDing> tDeptDingList = tDeptDingMapper.selectAll();
