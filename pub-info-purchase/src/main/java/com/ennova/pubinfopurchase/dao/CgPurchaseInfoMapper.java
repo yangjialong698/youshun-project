@@ -2,6 +2,7 @@ package com.ennova.pubinfopurchase.dao;
 
 import com.ennova.pubinfopurchase.entity.CgPurchaseInfo;
 import com.ennova.pubinfopurchase.vo.CgPurchaseInfoVO;
+import com.ennova.pubinfopurchase.vo.TaskNumber;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +26,6 @@ public interface CgPurchaseInfoMapper {
     List<CgPurchaseInfoVO> selectPurchaseInfo(@Param("name") String name);
 
     int deleteByPrimaryKey(Integer id);
+
+    List<TaskNumber> selectTaskNumber(@Param("name") String name);
 }

@@ -54,6 +54,15 @@ public class CgPurchaseInfoController {
         return cgPurchaseInfoService.insertOrUpdate(cgPurchaseInfoVO);
     }
 
+    @ApiOperation(value = "采购信息 - 获取主任务编号和名称")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "主任务名称")
+    })
+    @GetMapping("/selectTaskNumber")
+    public Callback selectTaskNumber(String name) {
+        return cgPurchaseInfoService.selectTaskNumber(name);
+    }
+
     @ApiOperation(value = "采购信息 - 删除")
     @GetMapping("/delete")
     public Callback delete(Integer id) {

@@ -106,6 +106,14 @@ public class UserVO {
 
     private Integer roleId;
 
+    private String userId;
+
+    /**
+     * 是否是部门领导（0-不是；1-是）
+     */
+    @ApiModelProperty(value = "是否是部门领导（0-不是；1-是")
+    private Integer isBold;
+
     @ApiModelProperty(value = "token验证是否登录")
     private String token;
 

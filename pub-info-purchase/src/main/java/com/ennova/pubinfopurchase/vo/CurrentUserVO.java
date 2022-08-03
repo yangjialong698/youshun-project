@@ -18,6 +18,8 @@ public class CurrentUserVO {
 
     private String username;
 
+    private String jobNum;
+
     private String roleName;
 
     private String roleCode;

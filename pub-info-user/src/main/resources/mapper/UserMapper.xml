@@ -200,7 +200,8 @@
         u.position,
         r.role_name AS roleName,
         u.STATUS,
-        u.create_time AS createTime
+        u.create_time AS createTime,
+        u.user_id AS userId
         FROM
         t_user u
 <!--        LEFT JOIN t_dept d ON u.department = d.id-->
