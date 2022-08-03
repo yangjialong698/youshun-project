@@ -253,6 +253,7 @@ public class DingDingService  {
            tUserDingList.forEach(tUserDing -> {
                UserEntity userEntity = new UserEntity();
                BeanUtils.copyProperties(tUserDing,userEntity);
+               userEntity.setUpdateTime(new Date());
                userEntities.add(userEntity);
            });
        }
@@ -263,6 +264,7 @@ public class DingDingService  {
         List<UserEntity> userEntityList = userDao.selectLeave();
         if (CollectionUtil.isNotEmpty(userEntityList)){
             userEntityList.forEach(e->{
+                e.setUpdateTime(new Date());
                 userDao.deleteUser(e.getId());
             });
         }
@@ -279,6 +281,7 @@ public class DingDingService  {
             tDeptDingList.forEach(tDeptDing -> {
                 DeptEntity deptEntity = new DeptEntity();
                 BeanUtils.copyProperties(tDeptDing,deptEntity);
+                deptEntity.setUpdateTime(new Date());
                 deptEntityList.add(deptEntity);
             });
         }
