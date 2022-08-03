@@ -324,15 +324,10 @@ public class UserService extends BaseService<UserEntity> {
         Page<UserVO> startPage = PageHelper.startPage(page, pageSize);
         List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey);
         List<DeptVO> deptVOList = deptService.listDeptList(53).getData();
-        List<Object> list = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(deptVOList)){
-            List<DeptVO> deptVOList1 = deptVOList.stream().filter(p -> StringUtils.isNotEmpty(p.getManageId())).collect(Collectors.toList());
-            for (DeptVO deptVO : deptVOList1) {
-                list.add(deptVO.getManageId());
-            }
-            System.out.println(list);
+            List<String> deptManageIds = deptVOList.stream().filter(p -> StringUtils.isNotEmpty(p.getManageId())).map(deptVO -> deptVO.getManageId()).collect(Collectors.toList());
             for (UserVO userVO : userVOList) {
-                for (Object deptManageId : list) {
+                for (Object deptManageId : deptManageIds) {
                     if (userVO.getUserId().equals(deptManageId)){
                         userVO.setIsBold(1);
                     }
