@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.util.DigestUtils.md5DigestAsHex;
 
@@ -74,6 +75,9 @@ public class UserService extends BaseService<UserEntity> {
 
     @Autowired
     private TUserSystemMapper tUserSystemMapper;
+
+    @Autowired
+    private DeptService deptService;
 
 
     public Callback<UserVO> login(String account, String password) {
@@ -319,6 +323,22 @@ public class UserService extends BaseService<UserEntity> {
         }
         Page<UserVO> startPage = PageHelper.startPage(page, pageSize);
         List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey);
+        List<DeptVO> deptVOList = deptService.listDeptList(53).getData();
+        List<Object> list = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(deptVOList)){
+            List<DeptVO> deptVOList1 = deptVOList.stream().filter(p -> StringUtils.isNotEmpty(p.getManageId())).collect(Collectors.toList());
+            for (DeptVO deptVO : deptVOList1) {
+                list.add(deptVO.getManageId());
+            }
+            System.out.println(list);
+            for (UserVO userVO : userVOList) {
+                for (Object deptManageId : list) {
+                    if (userVO.getUserId().equals(deptManageId)){
+                        userVO.setIsBold(1);
+                    }
+                }
+            }
+        }
         BaseVO<UserVO> baseVO = new BaseVO<>(userVOList, new PageUtil(pageSize, (int)startPage.getTotal(), page));
         return Callback.success(baseVO);
     }

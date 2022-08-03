@@ -15,5 +15,8 @@ public interface UserMapper {
 
     CurrentUserVO selectCurrentUser(@Param("userId") Integer userId);
 
+    //根据工号查询对应审核人信息
+    CurrentUserVO selectUserByJobNum(@Param("jobNum") String jobNum);
+
     UserDTO selectById(@Param("id") Integer id);
 }
