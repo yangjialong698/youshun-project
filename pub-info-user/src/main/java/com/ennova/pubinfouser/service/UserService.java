@@ -330,6 +330,8 @@ public class UserService extends BaseService<UserEntity> {
                 for (Object deptManageId : deptManageIds) {
                     if (userVO.getUserId().equals(deptManageId)){
                         userVO.setIsBold(1);
+                    }else {
+                        userVO.setIsBold(0);
                     }
                 }
             }

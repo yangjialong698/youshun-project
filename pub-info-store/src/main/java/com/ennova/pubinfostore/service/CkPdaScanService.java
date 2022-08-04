@@ -39,9 +39,6 @@ public class CkPdaScanService {
     private final CkPadScanMapper ckPadScanMapper;
 
     public Callback insert(CkPdaScanVO ckPdaScanVO){
-        String token = request.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
 
         CkPdaScan ckPdaScan = new CkPdaScan();
         BeanUtils.copyProperties(ckPdaScanVO, ckPdaScan);
