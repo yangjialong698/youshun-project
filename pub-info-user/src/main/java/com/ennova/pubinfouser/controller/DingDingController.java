@@ -1,6 +1,8 @@
 package com.ennova.pubinfouser.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfouser.dto.BaseDTO;
+import com.ennova.pubinfouser.dto.RoleDTO;
 import com.ennova.pubinfouser.service.DingDingService;
 import com.ennova.pubinfouser.vo.DingDeptVO;
 import com.ennova.pubinfouser.vo.DingUserVO;
@@ -21,9 +23,9 @@ public class DingDingController {
     private DingDingService dingDingService;
 
     @ApiOperation(value = "钉钉-获取最后一级部门ID列表", tags = "钉钉API")
-    @GetMapping("/listDeptIds")
-    public Callback<List<Long>> listDeptIds() {
-        return dingDingService.listDeptIds();
+    @GetMapping("/lastDeptIds")
+    public Callback<List<Long>> lastDeptIds() {
+        return dingDingService.lastDeptIds();
     }
 
     @ApiOperation(value = "钉钉-获取所有部门ID列表", tags = "钉钉API")
@@ -34,8 +36,14 @@ public class DingDingController {
 
     @ApiOperation(value = "钉钉-根据部门集合获取钉钉所有用户详情", tags = "钉钉API")
     @GetMapping("/userDetails")
-    public Callback<List<DingUserVO>> userDetails() {
-        return dingDingService.userDetails();
+    public void userDetails() {
+        dingDingService.userDetails();
+    }
+
+    @PostMapping("/updatTuser")
+    @ApiOperation(value = "测试", tags = "测试")
+    public void updatTuser() {
+         dingDingService.updatTuser();
     }
 
     @ApiOperation(value = "钉钉-根据部门集合获取钉钉所有部门详情", tags = "钉钉API")

@@ -460,4 +460,16 @@
       </if>
     </trim>
   </insert>
+
+  <delete id="deleteAll">
+    truncate table t_user_ding
+  </delete>
+
+  <select id="selectEntry"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+     from t_user_ding tud
+    where tud.job_num
+    not in (select job_num from t_user)
+  </select>
 </mapper>

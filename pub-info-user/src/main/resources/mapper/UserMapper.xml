@@ -6,6 +6,7 @@
         <id column="id" jdbcType="INTEGER" property="id" />
         <result column="username" jdbcType="VARCHAR" property="username" />
         <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="wechat_no" jdbcType="VARCHAR" property="wechatNo" />
         <result column="mobile" jdbcType="VARCHAR" property="mobile" />
         <result column="job_num" jdbcType="VARCHAR" property="jobNum" />
         <result column="company" jdbcType="VARCHAR" property="company" />
@@ -15,10 +16,14 @@
         <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="is_show" jdbcType="INTEGER" property="isShow" />
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="is_update" jdbcType="INTEGER" property="isUpdate" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, username, password, mobile,job_num, company, department, position, status, is_delete, create_time,update_time
+        id, username, `password`, wechat_no, mobile, job_num, company, department, `position`,
+        `status`, is_delete, create_time, update_time, is_show, user_id, is_update
     </sql>
 
     <select id="getUserInfoByMobile" resultType="com.ennova.pubinfouser.vo.UserVO">
@@ -92,6 +97,15 @@
             <if test="updateTime != null">
                 update_time,
             </if>
+            <if test="isShow != null">
+                is_show,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="isUpdate != null">
+                is_update,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="username != null">
@@ -113,7 +127,7 @@
                 #{company,jdbcType=VARCHAR},
             </if>
             <if test="department != null">
-                #{department,jdbcType=INTEGER},
+                #{department,jdbcType=VARCHAR},
             </if>
             <if test="position != null">
                 #{position,jdbcType=VARCHAR},
@@ -129,6 +143,15 @@
             </if>
             <if test="updateTime != null">
                 #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isShow != null">
+                #{isShow,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="isUpdate != null">
+                #{isUpdate,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -177,7 +200,8 @@
         u.position,
         r.role_name AS roleName,
         u.STATUS,
-        u.create_time AS createTime
+        u.create_time AS createTime,
+        u.user_id AS userId
         FROM
         t_user u
 <!--        LEFT JOIN t_dept d ON u.department = d.id-->
@@ -256,6 +280,12 @@
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="isShow != null">
+                is_show = #{isShow,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
             <if test="isUpdate != null">
                 is_update = #{isUpdate,jdbcType=INTEGER},
             </if>
@@ -325,4 +355,27 @@
         and u.job_num = #{jobNum}
         limit 1
     </select>
+
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        update   t_user set is_delete = 1
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectLeave"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_user tu
+        where tu.job_num
+        not in (select job_num from t_user_ding)
+        and tu.is_show = 1
+    </select>
+
+
+    <update id="updateAllDept">
+        UPDATE t_user tu
+            INNER JOIN t_user_ding tdu
+        SET tu.department = tdu.department
+        WHERE
+            tdu.job_num = tu.job_num
+    </update>
 </mapper>

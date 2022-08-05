@@ -5,10 +5,14 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.*;
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfouser.dao.DeptDao;
 import com.ennova.pubinfouser.dao.TDeptDingMapper;
 import com.ennova.pubinfouser.dao.TUserDingMapper;
+import com.ennova.pubinfouser.dao.UserDao;
+import com.ennova.pubinfouser.entity.DeptEntity;
 import com.ennova.pubinfouser.entity.TDeptDing;
 import com.ennova.pubinfouser.entity.TUserDing;
+import com.ennova.pubinfouser.entity.UserEntity;
 import com.ennova.pubinfouser.utils.DingDingUtil;
 import com.ennova.pubinfouser.vo.DingDeptVO;
 import com.ennova.pubinfouser.vo.DingUserVO;
@@ -17,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -34,9 +40,13 @@ public class DingDingService  {
     private TDeptDingMapper tDeptDingMapper;
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private DeptDao deptDao;
 
-    //获取最后一级部门
-    public Callback<List<Long>> listDeptIds() {
+    //获取最后一级部门接口
+    public Callback<List<Long>> lastDeptIds() {
         String accesstoken = DingDingUtil.getAccess_Token();
         ArrayList<Long> deptListFinal = new ArrayList<>();
         List<Long> deptParentIds = null ;
@@ -70,7 +80,48 @@ public class DingDingService  {
         return deptListFinal;
     }
 
-    public Callback<List<DingUserVO>> userDetails() {
+
+    //获取公司所有的部门
+    public Callback<List<Long>> listDeptAllIds() {
+        String accesstoken = DingDingUtil.getAccess_Token();
+        ArrayList<Long> deptListFinal = new ArrayList<>();
+        List<Long> deptParentIds = null ;
+        if (StringUtils.isNotEmpty(accesstoken)){
+            //获取一级部门列表
+            List<OapiV2DepartmentListsubResponse.DeptBaseResponse> parentDepIdString = DingDingUtil.getParentDepIdList(accesstoken);
+            deptParentIds = parentDepIdString.stream().map(e -> e.getDeptId()).collect(Collectors.toList());
+            deptListFinal.addAll(deptParentIds);
+        }
+        //获取最后一级部门列表
+        if (CollectionUtil.isNotEmpty(deptParentIds)){
+            List<Long> aa = getLastAllDepts(accesstoken, deptListFinal, deptParentIds);
+            List<Long> collect = aa.stream().distinct().collect(Collectors.toList());
+            redisTemplate.opsForValue().set("alldepts",JSONObject.toJSONString(collect), 24, TimeUnit.HOURS);
+            return Callback.success(collect) ;
+        }
+        return null;
+    }
+    //递归调用获取子集部门
+    private List<Long> getLastAllDepts(String accesstoken, ArrayList<Long> deptListFinal, List<Long> deptParentIds) {
+        if (CollectionUtil.isNotEmpty(deptParentIds)){
+            deptParentIds.forEach(deptId->{
+                OapiV2DepartmentListsubidResponse.DeptListSubIdResponse sunDepIdS = DingDingUtil.getSunDepIdList(deptId, accesstoken);
+                List<Long> deptIdList = null ;
+                if (sunDepIdS.getDeptIdList().size()>0){
+                    deptIdList = sunDepIdS.getDeptIdList();
+                    deptListFinal.addAll(deptIdList);
+                    getLastAllDepts(accesstoken,deptListFinal,deptIdList);
+                }else {
+                    deptListFinal.add(deptId);
+                }
+            });
+        }
+        return deptListFinal;
+    }
+
+    //每天上午10点下午3点跑一次获取钉钉用户列表
+    @Scheduled(cron="0 0 10,15/12 * * ?")
+    public void userDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         List<Long> deptIds = null ;
         List<Long> alldeptIds = null ;
@@ -78,7 +129,7 @@ public class DingDingService  {
         if (StringUtils.isNotEmpty(lastdepts)){
              deptIds = JSONObject.parseArray(lastdepts, Long.class);
         }else {
-            Callback<List<Long>> listCallback = this.listDeptIds();
+            Callback<List<Long>> listCallback = this.lastDeptIds();
             deptIds = listCallback.getData();
         }
         ArrayList<DingUserVO> dingUserVOS = new ArrayList<>();
@@ -104,9 +155,15 @@ public class DingDingService  {
             alldeptIds.forEach(deptId->{
                 OapiV2DepartmentGetResponse.DeptGetResponse deptDetails = DingDingUtil.getDeptDetails(deptId, accesstoken);
                 if (null != deptDetails){
+                    //部门管理者
                     List<String> managerUseridList = deptDetails.getDeptManagerUseridList();
                     if (CollectionUtil.isNotEmpty(managerUseridList)){
                         deptManagerUseridList.addAll(managerUseridList);
+                    }
+                    //群主
+                    String orgDeptOwner = deptDetails.getOrgDeptOwner();
+                    if (StringUtils.isNotEmpty(orgDeptOwner)){
+                        deptManagerUseridList.add(orgDeptOwner);
                     }
                 }
             });
@@ -141,50 +198,13 @@ public class DingDingService  {
                 Collectors.collectingAndThen(
                         Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TUserDing::getJobNum))), ArrayList::new)
         );
+        tUserDingMapper.deleteAll();
         tUserDingMapper.batchInsert(uniqueList);
-        return Callback.success(dingUserVOS);
     }
 
 
 
-    //获取公司所有的部门
-    public Callback<List<Long>> listDeptAllIds() {
-        String accesstoken = DingDingUtil.getAccess_Token();
-        ArrayList<Long> deptListFinal = new ArrayList<>();
-        List<Long> deptParentIds = null ;
-        if (StringUtils.isNotEmpty(accesstoken)){
-            //获取一级部门列表
-            List<OapiV2DepartmentListsubResponse.DeptBaseResponse> parentDepIdString = DingDingUtil.getParentDepIdList(accesstoken);
-            deptParentIds = parentDepIdString.stream().map(e -> e.getDeptId()).collect(Collectors.toList());
-            deptListFinal.addAll(deptParentIds);
-        }
-        //获取最后一级部门列表
-        if (CollectionUtil.isNotEmpty(deptParentIds)){
-            List<Long> aa = getLastAllDepts(accesstoken, deptListFinal, deptParentIds);
-            List<Long> collect = aa.stream().distinct().collect(Collectors.toList());
-            redisTemplate.opsForValue().set("alldepts",JSONObject.toJSONString(collect), 24, TimeUnit.HOURS);
-            return Callback.success(collect) ;
-        }
-        return null;
-    }
-    //递归调用获取子集部门
-    private List<Long> getLastAllDepts(String accesstoken, ArrayList<Long> deptListFinal, List<Long> deptParentIds) {
-        if (CollectionUtil.isNotEmpty(deptParentIds)){
-            deptParentIds.forEach(deptId->{
-                OapiV2DepartmentListsubidResponse.DeptListSubIdResponse sunDepIdS = DingDingUtil.getSunDepIdList(deptId, accesstoken);
-                List<Long> deptIdList = null ;
-                if (sunDepIdS.getDeptIdList().size()>0){
-                    deptIdList = sunDepIdS.getDeptIdList();
-                    deptListFinal.addAll(deptIdList);
-                    getLastDepts(accesstoken,deptListFinal,deptIdList);
-                } else {
-                    deptListFinal.add(deptId);
-                }
-            });
-        }
-        return deptListFinal;
-    }
-
+    @Scheduled(cron="0 0 2 * * ? ")
     public Callback<List<DingDeptVO>> deptDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         Callback<List<Long>> listCallback = this.listDeptAllIds();
@@ -200,7 +220,7 @@ public class DingDingService  {
                 dingDeptVO.setDeptId(depId);
                 dingDeptVO.setName(deptName);
                 dingDeptVO.setParentId(parentId);
-                dingDeptVO.setManageId(null != deptDetails.getDeptManagerUseridList() ? deptDetails.getDeptManagerUseridList().toString() : "");
+                dingDeptVO.setManageId(null != deptDetails.getDeptManagerUseridList() ? StringUtils.strip(deptDetails.getDeptManagerUseridList().toString(),"[]") : "");
                 dingDeptVOS.add(dingDeptVO);
             });
         }
@@ -218,8 +238,55 @@ public class DingDingService  {
             tDeptDing.setManageId(e.getManageId());
             tDeptDings.add(tDeptDing);
         });
+        tDeptDingMapper.deleteAll();
         tDeptDingMapper.batchInsert(tDeptDings);
         return Callback.success(dingDeptVOS);
+    }
+
+
+    @Scheduled(cron="0 0 11,16/12 * * ?")
+    public void updatTuser() {
+        //1.查询t_user无,t_user_ding有的数据(新入职)
+        List<TUserDing> tUserDingList = tUserDingMapper.selectEntry();
+        ArrayList<UserEntity> userEntities = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(tUserDingList)){
+           tUserDingList.forEach(tUserDing -> {
+               UserEntity userEntity = new UserEntity();
+               BeanUtils.copyProperties(tUserDing,userEntity);
+               userEntity.setUpdateTime(new Date());
+               userEntities.add(userEntity);
+           });
+       }
+        userEntities.forEach(e->{
+            userDao.insert(e);
+        });
+        //2.查询t_user有,t_user_ding无的数据(已离职-排除isshow等于0)
+        List<UserEntity> userEntityList = userDao.selectLeave();
+        if (CollectionUtil.isNotEmpty(userEntityList)){
+            userEntityList.forEach(e->{
+                e.setUpdateTime(new Date());
+                userDao.deleteUser(e.getId());
+            });
+        }
+        //更新最新用户表所有部门
+        userDao.updateAllDept();
+    }
+
+    @Scheduled(cron="0 0 3 * * ? ")
+    public void updatTdept() {
+        deptDao.deleteAll();
+        List<TDeptDing> tDeptDingList = tDeptDingMapper.selectAll();
+        ArrayList<DeptEntity> deptEntityList = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(tDeptDingList)){
+            tDeptDingList.forEach(tDeptDing -> {
+                DeptEntity deptEntity = new DeptEntity();
+                BeanUtils.copyProperties(tDeptDing,deptEntity);
+                deptEntity.setUpdateTime(new Date());
+                deptEntityList.add(deptEntity);
+            });
+        }
+        deptDao.insertBatch(deptEntityList);
+
     }
 }
 

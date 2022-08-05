@@ -68,4 +68,10 @@ public class DeptVO {
     @ApiModelProperty(value = "修改时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+    /**
+     * 部门领导ID
+     */
+    @ApiModelProperty(value = "部门领导ID")
+    private String manageId;
 }

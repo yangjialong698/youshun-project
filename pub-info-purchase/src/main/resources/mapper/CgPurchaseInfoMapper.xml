@@ -137,4 +137,17 @@
         where `id` = #{id,jdbcType=INTEGER}
     </delete>
 
+    <select id="selectTaskNumber" resultType="com.ennova.pubinfopurchase.vo.TaskNumber">
+        SELECT DISTINCT
+        t1.id,
+        t1.serial_number serialNumber,
+        t1.name
+        FROM ys_master_task t1
+        <where>
+            t1.status != 0
+            <if test="name != null and name != ''">
+                and t1.name like CONCAT('%', trim(#{name}), '%')
+            </if>
+        </where>
+    </select>
 </mapper>

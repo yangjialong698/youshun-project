@@ -24,4 +24,9 @@ public interface TUserDingMapper {
     int updateByPrimaryKey(TUserDing record);
 
     int batchInsert(@Param("list") List<TUserDing> list);
+
+    void deleteAll();
+
+    List<TUserDing> selectEntry();
+
 }

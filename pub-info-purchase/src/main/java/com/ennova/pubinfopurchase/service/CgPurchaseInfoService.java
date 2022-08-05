@@ -11,14 +11,15 @@ import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfopurchase.dao.CgContactInformationMapper;
 import com.ennova.pubinfopurchase.dao.CgPurchaseFileMapper;
 import com.ennova.pubinfopurchase.dao.CgPurchaseInfoMapper;
-import com.ennova.pubinfopurchase.dao.UserMapper;
 import com.ennova.pubinfopurchase.dto.FileDelDTO;
 import com.ennova.pubinfopurchase.entity.CgContactInformation;
 import com.ennova.pubinfopurchase.entity.CgPurchaseFile;
 import com.ennova.pubinfopurchase.entity.CgPurchaseInfo;
+import com.ennova.pubinfopurchase.service.fegin.PubInfoTaskClient;
 import com.ennova.pubinfopurchase.vo.CgPurchaseFileVO;
 import com.ennova.pubinfopurchase.vo.CgPurchaseInfoVO;
 import com.ennova.pubinfopurchase.vo.FileVO;
+import com.ennova.pubinfopurchase.vo.TaskNumber;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class CgPurchaseInfoService {
     private final CgPurchaseInfoMapper cgPurchaseInfoMapper;
     private final CgPurchaseFileMapper cgPurchaseFileMapper;
     private final CgContactInformationMapper cgContactInformationMapper;
-    private final UserMapper userMapper;
+    private final PubInfoTaskClient pubInfoTaskClient;
 
     /**
      * 本地路径
@@ -205,6 +206,14 @@ public class CgPurchaseInfoService {
             return Callback.success(true);
         }
         return Callback.error(2, "数据处理失败!");
+    }
+
+    public Callback selectTaskNumber(String name) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        List<TaskNumber> taskNumbers = cgPurchaseInfoMapper.selectTaskNumber(name);
+        return Callback.success(taskNumbers);
     }
 
     public Callback delete(Integer id) {

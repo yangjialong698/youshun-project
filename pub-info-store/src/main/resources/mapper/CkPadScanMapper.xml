@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfostore.dao.CkPadScanMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfostore.entity.CkPdaScan">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="bar_code1" jdbcType="VARCHAR" property="barCode1" />
+    <result column="bar_code2" jdbcType="VARCHAR" property="barCode2" />
+    <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, bar_code1, bar_code2, check_status, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ck_pad_scan
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ck_pad_scan
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.ennova.pubinfostore.entity.CkPdaScan">
+    insert into ck_pda_scan (id, bar_code1, bar_code2, check_status,
+      create_time)
+    values (#{id}, #{barCode1,jdbcType=VARCHAR}, #{barCode2,jdbcType=VARCHAR}, #{checkStatus,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ennova.pubinfostore.entity.CkPdaScan">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ck_pda_scan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="barCode1 != null">
+        bar_code1,
+      </if>
+      <if test="barCode2 != null">
+        bar_code2,
+      </if>
+      <if test="checkStatus != null">
+        check_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="barCode1 != null">
+        #{barCode1,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode2 != null">
+        #{barCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="checkStatus != null">
+        #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfostore.entity.CkPdaScan">
+    update ck_pad_scan
+    <set>
+      <if test="barCode1 != null">
+        bar_code1 = #{barCode1,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode2 != null">
+        bar_code2 = #{barCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="checkStatus != null">
+        check_status = #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfostore.entity.CkPdaScan">
+    update ck_pad_scan
+    set bar_code1 = #{barCode1,jdbcType=VARCHAR},
+      bar_code2 = #{barCode2,jdbcType=VARCHAR},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectPdaInfo" resultType="com.ennova.pubinfostore.vo.CkPdaScanVO">
+    select
+    cps.id,
+    cps.bar_code1 AS barCode1,
+    cps.bar_code2 AS barCode2,
+    cps.check_status AS checkStatus,
+    cps.create_time AS createTime
+    from ck_pda_scan cps
+    <where>
+    <if test="barCode != null and barCode != ''">
+      CONCAT(IFNULL(cps.bar_code1,''),IFNULL(cps.bar_code2,'')) like CONCAT('%',#{barCode},'%')
+    </if>
+    </where>
+    order by cps.create_time desc
+  </select>
+</mapper>
