@@ -3,6 +3,7 @@ package com.ennova.pubinfostore.dao;
 import com.ennova.pubinfostore.entity.CkPdaScan;
 import com.ennova.pubinfostore.vo.CkPdaScanVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,5 +21,5 @@ public interface CkPadScanMapper {
 
     int updateByPrimaryKey(CkPdaScan record);
 
-    List<CkPdaScanVO> selectPdaInfo();
+    List<CkPdaScanVO> selectPdaInfo(@Param("barCode") String barCode);
 }

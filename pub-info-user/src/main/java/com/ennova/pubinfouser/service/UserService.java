@@ -327,11 +327,10 @@ public class UserService extends BaseService<UserEntity> {
         if (CollectionUtil.isNotEmpty(deptVOList)){
             List<String> deptManageIds = deptVOList.stream().filter(p -> StringUtils.isNotEmpty(p.getManageId())).map(deptVO -> deptVO.getManageId()).collect(Collectors.toList());
             for (UserVO userVO : userVOList) {
+                userVO.setIsBold(0);
                 for (Object deptManageId : deptManageIds) {
                     if (userVO.getUserId().equals(deptManageId)){
                         userVO.setIsBold(1);
-                    }else {
-                        userVO.setIsBold(0);
                     }
                 }
             }

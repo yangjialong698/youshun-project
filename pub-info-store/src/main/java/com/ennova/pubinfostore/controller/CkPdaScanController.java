@@ -35,11 +35,12 @@ public class CkPdaScanController {
     @ApiOperation(value = "PDA扫描 - 条形码比对列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "开始页"),
-            @ApiImplicitParam(name = "pageSize", value = "显示条数")
+            @ApiImplicitParam(name = "pageSize", value = "显示条数"),
+            @ApiImplicitParam(name = "barCode", value = "条码1/条码2")
     })
     @GetMapping("/selectPdaInfo")
-    public Callback<BaseVO<CkPdaScanVO>> selectPdaInfo(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer pageSize){
-        return ckPdaScanService.selectPdaInfo(page, pageSize);
+    public Callback<BaseVO<CkPdaScanVO>> selectPdaInfo(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer pageSize, String barCode){
+        return ckPdaScanService.selectPdaInfo(page, pageSize, barCode);
     }
 
 }
