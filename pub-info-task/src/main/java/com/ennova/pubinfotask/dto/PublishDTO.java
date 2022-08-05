@@ -1,5 +1,6 @@
 package com.ennova.pubinfotask.dto;
 
+import com.ennova.pubinfotask.vo.FileVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,6 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @className: PublishDTO
@@ -42,5 +44,11 @@ public class PublishDTO {
     @NotNull(message = "审核人ID不能为空")
     @ApiModelProperty(value = "审核人ID")
     private Integer checkUserId;
+
+    /**
+     * 上传的附件
+     */
+    @ApiModelProperty(value = "上传的附件")
+    private List<FileVO> fileVOList;
 
 }

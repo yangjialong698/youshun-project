@@ -1,5 +1,6 @@
 package com.ennova.pubinfotask.entity;
 
+import com.ennova.pubinfotask.vo.FileVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 公告表
@@ -84,4 +86,8 @@ public class YsBulletin {
      */
     @ApiModelProperty(value = "更新日期")
     private LocalDateTime updateTime;
+
+    // 文件
+    @ApiModelProperty(value = "文件")
+    private List<YsBulletinFile> files;
 }

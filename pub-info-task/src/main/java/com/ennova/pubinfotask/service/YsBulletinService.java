@@ -2,18 +2,19 @@ package com.ennova.pubinfotask.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfocommon.utils.FileUtils;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfotask.config.ChannelHandlerPool;
 import com.ennova.pubinfotask.dao.UserMapper;
+import com.ennova.pubinfotask.dao.YsBulletinFileMapper;
 import com.ennova.pubinfotask.dao.YsBulletinMapper;
 import com.ennova.pubinfotask.dao.YsMessageMapper;
+import com.ennova.pubinfotask.dto.FileDelDTO;
 import com.ennova.pubinfotask.dto.PublishDTO;
-import com.ennova.pubinfotask.entity.YsBulletin;
-import com.ennova.pubinfotask.entity.YsFileType;
-import com.ennova.pubinfotask.entity.YsMessage;
+import com.ennova.pubinfotask.entity.*;
 import com.ennova.pubinfotask.utils.BeanConvertUtils;
 import com.ennova.pubinfotask.vo.*;
 import com.github.pagehelper.Page;
@@ -23,18 +24,20 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -48,6 +51,77 @@ public class YsBulletinService {
     private final RedisTemplate redisTemplate;
     private final UserMapper userMapper;
     private final YsMessageMapper ysMessageMapper;
+    private final YsBulletinFileMapper ysBulletinFileMapper;
+
+    /**
+     * 本地路径
+     */
+    @Value("${spring.upload.local.path}")
+    private String localPath;
+
+    /**
+     * 访问url
+     */
+    @Value("${spring.upload.local.url}")
+    private String localUrl;
+
+    /**
+     * 支持文件
+     */
+    @Value("${file.suffix}")
+    private String[] fileSuffix;
+
+
+    public Callback<FileVO> uploadFile(MultipartFile file) {
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        if (ObjectUtils.isEmpty(file) || file.getSize() <= 0) {
+            log.info("上传文件大小为空!");
+            return Callback.error(2, "上传文件不能为空!");
+        }
+
+        HashMap<String, String> map = FileUtils.uploadFile(file, localPath, fileSuffix);
+        if (StringUtils.isNotBlank(map.get("error"))) {
+            return Callback.error(2, map.get("error"));
+        }
+        String subname = map.get("year") + "/" + map.get("month") + "/" + map.get("newfileName");
+
+        YsBulletinFile ysBulletinFile = YsBulletinFile.builder().fileMd5(subname).fileUrl(localUrl + "/file/" + subname).name(map.get("fileName"))
+                .fileSize(map.get("fileSize")).openFile(0).delFlag(0).userId(userVo.getId()).createTime(LocalDateTime.now()).build();
+
+        int count = ysBulletinFileMapper.insertSelective(ysBulletinFile);
+        if (count > 0) {
+            FileVO fileVo = FileVO.builder().id(ysBulletinFile.getId()).fileName(map.get("fileName")).newfileName(subname).build();
+            return Callback.success(fileVo);
+        }
+        return Callback.error(2, "上传失败!");
+    }
+
+    public Callback deleteFile(FileDelDTO fileDelDTO) {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        fileDelDTO.getFileVos().forEach(fileVo -> {
+            String path = localPath + "/" + fileVo.getNewfileName();
+            // 如果是本人上传的，才能执行删除操作
+            assert userVo != null;
+            List<YsBulletinFile> files = ysBulletinFileMapper.selectAllByFileMd5AndUserId(fileVo.getNewfileName(), userVo.getId());
+            if (CollectionUtils.isNotEmpty(files)) {
+                File file = new File(path);
+                if (file.exists()) {
+                    //查看是否唯一
+                    int count = ysBulletinFileMapper.selectByFileMd5(fileVo.getNewfileName());
+                    if (count == 1) {
+                        file.delete();
+                    }
+                    YsBulletinFile ysBulletinFile = ysBulletinFileMapper.selectByPrimaryKey(fileVo.getId());
+                    ysBulletinFileMapper.deleteByPrimaryKey(fileVo.getId());
+                }
+            }
+        });
+        return Callback.success(true);
+    }
 
     //审核人列表
     public Callback getReviewerList() {
@@ -69,23 +143,30 @@ public class YsBulletinService {
             return Callback.error(2, "您没有权限新增");
         }
 
+        int i = ysBulletinMapper.selectByTitle(publishDTO.getTitle(), null);
+        if (i > 0) {
+            return Callback.error(2, "标题已存在");
+        }
+
         YsBulletin ysBulletin = BeanConvertUtils.convertTo(publishDTO, YsBulletin::new);
         ysBulletin.setCreateTime(LocalDateTime.now());
         ysBulletin.setStatus(0);
         ysBulletin.setCreateId(userVo.getId());
-        //ysBulletin.setIsDelete(0);
-        //List<YsBulletin> ysBulletins = ysBulletinMapper.selectByTitleAndContent(ysBulletin.getTitle(), ysBulletin.getContent());
-        //if (CollectionUtils.isNotEmpty(ysBulletins)) {
-        //    return Callback.error(2, "已存在相同的公告标题和内容!");
-        //}
-        int i = ysBulletinMapper.insert(ysBulletin); // 插入主表
-        if (i > 0) {
-            //推送:sourceType=0 公告,type=0 新增
+        int count = ysBulletinMapper.insert(ysBulletin);// 插入主表
+        List<FileVO> fileVOList = publishDTO.getFileVOList();
+        if (CollectionUtils.isNotEmpty(fileVOList)) {
+            fileVOList.forEach(fileVO -> {
+                Optional.ofNullable(ysBulletinFileMapper.selectByPrimaryKey(fileVO.getId())).ifPresent(ysBulletinFile -> {
+                    ysBulletinFile.setFileMasterId(ysBulletin.getId());
+                    ysBulletinFile.setUpdateTime(LocalDateTime.now());
+                    ysBulletinFileMapper.updateByPrimaryKeySelective(ysBulletinFile);
+                });
+            });
+        }
+        //推送:sourceType=0 公告,type=0 新增
+        if (count > 0) {
             SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(0).content(ysBulletin).build();
-
-            //List<Channel> channelList = getChannelByName(String.valueOf(publishDTO.getCheckUserId()));
             Channel channel = getChannel(String.valueOf(publishDTO.getCheckUserId()));
-
             log.info("新增公告时的审核人: " + publishDTO.getCheckUserId() );
             log.info("新增公告时channeList: " + channel );
             if (null == channel) {
@@ -94,23 +175,11 @@ public class YsBulletinService {
                 return Callback.success();
             } else {
                 //推送list第一个元素
-                //channelList.forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame("您有一条编号为" + JSONObject.toJSONString(socketVO) + "的公告需要审批！")));
                 channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
             }
-
-            //Channel channel = getChannelByName2(String.valueOf(publishDTO.getCheckUserId()));
-            //if (null != channel) {
-            //    if (online(String.valueOf(publishDTO.getCheckUserId()))) {
-            //        channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(socketVO)));
-            //    } else {
-            //        redisTemplate.opsForList().rightPush("bulletin:add:" + publishDTO.getCheckUserId(), JSONObject.toJSONString(socketVO));
-            //        log.info("用户: " + publishDTO.getCheckUserId() + " 没有登录，添加到redis队列");
-            //    }
-            //
-            //}
-
             return Callback.success(true);
         }
+
         return Callback.error(2, "新增失败");
     }
 
@@ -129,6 +198,11 @@ public class YsBulletinService {
             return Callback.error(2, "ID为" + publishDTO.getId() + "的公告不存在");
         }
 
+        int i = ysBulletinMapper.selectByTitle(publishDTO.getTitle(), publishDTO.getId());
+        if (i > 0) {
+            return Callback.error(2, "标题已存在");
+        }
+
         // 排除当前ID，不能修改成已存在的公告标题和内容
         List<YsBulletin> ysBulletins = ysBulletinMapper.selectByTitleAndContentAndIdNot(publishDTO.getTitle(), publishDTO.getContent(), publishDTO.getId());
         if (CollectionUtils.isNotEmpty(ysBulletins)) {
@@ -143,12 +217,21 @@ public class YsBulletinService {
         YsBulletin ysBulletin = BeanConvertUtils.convertTo(publishDTO, YsBulletin::new);
         ysBulletin.setStatus(0);
         ysBulletin.setUpdateTime(LocalDateTime.now());
-        int i = ysBulletinMapper.updateByPrimaryKeySelective(ysBulletin); // 更新主表
-               log.info("更新公告时的审核人: " + publishDTO.getCheckUserId() );
+        int count = ysBulletinMapper.updateByPrimaryKeySelective(ysBulletin);// 更新主表
+        log.info("更新公告时的审核人: " + publishDTO.getCheckUserId() );
 
-        if (i > 0) {
+        List<FileVO> fileVOList = publishDTO.getFileVOList();
+        if (CollectionUtils.isNotEmpty(fileVOList)) {
+            fileVOList.forEach(fileVO -> {
+                Optional.ofNullable(ysBulletinFileMapper.selectByPrimaryKey(fileVO.getId())).ifPresent(ysBulletinFile -> {
+                    ysBulletinFile.setFileMasterId(ysBulletin.getId());
+                    ysBulletinFile.setUpdateTime(LocalDateTime.now());
+                    ysBulletinFileMapper.updateByPrimaryKeySelective(ysBulletinFile);
+                });
+            });
+        }
+        if (count > 0){
             //推送:sourceType=0 公告,type=3 修改
-
             SocketVO<Object> socketVO = SocketVO.builder().sourceType(0).type(3).content(ysBulletin).build();
             //List<Channel> channelList = getChannelByName(String.valueOf(publishDTO.getCheckUserId()));
             Channel channel = getChannel(String.valueOf(publishDTO.getCheckUserId()));
@@ -194,6 +277,15 @@ public class YsBulletinService {
         // 菜单不展示，可查看人员的角色：task_manage、admin、check_person
         Page<YsFileType> startPage = PageMethod.startPage(page, pageSize);
         List<YsBulletinVO> list = ysBulletinMapper.selectByStatusAndTitleLike(status, likeTitle, null, "id desc");
+        if(CollectionUtils.isNotEmpty(list)){
+            list.stream().map(ysBulletinVO -> {
+                List<YsBulletinFile> ysbulletinFiles = ysBulletinFileMapper.selectByFileMasterId(ysBulletinVO.getId());
+                ysBulletinVO.setFiles(ysbulletinFiles);
+                return ysBulletinVO;
+            }).collect(Collectors.toList());
+        }
+
+
         //list.stream().forEach(ysBulletin -> {
         //    ysBulletin.setIsEdit(false);
         //    if (currentUserVO.getUserId().equals(ysBulletin.getCreateId())) {
@@ -217,6 +309,11 @@ public class YsBulletinService {
     //查询公告详情
     public Callback<YsBulletinVO> getBulletinDetail(Integer id) {
         YsBulletin ysBulletin = ysBulletinMapper.selectByPrimaryKey(id);
+        if(ysBulletin != null){
+           ysBulletin.getId();
+            List<YsBulletinFile> files = ysBulletinFileMapper.selectByFileMasterId(ysBulletin.getId());
+            ysBulletin.setFiles(files);
+        }
         YsBulletinVO ysBulletinVO = BeanConvertUtils.convertTo(ysBulletin, YsBulletinVO::new);
         ysBulletinVO.setCreateName(userMapper.selectById(ysBulletinVO.getCreateId()).getUserName());
         ysBulletinVO.setCheckName(userMapper.selectById(ysBulletinVO.getCheckUserId()).getUserName());

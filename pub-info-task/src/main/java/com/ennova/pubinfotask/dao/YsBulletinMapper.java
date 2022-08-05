@@ -16,6 +16,8 @@ public interface YsBulletinMapper {
 
     int insertSelective(YsBulletin record);
 
+    int selectByTitle(@Param("title") String title, @Param("id") Integer id);
+
     YsBulletin selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(YsBulletin record);

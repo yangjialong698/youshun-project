@@ -1,28 +1,59 @@
 package com.ennova.pubinfotask.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfocommon.utils.FileUtils;
+import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfocommon.vo.UserVO;
+import com.ennova.pubinfotask.dao.YsBulletinFileMapper;
+import com.ennova.pubinfotask.dto.FileDelDTO;
 import com.ennova.pubinfotask.dto.PublishDTO;
+import com.ennova.pubinfotask.entity.YsBulletinFile;
+import com.ennova.pubinfotask.entity.YsSlaveFile;
 import com.ennova.pubinfotask.service.YsBulletinService;
+import com.ennova.pubinfotask.vo.FileVO;
 import com.ennova.pubinfotask.vo.MessageVO;
 import com.ennova.pubinfotask.vo.YsBulletinVO;
 import com.ennova.pubinfotask.vo.YsMessageVO;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @ApiSort(value = 1)
 @Api(tags = "公共信息平台-公告")
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 @RestController
+@Slf4j
 @RequestMapping("/bulletin")
 public class YsBulletinController {
 
     private final YsBulletinService ysBulletinService;
+
+    @ApiOperation(value = "公告 - 附件上传")
+    @ApiOperationSort(value = 1)
+    @PostMapping("/upload")
+    public Callback<FileVO> uploadFile(MultipartFile file) {
+        return ysBulletinService.uploadFile(file);
+    }
+
+    @ApiOperation(value = "公告 - 附件删除")
+    @ApiOperationSort(value = 1)
+    @PostMapping("/deleteFile")
+    public Callback deleteFile(@RequestBody  FileDelDTO fileDelDTO) {
+        return ysBulletinService.deleteFile(fileDelDTO);
+    }
 
     @ApiOperation(value = "公告 - 审核人")
     @ApiOperationSort(value = 1)

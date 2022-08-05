@@ -335,4 +335,17 @@
     order by ${orderBy}
   </if>
   </select>
+
+  <select id="selectByTitle" resultType="java.lang.Integer">
+    select count(*)
+    from `ys_bulletin`
+    <where>
+        <if test="title != null">
+            and title=#{title,jdbcType=VARCHAR}
+        </if>
+        <if test="id != null">
+            and id not in (#{id,jdbcType=INTEGER})
+        </if>
+    </where>
+</select>
 </mapper>

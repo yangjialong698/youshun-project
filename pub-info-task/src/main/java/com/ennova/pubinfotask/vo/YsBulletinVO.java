@@ -1,5 +1,6 @@
 package com.ennova.pubinfotask.vo;
 
+import com.ennova.pubinfotask.entity.YsBulletinFile;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @className: YsBulletinVO
@@ -112,4 +114,7 @@ public class YsBulletinVO {
     @ApiModelProperty(value = "是否可驳回 true:可驳回 false:不可驳回")
     private Boolean isReject;
 
+    // 文件
+    @ApiModelProperty(value = "文件")
+    private List<YsBulletinFile> files;
 }
