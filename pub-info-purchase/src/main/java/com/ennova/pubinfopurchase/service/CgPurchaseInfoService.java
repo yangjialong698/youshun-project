@@ -166,6 +166,10 @@ public class CgPurchaseInfoService {
         if (!cgPurchaseInfoVO.getPurchaseName().equals(currentUserVO.getUsername())){
             return Callback.error("采购人填写有误，应与登录用户名一致");
         }*/
+        List<TaskNumber> taskNumbers = cgPurchaseInfoMapper.selectTaskNumberIsExist(Integer.parseInt(cgPurchaseInfoVO.getTaskNumber()));
+        if (taskNumbers.isEmpty()){
+            return Callback.error("请输入正确的任务编号");
+        }
         if (cgPurchaseInfoVO.getId() != null) {
             //修改采集信息
             CgPurchaseInfo purchaseInfo = cgPurchaseInfoMapper.selectByPrimaryKey(cgPurchaseInfoVO.getId());

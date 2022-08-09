@@ -28,4 +28,6 @@ public interface CgPurchaseInfoMapper {
     int deleteByPrimaryKey(Integer id);
 
     List<TaskNumber> selectTaskNumber(@Param("name") String name);
+
+    List<TaskNumber> selectTaskNumberIsExist(@Param("serialNumber") Integer serialNumber);
 }
