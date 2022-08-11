@@ -40,6 +40,10 @@ import static org.springframework.util.DigestUtils.md5DigestAsHex;
 @Slf4j
 public class UserService extends BaseService<UserEntity> {
 
+    private String taskSystem = "1001";
+    private String purchaseSystem = "1002";
+    private String scanSystem = "1003";
+
     @Resource
     private UserDao userDao;
 
@@ -193,15 +197,22 @@ public class UserService extends BaseService<UserEntity> {
             for (TUserSystem tUserSystem : tUserSystems) {
                 NewMenuVO newMenuVO = new NewMenuVO();
                 String sysNum = tUserSystem.getSysNum();
-                if (sysNum.equals("1001")){
+                if (sysNum.equals(taskSystem)){
                     List<MenuVO> menuList = roleService.getMenu(userRole.getRoleId());
                     newMenuVO.setSysNum(sysNum);
                     newMenuVO.setSysName(tUserSystem.getSysName());
                     newMenuVO.setMenu(menuList);
                     newMenuVOS.add(newMenuVO);
                 }
-                if (sysNum.equals("1002")){
+                if (sysNum.equals(purchaseSystem)){
                     List<MenuVO> menuList = roleService.getMenuBySysNum("1002");
+                    newMenuVO.setSysNum(sysNum);
+                    newMenuVO.setSysName(tUserSystem.getSysName());
+                    newMenuVO.setMenu(menuList);
+                    newMenuVOS.add(newMenuVO);
+                }
+                if (sysNum.equals(scanSystem)){
+                    List<MenuVO> menuList = roleService.getMenuBySysNum("1003");
                     newMenuVO.setSysNum(sysNum);
                     newMenuVO.setSysName(tUserSystem.getSysName());
                     newMenuVO.setMenu(menuList);
