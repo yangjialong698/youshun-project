@@ -24,6 +24,13 @@ public class CkPdaScanVO {
     private Long id;
 
     /**
+     * 设备imsi
+     */
+    @ApiModelProperty(value = "设备imsi")
+    @NotBlank(message = "设备imsi: 不能为空!")
+    private String deviceId;
+
+    /**
      * 条形码1
      */
     @ApiModelProperty(value = "条形码1")

@@ -3,13 +3,14 @@
 <mapper namespace="com.ennova.pubinfostore.dao.CkPadScanMapper">
   <resultMap id="BaseResultMap" type="com.ennova.pubinfostore.entity.CkPdaScan">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
     <result column="bar_code1" jdbcType="VARCHAR" property="barCode1" />
     <result column="bar_code2" jdbcType="VARCHAR" property="barCode2" />
     <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, bar_code1, bar_code2, check_status, create_time
+    id, device_id, bar_code1, bar_code2, check_status, create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -22,9 +23,9 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.ennova.pubinfostore.entity.CkPdaScan">
-    insert into ck_pda_scan (id, bar_code1, bar_code2, check_status,
+    insert into ck_pda_scan (id, device_id, bar_code1, bar_code2, check_status,
       create_time)
-    values (#{id}, #{barCode1,jdbcType=VARCHAR}, #{barCode2,jdbcType=VARCHAR}, #{checkStatus,jdbcType=INTEGER},
+    values (#{id}, #{deviceId,jdbcType=VARCHAR}, #{barCode1,jdbcType=VARCHAR}, #{barCode2,jdbcType=VARCHAR}, #{checkStatus,jdbcType=INTEGER},
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ennova.pubinfostore.entity.CkPdaScan">
@@ -90,6 +91,7 @@
   <select id="selectPdaInfo" resultType="com.ennova.pubinfostore.vo.CkPdaScanVO">
     select
     cps.id,
+    cps.device_id AS deviceId,
     cps.bar_code1 AS barCode1,
     cps.bar_code2 AS barCode2,
     cps.check_status AS checkStatus,

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -24,6 +25,13 @@ public class CkPdaScan {
      */
     @ApiModelProperty(value = "ID", example = "1")
     private Long id;
+
+    /**
+     * 设备imsi
+     */
+    @ApiModelProperty(value = "设备imsi")
+    @NotBlank(message = "设备imsi: 不能为空!")
+    private String deviceId;
 
     /**
      * 条形码1
@@ -44,7 +52,7 @@ public class CkPdaScan {
     private Integer checkStatus;
 
     /**
-     * 条形码2
+     * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
