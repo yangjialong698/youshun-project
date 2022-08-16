@@ -30,7 +30,7 @@ public class DailyRepDetailVO {
      */
     @ApiModelProperty(value = "日报日期")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date dayrepTime;
+    private Date dailyRepTime;
 
     /**
      * 创建时间
@@ -51,12 +51,6 @@ public class DailyRepDetailVO {
      */
     @ApiModelProperty(value = "附件ID")
     private Integer fileId;
-
-//    /**
-//     * 类型前缀
-//     */
-//    @ApiModelProperty(value = "类型前缀")
-//    private String filePrefix;
 
     /**
      * 反馈状态

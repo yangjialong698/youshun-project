@@ -5,6 +5,7 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.FileUtils;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfodaily.dao.YsDailyFeedBackMapper;
 import com.ennova.pubinfodaily.dao.YsDailyRepFileMapper;
@@ -13,6 +14,8 @@ import com.ennova.pubinfodaily.entity.YsDailyFeedBack;
 import com.ennova.pubinfodaily.entity.YsDailyRep;
 import com.ennova.pubinfodaily.entity.YsDailyRepFile;
 import com.ennova.pubinfodaily.vo.*;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -29,6 +32,7 @@ import javax.xml.ws.Action;
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Slf4j
@@ -53,8 +57,7 @@ public class YsDailyRepService {
     private YsDailyRepFileMapper ysDailyRepFileMapper;
     @Autowired
     private YsDailyFeedBackMapper ysDailyFeedBackMapper;
-//    @Autowired
-//    private PubInfoTaskClient pubInfoTaskClient;
+
 
     public Callback insertOrUpdate(YsDailyRepVO ysDailyRepVO) {
         if (null != ysDailyRepVO.getId()){
@@ -94,7 +97,7 @@ public class YsDailyRepService {
                     .delFlag(0)
                     .fileContent(ysDailyRepVO.getFileContent())
                     .userId(userVo.getId())
-                    .dailyRepTime(ysDailyRepVO.getDailyRepTime())
+                    .dailyRepTime(new Date())
                     .createTime(new Date())
                     .build();
             ysDailyRepMapper.insertSelective(ysDailyRep);
@@ -161,7 +164,23 @@ public class YsDailyRepService {
     }
 
     public Callback<BaseVO<DailyRepDetailVO>> getDailyyRepDetails(Integer page, Integer pageSize, Integer ysMasterTaskId, String fileName, String startTime, String endTime, HttpServletRequest req) {
-        return null;
+        String token = req.getHeader("Authorization");
+        if (StringUtils.isEmpty(token)) {
+            return Callback.error("无权限token");
+        }
+        UserVO userVO = JWTUtil.getUserVOByToken(token);
+        Integer userId = userVO.getId();
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
+        }
+        BaseVO<DailyRepDetailVO> baseVO = null ;
+        Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
+        List<DailyRepDetailVO> list = ysDailyRepMapper.getDayRepAll(fileName,userId,startTime,endTime);
+        baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        return Callback.success(baseVO);
     }
 
     public Callback<FileVO> uploadFile(MultipartFile file) {
