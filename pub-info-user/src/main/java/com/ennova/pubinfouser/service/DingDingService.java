@@ -194,7 +194,8 @@ public class DingDingService  {
             tUserDing.setIsUpdate(0);
             TUserDings.add(tUserDing);
         });
-        List<TUserDing> uniqueList = TUserDings.stream().collect(
+        List<TUserDing> collect = TUserDings.stream().filter(e -> StringUtils.isNotEmpty(e.getJobNum())).collect(Collectors.toList());
+        List<TUserDing> uniqueList = collect.stream().collect(
                 Collectors.collectingAndThen(
                         Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TUserDing::getJobNum))), ArrayList::new)
         );
