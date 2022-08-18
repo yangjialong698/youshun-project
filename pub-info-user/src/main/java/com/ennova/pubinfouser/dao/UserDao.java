@@ -29,7 +29,7 @@ public interface UserDao extends BaseDao<UserEntity> {
 
     UserVO getUserInfoByJobNum(@Param("jobNum")String jobNum);
 
-    int deleteUser(Integer id);
+    int deleteUser(@Param("jobNum") String jobNum);
 
     List<UserEntity> selectLeave();
 

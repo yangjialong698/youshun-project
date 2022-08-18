@@ -268,7 +268,7 @@ public class DingDingService  {
         if (CollectionUtil.isNotEmpty(userEntityList)){
             userEntityList.forEach(e->{
                 e.setUpdateTime(new Date());
-                userDao.deleteUser(e.getId());
+                userDao.deleteUser(e.getJobNum());
             });
         }
         //更新最新用户表所有部门

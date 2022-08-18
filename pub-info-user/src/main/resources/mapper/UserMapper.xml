@@ -356,9 +356,9 @@
         limit 1
     </select>
 
-    <delete id="deleteUser" parameterType="java.lang.Integer">
+    <delete id="deleteUser" parameterType="java.lang.String">
         update   t_user set is_delete = 1
-        where id = #{id,jdbcType=INTEGER}
+        where job_num = #{jobNum,jdbcType=VARCHAR}
     </delete>
 
     <select id="selectLeave"  resultMap="BaseResultMap">
