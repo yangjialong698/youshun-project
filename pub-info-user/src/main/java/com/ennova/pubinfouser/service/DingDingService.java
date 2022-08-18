@@ -120,7 +120,8 @@ public class DingDingService  {
     }
 
     //每天上午10点下午3点跑一次获取钉钉用户列表
-    @Scheduled(cron="0 0 10,15/12 * * ?")
+    //@Scheduled(cron="0 0 10,15/12 * * ?") //线上
+    @Scheduled(cron="0 0 09,14/12 * * ?") //测试
     public void userDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         List<Long> deptIds = null ;
@@ -204,8 +205,8 @@ public class DingDingService  {
     }
 
 
-
-    @Scheduled(cron="0 0 2 * * ? ")
+    //@Scheduled(cron="0 0 2 * * ? ") //线上
+    @Scheduled(cron="0 0 3 * * ? ") //测试
     public Callback<List<DingDeptVO>> deptDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         Callback<List<Long>> listCallback = this.listDeptAllIds();
@@ -245,7 +246,8 @@ public class DingDingService  {
     }
 
 
-    @Scheduled(cron="0 0 11,16/12 * * ?")
+    //@Scheduled(cron="0 0 11,16/12 * * ?") //线上
+    @Scheduled(cron="0 0 10,15/12 * * ?") //测试
     public void updatTuser() {
         //1.查询t_user无,t_user_ding有的数据(新入职)
         List<TUserDing> tUserDingList = tUserDingMapper.selectEntry();
@@ -273,7 +275,8 @@ public class DingDingService  {
         userDao.updateAllDept();
     }
 
-    @Scheduled(cron="0 0 3 * * ? ")
+    //@Scheduled(cron="0 0 3 * * ? ") //线上
+    @Scheduled(cron="0 0 4 * * ? ") //测试
     public void updatTdept() {
         deptDao.deleteAll();
         List<TDeptDing> tDeptDingList = tDeptDingMapper.selectAll();
