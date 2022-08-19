@@ -23,6 +23,7 @@
         <module>pub-info-task</module>
         <module>pub-info-purchase</module>
         <module>pub-info-store</module>
+        <module>pub-info-new</module>
         <module>pub-info-daily</module>
     </modules>
     <properties>
