@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfonew.dao.NewsPeriodicalMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfonew.entity.NewsPeriodical">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="periodical_num" jdbcType="INTEGER" property="periodicalNum" />
+    <result column="edition_num" jdbcType="INTEGER" property="editionNum" />
+    <result column="edition_title" jdbcType="VARCHAR" property="editionTitle" />
+    <result column="div_position" jdbcType="VARCHAR" property="divPosition" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, periodical_num, edition_num, edition_title, div_position, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from news_periodical
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllNewPeriodical" resultType="com.ennova.pubinfonew.vo.NewsPeriodicalVO">
+    select
+    np.id,
+    np.periodical_num AS periodicalNum,
+    np.edition_num AS editionNum,
+    np.edition_title AS editionTitle,
+    np.div_position AS divPosition,
+    np.create_time AS createTime
+    from news_periodical np
+    <where>
+      <if test="periodicalNum != null">
+        np.periodical_num = #{periodicalNum}
+      </if>
+      <if test="editionNum != null">
+        and np.edition_num = #{editionNum}
+      </if>
+      <if test="editionTitle != null and editionTitle != ''">
+        and np.edition_title like CONCAT('%', trim(#{editionTitle}), '%')
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from news_periodical
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfonew.entity.NewsPeriodical" useGeneratedKeys="true">
+    insert into news_periodical (periodical_num, edition_num, edition_title, 
+      div_position)
+    values (#{periodicalNum,jdbcType=INTEGER}, #{editionNum,jdbcType=INTEGER}, #{editionTitle,jdbcType=VARCHAR}, 
+      #{divPosition,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfonew.entity.NewsPeriodical" useGeneratedKeys="true">
+    insert into news_periodical
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="periodicalNum != null">
+        periodical_num,
+      </if>
+      <if test="editionNum != null">
+        edition_num,
+      </if>
+      <if test="editionTitle != null">
+        edition_title,
+      </if>
+      <if test="divPosition != null">
+        div_position,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="periodicalNum != null">
+        #{periodicalNum,jdbcType=INTEGER},
+      </if>
+      <if test="editionNum != null">
+        #{editionNum,jdbcType=INTEGER},
+      </if>
+      <if test="editionTitle != null">
+        #{editionTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="divPosition != null">
+        #{divPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfonew.entity.NewsPeriodical">
+    update news_periodical
+    <set>
+      <if test="periodicalNum != null">
+        periodical_num = #{periodicalNum,jdbcType=INTEGER},
+      </if>
+      <if test="editionNum != null">
+        edition_num = #{editionNum,jdbcType=INTEGER},
+      </if>
+      <if test="editionTitle != null">
+        edition_title = #{editionTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="divPosition != null">
+        div_position = #{divPosition,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfonew.entity.NewsPeriodical">
+    update news_periodical
+    set periodical_num = #{periodicalNum,jdbcType=INTEGER},
+      edition_num = #{editionNum,jdbcType=INTEGER},
+      edition_title = #{editionTitle,jdbcType=VARCHAR},
+      div_position = #{divPosition,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+
+    insert into news_periodical
+    (periodical_num, edition_num, edition_title, div_position)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.periodicalNum,jdbcType=INTEGER}, #{item.editionNum,jdbcType=INTEGER}, #{item.editionTitle,jdbcType=VARCHAR}, 
+        #{item.divPosition,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <select id="selectPeriodicalNum" resultType="java.lang.Integer">
+    select DISTINCT(periodical_num) from news_periodical
+  </select>
+</mapper>

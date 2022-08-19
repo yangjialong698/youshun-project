@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ennova.pubinfonew.dao.UserMapper">
+    <select id="selectCurrentUser" resultType="com.ennova.pubinfonew.vo.CurrentUserVO">
+        SELECT
+            t1.id userId,
+            t1.username,
+            t1.job_num jobNum
+        FROM
+            t_user t1
+        <where>
+            t1.STATUS = 0
+            AND t1.is_delete = 0
+            <if test="userId != null">
+                AND t1.id=#{userId}
+            </if>
+        </where>
+    </select>
+
+</mapper>
