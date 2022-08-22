@@ -6,11 +6,12 @@
         <result column="new_id" jdbcType="INTEGER" property="newId"/>
         <result column="comment_user_id" jdbcType="INTEGER" property="commentUserId"/>
         <result column="comment_content" jdbcType="VARCHAR" property="commentContent"/>
+        <result column="div_position" jdbcType="VARCHAR" property="divPosition"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="sort_id" jdbcType="INTEGER" property="sortId"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, new_id, comment_user_id, comment_content, create_time, sort_id
+        id, new_id, comment_user_id, comment_content, div_position, create_time, sort_id
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -42,6 +43,9 @@
             <if test="commentContent != null">
                 comment_content,
             </if>
+            <if test="divPosition != null">
+                div_position,
+            </if>
             <if test="createTime != null">
                 create_time,
             </if>
@@ -58,6 +62,9 @@
             </if>
             <if test="commentContent != null">
                 #{commentContent,jdbcType=VARCHAR},
+            </if>
+            <if test="divPosition != null">
+                #{divPosition,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
@@ -131,6 +138,7 @@
                nc.new_id          AS newId,
                nc.comment_user_id AS commentUserId,
                nc.comment_content AS commentContent,
+               nc.div_position    AS divPosition,
                nc.create_time     AS createTime,
                nc.sort_id         AS sortId
         from news_comment nc
@@ -142,4 +150,15 @@
         update news_comment set is_delete = 1
         where id = #{id,jdbcType=INTEGER}
     </delete>
+
+    <select id="selectCommentByNewId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from news_comment
+        <where>
+            <if test="newId != null">
+                and new_id = #{newId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
 </mapper>

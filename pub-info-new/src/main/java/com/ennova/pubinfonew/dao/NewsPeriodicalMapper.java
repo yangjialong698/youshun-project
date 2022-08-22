@@ -26,4 +26,6 @@ public interface NewsPeriodicalMapper {
     int batchInsert(@Param("list") java.util.List<NewsPeriodical> list);
 
     List<Integer> selectPeriodicalNum();
+
+    NewsPeriodical selectNewIdByDivPosition(@Param("divPosition") String divPosition);
 }

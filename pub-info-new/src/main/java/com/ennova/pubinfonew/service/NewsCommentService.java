@@ -10,11 +10,13 @@ import com.ennova.pubinfonew.dao.NewsPeriodicalMapper;
 import com.ennova.pubinfonew.dao.UserMapper;
 import com.ennova.pubinfonew.dto.NewsCommentDto;
 import com.ennova.pubinfonew.entity.NewsComment;
+import com.ennova.pubinfonew.entity.NewsPeriodical;
 import com.ennova.pubinfonew.vo.NewsCommentVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,11 @@ public class NewsCommentService {
 
         NewsComment newsComment = new NewsComment();
         BeanUtils.copyProperties(newsCommentDto, newsComment);
+        NewsPeriodical newsPeriodical = newsPeriodicalMapper.selectNewIdByDivPosition(newsComment.getDivPosition());
+        if (ObjectUtils.isEmpty(newsPeriodical)){
+            return Callback.error(2, "报刊标题对应html位置未找到");
+        }
+        newsComment.setNewId(newsPeriodical.getId());
         newsComment.setCommentUserId(userVo.getId());
         newsComment.setCreateTime(new Date());
         int i = newsCommentMapper.insertSelective(newsComment);

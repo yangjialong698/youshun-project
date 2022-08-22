@@ -57,6 +57,12 @@ public class NewsCommentVO {
     private String commentContent;
 
     /**
+     * 报刊标题对应html位置
+     */
+    @ApiModelProperty(value = "报刊标题对应html位置")
+    private String divPosition;
+
+    /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")

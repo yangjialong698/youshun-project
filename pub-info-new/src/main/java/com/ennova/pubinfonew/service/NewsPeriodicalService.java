@@ -5,13 +5,16 @@ import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
+import com.ennova.pubinfonew.dao.NewsCommentMapper;
 import com.ennova.pubinfonew.dao.NewsPeriodicalMapper;
+import com.ennova.pubinfonew.entity.NewsComment;
 import com.ennova.pubinfonew.entity.NewsPeriodical;
 import com.ennova.pubinfonew.vo.NewsPeriodicalVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,7 @@ public class NewsPeriodicalService {
 
     private final HttpServletRequest request;
     private final NewsPeriodicalMapper newsPeriodicalMapper;
+    private final NewsCommentMapper newsCommentMapper;
 
     public Callback insertOrUpdate(NewsPeriodicalVO newsPeriodicalVO) {
         String token = request.getHeader("Authorization");
@@ -41,6 +45,7 @@ public class NewsPeriodicalService {
             NewsPeriodical newsPeriodicals = newsPeriodicalMapper.selectByPrimaryKey(newsPeriodicalVO.getId());
             if (newsPeriodicals != null) {
                 newsPeriodical.setCreateTime(new Date());
+                newsPeriodical.setDivPosition(newsPeriodicals.getDivPosition());
                 int i = newsPeriodicalMapper.updateByPrimaryKey(newsPeriodical);
                 if (i > 0) {
                     return Callback.success(true);
@@ -75,6 +80,12 @@ public class NewsPeriodicalService {
         NewsPeriodical newsPeriodical = newsPeriodicalMapper.selectByPrimaryKey(id);
         if (newsPeriodical != null) {
             int i = newsPeriodicalMapper.deleteByPrimaryKey(id);
+            List<NewsComment> newsComments = newsCommentMapper.selectCommentByNewId(newsPeriodical.getId());
+            if (CollectionUtils.isNotEmpty(newsComments)){
+                newsComments.forEach(newsComment -> {
+                    newsCommentMapper.deleteByPrimaryKey(newsComment.getId());
+                });
+            }
             if (i > 0) {
                 return Callback.success(true);
             }

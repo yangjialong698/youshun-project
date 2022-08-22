@@ -128,4 +128,10 @@
   <select id="selectPeriodicalNum" resultType="java.lang.Integer">
     select DISTINCT(periodical_num) from news_periodical
   </select>
+  <select id="selectNewIdByDivPosition" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from news_periodical
+    where div_position = #{divPosition,jdbcType=VARCHAR}
+  </select>
 </mapper>

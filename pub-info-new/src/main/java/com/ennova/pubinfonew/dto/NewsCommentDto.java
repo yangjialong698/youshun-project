@@ -17,10 +17,11 @@ import javax.validation.constraints.NotBlank;
 public class NewsCommentDto {
 
     /**
-     * 评论期刊标题id
+     * 报刊标题对应html位置
      */
-    @ApiModelProperty(value = "评论期刊标题id")
-    private Integer newId;
+    @ApiModelProperty(value = "报刊标题对应html位置")
+    @NotBlank(message = "报刊标题对应html位置不能为空!")
+    private String divPosition;
 
     /**
      * 评论内容
