@@ -97,7 +97,7 @@ public class YsDailyRepService {
                     .delFlag(0)
                     .fileContent(ysDailyRepVO.getFileContent())
                     .userId(userVo.getId())
-                    .dailyRepTime(new Date())
+                    .dailyRepTime(ysDailyRepVO.getDailyRepTime())
                     .createTime(new Date())
                     .build();
             ysDailyRepMapper.insertSelective(ysDailyRep);

@@ -484,10 +484,10 @@
       AND CONCAT(trim(replace(ydr.file_name,' ','')),trim(replace(tu.username,' ',''))) like trim(replace(CONCAT('%',#{fileName},'%'),' ',''))
     </if>
     <if test="startTime!=null and startTime!=''">
-      AND ydr.dayrep_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+      AND ydr.daily_rep_time &gt;= #{startTime,jdbcType=TIMESTAMP}
     </if>
     <if test="endTime!=null and endTime!=''">
-      AND ydr.dayrep_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+      AND ydr.daily_rep_time &lt;= #{endTime,jdbcType=TIMESTAMP}
     </if>
     GROUP BY id
     ORDER BY ydr.create_time DESC
