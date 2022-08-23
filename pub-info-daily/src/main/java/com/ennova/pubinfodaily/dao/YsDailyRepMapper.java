@@ -50,9 +50,4 @@ public interface YsDailyRepMapper {
                                               @Param("startTime")String startTime,
                                               @Param("endTime")String endTime);
 
-    List<DailyRepDetailVO> getDayRepByUid(@Param("fileName")String fileName,
-                                        @Param("userId")Integer userId,
-                                        @Param("startTime")String startTime,
-                                        @Param("endTime")String endTime);
-
 }

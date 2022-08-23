@@ -350,6 +350,12 @@
     truncate table t_dept_ding
   </delete>
 
-
+  <select id="selectEntry"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_dept_ding tdd
+    where tdd.dept_id
+    not in (select dept_id from t_dept)
+  </select>
 
 </mapper>

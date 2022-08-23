@@ -309,6 +309,23 @@ public class DingDingService  {
         deptDao.insertBatch(deptEntityList);
 
     }
+
+//
+//    @Scheduled(cron="0 0 5 * * ? ") //测试
+//    //@Scheduled(cron="0 0 3 * * ? ") //线上
+//    public void updatTempTdept() {
+//        //1.查询t_dept无,t_dept_ding有的数据(新建部门)
+//        List<TDeptDing> tDeptDingList = tDeptDingMapper.selectEntry();
+//        ArrayList<DeptEntity> deptEntityList = new ArrayList<>();
+//        if (CollectionUtil.isNotEmpty(tDeptDingList)){
+//            tDeptDingList.forEach(tDeptDing -> {
+//                DeptEntity deptEntity = new DeptEntity();
+//                BeanUtils.copyProperties(tDeptDing,deptEntity);
+//                deptEntity.setUpdateTime(new Date());
+//                deptEntityList.add(deptEntity);
+//            });
+//        }
+//    }
 }
 
 
