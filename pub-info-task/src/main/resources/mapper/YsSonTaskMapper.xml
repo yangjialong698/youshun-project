@@ -5,10 +5,12 @@
     <!--@mbg.generated-->
     <!--@Table ys_son_task-->
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="ys_master_task_id" jdbcType="INTEGER" property="ysMasterTaskId" />
     <result column="pressing_level" jdbcType="INTEGER" property="pressingLevel" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="rate" jdbcType="INTEGER" property="rate" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="estimate_work_time" jdbcType="INTEGER" property="estimateWorkTime" />
@@ -21,8 +23,9 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`, ys_master_task_id, pressing_level, `status`, start_time, end_time, estimate_work_time, 
-    ys_team_id, cost, receive_id, create_time, update_time, ys_master_file_id
+    id, serial_number, `name`, ys_master_task_id, pressing_level, `status`, rate, start_time, 
+    end_time, estimate_work_time, ys_team_id, cost, receive_id, create_time, update_time, 
+    ys_master_file_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -38,21 +41,26 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsSonTask" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into ys_son_task (`name`, ys_master_task_id, pressing_level, 
-      `status`, start_time, end_time, 
-      estimate_work_time, ys_team_id, cost, 
-      receive_id, create_time, update_time, 
-      ys_master_file_id)
-    values (#{name,jdbcType=VARCHAR}, #{ysMasterTaskId,jdbcType=INTEGER}, #{pressingLevel,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{estimateWorkTime,jdbcType=INTEGER}, #{ysTeamId,jdbcType=INTEGER}, #{cost,jdbcType=DOUBLE}, 
-      #{receiveId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{ysMasterFileId,jdbcType=INTEGER})
+    insert into ys_son_task (serial_number, `name`, ys_master_task_id, 
+      pressing_level, `status`, rate, 
+      start_time, end_time, estimate_work_time, 
+      ys_team_id, cost, receive_id, 
+      create_time, update_time, ys_master_file_id
+      )
+    values (#{serialNumber,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{ysMasterTaskId,jdbcType=INTEGER}, 
+      #{pressingLevel,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{rate,jdbcType=INTEGER}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{estimateWorkTime,jdbcType=INTEGER}, 
+      #{ysTeamId,jdbcType=INTEGER}, #{cost,jdbcType=DOUBLE}, #{receiveId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{ysMasterFileId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsSonTask" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into ys_son_task
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serialNumber != null">
+        serial_number,
+      </if>
       <if test="name != null">
         `name`,
       </if>
@@ -64,6 +72,9 @@
       </if>
       <if test="status != null">
         `status`,
+      </if>
+      <if test="rate != null">
+        rate,
       </if>
       <if test="startTime != null">
         start_time,
@@ -94,6 +105,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
@@ -105,6 +119,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=INTEGER},
       </if>
       <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
@@ -139,6 +156,9 @@
     <!--@mbg.generated-->
     update ys_son_task
     <set>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         `name` = #{name,jdbcType=VARCHAR},
       </if>
@@ -150,6 +170,9 @@
       </if>
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=INTEGER},
       </if>
       <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
@@ -184,10 +207,12 @@
   <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfotask.entity.YsSonTask">
     <!--@mbg.generated-->
     update ys_son_task
-    set `name` = #{name,jdbcType=VARCHAR},
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
       ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER},
       pressing_level = #{pressingLevel,jdbcType=INTEGER},
       `status` = #{status,jdbcType=INTEGER},
+      rate = #{rate,jdbcType=INTEGER},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       estimate_work_time = #{estimateWorkTime,jdbcType=INTEGER},
@@ -203,6 +228,11 @@
     <!--@mbg.generated-->
     update ys_son_task
     <trim prefix="set" suffixOverrides=",">
+      <trim prefix="serial_number = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.serialNumber,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
       <trim prefix="`name` = case" suffix="end,">
         <foreach collection="list" index="index" item="item">
           when id = #{item.id,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
@@ -221,6 +251,11 @@
       <trim prefix="`status` = case" suffix="end,">
         <foreach collection="list" index="index" item="item">
           when id = #{item.id,jdbcType=INTEGER} then #{item.status,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="rate = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.rate,jdbcType=INTEGER}
         </foreach>
       </trim>
       <trim prefix="start_time = case" suffix="end,">
@@ -277,15 +312,17 @@
   <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into ys_son_task
-    (`name`, ys_master_task_id, pressing_level, `status`, start_time, end_time, estimate_work_time, 
-      ys_team_id, cost, receive_id, create_time, update_time, ys_master_file_id)
+    (serial_number, `name`, ys_master_task_id, pressing_level, `status`, rate, start_time, 
+      end_time, estimate_work_time, ys_team_id, cost, receive_id, create_time, update_time, 
+      ys_master_file_id)
     values
     <foreach collection="list" item="item" separator=",">
-      (#{item.name,jdbcType=VARCHAR}, #{item.ysMasterTaskId,jdbcType=INTEGER}, #{item.pressingLevel,jdbcType=INTEGER}, 
-        #{item.status,jdbcType=INTEGER}, #{item.startTime,jdbcType=TIMESTAMP}, #{item.endTime,jdbcType=TIMESTAMP}, 
-        #{item.estimateWorkTime,jdbcType=INTEGER}, #{item.ysTeamId,jdbcType=INTEGER}, #{item.cost,jdbcType=DOUBLE}, 
-        #{item.receiveId,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, 
-        #{item.ysMasterFileId,jdbcType=INTEGER})
+      (#{item.serialNumber,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.ysMasterTaskId,jdbcType=INTEGER}, 
+        #{item.pressingLevel,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER}, #{item.rate,jdbcType=INTEGER}, 
+        #{item.startTime,jdbcType=TIMESTAMP}, #{item.endTime,jdbcType=TIMESTAMP}, #{item.estimateWorkTime,jdbcType=INTEGER}, 
+        #{item.ysTeamId,jdbcType=INTEGER}, #{item.cost,jdbcType=DOUBLE}, #{item.receiveId,jdbcType=INTEGER}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.ysMasterFileId,jdbcType=INTEGER}
+        )
     </foreach>
   </insert>
   <update id="updateSonTaskByMasterId">
@@ -299,12 +336,12 @@
 <!--        a2.name-->
 <!--    FROM-->
 <!--        ( SELECT distinct ys_master_task_id FROM ys_team-->
-<!--      <where>-->
-<!--          <if test="userId != null">-->
+<!--      &amp;lt;where&amp;gt;-->
+<!--          &amp;lt;if test="userId != null"&amp;gt;-->
 <!--               (user_id in (#{userId})-->
 <!--               or executor_id in (#{userId}))-->
-<!--          </if>-->
-<!--      </where>-->
+<!--          &amp;lt;/if&amp;gt;-->
+<!--      &amp;lt;/where&amp;gt;-->
 <!--      GROUP BY ys_master_task_id ) a1,-->
 <!--        ys_master_task a2-->
 <!--    WHERE-->
@@ -435,6 +472,8 @@
   <select id="selectSonTaskPagelist" resultType="com.ennova.pubinfotask.vo.YsSonTaskPageListVO">
     SELECT
         t1.id,
+        t1.serial_number serialNumber,
+        t1.rate rate,
         t1.name,
         t3.id teamUserId,
         t5.username username,
@@ -467,9 +506,9 @@
       <if test="teamUserId != null">
            and t3.executor_id in (select executor_id from ys_team where id=#{teamUserId})
       </if>
-<!--      <if test="masterTaskName != null and masterTaskName != ''">-->
+<!--      &amp;lt;if test="masterTaskName != null and masterTaskName != ''"&amp;gt;-->
 <!--          and t2.name like concat('%',trim(#{masterTaskName}),'%')-->
-<!--      </if>-->
+<!--      &amp;lt;/if&amp;gt;-->
       <if test="masterTaskId != null">
           and t2.id = #{masterTaskId}
       </if>
@@ -499,7 +538,7 @@
 
   <select id="selectSonTaskOne" resultType="com.ennova.pubinfotask.vo.EditSontTaskAndFileVO">
        SELECT
-            t1.id,t1.`name`,t1.ys_master_task_id ysMasterTaskId,t1.pressing_level pressingLevel,t1.`status`,
+            t1.id,t1.serial_number serialNumber,t1.`name`,t1.ys_master_task_id ysMasterTaskId,t1.pressing_level pressingLevel,t1.`status`,
             t1.start_time startTime,t1.end_time endTime,t1.estimate_work_time estimateWorkTime,t1.ys_team_id ysTeamId,t1.cost,t1.create_time createTime,
             t1.update_time updateTime, t2.id masterFileId, t2.ys_file_type_id ysFileTypeId
         FROM
@@ -543,7 +582,7 @@
   </select>
 
   <select id="selectAllByYsTeamId" resultMap="BaseResultMap">
-  select <include refid="Base_Column_List"/>
+  select <include refid="Base_Column_List" />
     from ys_son_task
     <where>
       <if test="ysTeamId != null">
@@ -593,7 +632,7 @@
 
   <select id="selectByIdAndReceiveId" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List" />
         from ys_son_task
         <where>
             <if test="id != null">
@@ -604,4 +643,13 @@
             </if>
         </where>
     </select>
+  <select id="selectBySerialNumber" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from ys_son_task
+    <where>
+        <if test="serialNumber != null and serialNumber !=''">
+            and serial_number=#{serialNumber,jdbcType=VARCHAR}
+        </if>
+    </where>
+</select>
 </mapper>

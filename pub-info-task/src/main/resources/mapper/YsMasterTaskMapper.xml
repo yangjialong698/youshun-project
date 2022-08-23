@@ -5,7 +5,7 @@
     <!--@mbg.generated-->
     <!--@Table ys_master_task-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
     <result column="pressing_level" jdbcType="INTEGER" property="pressingLevel" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="type" jdbcType="INTEGER" property="type" />
@@ -48,7 +48,7 @@
       task_end_date, rate, publish_date, 
       user_id, create_time, update_time, 
       ys_master_file_id)
-    values (#{serialNumber,jdbcType=INTEGER}, #{pressingLevel,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{serialNumber,jdbcType=VARCHAR}, #{pressingLevel,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
       #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{summary,jdbcType=VARCHAR}, 
       #{cost,jdbcType=DOUBLE}, #{checkStandard,jdbcType=VARCHAR}, #{estimateHour,jdbcType=INTEGER}, 
       #{taskEndDate,jdbcType=DATE}, #{rate,jdbcType=INTEGER}, #{publishDate,jdbcType=TIMESTAMP}, 
@@ -110,7 +110,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="serialNumber != null">
-        #{serialNumber,jdbcType=INTEGER},
+        #{serialNumber,jdbcType=VARCHAR},
       </if>
       <if test="pressingLevel != null">
         #{pressingLevel,jdbcType=INTEGER},
@@ -164,7 +164,7 @@
     update ys_master_task
     <set>
       <if test="serialNumber != null">
-        serial_number = #{serialNumber,jdbcType=INTEGER},
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
       </if>
       <if test="pressingLevel != null">
         pressing_level = #{pressingLevel,jdbcType=INTEGER},
@@ -217,7 +217,7 @@
   <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfotask.entity.YsMasterTask">
     <!--@mbg.generated-->
     update ys_master_task
-    set serial_number = #{serialNumber,jdbcType=INTEGER},
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
       pressing_level = #{pressingLevel,jdbcType=INTEGER},
       `name` = #{name,jdbcType=VARCHAR},
       `type` = #{type,jdbcType=INTEGER},
@@ -241,7 +241,7 @@
     <trim prefix="set" suffixOverrides=",">
       <trim prefix="serial_number = case" suffix="end,">
         <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.serialNumber,jdbcType=INTEGER}
+          when id = #{item.id,jdbcType=INTEGER} then #{item.serialNumber,jdbcType=VARCHAR}
         </foreach>
       </trim>
       <trim prefix="pressing_level = case" suffix="end,">
@@ -333,7 +333,7 @@
       ys_master_file_id)
     values
     <foreach collection="list" item="item" separator=",">
-      (#{item.serialNumber,jdbcType=INTEGER}, #{item.pressingLevel,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR}, 
+      (#{item.serialNumber,jdbcType=VARCHAR}, #{item.pressingLevel,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR},
         #{item.type,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER}, #{item.summary,jdbcType=VARCHAR}, 
         #{item.cost,jdbcType=DOUBLE}, #{item.checkStandard,jdbcType=VARCHAR}, #{item.estimateHour,jdbcType=INTEGER}, 
         #{item.taskEndDate,jdbcType=DATE}, #{item.rate,jdbcType=INTEGER}, #{item.publishDate,jdbcType=TIMESTAMP}, 
@@ -343,11 +343,11 @@
   </insert>
 
 
-  <select id="selectLastSerialNumber" resultType="java.lang.Integer">
-      select serial_number
-      from ys_master_task t
-      ORDER BY id desc LIMIT 1
-  </select>
+<!--  <select id="selectLastSerialNumber" resultType="java.lang.Integer">-->
+<!--      select serial_number-->
+<!--      from ys_master_task t-->
+<!--      ORDER BY id desc LIMIT 1-->
+<!--  </select>-->
     <!-- 当前用户待发布任务 -->
     <select id="selectAll" resultType="java.util.LinkedHashMap">
         select t1.id,
@@ -642,7 +642,7 @@
       <include refid="Base_Column_List" />
       from ys_master_task
       <where>
-          <if test="name != null">
+          <if test="name != null and name !=''">
               and `name` = #{name,jdbcType=VARCHAR}
           </if>
       </where>
@@ -654,9 +654,18 @@
       from ys_master_task
       <where>
           id != #{id,jdbcType=INTEGER}
-          <if test="name != null">
+          <if test="name != null and name !=''">
               and `name` = #{name,jdbcType=VARCHAR}
           </if>
       </where>
   </select>
+  <select id="selectBySerialNumber" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from ys_master_task
+    <where>
+        <if test="serialNumber != null and serialNumber !=''">
+            and serial_number=#{serialNumber,jdbcType=VARCHAR}
+        </if>
+    </where>
+</select>
 </mapper>

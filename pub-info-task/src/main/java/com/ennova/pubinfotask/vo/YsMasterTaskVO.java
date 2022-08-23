@@ -33,6 +33,12 @@ public class YsMasterTaskVO {
     private Integer id;
 
     /**
+     * 编号
+     */
+    @ApiModelProperty(value = "编号", example = "1")
+    private String serialNumber;
+
+    /**
      * 主任务名称
      */
     @ApiModelProperty(value = "主任务名称")

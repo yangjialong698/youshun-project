@@ -4,22 +4,17 @@ import com.ennova.pubinfotask.dto.MasterTeamGroupDTO;
 import com.ennova.pubinfotask.dto.UserMasterDTO;
 import com.ennova.pubinfotask.dto.WorkTimeResidueDTO;
 import com.ennova.pubinfotask.entity.YsSonTask;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
+
 import com.ennova.pubinfotask.vo.EditSontTaskAndFileVO;
 import com.ennova.pubinfotask.vo.WorkTimeResidueVO;
 import com.ennova.pubinfotask.vo.YsSonTaskPageListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
-
-/**
- * @Auther: shibingyang1990@gmail.com
- * @Date: 2022/5/20
- * @Description: com.ennova.pubinfotask.dao
- * @Version: 1.0
- */
 @Mapper
 public interface YsSonTaskMapper {
     int deleteByPrimaryKey(Integer id);
@@ -61,30 +56,23 @@ public interface YsSonTaskMapper {
                                                     @Param("masterTaskId") Integer masterTaskId
     );
 
-    //List<YsSonTaskPageListVO> selectSonTaskPagelist(@Param("status") Integer status,
-    //                                                    @Param("teamUserId") Integer teamUserId,
-    //                                                    @Param("sonTaskName") String sonTaskName,
-    //                                                    //@Param("masterTaskId") Integer masterTaskId,
-    //                                                    @Param("userId") Integer userId, @Param("masterIds") Set<Integer> masterIds);
-
     EditSontTaskAndFileVO selectSonTaskOne(@Param("sonTaskId") Integer sonTaskId);
 
     WorkTimeResidueVO selectEstimateHourByMasterTaskId(@Param("masterTaskId") Integer masterTaskId);
 
-    List<YsSonTask> selectAllByYsTeamId(@Param("ysTeamId")Integer ysTeamId);
+    List<YsSonTask> selectAllByYsTeamId(@Param("ysTeamId") Integer ysTeamId);
 
     List<WorkTimeResidueDTO> selectWorkTimeResidueDTOByMasterId(@Param("receiveId") Integer receiveId, @Param("masterTaskId") Integer masterTaskId);
-    
+
     List<MasterTeamGroupDTO> selectGroupTeamIdByMasterTaskId(@Param("ysMasterTaskId") Integer ysMasterTaskId);
 
     // 根据ID查询和团队表中的执行人，查询子任务信息
     YsSonTask selectByIdAndExecutorId(@Param("id") Integer id, @Param("executorId") Integer executorId);
 
     // 根据ID查询和认领人查看子任务信息
-    YsSonTask selectByIdAndReceiveId(@Param("id")Integer id,@Param("receiveId")Integer receiveId);
+    YsSonTask selectByIdAndReceiveId(@Param("id") Integer id, @Param("receiveId") Integer receiveId);
 
-
-
+    List<YsSonTask> selectBySerialNumber(@Param("serialNumber")String serialNumber);
 
 
 }

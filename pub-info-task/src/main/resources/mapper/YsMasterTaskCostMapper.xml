@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfotask.dao.YsMasterTaskCostMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfotask.entity.YsMasterTaskCost">
+    <!--@mbg.generated-->
+    <!--@Table ys_master_task_cost-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ys_master_task_id" jdbcType="INTEGER" property="ysMasterTaskId" />
+    <result column="cost_date" jdbcType="DATE" property="costDate" />
+    <result column="cost" jdbcType="DOUBLE" property="cost" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, ys_master_task_id, cost_date, cost, remark, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from ys_master_task_cost
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from ys_master_task_cost
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsMasterTaskCost" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_master_task_cost (ys_master_task_id, cost_date, cost, 
+      remark, create_time, update_time
+      )
+    values (#{ysMasterTaskId,jdbcType=INTEGER}, #{costDate,jdbcType=DATE}, #{cost,jdbcType=DOUBLE}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfotask.entity.YsMasterTaskCost" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_master_task_cost
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ysMasterTaskId != null">
+        ys_master_task_id,
+      </if>
+      <if test="costDate != null">
+        cost_date,
+      </if>
+      <if test="cost != null">
+        cost,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ysMasterTaskId != null">
+        #{ysMasterTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="costDate != null">
+        #{costDate,jdbcType=DATE},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfotask.entity.YsMasterTaskCost">
+    <!--@mbg.generated-->
+    update ys_master_task_cost
+    <set>
+      <if test="ysMasterTaskId != null">
+        ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="costDate != null">
+        cost_date = #{costDate,jdbcType=DATE},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfotask.entity.YsMasterTaskCost">
+    <!--@mbg.generated-->
+    update ys_master_task_cost
+    set ys_master_task_id = #{ysMasterTaskId,jdbcType=INTEGER},
+      cost_date = #{costDate,jdbcType=DATE},
+      cost = #{cost,jdbcType=DOUBLE},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update ys_master_task_cost
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="ys_master_task_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.ysMasterTaskId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="cost_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.costDate,jdbcType=DATE}
+        </foreach>
+      </trim>
+      <trim prefix="cost = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.cost,jdbcType=DOUBLE}
+        </foreach>
+      </trim>
+      <trim prefix="remark = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.remark,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_master_task_cost
+    (ys_master_task_id, cost_date, cost, remark, create_time, update_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.ysMasterTaskId,jdbcType=INTEGER}, #{item.costDate,jdbcType=DATE}, #{item.cost,jdbcType=DOUBLE}, 
+        #{item.remark,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}
+        )
+    </foreach>
+  </insert>
+
+  <select id="selectByYsMasterTaskIdAndCostDate" resultType="com.ennova.pubinfotask.entity.YsMasterTaskCost">
+  select
+    id,
+<!--    (@i:=@i+1) AS sortId,-->
+    ys_master_task_id ysMasterTaskId,
+    cost_date costDate,
+    cost,
+    remark,
+    create_time createTime,
+    update_time updateTime
+  from ys_master_task_cost
+<!--    , (SELECT @i:=0) b-->
+    <where>
+      <if test="ysMasterTaskId != null">
+        and ys_master_task_id=#{ysMasterTaskId,jdbcType=INTEGER}
+      </if>
+      <if test="@org.apache.commons.lang.StringUtils@isNotBlank(costDate)">
+        and cost_date=#{costDate,jdbcType=DATE}
+      </if>
+    </where>
+  </select>
+  <select id="selectByYsMasterTaskId" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List" />
+    from ys_master_task_cost
+    <where>
+      <if test="ysMasterTaskId != null">
+        and ys_master_task_id=#{ysMasterTaskId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+</mapper>

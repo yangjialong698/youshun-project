@@ -25,7 +25,7 @@ public class EditMasterTaskAndFileVO {
      * 编号
      */
     @ApiModelProperty(value = "编号", example = "1")
-    private Integer serialNumber;
+    private String serialNumber;
 
     /**
      * 主任务名称

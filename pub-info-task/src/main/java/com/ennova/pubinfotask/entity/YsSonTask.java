@@ -33,6 +33,18 @@ public class YsSonTask {
     private Integer id;
 
     /**
+     * 编号
+     */
+    @ApiModelProperty(value = "编号")
+    private String serialNumber;
+
+    /**
+     * 进度
+     */
+    @ApiModelProperty(value = "进度", example = "1")
+    private Integer rate;
+
+    /**
      * 任务名称
      */
     @ApiModelProperty(value = "任务名称")

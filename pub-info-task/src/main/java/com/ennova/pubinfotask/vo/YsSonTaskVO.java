@@ -30,6 +30,10 @@ public class YsSonTaskVO {
     @ApiModelProperty(value="ID", example = "1")
     private Integer id;
 
+
+    @ApiModelProperty(value = "编号", example = "1")
+    private String serialNumber;
+
     /**
     * 任务名称
     */

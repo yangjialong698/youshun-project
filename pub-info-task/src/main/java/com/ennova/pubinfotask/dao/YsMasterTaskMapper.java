@@ -33,7 +33,7 @@ public interface YsMasterTaskMapper {
 
     int batchInsert(@Param("list") List<YsMasterTask> list);
 
-    Integer selectLastSerialNumber();
+//    Integer selectLastSerialNumber();
 
     List<LinkedHashMap> selectAll();
 
@@ -67,5 +67,9 @@ public interface YsMasterTaskMapper {
      * 根据主任务ID，查询任务状态和负责人
      **/
     LinkedHashMap<String, Integer> selectStatusAndReceiveIdById(@Param("ysMasterTaskId") Integer ysMasterTaskId);
+
+    List<YsMasterTask> selectBySerialNumber(@Param("serialNumber")String serialNumber);
+
+
 
 }

@@ -26,6 +26,12 @@ public class YsSonTaskPageListVO {
     @ApiModelProperty(value="ID", example = "1")
     private Integer id;
 
+    @ApiModelProperty(value="编号", example = "1")
+    private String serialNumber;
+
+    @ApiModelProperty(value = "进度", example = "1")
+    private Integer rate;
+
     @ApiModelProperty(value="子任务名称")
     private String name;
 
@@ -62,7 +68,6 @@ public class YsSonTaskPageListVO {
     @ApiModelProperty(value = "主任务状态： 0- 未发布 1- 已发布，待认领  2- 已认领，未开始  3- 进行中 4- 已完成 5- 已关闭")
     private Integer masterStatus;
 
-    @JsonIgnore
     @ApiModelProperty(value="紧急程度：0-  一般、1- 重要、2- 紧急", example = "1")
     private Integer pressingLevel;
 

@@ -133,13 +133,15 @@ public class YsSonTaskService {
             }
             Integer receiveId = map.get("receiveId");
             if (userVO.getUserId().equals(receiveId)) {
+                List<YsSonTask> sonTaskList = ysSonTaskMapper.selectBySerialNumber(record.getSerialNumber());
+                if (CollectionUtils.isNotEmpty(sonTaskList)){
+                    return Callback.error(2,"子任务任务编号重复");
+                }
+
+
                 YsSonTask sonTask = new YsSonTask();
-                boolean notBlank = StringUtils.isNotBlank(record.getCost());
-                if (notBlank) {
-                    boolean creatable = NumberUtils.isCreatable(record.getCost());
-                    if (creatable) {
-                        sonTask.setCost(new BigDecimal(record.getCost()));
-                    }
+                if (StringUtils.isNotBlank(record.getCost()) && NumberUtils.isCreatable(record.getCost())) {
+                    sonTask.setCost(new BigDecimal(record.getCost()));
                 }
                 BeanUtils.copyProperties(record, sonTask);
                 if (record.getEstimateWorkTime() != null) {
@@ -213,24 +215,26 @@ public class YsSonTaskService {
             Integer receiveId = map.get("receiveId");
             if (userVO.getUserId().equals(receiveId)) {
                 YsSonTask task = ysSonTaskMapper.selectByPrimaryKey(record.getId()); // 查原有工时
+                if (!record.getSerialNumber().equals(task.getSerialNumber())){
+                    List<YsSonTask> sonTaskList = ysSonTaskMapper.selectBySerialNumber(record.getSerialNumber());
+                    if (CollectionUtils.isNotEmpty(sonTaskList)){
+                        return Callback.error(2,"子任务任务编号重复");
+                    }
+                }
+
                 if (task != null) {
                     YsSonTask sonTask = new YsSonTask();
-                    sonTask.setCost(null);
-                    boolean notBlank = StringUtils.isNotBlank(record.getCost());
-                    if (notBlank) {
-                        boolean creatable = NumberUtils.isCreatable(record.getCost());
-                        if (creatable) {
-                            sonTask.setCost(new BigDecimal(record.getCost()));
-                        }
+                    if (StringUtils.isNotBlank(record.getCost()) && NumberUtils.isCreatable(record.getCost())) {
+                        sonTask.setCost(new BigDecimal(record.getCost()));
                     }
                     BeanUtils.copyProperties(record, sonTask);
                     if (record.getEstimateWorkTime() != null) {
                         sonTask.setEstimateWorkTime(record.getEstimateWorkTime().intValue());
                     }
                     //sonTask.setEstimateWorkTime(record.getEstimateWorkTime().intValue());
-                    sonTask.setReceiveId(task.getReceiveId());
+                    //sonTask.setReceiveId(task.getReceiveId());
                     sonTask.setStatus(0);
-                    sonTask.setCreateTime(task.getCreateTime());
+                    //sonTask.setCreateTime(task.getCreateTime());
                     sonTask.setUpdateTime(LocalDateTime.now());
 
                     // 工时》 报工   工时《报工
@@ -245,7 +249,7 @@ public class YsSonTaskService {
                         }
                     }
 
-                    ysSonTaskMapper.updateByPrimaryKey(sonTask);
+                    ysSonTaskMapper.updateByPrimaryKeySelective(sonTask);
                     Integer newWorkTime = 0;
                     if (record.getEstimateWorkTime() != null) {
                          newWorkTime = record.getEstimateWorkTime().intValue();
@@ -473,6 +477,7 @@ public class YsSonTaskService {
             if (sonTaskId != null) {
                 if (ysSonTask.getStatus().equals(0) || ysSonTask.getStatus().equals(1)) {
                     ysSonTask.setStatus(2);
+                    ysSonTask.setRate(100);
                     ysSonTask.setUpdateTime(LocalDateTime.now());
                     int count = ysSonTaskMapper.updateByPrimaryKeySelective(ysSonTask);
                     if (count > 0) {
@@ -1168,6 +1173,45 @@ public class YsSonTaskService {
 //        }
         return Callback.error(2, "更新状态失败！");
     }
+
+
+    // 未开始的，和主任务一样，暂不能录入
+    // 权限暂未定义，以用户能展示的数据为准
+    public Callback updateRateById(Integer id, Integer rate) {
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
+        // 子任务管理员
+        if (!"sub_task_manage".equals(currentUserVO.getRoleCode())) {
+            return Callback.error(2, "您没有权限操作");
+        }
+        if(null == rate || !(rate <= 100 && rate >= 0)){
+            return Callback.error(2, "进度不能为空且必须在0-100之间");
+        }
+
+        YsSonTask sonTask = ysSonTaskMapper.selectByPrimaryKey(id);
+        if (sonTask != null){
+            if (sonTask.getStatus() == 2 || sonTask.getStatus() == 3) {
+                return Callback.error(2, "已完成或已关闭的任务，不能修改进度");
+            }
+            if (sonTask.getStatus() == 0) {
+                return Callback.error(2, "未开始的任务，不能修改进度");
+            }
+            if(100 == rate) {
+                sonTask.setStatus(2);
+            }
+            sonTask.setRate(rate);
+            sonTask.setUpdateTime(LocalDateTime.now());
+            int update = ysSonTaskMapper.updateByPrimaryKey(sonTask);
+            if (update == 1) {
+                return Callback.success();
+            }
+        }
+        return Callback.error(2, "更新失败");
+    }
+
+
 
 
 }

@@ -91,13 +91,8 @@ public class YsMasterTaskService {
         }
 
         YsMasterTask ysMasterTask = new YsMasterTask();
-        ysMasterTask.setCost(null);
-        boolean notBlank = StringUtils.isNotBlank(record.getCost());
-        if (notBlank) {
-            boolean creatable = NumberUtils.isCreatable(record.getCost());
-            if (creatable) {
-                ysMasterTask.setCost(new Double(record.getCost()));
-            }
+        if (StringUtils.isNotBlank(record.getCost()) && NumberUtils.isCreatable(record.getCost())) {
+            ysMasterTask.setCost(new Double(record.getCost()));
         }
         BeanUtils.copyProperties(record, ysMasterTask);
         ysMasterTask.setUserId(userVo.getId());//标记发布ID
@@ -107,17 +102,28 @@ public class YsMasterTaskService {
         if (record.getId() != null) {
             YsMasterTask task = ysMasterTaskMapper.selectByPrimaryKey(record.getId());
             if (task != null) {
+                // 只有在不是原来的序号的情况下，才有可能发生修改冲突
+                if(!task.getSerialNumber().equals(record.getSerialNumber())) {
+                    List<YsMasterTask> ysMasterTaskList = ysMasterTaskMapper.selectBySerialNumber(record.getSerialNumber());
+                    if (CollectionUtils.isNotEmpty(ysMasterTaskList)) {
+                        return Callback.error(2, "任务编号已存在");
+                    }
+                }
+
+
                 ysMasterTask.setUpdateTime(LocalDateTime.now());
                 List<YsMasterTask> ysMasterTasks = ysMasterTaskMapper.selectByIdAndName(ysMasterTask.getId(), ysMasterTask.getName());
                 if (CollectionUtils.isNotEmpty(ysMasterTasks)) {
                     return Callback.error(2, "主任务名称不能重复");
                 }
+
                 // 更新主任务
-                ysMasterTask.setId(task.getId());
-                ysMasterTask.setSerialNumber(task.getSerialNumber());
-                ysMasterTask.setName(task.getName());
-                ysMasterTask.setCreateTime(task.getCreateTime());
-                ysMasterTaskMapper.updateByPrimaryKey(ysMasterTask);
+//                ysMasterTask.setId(task.getId());
+//                ysMasterTask.setSerialNumber(task.getSerialNumber());
+//                ysMasterTask.setName(task.getName());
+//                ysMasterTask.setCreateTime(task.getCreateTime());
+//                ysMasterTaskMapper.updateByPrimaryKey(ysMasterTask);
+                ysMasterTaskMapper.updateByPrimaryKeySelective(ysMasterTask);
                 //ysMasterTaskMapper.updateByPrimaryKeySelective(ysMasterTask);
                 List<FileVO> fileVOList = record.getFileVOList();
                 if (fileVOList != null && !fileVOList.isEmpty()) {
@@ -155,9 +161,15 @@ public class YsMasterTaskService {
             }
         } else {
             // 新增
-            Integer number = ysMasterTaskMapper.selectLastSerialNumber();
-            Integer serialNumber = getSerialNumber(number);
-            ysMasterTask.setSerialNumber(serialNumber);
+//            Integer number = ysMasterTaskMapper.selectLastSerialNumber();
+//            Integer serialNumber = getSerialNumber(number);
+//            ysMasterTask.setSerialNumber(serialNumber);
+
+            List<YsMasterTask> masterTaskList = ysMasterTaskMapper.selectBySerialNumber(ysMasterTask.getSerialNumber());
+            if (CollectionUtils.isNotEmpty(masterTaskList)){
+                return Callback.error(2, "任务编号不能重复");
+            }
+
             ysMasterTask.setCreateTime(LocalDateTime.now());
             List<YsMasterTask> ysMasterTasks = ysMasterTaskMapper.selectByName(ysMasterTask.getName());
             if (CollectionUtils.isNotEmpty(ysMasterTasks)) {
@@ -194,31 +206,31 @@ public class YsMasterTaskService {
     }
 
 
-    private Integer getSerialNumber(Integer serialNumber) {
-
-        String dayStr = DateUtil.format(new Date(), "yyyy-MM-dd");
-        String[] dayArr = dayStr.split("-");
-
-        String year = dayArr[0].substring(2, 4);
-        String month = dayArr[1];
-        if (serialNumber == null || serialNumber.equals(0)) {
-            String newNumber = year + month + "001";
-            return Integer.parseInt(newNumber);
-        }
-
-        String stringNum = String.valueOf(serialNumber);
-        String year2 = stringNum.substring(0, 2);
-        String month2 = stringNum.substring(2, 4);
-
-        // 如果日期一致，相加
-        if (year.equals(year2) && month.equals(month2)) {
-            return serialNumber.intValue() + 1;
-        }
-
-        // 日期不一致，获取一个新的日期
-        String newNumber = year + month + "001";
-        return Integer.parseInt(newNumber);
-    }
+//    private Integer getSerialNumber(Integer serialNumber) {
+//
+//        String dayStr = DateUtil.format(new Date(), "yyyy-MM-dd");
+//        String[] dayArr = dayStr.split("-");
+//
+//        String year = dayArr[0].substring(2, 4);
+//        String month = dayArr[1];
+//        if (serialNumber == null || serialNumber.equals(0)) {
+//            String newNumber = year + month + "001";
+//            return Integer.parseInt(newNumber);
+//        }
+//
+//        String stringNum = String.valueOf(serialNumber);
+//        String year2 = stringNum.substring(0, 2);
+//        String month2 = stringNum.substring(2, 4);
+//
+//        // 如果日期一致，相加
+//        if (year.equals(year2) && month.equals(month2)) {
+//            return serialNumber.intValue() + 1;
+//        }
+//
+//        // 日期不一致，获取一个新的日期
+//        String newNumber = year + month + "001";
+//        return Integer.parseInt(newNumber);
+//    }
 
 
     public Callback<FileVO> uploadFile(MultipartFile file) {
@@ -416,12 +428,11 @@ public class YsMasterTaskService {
 
 
     public Callback<LinkedHashMap> selectTaskDetailsOne(Integer id) {
-        if (id == null) {
-            return Callback.error(2, "id不为空");
-        }
-        LinkedHashMap map = ysMasterTaskMapper.selectTaskDetailsOne(id);
-        if (map != null) {
-            return Callback.success(map);
+        if (id != null){
+            LinkedHashMap map = ysMasterTaskMapper.selectTaskDetailsOne(id);
+            if (MapUtils.isNotEmpty(map)) {
+                return Callback.success(map);
+            }
         }
         return Callback.error(2, "查询一条主任务详情失败!");
     }
