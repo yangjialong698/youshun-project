@@ -7,12 +7,8 @@ import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
-import com.ennova.pubinfodaily.dao.YsDailyFeedBackMapper;
-import com.ennova.pubinfodaily.dao.YsDailyRepFileMapper;
-import com.ennova.pubinfodaily.dao.YsDailyRepMapper;
-import com.ennova.pubinfodaily.entity.YsDailyFeedBack;
-import com.ennova.pubinfodaily.entity.YsDailyRep;
-import com.ennova.pubinfodaily.entity.YsDailyRepFile;
+import com.ennova.pubinfodaily.dao.*;
+import com.ennova.pubinfodaily.entity.*;
 import com.ennova.pubinfodaily.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -30,10 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.Action;
 import java.io.File;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -57,6 +52,10 @@ public class YsDailyRepService {
     private YsDailyRepFileMapper ysDailyRepFileMapper;
     @Autowired
     private YsDailyFeedBackMapper ysDailyFeedBackMapper;
+    @Autowired
+    private TDeptMapper tDeptMapper;
+    @Autowired
+    private TUserMapper tUserMapper;
 
 
     public Callback insertOrUpdate(YsDailyRepVO ysDailyRepVO) {
@@ -163,7 +162,7 @@ public class YsDailyRepService {
         return Callback.success(fileDownVOList);
     }
 
-    public Callback<BaseVO<DailyRepDetailVO>> getDailyyRepDetails(Integer page, Integer pageSize, Integer ysMasterTaskId, String fileName, String startTime, String endTime, HttpServletRequest req) {
+    public Callback<BaseVO<DailyRepDetailVO>> getDailyyRepDetails(Integer page, Integer pageSize, String fileName, String startTime, String endTime, HttpServletRequest req) {
         String token = req.getHeader("Authorization");
         if (StringUtils.isEmpty(token)) {
             return Callback.error("无权限token");
@@ -177,8 +176,26 @@ public class YsDailyRepService {
             pageSize = 10;
         }
         BaseVO<DailyRepDetailVO> baseVO = null ;
+        //查询check_id
+        List<TUser> tUsers = new ArrayList<>();
+        TUser tUser = tUserMapper.selectByPrimaryKey(userId);
+        List<TDept> tDeptsCheck = tDeptMapper.selectByCheckId(tUser.getUserId());
+        if (CollectionUtil.isNotEmpty(tDeptsCheck)){
+            List<Long> deptIds = tDeptsCheck.stream().map(e -> e.getDeptId()).collect(Collectors.toList());
+            tUsers = tUserMapper.selectByDepartment(deptIds);
+            //根据用户ID查日报
+        }else {
+            List<TDept> tDeptsManage = tDeptMapper.selectByManageId(tUser.getUserId());
+            if (CollectionUtil.isNotEmpty(tDeptsManage)){
+                List<Long> deptIds = tDeptsManage.stream().map(e -> e.getDeptId()).collect(Collectors.toList());
+                tUsers = tUserMapper.selectByDepartment(deptIds);
+            }else {
+                tUsers.add(tUser);
+            }
+        }
+        List<Integer> userIds = tUsers.stream().map(e -> e.getId()).collect(Collectors.toList());
         Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
-        List<DailyRepDetailVO> list = ysDailyRepMapper.getDayRepAll(fileName,userId,startTime,endTime);
+        List<DailyRepDetailVO> list = ysDailyRepMapper.getDayRepByUserIds(fileName,userIds,startTime,endTime);
         baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }

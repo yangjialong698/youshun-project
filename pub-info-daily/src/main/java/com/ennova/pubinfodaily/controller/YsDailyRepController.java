@@ -58,14 +58,13 @@ public class YsDailyRepController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "开始页"),
             @ApiImplicitParam(name = "pageSize", value = "显示条数"),
-            @ApiImplicitParam(name = "ysMasterTaskId", value = "主任务ID"),
             @ApiImplicitParam(name = "fileName", value = "日报名称")
     })
     @GetMapping("/getDailyyRepDetails")
     public Callback<BaseVO<DailyRepDetailVO>> getDailyyRepDetails(Integer page, Integer pageSize,
-                                                                  Integer ysMasterTaskId, String fileName, String startTime, String endTime){
+                                                                  String fileName, String startTime, String endTime){
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        return ysDailyRepService.getDailyyRepDetails(page,pageSize,ysMasterTaskId,fileName,startTime,endTime,req);
+        return ysDailyRepService.getDailyyRepDetails(page,pageSize,fileName,startTime,endTime,req);
     }
 
     @ApiOperation(value = "非任务日报管理 - 上传非任务工作日报附件",tags = "非任务日报管理API")
