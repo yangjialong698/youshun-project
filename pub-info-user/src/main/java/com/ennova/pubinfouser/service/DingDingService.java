@@ -154,6 +154,18 @@ public class DingDingService  {
                 Callback<List<Long>> listCallback = this.listDeptAllIds();
                 alldeptIds = listCallback.getData();
             }
+            //取差集-查助理
+            List<Long> finalDeptIds = deptIds;
+            List<Long> reduce1 = alldeptIds.stream().filter(item -> !finalDeptIds.contains(item)).collect(Collectors.toList());
+            if (CollectionUtil.isNotEmpty(reduce1)){
+                reduce1.forEach(e->{
+                    OapiV2UserListResponse.PageResult departmentUser = DingDingUtil.getDepartmentUser(e, 0, 100, accesstoken);
+                    List<OapiV2UserListResponse.ListUserResponse> userList = departmentUser.getList();
+                    userList.forEach(a->{
+                        deptManagerUseridList.add( a.getUserid());
+                    });
+                });
+            }
             alldeptIds.forEach(deptId->{
                 OapiV2DepartmentGetResponse.DeptGetResponse deptDetails = DingDingUtil.getDeptDetails(deptId, accesstoken);
                 if (null != deptDetails){
@@ -167,6 +179,7 @@ public class DingDingService  {
                     if (StringUtils.isNotEmpty(orgDeptOwner)){
                         deptManagerUseridList.add(orgDeptOwner);
                     }
+
                 }
             });
             List<String> collect = deptManagerUseridList.stream().distinct().collect(Collectors.toList());
