@@ -455,16 +455,13 @@
                t4.dept_name         deptName,
                t2.position          jobTitle,
                t2.mobile            phone
-        from ys_team t1,
-             t_user t2,
-             t_user_dept t3,
-             t_dept t4
+        FROM
+            ys_team t1 left join t_user t2  on t1.executor_id = t2.id
+            left join t_user_dept t3 on t3.user_id = t2.id
+            left join t_dept t4 on t4.dept_id = t3.dept_id
         <where>
-            t1.executor_id = t2.id
-              and t3.dept_id = t4.dept_id
-              and t3.user_id = t2.id
-              and t1.is_delete = 0
-              and t2.is_delete = 0
+            t1.is_delete = 0
+	        AND t2.is_delete = 0
             <if test="id != null">
                 and t1.id = #{id,jdbcType=INTEGER}
             </if>

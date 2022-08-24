@@ -4,10 +4,7 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfotask.dto.FileDelDTO;
 import com.ennova.pubinfotask.service.YsMasterTaskService;
-import com.ennova.pubinfotask.vo.EditMasterTaskAndFileVO;
-import com.ennova.pubinfotask.vo.FileVO;
-import com.ennova.pubinfotask.vo.MasterLeve1;
-import com.ennova.pubinfotask.vo.YsMasterTaskVO;
+import com.ennova.pubinfotask.vo.*;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,7 +145,7 @@ public class YsMasterTaskController {
             @ApiImplicitParam(name = "id", value = "主任务ID" )
     })
     @GetMapping("/selectTaskDetailsOne")
-    public Callback<LinkedHashMap> selectTaskDetailsOne(Integer id){
+    public Callback<TaskDetailVO> selectTaskDetailsOne(Integer id){
         return ysMasterTaskService.selectTaskDetailsOne(id);
     }
 

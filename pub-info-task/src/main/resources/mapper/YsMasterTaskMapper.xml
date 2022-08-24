@@ -385,7 +385,7 @@
           </if>
       </where>
   </select>
-  <select id="selectTaskDetailsOne" resultType="java.util.LinkedHashMap">
+  <select id="selectTaskDetailsOne" resultType="com.ennova.pubinfotask.vo.TaskDetailVO">
       SELECT a.id,
              a.serial_number                          serialNumber,
              a.pressing_level   pressingLevel,
@@ -393,12 +393,12 @@
              a.type,
              a.status,
              a.summary,
-             a.cost,
+             (select sum(cost) from ys_master_task_cost where ys_master_task_id=#{id}) cost,
              a.check_standard                         checkStandard,
              a.estimate_hour                          estimateHour,
-             DATE_FORMAT(a.task_end_date, '%Y-%m-%d') taskEndDate,
+             a.task_end_date taskEndDate,
              b.username,
-             DATE_FORMAT(a.create_time, '%Y-%m-%d')   createTime
+             a.create_time   createTime
       FROM ys_master_task a,
            t_user b
       <where>

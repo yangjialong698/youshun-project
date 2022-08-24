@@ -1,5 +1,6 @@
 package com.ennova.pubinfotask.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
@@ -34,6 +35,7 @@ public class YsMasterTaskCostVO {
      * 成本录入日期
      */
     @ApiModelProperty(value = "成本录入日期")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date costDate;
 
     /**

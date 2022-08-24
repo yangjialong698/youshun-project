@@ -1,21 +1,18 @@
 package com.ennova.pubinfotask.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
- * @Auther: shibingyang1990@gmail.com
- * @Date: 2022/4/25
- * @Description: 主任务修改时，查询一条数据
- * @Version: 1.0
+ * 查询一条主任务详情
  */
 @Data
-public class EditMasterTaskAndFileVO {
+public class TaskDetailVO {
 
- /**
+    /**
      * ID
      */
     @ApiModelProperty(value = "ID", example = "1")
@@ -33,11 +30,11 @@ public class EditMasterTaskAndFileVO {
     @ApiModelProperty(value = "主任务名称")
     private String name;
 
-   /**
-    * 紧急程度：0-  一般、1- 重要、2- 紧急
-    */
-   @ApiModelProperty(value = "紧急程度：0-  一般、1- 重要、2- 紧急")
-   private Integer pressingLevel;
+    /**
+     * 紧急程度：0-  一般、1- 重要、2- 紧急
+     */
+    @ApiModelProperty(value = "紧急程度：0-  一般、1- 重要、2- 紧急")
+    private Integer pressingLevel;
 
     /**
      * 任务类型： 0- 实验类  1- 研发类
@@ -79,28 +76,16 @@ public class EditMasterTaskAndFileVO {
      * 结束日期
      */
     @ApiModelProperty(value = "结束日期")
-    private LocalDate taskEndDate;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private LocalDateTime taskEndDate;
+
+    @ApiModelProperty(value = "姓名")
+    private String username;
+
+    @ApiModelProperty(value = "创建日期")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private LocalDateTime createTime;
 
 
-      /**
-     * 预计工时
-     */
-    @ApiModelProperty(value = "文件主表 - 类型ID", example = "1")
-    private Integer ysFileTypeId;
-
-    /**
-     * 结束日期
-     */
-    @ApiModelProperty(value = "文件主表ID")
-    private Integer fileMasterId;
-
-
-
-
-    @ApiModelProperty(value = "附件信息")
-    private List<FileVO> fileVOList;
 
 }
-
-
-

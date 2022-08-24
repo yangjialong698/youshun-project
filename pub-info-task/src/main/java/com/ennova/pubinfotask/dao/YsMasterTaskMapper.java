@@ -3,6 +3,7 @@ package com.ennova.pubinfotask.dao;
 import com.ennova.pubinfotask.entity.YsMasterTask;
 import com.ennova.pubinfotask.vo.EditMasterTaskAndFileVO;
 import com.ennova.pubinfotask.vo.MasterLeve1;
+import com.ennova.pubinfotask.vo.TaskDetailVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,7 +40,7 @@ public interface YsMasterTaskMapper {
 
     EditMasterTaskAndFileVO selectTaskAndFileOne(@Param("id") Integer id);
 
-    LinkedHashMap selectTaskDetailsOne(@Param("id") Integer id);
+    TaskDetailVO selectTaskDetailsOne(@Param("id") Integer id);
 
     LinkedHashMap selectTaskCount(@Param("receiveId") Integer receiveId);
 

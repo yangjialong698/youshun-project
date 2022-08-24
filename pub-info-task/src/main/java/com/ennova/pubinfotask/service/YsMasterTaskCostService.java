@@ -8,6 +8,7 @@ import com.ennova.pubinfotask.dao.UserMapper;
 import com.ennova.pubinfotask.dao.YsMasterTaskCostMapper;
 import com.ennova.pubinfotask.entity.YsMasterTaskCost;
 import com.ennova.pubinfotask.utils.BeanConvertUtils;
+import com.ennova.pubinfotask.vo.BaseVO;
 import com.ennova.pubinfotask.vo.CostBaseVO;
 import com.ennova.pubinfotask.vo.CurrentUserVO;
 import com.ennova.pubinfotask.vo.YsMasterTaskCostVO;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -50,30 +52,28 @@ public class YsMasterTaskCostService {
     public Callback<CostBaseVO<YsMasterTaskCost>> selectByYsMasterTaskId(Integer page, Integer pageSize, Integer ysMasterTaskId, String costDate) {
         String roleCode = getRoleCode();
         if ("cost_accountant".equals(roleCode)) {
-            if (ysMasterTaskId != null) {
-                List<YsMasterTaskCost> costList = ysMasterTaskCostMapper.selectByYsMasterTaskIdAndCostDate(ysMasterTaskId, costDate);
-                //求和,reduce默认值0,保留两位小数
-                AtomicReference<Double> cost = new AtomicReference<>(0D);
-                if (CollectionUtils.isNotEmpty(costList)) {
-                    // 求和，Double类型的数据相加
-                    costList.stream().filter(v -> v.getCost() != null).map(YsMasterTaskCost::getCost).reduce((v1, v2) -> v1 + v2).ifPresent(v -> {
-                        cost.updateAndGet(v1 -> v1 + v);
-                    });
-
-                    Page<YsMasterTaskCost> startPage = PageHelper.startPage(page, pageSize);
-                    List<YsMasterTaskCost> list = ysMasterTaskCostMapper.selectByYsMasterTaskIdAndCostDate(ysMasterTaskId, costDate);
-                    CostBaseVO<YsMasterTaskCost> baseVO = new CostBaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page), cost.get());
-                    return Callback.success(baseVO);
-                }
+            //求和,reduce默认值0,保留两位小数
+            AtomicReference<Double> cost = new AtomicReference<>(0D);
+            List<YsMasterTaskCost> costList = ysMasterTaskCostMapper.selectByYsMasterTaskIdAndCostDate(ysMasterTaskId, costDate);
+            if (CollectionUtils.isNotEmpty(costList)) {
+                // 求和，Double类型的数据相加
+                costList.stream().filter(v -> v.getCost() != null).map(YsMasterTaskCost::getCost).reduce((v1, v2) -> v1 + v2).ifPresent(v -> {
+                    cost.updateAndGet(v1 -> v1 + v);
+                });
             }
+            Page<YsMasterTaskCost> startPage = PageHelper.startPage(page, pageSize);
+            List<YsMasterTaskCost> list = ysMasterTaskCostMapper.selectByYsMasterTaskIdAndCostDate(ysMasterTaskId, costDate);
+            CostBaseVO<YsMasterTaskCost> baseVO = new CostBaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page), cost.get());
+            return Callback.success(baseVO);
         } else {
-            return Callback.error(2, "没有权限");
+                return Callback.error(2, "没有权限");
         }
-        return Callback.error(2, "查询失败");
+
     }
 
 
-    public Callback batchCostInsert(List <YsMasterTaskCostVO > list) {
+    public Callback batchCostInsert(BaseVO<YsMasterTaskCostVO> baseVO) {
+        List<YsMasterTaskCostVO> list = baseVO.getList();
         String roleCode = getRoleCode();
         if ("cost_accountant".equals(roleCode)) {
             if (CollectionUtils.isNotEmpty(list)) {
@@ -104,7 +104,8 @@ public class YsMasterTaskCostService {
         }
     }
 
-    public Callback updateCostBatch(List <YsMasterTaskCostVO> list) {
+    public Callback updateCostBatch(BaseVO<YsMasterTaskCostVO> baseVO) {
+        List<YsMasterTaskCostVO> list = baseVO.getList();
         String roleCode = getRoleCode();
         if ("cost_accountant".equals(roleCode)) {
             if (CollectionUtils.isNotEmpty(list)) {
@@ -114,12 +115,11 @@ public class YsMasterTaskCostService {
                     ysMasterTaskCost.setUpdateTime(LocalDateTime.now());
                     ysMasterTaskCostMapper.updateByPrimaryKeySelective(ysMasterTaskCost);
                 });
-                return Callback.success();
             }
+            return Callback.success();
         } else {
             return Callback.error(2, "您没有权限操作");
         }
-        return Callback.error(2, "更新失败");
     }
 
 

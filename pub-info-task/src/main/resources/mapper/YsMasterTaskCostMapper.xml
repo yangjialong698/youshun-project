@@ -189,6 +189,7 @@
         and cost_date=#{costDate,jdbcType=DATE}
       </if>
     </where>
+    order by create_time desc
   </select>
   <select id="selectByYsMasterTaskId" resultMap="BaseResultMap">
   select <include refid="Base_Column_List" />

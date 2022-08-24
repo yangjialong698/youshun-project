@@ -427,11 +427,11 @@ public class YsMasterTaskService {
     }
 
 
-    public Callback<LinkedHashMap> selectTaskDetailsOne(Integer id) {
+    public Callback<TaskDetailVO> selectTaskDetailsOne(Integer id) {
         if (id != null){
-            LinkedHashMap map = ysMasterTaskMapper.selectTaskDetailsOne(id);
-            if (MapUtils.isNotEmpty(map)) {
-                return Callback.success(map);
+            TaskDetailVO taskDetailVO = ysMasterTaskMapper.selectTaskDetailsOne(id);
+            if (taskDetailVO != null) {
+                return Callback.success(taskDetailVO);
             }
         }
         return Callback.error(2, "查询一条主任务详情失败!");
