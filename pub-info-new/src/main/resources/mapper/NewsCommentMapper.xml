@@ -148,7 +148,7 @@
 
     <delete id="deleteComment" parameterType="java.lang.Integer">
         update news_comment set is_delete = 1
-        where id = #{id,jdbcType=INTEGER}
+        where new_id = #{id,jdbcType=INTEGER}
     </delete>
 
     <select id="selectCommentByNewId" resultMap="BaseResultMap">

@@ -29,6 +29,12 @@ public class NewsPeriodicalFile {
     private Integer newsPeriodicalNum;
 
     /**
+     * 报刊版数
+     */
+    @ApiModelProperty(value = "报刊版数")
+    private Integer newsEditionNum;
+
+    /**
      * 原文件名
      */
     @ApiModelProperty(value = "原文件名")

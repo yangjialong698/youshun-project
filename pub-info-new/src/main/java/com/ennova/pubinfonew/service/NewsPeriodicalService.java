@@ -6,10 +6,12 @@ import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfonew.dao.NewsCommentMapper;
+import com.ennova.pubinfonew.dao.NewsPeriodicalFileMapper;
 import com.ennova.pubinfonew.dao.NewsPeriodicalMapper;
 import com.ennova.pubinfonew.entity.NewsComment;
 import com.ennova.pubinfonew.entity.NewsPeriodical;
 import com.ennova.pubinfonew.vo.NewsPeriodicalVO;
+import com.ennova.pubinfonew.vo.NewsVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class NewsPeriodicalService {
     private final HttpServletRequest request;
     private final NewsPeriodicalMapper newsPeriodicalMapper;
     private final NewsCommentMapper newsCommentMapper;
+    private final NewsPeriodicalFileMapper newsPeriodicalFileMapper;
 
     public Callback insertOrUpdate(NewsPeriodicalVO newsPeriodicalVO) {
         String token = request.getHeader("Authorization");
@@ -83,7 +86,13 @@ public class NewsPeriodicalService {
             List<NewsComment> newsComments = newsCommentMapper.selectCommentByNewId(newsPeriodical.getId());
             if (CollectionUtils.isNotEmpty(newsComments)){
                 newsComments.forEach(newsComment -> {
-                    newsCommentMapper.deleteByPrimaryKey(newsComment.getId());
+                    newsCommentMapper.deleteComment(newsComment.getNewId());
+                });
+            }
+            List<NewsVO> newsFiles= newsPeriodicalFileMapper.selectPeriodicalFile(newsPeriodical.getPeriodicalNum(), newsPeriodical.getEditionNum());
+            if (CollectionUtils.isNotEmpty(newsFiles)){
+                newsFiles.forEach(newsVO -> {
+                    newsPeriodicalFileMapper.deletePeriodicalFile(newsVO.getId());
                 });
             }
             if (i > 0) {
@@ -92,6 +101,5 @@ public class NewsPeriodicalService {
         }
         return Callback.error(2, "删除失败");
     }
-
 
 }

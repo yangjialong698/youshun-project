@@ -70,8 +70,8 @@ public class NewsPeriodicalFileController {
     })
     @GetMapping("/selectPeriodicalFile")
     public Callback<BaseVO<NewsVO>> selectPeriodicalFile(@RequestParam(defaultValue = "1") Integer page,
-                                                       @RequestParam(defaultValue = "10") Integer pageSize, Integer periodicalNum){
-        return newsPeriodicalFileService.selectPeriodicalFile(page, pageSize, periodicalNum);
+                                                       @RequestParam(defaultValue = "10") Integer pageSize, Integer periodicalNum, Integer editionNum){
+        return newsPeriodicalFileService.selectPeriodicalFile(page, pageSize, periodicalNum, editionNum);
     }
 
 }

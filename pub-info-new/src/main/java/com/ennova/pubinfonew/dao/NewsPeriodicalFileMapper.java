@@ -27,6 +27,7 @@ public interface NewsPeriodicalFileMapper {
 
     int selectByFileMd5(@Param("fileMd5") String fileMd5);
 
-    List<NewsVO> selectPeriodicalFile(@Param("periodicalNum") Integer periodicalNum);
+    List<NewsVO> selectPeriodicalFile(@Param("periodicalNum") Integer periodicalNum, @Param("editionNum") Integer editionNum);
 
+    int deletePeriodicalFile(@Param("id") Integer id);
 }

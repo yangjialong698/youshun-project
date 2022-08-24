@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yangjialong
@@ -107,6 +108,7 @@ public class NewsPeriodicalFileService {
         if (fileDto.getPeriodicalNum() != null) {
             NewsPeriodicalFile newsPeriodicalFile = newsPeriodicalFileMapper.selectByPrimaryKey(fileDto.getId());
             newsPeriodicalFile.setNewsPeriodicalNum(fileDto.getPeriodicalNum());
+            newsPeriodicalFile.setNewsEditionNum(fileDto.getEditionNum());
             int i = newsPeriodicalFileMapper.updateByPrimaryKeySelective(newsPeriodicalFile);
             if (i > 0) {
                 return Callback.success(true);
@@ -169,13 +171,14 @@ public class NewsPeriodicalFileService {
         return Callback.success("附件删除成功");
     }
 
-    public Callback<BaseVO<NewsVO>> selectPeriodicalFile(Integer page, Integer pageSize, Integer periodicalNum) {
+    public Callback<BaseVO<NewsVO>> selectPeriodicalFile(Integer page, Integer pageSize, Integer periodicalNum, Integer editionNum) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
-        List<NewsVO> newsVOS = newsPeriodicalFileMapper.selectPeriodicalFile(periodicalNum);
-        BaseVO<NewsVO> baseVO = new BaseVO<>(newsVOS, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        List<NewsVO> newsVOS = newsPeriodicalFileMapper.selectPeriodicalFile(periodicalNum, editionNum);
+        List<NewsVO> collect = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null).collect(Collectors.toList());
+        BaseVO<NewsVO> baseVO = new BaseVO<>(collect, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
 

@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.ennova.pubinfonew.entity.NewsPeriodicalFile">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="news_periodical_num" jdbcType="INTEGER" property="newsPeriodicalNum" />
+    <result column="news_edition_num" jdbcType="INTEGER" property="newsEditionNum"/>
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="file_md5" jdbcType="VARCHAR" property="fileMd5" />
     <result column="file_size" jdbcType="VARCHAR" property="fileSize" />
@@ -15,7 +16,8 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, news_periodical_num, name, file_md5, file_size, file_url, del_flag, open_file, 
+    id
+    , news_periodical_num, news_edition_num, name, file_md5, file_size, file_url, del_flag, open_file,
     create_time, update_time, user_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -43,6 +45,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="newsPeriodicalNum != null">
         news_periodical_num,
+      </if>
+      <if test="newsEditionNum != null">
+        news_edition_num,
       </if>
       <if test="name != null">
         name,
@@ -110,6 +115,9 @@
     <set>
       <if test="newsPeriodicalNum != null">
         news_periodical_num = #{newsPeriodicalNum,jdbcType=INTEGER},
+      </if>
+      <if test="newsEditionNum != null">
+        news_edition_num = #{newsEditionNum,jdbcType=INTEGER},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -192,14 +200,25 @@
     select
     npf.id,
     npf.news_periodical_num AS periodicalNum,
+    npf.news_edition_num AS editionNum,
     npf.create_time AS createTime,
     npf.name AS fileName,
     npf.file_md5 AS newfileName
     from news_periodical_file npf
     <where>
+      del_flag = 0
       <if test="periodicalNum != null">
-        npf.news_periodical_num = #{periodicalNum}
+        and npf.news_periodical_num = #{periodicalNum}
+      </if>
+      <if test="editionNum != null">
+        and npf.news_edition_num = #{editionNum}
       </if>
     </where>
   </select>
+
+  <delete id="deletePeriodicalFile" parameterType="java.lang.Integer">
+    update news_periodical_file
+    set del_flag = 1
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
 </mapper>

@@ -19,4 +19,6 @@ public class FileDto {
     @ApiModelProperty(value = "期数", example = "1")
     private Integer periodicalNum;
 
+    @ApiModelProperty(value = "版数", example = "1")
+    private Integer editionNum;
 }
