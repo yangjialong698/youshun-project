@@ -292,30 +292,11 @@ public class DingDingService  {
     }
 
 
-    @Scheduled(cron="0 0 4 * * ? ") //测试
-    //@Scheduled(cron="0 0 3 * * ? ") //线上
-    public void updatTdept() {
-        deptDao.deleteAll();
-        List<TDeptDing> tDeptDingList = tDeptDingMapper.selectAll();
-        ArrayList<DeptEntity> deptEntityList = new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(tDeptDingList)){
-            tDeptDingList.forEach(tDeptDing -> {
-                DeptEntity deptEntity = new DeptEntity();
-                BeanUtils.copyProperties(tDeptDing,deptEntity);
-                deptEntity.setUpdateTime(new Date());
-                deptEntityList.add(deptEntity);
-            });
-        }
-        deptDao.insertBatch(deptEntityList);
-
-    }
-
-//
-//    @Scheduled(cron="0 0 5 * * ? ") //测试
-//    //@Scheduled(cron="0 0 3 * * ? ") //线上
-//    public void updatTempTdept() {
-//        //1.查询t_dept无,t_dept_ding有的数据(新建部门)
-//        List<TDeptDing> tDeptDingList = tDeptDingMapper.selectEntry();
+//    @Scheduled(cron="0 0 4 * * ? ") //部门测试第一版
+//    //@Scheduled(cron="0 0 3 * * ? ") //部门线上第一版
+//    public void updatTdept() {
+//        deptDao.deleteAll();
+//        List<TDeptDing> tDeptDingList = tDeptDingMapper.selectAll();
 //        ArrayList<DeptEntity> deptEntityList = new ArrayList<>();
 //        if (CollectionUtil.isNotEmpty(tDeptDingList)){
 //            tDeptDingList.forEach(tDeptDing -> {
@@ -325,7 +306,34 @@ public class DingDingService  {
 //                deptEntityList.add(deptEntity);
 //            });
 //        }
+//        deptDao.insertBatch(deptEntityList);
 //    }
+
+
+    @Scheduled(cron="0 0 10 * * ? ") //部门测试第二版
+    //@Scheduled(cron="0 0 3 * * ? ") //部门线上第二版
+    public void updatTempTdept() {
+        //1.查询t_dept无,t_dept_ding有的数据(新建部门)
+        List<TDeptDing> tDeptDingList = tDeptDingMapper.selectEntry();
+        ArrayList<DeptEntity> deptEntityList = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(tDeptDingList)){
+            tDeptDingList.forEach(tDeptDing -> {
+                DeptEntity deptEntity = new DeptEntity();
+                BeanUtils.copyProperties(tDeptDing,deptEntity);
+                deptEntity.setUpdateTime(new Date());
+                deptEntityList.add(deptEntity);
+            });
+            deptDao.insertBatch(deptEntityList);
+        }
+        //2.t_dept,t_dept_ding有的数据(钉钉已删除的部门)
+        List<DeptEntity> deptEntitys = deptDao.selectDelete();
+        if (CollectionUtil.isNotEmpty(deptEntitys)){
+            deptEntitys.forEach(e->{
+                e.setUpdateTime(new Date());
+                deptDao.deleteDept(e.getDeptId());
+            });
+        }
+    }
 }
 
 

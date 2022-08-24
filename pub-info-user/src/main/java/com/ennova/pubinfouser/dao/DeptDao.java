@@ -28,4 +28,8 @@ public interface DeptDao extends BaseDao<DeptEntity>{
     int deleteAll();
 
     int insertBatch(@Param("deptEntityList") ArrayList<DeptEntity> deptEntityList);
+
+    List<DeptEntity> selectDelete();
+
+    int deleteDept(@Param("deptId")Long deptId);
 }

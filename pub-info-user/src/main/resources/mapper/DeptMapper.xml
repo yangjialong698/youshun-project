@@ -176,4 +176,17 @@
             , #{deptEntit.updateTime}, #{deptEntit.parentId}, #{deptEntit.deptId}, #{deptEntit.manageId})
         </foreach >
     </insert>
+
+    <select id="selectDelete"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_dept td
+        where td.dept_id
+        not in (select dept_id from t_dept_ding)
+    </select>
+
+    <delete id="deleteDept" parameterType="java.lang.Long">
+        update   t_dept set is_delete = 1
+        where dept_id = #{deptId,jdbcType=BIGINT}
+    </delete>
 </mapper>
