@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ennova.pubinfouser.dao.TDeptDingMapper">
-  <resultMap id="BaseResultMap" type="com.ennova.pubinfouser.entity.TDeptDing">
+<mapper namespace="com.ennova.pubinfodaily.dao.TDeptMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfodaily.entity.TDept">
     <!--@mbg.generated-->
-    <!--@Table t_dept_ding-->
+    <!--@Table t_dept-->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="use_status" jdbcType="VARCHAR" property="useStatus" />
@@ -15,38 +15,39 @@
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="dept_id" jdbcType="BIGINT" property="deptId" />
     <result column="manage_id" jdbcType="VARCHAR" property="manageId" />
+    <result column="check_id" jdbcType="VARCHAR" property="checkId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, dept_name, use_status, is_operate, is_delete, company, create_time, update_time, 
-    parent_id, dept_id, manage_id
+    parent_id, dept_id, manage_id, check_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
-    from t_dept_ding
+    from t_dept
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
-    delete from t_dept_ding
+    delete from t_dept
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfouser.entity.TDeptDing" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfodaily.entity.TDept" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into t_dept_ding (dept_name, use_status, is_operate, 
+    insert into t_dept (dept_name, use_status, is_operate, 
       is_delete, company, create_time, 
       update_time, parent_id, dept_id, 
-      manage_id)
+      manage_id, check_id)
     values (#{deptName,jdbcType=VARCHAR}, #{useStatus,jdbcType=VARCHAR}, #{isOperate,jdbcType=INTEGER}, 
       #{isDelete,jdbcType=INTEGER}, #{company,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{parentId,jdbcType=BIGINT}, #{deptId,jdbcType=BIGINT}, 
-      #{manageId,jdbcType=VARCHAR})
+      #{manageId,jdbcType=VARCHAR}, #{checkId,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfouser.entity.TDeptDing" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfodaily.entity.TDept" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into t_dept_ding
+    insert into t_dept
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="deptName != null">
         dept_name,
@@ -77,6 +78,9 @@
       </if>
       <if test="manageId != null">
         manage_id,
+      </if>
+      <if test="checkId != null">
+        check_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -110,11 +114,14 @@
       <if test="manageId != null">
         #{manageId,jdbcType=VARCHAR},
       </if>
+      <if test="checkId != null">
+        #{checkId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfouser.entity.TDeptDing">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfodaily.entity.TDept">
     <!--@mbg.generated-->
-    update t_dept_ding
+    update t_dept
     <set>
       <if test="deptName != null">
         dept_name = #{deptName,jdbcType=VARCHAR},
@@ -146,12 +153,15 @@
       <if test="manageId != null">
         manage_id = #{manageId,jdbcType=VARCHAR},
       </if>
+      <if test="checkId != null">
+        check_id = #{checkId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfouser.entity.TDeptDing">
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfodaily.entity.TDept">
     <!--@mbg.generated-->
-    update t_dept_ding
+    update t_dept
     set dept_name = #{deptName,jdbcType=VARCHAR},
       use_status = #{useStatus,jdbcType=VARCHAR},
       is_operate = #{isOperate,jdbcType=INTEGER},
@@ -161,25 +171,178 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       parent_id = #{parentId,jdbcType=BIGINT},
       dept_id = #{deptId,jdbcType=BIGINT},
-      manage_id = #{manageId,jdbcType=VARCHAR}
+      manage_id = #{manageId,jdbcType=VARCHAR},
+      check_id = #{checkId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update t_dept
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="dept_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.deptName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="use_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.useStatus,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="is_operate = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.isOperate,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="is_delete = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.isDelete,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="company = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.company,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="parent_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.parentId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="dept_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.deptId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="manage_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.manageId,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="check_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.checkId,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update t_dept
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="dept_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.deptName != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.deptName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="use_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.useStatus != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.useStatus,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="is_operate = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.isOperate != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.isOperate,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="is_delete = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.isDelete != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.isDelete,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="company = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.company != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.company,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createTime != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updateTime != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="parent_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.parentId != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.parentId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="dept_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.deptId != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.deptId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="manage_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.manageId != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.manageId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="check_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.checkId != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.checkId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
   </update>
   <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into t_dept_ding
+    insert into t_dept
     (dept_name, use_status, is_operate, is_delete, company, create_time, update_time, 
-      parent_id, dept_id, manage_id)
+      parent_id, dept_id, manage_id, check_id)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.deptName,jdbcType=VARCHAR}, #{item.useStatus,jdbcType=VARCHAR}, #{item.isOperate,jdbcType=INTEGER}, 
         #{item.isDelete,jdbcType=INTEGER}, #{item.company,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
         #{item.updateTime,jdbcType=TIMESTAMP}, #{item.parentId,jdbcType=BIGINT}, #{item.deptId,jdbcType=BIGINT}, 
-        #{item.manageId,jdbcType=VARCHAR})
+        #{item.manageId,jdbcType=VARCHAR}, #{item.checkId,jdbcType=VARCHAR})
     </foreach>
   </insert>
-  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfouser.entity.TDeptDing" useGeneratedKeys="true">
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfodaily.entity.TDept" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into t_dept_ding
+    insert into t_dept
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -194,6 +357,7 @@
       parent_id,
       dept_id,
       manage_id,
+      check_id,
     </trim>
     values
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -210,6 +374,7 @@
       #{parentId,jdbcType=BIGINT},
       #{deptId,jdbcType=BIGINT},
       #{manageId,jdbcType=VARCHAR},
+      #{checkId,jdbcType=VARCHAR},
     </trim>
     on duplicate key update 
     <trim suffixOverrides=",">
@@ -226,11 +391,12 @@
       parent_id = #{parentId,jdbcType=BIGINT},
       dept_id = #{deptId,jdbcType=BIGINT},
       manage_id = #{manageId,jdbcType=VARCHAR},
+      check_id = #{checkId,jdbcType=VARCHAR},
     </trim>
   </insert>
-  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfouser.entity.TDeptDing" useGeneratedKeys="true">
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfodaily.entity.TDept" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into t_dept_ding
+    insert into t_dept
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -264,6 +430,9 @@
       </if>
       <if test="manageId != null">
         manage_id,
+      </if>
+      <if test="checkId != null">
+        check_id,
       </if>
     </trim>
     values
@@ -301,6 +470,9 @@
       <if test="manageId != null">
         #{manageId,jdbcType=VARCHAR},
       </if>
+      <if test="checkId != null">
+        #{checkId,jdbcType=VARCHAR},
+      </if>
     </trim>
     on duplicate key update 
     <trim suffixOverrides=",">
@@ -337,25 +509,32 @@
       <if test="manageId != null">
         manage_id = #{manageId,jdbcType=VARCHAR},
       </if>
+      <if test="checkId != null">
+        check_id = #{checkId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
 
-  <select id="selectAll" resultMap="BaseResultMap">
+<!--auto generated by MybatisCodeHelper on 2022-08-23-->
+  <select id="selectByCheckId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dept
+        <where>
+            <if test="checkId != null">
+                and check_id=#{checkId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+  <select id="selectByManageId" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List" />
-    from t_dept_ding
+    <include refid="Base_Column_List"/>
+    from t_dept
+    <where>
+      <if test="manageId != null and manageId != ''">
+        AND manage_id LIKE CONCAT('%',#{manageId},'%')
+      </if>
+    </where>
   </select>
-
-  <delete id="deleteAll">
-    truncate table t_dept_ding
-  </delete>
-
-  <select id="selectEntry"  resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from t_dept_ding tdd
-    where tdd.dept_id
-    not in (select dept_id from t_dept)
-  </select>
-
 </mapper>

@@ -2,6 +2,7 @@ package com.ennova.pubinfodaily.dao;
 
 import com.ennova.pubinfodaily.entity.YsDailyRep;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.ennova.pubinfodaily.vo.DailyRepDetailVO;
 import com.ennova.pubinfodaily.vo.FileDownVO;
@@ -43,5 +44,10 @@ public interface YsDailyRepMapper {
                                         @Param("userId")Integer userId,
                                         @Param("startTime")String startTime,
                                         @Param("endTime")String endTime);
+
+    List<DailyRepDetailVO> getDayRepByUserIds(@Param("fileName")String fileName,
+                                              @Param("userIds")List<Integer>userIds,
+                                              @Param("startTime")String startTime,
+                                              @Param("endTime")String endTime);
 
 }

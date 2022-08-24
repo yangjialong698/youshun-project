@@ -29,4 +29,6 @@ public interface TDeptDingMapper {
 
     void deleteAll();
 
+    List<TDeptDing> selectEntry();
+
 }
