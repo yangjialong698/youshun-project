@@ -379,7 +379,7 @@ public class YsMasterTaskService {
                             /* 已认领、进行中的可进行完成 **/
                             boolean flag = masterTask.getStatus().equals(2) || masterTask.getStatus().equals(3);
                             if (flag) {
-                                YsMasterTask task = YsMasterTask.builder().id(id).status(4).updateTime(LocalDateTime.now()).build();
+                                YsMasterTask task = YsMasterTask.builder().id(id).status(4).rate(100).updateTime(LocalDateTime.now()).build();
                                 int count = ysMasterTaskMapper.updateByPrimaryKeySelective(task);
                                 if (count > 0) {
                                     return Callback.success(true);

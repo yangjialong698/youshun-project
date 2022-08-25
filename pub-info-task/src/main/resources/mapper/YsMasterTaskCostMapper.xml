@@ -175,7 +175,7 @@
 <!--    (@i:=@i+1) AS sortId,-->
     ys_master_task_id ysMasterTaskId,
     cost_date costDate,
-    cost,
+    round(cost,2) cost,
     remark,
     create_time createTime,
     update_time updateTime

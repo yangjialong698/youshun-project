@@ -402,6 +402,7 @@
   <select id="selectMasterNameNotCloseByReceiveId" resultType="java.util.LinkedHashMap">
         select distinct
             t1.id,
+            t1.serial_number as serialNumber,
             t1.name
        from
             ys_master_task t1,
@@ -422,6 +423,7 @@
        select
            distinct
            t1.id,
+           t1.serial_number serialNumber,
            t1.name
        from
            ys_master_task t1,

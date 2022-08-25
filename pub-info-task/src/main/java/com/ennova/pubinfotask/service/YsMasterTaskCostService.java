@@ -25,6 +25,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -57,9 +58,9 @@ public class YsMasterTaskCostService {
             List<YsMasterTaskCost> costList = ysMasterTaskCostMapper.selectByYsMasterTaskIdAndCostDate(ysMasterTaskId, costDate);
             if (CollectionUtils.isNotEmpty(costList)) {
                 // 求和，Double类型的数据相加
-                costList.stream().filter(v -> v.getCost() != null).map(YsMasterTaskCost::getCost).reduce((v1, v2) -> v1 + v2).ifPresent(v -> {
-                    cost.updateAndGet(v1 -> v1 + v);
-                });
+                Double sumCost = costList.stream().filter(v -> v.getCost() != null).map(YsMasterTaskCost::getCost).reduce((v1, v2) -> v1 + v2).orElse(0D);
+                double newCost = new BigDecimal(sumCost).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                cost.set(newCost);
             }
             Page<YsMasterTaskCost> startPage = PageHelper.startPage(page, pageSize);
             List<YsMasterTaskCost> list = ysMasterTaskCostMapper.selectByYsMasterTaskIdAndCostDate(ysMasterTaskId, costDate);
