@@ -39,8 +39,8 @@ public class CkPdaScanController {
             @ApiImplicitParam(name = "barCode", value = "条码1/条码2")
     })
     @GetMapping("/selectPdaInfo")
-    public Callback<BaseVO<CkPdaScanVO>> selectPdaInfo(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer pageSize, String barCode){
-        return ckPdaScanService.selectPdaInfo(page, pageSize, barCode);
+    public Callback<BaseVO<CkPdaScanVO>> selectPdaInfo(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer pageSize, String barCode, String startTime, String endTime){
+        return ckPdaScanService.selectPdaInfo(page, pageSize, barCode, startTime, endTime);
     }
 
 }

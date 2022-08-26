@@ -54,12 +54,12 @@ public class CkPdaScanService {
         return Callback.error("入库失败");
     }
 
-    public Callback<BaseVO<CkPdaScanVO>> selectPdaInfo(Integer page, Integer pageSize, String barCode){
+    public Callback<BaseVO<CkPdaScanVO>> selectPdaInfo(Integer page, Integer pageSize, String barCode, String startTime, String endTime){
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
-        List<CkPdaScanVO> ckPdaScanVOS = ckPadScanMapper.selectPdaInfo(barCode);
+        List<CkPdaScanVO> ckPdaScanVOS = ckPadScanMapper.selectPdaInfo(barCode, startTime, endTime);
         BaseVO<CkPdaScanVO> baseVO = new BaseVO<>(ckPdaScanVOS, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }

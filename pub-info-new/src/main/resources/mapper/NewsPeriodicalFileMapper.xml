@@ -203,7 +203,9 @@
     npf.news_edition_num AS editionNum,
     npf.create_time AS createTime,
     npf.name AS fileName,
-    npf.file_md5 AS newfileName
+    npf.file_md5 AS newfileName,
+    npf.user_id AS userId,
+    npf.file_url AS fileUrl
     from news_periodical_file npf
     <where>
       del_flag = 0
@@ -214,6 +216,7 @@
         and npf.news_edition_num = #{editionNum}
       </if>
     </where>
+    order by createTime desc
   </select>
 
   <delete id="deletePeriodicalFile" parameterType="java.lang.Integer">

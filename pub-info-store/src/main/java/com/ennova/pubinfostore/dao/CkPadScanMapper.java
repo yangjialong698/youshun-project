@@ -21,5 +21,5 @@ public interface CkPadScanMapper {
 
     int updateByPrimaryKey(CkPdaScan record);
 
-    List<CkPdaScanVO> selectPdaInfo(@Param("barCode") String barCode);
+    List<CkPdaScanVO> selectPdaInfo(@Param("barCode") String barCode, @Param("startTime") String createTime, @Param("endTime") String endTime);
 }

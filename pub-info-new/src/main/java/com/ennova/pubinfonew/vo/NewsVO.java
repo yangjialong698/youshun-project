@@ -22,6 +22,9 @@ public class NewsVO {
     @ApiModelProperty(value = "期数", example = "1")
     private Integer periodicalNum;
 
+    @ApiModelProperty(value = "版数", example = "1")
+    private Integer editionNum;
+
     @ApiModelProperty(value = "创建日期")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date createTime;
@@ -31,4 +34,10 @@ public class NewsVO {
 
     @ApiModelProperty(value = "MD5")
     private String newfileName;
+
+    @ApiModelProperty(value = "用户id")
+    private Integer userId;
+
+    @ApiModelProperty(value = "文件url")
+    private String fileUrl;
 }

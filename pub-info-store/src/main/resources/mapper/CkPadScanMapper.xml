@@ -98,9 +98,15 @@
     cps.create_time AS createTime
     from ck_pda_scan cps
     <where>
-    <if test="barCode != null and barCode != ''">
-      CONCAT(IFNULL(cps.bar_code1,''),IFNULL(cps.bar_code2,'')) like CONCAT('%',#{barCode},'%')
-    </if>
+      <if test="barCode != null and barCode != ''">
+        CONCAT(IFNULL(cps.bar_code1,''),IFNULL(cps.bar_code2,'')) like CONCAT('%',#{barCode},'%')
+      </if>
+      <if test="startTime!=null and startTime!=''">
+        AND cps.create_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime!=null and endTime!=''">
+        AND cps.create_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+      </if>
     </where>
     order by cps.create_time desc
   </select>
