@@ -92,7 +92,6 @@ public class YsMasterTaskController {
         return ysMasterTaskService.receiveTask(id);
     }
 
-    // 主任务哪几种状态下，可以选择完成？？？？
     @ApiOperation(value = "主任务 - 完成")
     @ApiOperationSort(value = 8)
     @ApiImplicitParams({

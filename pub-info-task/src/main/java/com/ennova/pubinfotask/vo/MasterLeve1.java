@@ -152,4 +152,7 @@ public class MasterLeve1 {
      */
     @ApiModelProperty(value = "是否存在经验建议： 0- 包含  1-不含", example = "1")
     private Integer experienceStatus;
+
+    @ApiModelProperty(value = "是否存在子任务： 0- 包含  1-不含", example = "1")
+    private Integer sonTaskStatus;
 }

@@ -74,5 +74,8 @@ public interface YsSonTaskMapper {
 
     List<YsSonTask> selectBySerialNumber(@Param("serialNumber")String serialNumber);
 
+    List<YsSonTask> selectByYsMasterTaskId(@Param("ysMasterTaskId")Integer ysMasterTaskId);
+
+
 
 }

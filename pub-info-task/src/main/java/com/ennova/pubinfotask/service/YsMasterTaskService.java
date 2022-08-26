@@ -605,9 +605,16 @@ public class YsMasterTaskService {
 
             List<YsMasterFile> masterFiles = ysMasterFileMapper.selectAllByYsMasterTaskId(x.getId());
             x.setButtonStatus(1);
-            if (masterFiles != null && !masterFiles.isEmpty()) {
+            if (CollectionUtils.isNotEmpty(masterFiles)) {
                 x.setButtonStatus(0);
             }
+
+            List<YsSonTask> ysSonTasks = ysSonTaskMapper.selectByYsMasterTaskId(x.getId());
+            x.setSonTaskStatus(1);
+            if (CollectionUtils.isNotEmpty(ysSonTasks)){
+                x.setSonTaskStatus(0);
+            }
+
             x.setEstimateHour(String.valueOf(sumEstimateWork));
             x.setTotalConsume(String.valueOf(sumTotalConsume));
             x.setSurplus(String.valueOf(surplus));
