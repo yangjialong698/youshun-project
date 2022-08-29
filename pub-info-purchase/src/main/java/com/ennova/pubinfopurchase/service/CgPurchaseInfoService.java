@@ -16,10 +16,7 @@ import com.ennova.pubinfopurchase.entity.CgContactInformation;
 import com.ennova.pubinfopurchase.entity.CgPurchaseFile;
 import com.ennova.pubinfopurchase.entity.CgPurchaseInfo;
 import com.ennova.pubinfopurchase.service.fegin.PubInfoTaskClient;
-import com.ennova.pubinfopurchase.vo.CgPurchaseFileVO;
-import com.ennova.pubinfopurchase.vo.CgPurchaseInfoVO;
-import com.ennova.pubinfopurchase.vo.FileVO;
-import com.ennova.pubinfopurchase.vo.TaskNumber;
+import com.ennova.pubinfopurchase.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
@@ -162,14 +159,15 @@ public class CgPurchaseInfoService {
         assert userVo != null;
         CgPurchaseInfo cgPurchaseInfo = new CgPurchaseInfo();
         BeanUtils.copyProperties(cgPurchaseInfoVO, cgPurchaseInfo);
-/*        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
+        /*CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
         if (!cgPurchaseInfoVO.getPurchaseName().equals(currentUserVO.getUsername())){
             return Callback.error("采购人填写有误，应与登录用户名一致");
         }*/
-        List<TaskNumber> taskNumbers = cgPurchaseInfoMapper.selectTaskNumberIsExist(Integer.parseInt(cgPurchaseInfoVO.getTaskNumber()));
+        //根据需求任务编号改为非必填项
+        /*List<TaskNumber> taskNumbers = cgPurchaseInfoMapper.selectTaskNumberIsExist(Integer.parseInt(cgPurchaseInfoVO.getTaskNumber()));
         if (taskNumbers.isEmpty()){
             return Callback.error("请输入正确的任务编号");
-        }
+        }*/
         if (cgPurchaseInfoVO.getId() != null) {
             //修改采集信息
             CgPurchaseInfo purchaseInfo = cgPurchaseInfoMapper.selectByPrimaryKey(cgPurchaseInfoVO.getId());

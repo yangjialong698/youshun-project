@@ -45,7 +45,6 @@ public class CgPurchaseInfoVO {
      * 任务编号
      */
     @ApiModelProperty(value = "任务编号")
-    @NotBlank(message = "任务编号(estimateHour): 不能为空!")
     private String taskNumber;
 
     /**

@@ -55,7 +55,7 @@ public class NewsCommentService {
         BeanUtils.copyProperties(newsCommentDto, newsComment);
         NewsPeriodical newsPeriodical = newsPeriodicalMapper.selectNewIdByDivPosition(newsComment.getDivPosition());
         if (ObjectUtils.isEmpty(newsPeriodical)){
-            return Callback.error(2, "报刊标题对应html位置未找到");
+            return Callback.error(2, "报刊标题对应网页名称未找到");
         }
         newsComment.setNewId(newsPeriodical.getId());
         newsComment.setCommentUserId(userVo.getId());

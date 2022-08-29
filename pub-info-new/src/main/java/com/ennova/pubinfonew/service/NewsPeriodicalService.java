@@ -86,7 +86,7 @@ public class NewsPeriodicalService {
             List<NewsComment> newsComments = newsCommentMapper.selectCommentByNewId(newsPeriodical.getId());
             if (CollectionUtils.isNotEmpty(newsComments)){
                 newsComments.forEach(newsComment -> {
-                    newsCommentMapper.deleteComment(newsComment.getNewId());
+                    newsCommentMapper.deleteComment(newsComment.getId());
                 });
             }
             List<NewsVO> newsFiles= newsPeriodicalFileMapper.selectPeriodicalFile(newsPeriodical.getPeriodicalNum(), newsPeriodical.getEditionNum());
