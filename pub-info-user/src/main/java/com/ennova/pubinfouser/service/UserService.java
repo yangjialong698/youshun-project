@@ -393,6 +393,12 @@ public class UserService extends BaseService<UserEntity> {
             userRole.setUserId(userDTO.getId());
             userRole.setRoleId(userDTO.getRoleId());
             userRoleMapper.updateByPrimaryKeySelective(userRole);
+        }else {
+            UserRole userRole = new UserRole();
+            userRole.setUserId(userDTO.getId());
+            userRole.setRoleId(userDTO.getRoleId());
+            userRole.setCreateTime(new Date());
+            userRoleMapper.insertSelective(userRole);
         }
         return Callback.success("用户修改成功");
     }
