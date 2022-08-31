@@ -224,6 +224,31 @@
         order by CONVERT( u.username USING gbk ) COLLATE gbk_chinese_ci ASC
     </select>
 
+    <select id="listManagerUsers" resultType="com.ennova.pubinfouser.vo.UserVO">
+        SELECT
+        u.id,
+        u.mobile,
+        u.job_num AS jobNum,
+        u.username,
+        u.department,
+        u.wechat_no AS wechatNo,
+        d.dept_name deptName,
+        u.position,
+        r.role_name AS roleName,
+        u.STATUS,
+        u.create_time AS createTime,
+        u.user_id AS userId
+        FROM
+        t_user u
+        LEFT JOIN t_dept d ON u.department = d.dept_id
+        LEFT JOIN t_user_role ur ON ur.user_id = u.id
+        LEFT JOIN t_role r ON ur.role_id = r.id
+        WHERE
+        u.is_delete = 0
+        AND u.is_show != 0
+        AND u.position like '%经理' or u.position like '%总监' or u.position like '%院长'
+    </select>
+
     <select id="getCouPerDept" resultType="com.ennova.pubinfouser.vo.PerDeptNumVO">
         SELECT
         d.dept_name AS deptName,

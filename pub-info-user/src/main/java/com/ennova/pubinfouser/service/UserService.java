@@ -342,6 +342,7 @@ public class UserService extends BaseService<UserEntity> {
         }
         Page<UserVO> startPage = PageHelper.startPage(page, pageSize);
         List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey);
+        List<UserVO> userVOS = userDao.listManagerUsers();
         List<DeptVO> deptVOList = deptService.listDeptList(53).getData();
         if (CollectionUtil.isNotEmpty(deptVOList)){
             List<String> deptManageIds = deptVOList.stream().filter(p -> StringUtils.isNotEmpty(p.getManageId())).map(deptVO -> deptVO.getManageId()).collect(Collectors.toList());
@@ -349,7 +350,11 @@ public class UserService extends BaseService<UserEntity> {
                 userVO.setIsBold(0);
                 for (Object deptManageId : deptManageIds) {
                     if (userVO.getUserId().equals(deptManageId)){
-                        userVO.setIsBold(1);
+                        for (UserVO vo : userVOS) {
+                            if (vo.getUserId().equals(userVO.getUserId())) {
+                                userVO.setIsBold(1);
+                            }
+                        }
                     }
                 }
             }

@@ -1,6 +1,5 @@
 package com.ennova.pubinfouser.dao;
 
-import com.ennova.pubinfouser.entity.TUserDing;
 import com.ennova.pubinfouser.entity.UserEntity;
 import com.ennova.pubinfouser.vo.PerDeptNumVO;
 import com.ennova.pubinfouser.vo.UserVO;
@@ -20,6 +19,8 @@ public interface UserDao extends BaseDao<UserEntity> {
     UserVO getUserById(@Param("id")Integer id);
 
     List<UserVO> listUsers(@Param("company")Integer company,@Param("roleId")Integer roleId,@Param("department")Integer department,  @Param("searchKey")String searchKey);
+
+    List<UserVO> listManagerUsers();
 
     List<PerDeptNumVO> getCouPerDept();
 
