@@ -302,6 +302,7 @@
            t_user t2
       <where>
           t1.executor_id = t2.id
+            and t2.is_delete = 0
             and t1.is_delete = 0
           <if test="masterTaskId != null">
               and t1.ys_master_task_id = #{masterTaskId,jdbcType=INTEGER}
