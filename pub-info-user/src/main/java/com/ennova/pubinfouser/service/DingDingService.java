@@ -122,7 +122,7 @@ public class DingDingService  {
     //每天上午10点下午3点跑一次获取钉钉用户列表
 
     @Scheduled(cron="0 0 09,14/12 * * ?") //测试
-    //@Scheduled(cron="0 0 12,17/12 * * ?") //线上
+    //@Scheduled(cron="0 0 01,12/12 * * ?") //线上
     public void userDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         List<Long> deptIds = null ;
@@ -263,7 +263,7 @@ public class DingDingService  {
 
 
     @Scheduled(cron="0 0 10,15/12 * * ?") //测试
-    //@Scheduled(cron="0 0 13,18/12 * * ?") //线上
+    //@Scheduled(cron="0 0 02,13/12 * * ?") //线上
     public void updatTuser() {
         //1.查询t_user无,t_user_ding有的数据(新入职)
         List<TUserDing> tUserDingList = tUserDingMapper.selectEntry();
