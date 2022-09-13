@@ -372,6 +372,7 @@
                 LEFT JOIN ys_son_task yst ON yst.ys_master_task_id = ymt.id
         WHERE
             yst.name IS NOT NULL
+          AND ymt.status != 5
     </select>
 
     <select id="selectMasterTaskByZrw" resultType="java.util.LinkedHashMap">
@@ -383,6 +384,7 @@
                 LEFT JOIN ys_task_receive ytr ON ytr.ys_master_task_id = ymt.id
         WHERE
         ytr.receive_id = #{userId}
+        AND ymt.status != 5
     </select>
 
     <select id="selectSonTask" resultType="java.util.LinkedHashMap">
@@ -601,6 +603,7 @@
         <foreach close=")" collection="ysMasterTaskIdList" item="item" open="(" separator=", ">
             #{item}
         </foreach>
+        AND ymt.status != 5
     </select>
 
 
