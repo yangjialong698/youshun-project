@@ -3,11 +3,17 @@
 <mapper namespace="com.ennova.pubinfotask.dao.ReportMapper">
 
   <select id = "selectSortList" resultType="com.ennova.pubinfotask.vo.SortMasterRateVO">
-    select id,name,rate,
-           (@i:=@i+1) AS sortNum
-    from ys_master_task,
-      (SELECT @i:=0) AS itable
+    select
+        t1.id,
+        t1.name,
+		t3.username,
+		t1.task_end_date taskEndDate,
+        t1.rate,
+        (@i:=@i+1) AS sortNum
+    from ys_master_task t1,ys_task_receive t2,t_user t3,(SELECT @i:=0) AS itable
     <where>
+        t1.id=t2.ys_master_task_id
+		and t2.receive_id = t3.id
         <if test="name != null">
             and name like concat('%',#{name},'%')
         </if>
