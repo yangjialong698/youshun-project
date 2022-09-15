@@ -6,7 +6,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -45,11 +47,39 @@ public class NewsPeriodicalVO {
     private String editionTitle;
 
     /**
-     * 报刊标题对应html位置
+     * 报刊内容
      */
-    @ApiModelProperty(value = "报刊标题对应html位置")
-    @NotBlank(message = "报刊标题对应html位置(divPosition): 不能为空!")
-    private String divPosition;
+    @ApiModelProperty(value = "报刊内容")
+    @NotBlank(message = "报刊内容(newsContent): 不能为空!")
+    private String newsContent;
+
+    /**
+     * 报刊内容起点x坐标
+     */
+    @ApiModelProperty(value = "报刊内容起点x坐标")
+    @NotNull(message = "报刊内容起点x坐标不能为空")
+    private Integer newsX;
+
+    /**
+     * 报刊内容起点y坐标
+     */
+    @ApiModelProperty(value = "报刊内容起点y坐标")
+    @NotNull(message = "报刊内容起点y坐标不能为空")
+    private Integer newsY;
+
+    /**
+     * 报刊内容对应宽度
+     */
+    @ApiModelProperty(value = "报刊内容对应宽度")
+    @Digits(integer = 6, fraction = 2, message = "宽度只能是两位小数")
+    private Double newsWidth;
+
+    /**
+     * 报刊内容对应高度
+     */
+    @ApiModelProperty(value = "报刊内容对应高度")
+    @Digits(integer = 6, fraction = 2, message = "高度只能是两位小数")
+    private Double newsHeight;
 
     /**
      * 上传日期

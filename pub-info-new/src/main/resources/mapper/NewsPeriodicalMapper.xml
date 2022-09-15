@@ -6,15 +6,27 @@
     <result column="periodical_num" jdbcType="INTEGER" property="periodicalNum" />
     <result column="edition_num" jdbcType="INTEGER" property="editionNum" />
     <result column="edition_title" jdbcType="VARCHAR" property="editionTitle" />
-    <result column="div_position" jdbcType="VARCHAR" property="divPosition" />
+    <result column="news_x" jdbcType="INTEGER" property="newsX" />
+    <result column="news_y" jdbcType="INTEGER" property="newsY" />
+    <result column="news_width" jdbcType="DOUBLE" property="newsWidth" />
+    <result column="news_height" jdbcType="DOUBLE" property="newsHeight" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ennova.pubinfonew.entity.NewsPeriodical">
+    <result column="news_content" jdbcType="LONGVARCHAR" property="newsContent" />
+  </resultMap>
   <sql id="Base_Column_List">
-    id, periodical_num, edition_num, edition_title, div_position, create_time
+    id, periodical_num, edition_num, edition_title, news_x, news_y, news_width, news_height,
+    create_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+  <sql id="Blob_Column_List">
+    news_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from news_periodical
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -25,7 +37,11 @@
     np.periodical_num AS periodicalNum,
     np.edition_num AS editionNum,
     np.edition_title AS editionTitle,
-    np.div_position AS divPosition,
+    np.news_content AS newsContent,
+    np.news_x AS newsX,
+    np.news_y AS newsY,
+    np.news_width AS newsWidth,
+    np.news_height AS newsHeight,
     np.create_time AS createTime
     from news_periodical np
     <where>
@@ -64,11 +80,23 @@
       <if test="editionTitle != null">
         edition_title,
       </if>
-      <if test="divPosition != null">
-        div_position,
+      <if test="newsX != null">
+        news_x,
+      </if>
+      <if test="newsY != null">
+        news_y,
+      </if>
+      <if test="newsWidth != null">
+        news_width,
+      </if>
+      <if test="newsHeight != null">
+        news_height,
       </if>
       <if test="createTime != null">
         create_time,
+      </if>
+      <if test="newsContent != null">
+        news_content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -81,11 +109,23 @@
       <if test="editionTitle != null">
         #{editionTitle,jdbcType=VARCHAR},
       </if>
-      <if test="divPosition != null">
-        #{divPosition,jdbcType=VARCHAR},
+      <if test="newsX != null">
+        #{newsX,jdbcType=INTEGER},
+      </if>
+      <if test="newsY != null">
+        #{newsY,jdbcType=INTEGER},
+      </if>
+      <if test="newsWidth != null">
+        #{newsWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="newsHeight != null">
+        #{newsHeight,jdbcType=DOUBLE},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newsContent != null">
+        #{newsContent,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -107,13 +147,17 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfonew.entity.NewsPeriodical">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ennova.pubinfonew.entity.NewsPeriodical">
     update news_periodical
     set periodical_num = #{periodicalNum,jdbcType=INTEGER},
-      edition_num = #{editionNum,jdbcType=INTEGER},
-      edition_title = #{editionTitle,jdbcType=VARCHAR},
-      div_position = #{divPosition,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+        edition_num = #{editionNum,jdbcType=INTEGER},
+        edition_title = #{editionTitle,jdbcType=VARCHAR},
+        news_x = #{newsX,jdbcType=INTEGER},
+        news_y = #{newsY,jdbcType=INTEGER},
+        news_width = #{newsWidth,jdbcType=DOUBLE},
+        news_height = #{newsHeight,jdbcType=DOUBLE},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        news_content = #{newsContent,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">

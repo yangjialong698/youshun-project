@@ -10,13 +10,11 @@ import com.ennova.pubinfonew.dao.NewsPeriodicalMapper;
 import com.ennova.pubinfonew.dao.UserMapper;
 import com.ennova.pubinfonew.dto.NewsCommentDto;
 import com.ennova.pubinfonew.entity.NewsComment;
-import com.ennova.pubinfonew.entity.NewsPeriodical;
 import com.ennova.pubinfonew.vo.NewsCommentVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +51,7 @@ public class NewsCommentService {
 
         NewsComment newsComment = new NewsComment();
         BeanUtils.copyProperties(newsCommentDto, newsComment);
-        NewsPeriodical newsPeriodical = newsPeriodicalMapper.selectNewIdByDivPosition(newsComment.getDivPosition());
-        if (ObjectUtils.isEmpty(newsPeriodical)){
-            return Callback.error(2, "报刊标题对应网页名称未找到");
-        }
-        newsComment.setNewId(newsPeriodical.getId());
+        newsComment.setNewsId(newsCommentDto.getNewsId());
         newsComment.setCommentUserId(userVo.getId());
         newsComment.setCreateTime(new Date());
         int i = newsCommentMapper.insertSelective(newsComment);
@@ -106,7 +100,7 @@ public class NewsCommentService {
         List<NewsCommentVO> newsCommentVOS = newsCommentMapper.selectCommentByEditionTitle();
         for (NewsCommentVO newsCommentVO : newsCommentVOS) {
             newsCommentVO.setCommentUser(userMapper.selectCurrentUser(newsCommentVO.getCommentUserId()).getUsername());
-            newsCommentVO.setEditionTitle(newsPeriodicalMapper.selectByPrimaryKey(newsCommentVO.getNewId()).getEditionTitle());
+            newsCommentVO.setEditionTitle(newsPeriodicalMapper.selectByPrimaryKey(newsCommentVO.getNewsId()).getEditionTitle());
         }
         List<NewsCommentVO> collect = newsCommentVOS.stream().filter(newsCommentVO -> newsCommentVO.getEditionTitle().contains(editionTitle)).collect(Collectors.toList());
         BaseVO<NewsCommentVO> baseVO = new BaseVO<>(collect, new PageUtil(pageSize, (int) startPage.getTotal(), page));

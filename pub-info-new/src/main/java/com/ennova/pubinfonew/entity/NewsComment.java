@@ -26,7 +26,7 @@ public class NewsComment {
      * 评论期刊标题id
      */
     @ApiModelProperty(value = "评论期刊标题id")
-    private Integer newId;
+    private Integer newsId;
 
     /**
      * 评论人id
@@ -39,12 +39,6 @@ public class NewsComment {
      */
     @ApiModelProperty(value = "评论内容")
     private String commentContent;
-
-    /**
-     * 报刊标题对应html位置
-     */
-    @ApiModelProperty(value = "报刊标题对应html位置")
-    private String divPosition;
 
     /**
      * 创建时间

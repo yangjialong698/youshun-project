@@ -2,6 +2,7 @@ package com.ennova.pubinfonew.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfonew.entity.NewsPeriodical;
 import com.ennova.pubinfonew.service.NewsPeriodicalService;
 import com.ennova.pubinfonew.vo.NewsPeriodicalVO;
 import io.swagger.annotations.Api;
@@ -53,5 +54,15 @@ public class NewsPeriodicalController {
     public Callback delete(Integer id) {
         return newsPeriodicalService.delete(id);
     }
+
+    @ApiOperation(value = "新闻期刊 - 期刊信息查看详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "期刊ID", required = true)
+    })
+    @GetMapping("/getNewsDetail")
+    public Callback<NewsPeriodical> getNewsDetail(Integer id){
+        return newsPeriodicalService.getNewsDetail(id);
+    }
+
 
 }

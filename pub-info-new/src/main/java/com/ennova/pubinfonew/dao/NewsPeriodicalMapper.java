@@ -21,7 +21,7 @@ public interface NewsPeriodicalMapper {
 
     int updateByPrimaryKeySelective(NewsPeriodical record);
 
-    int updateByPrimaryKey(NewsPeriodical record);
+    int updateByPrimaryKeyWithBLOBs(NewsPeriodical record);
 
     int batchInsert(@Param("list") java.util.List<NewsPeriodical> list);
 

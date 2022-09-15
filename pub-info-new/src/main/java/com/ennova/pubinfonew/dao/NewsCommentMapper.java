@@ -34,5 +34,5 @@ public interface NewsCommentMapper {
 
     int deleteComment(@Param("id") Integer id);
 
-    List<NewsComment> selectCommentByNewId(@Param("newId") Integer newId);
+    List<NewsComment> selectCommentByNewsId(@Param("newId") Integer newId);
 }

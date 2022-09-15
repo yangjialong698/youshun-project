@@ -97,7 +97,9 @@ public class NewsPeriodicalFileService {
     }
 
     public Callback<List<Integer>> getPeriodicalNum() {
-        List<Integer> periodicalNums = newsPeriodicalMapper.selectPeriodicalNum();
+        //图片上传后的期数
+        List<NewsVO> newsVOS = newsPeriodicalFileMapper.selectPeriodicalFile(null, null);
+        List<Integer> periodicalNums = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null && !newsVO.getFileName().contains(".pdf")).map(newsVO -> newsVO.getPeriodicalNum()).collect(Collectors.toList());
         return Callback.success(periodicalNums);
     }
 
@@ -177,7 +179,18 @@ public class NewsPeriodicalFileService {
         assert userVo != null;
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
         List<NewsVO> newsVOS = newsPeriodicalFileMapper.selectPeriodicalFile(periodicalNum, editionNum);
-        List<NewsVO> collect = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null).collect(Collectors.toList());
+        List<NewsVO> collect = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null && newsVO.getFileName().contains(".pdf")).collect(Collectors.toList());
+        BaseVO<NewsVO> baseVO = new BaseVO<>(collect, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        return Callback.success(baseVO);
+    }
+
+    public Callback<BaseVO<NewsVO>> selectPeriodicalPicture(Integer page, Integer pageSize, Integer periodicalNum, Integer editionNum) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
+        List<NewsVO> newsVOS = newsPeriodicalFileMapper.selectPeriodicalFile(periodicalNum, editionNum);
+        List<NewsVO> collect = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null && !newsVO.getFileName().contains(".pdf")).collect(Collectors.toList());
         BaseVO<NewsVO> baseVO = new BaseVO<>(collect, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }

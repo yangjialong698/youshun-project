@@ -74,4 +74,15 @@ public class NewsPeriodicalFileController {
         return newsPeriodicalFileService.selectPeriodicalFile(page, pageSize, periodicalNum, editionNum);
     }
 
+    @ApiOperation(value = "期刊图片 - 分页列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "开始页"),
+            @ApiImplicitParam(name = "pageSize", value = "显示条数"),
+            @ApiImplicitParam(name = "PeriodicalNum", value = "报刊期数")
+    })
+    @GetMapping("/selectPeriodicalPicture")
+    public Callback<BaseVO<NewsVO>> selectPeriodicalPicture(@RequestParam(defaultValue = "1") Integer page,
+                                                         @RequestParam(defaultValue = "10") Integer pageSize, Integer periodicalNum, Integer editionNum){
+        return newsPeriodicalFileService.selectPeriodicalPicture(page, pageSize, periodicalNum, editionNum);
+    }
 }

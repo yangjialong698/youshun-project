@@ -48,8 +48,7 @@ public class NewsPeriodicalService {
             NewsPeriodical newsPeriodicals = newsPeriodicalMapper.selectByPrimaryKey(newsPeriodicalVO.getId());
             if (newsPeriodicals != null) {
                 newsPeriodical.setCreateTime(new Date());
-                newsPeriodical.setDivPosition(newsPeriodicals.getDivPosition());
-                int i = newsPeriodicalMapper.updateByPrimaryKey(newsPeriodical);
+                int i = newsPeriodicalMapper.updateByPrimaryKeyWithBLOBs(newsPeriodical);
                 if (i > 0) {
                     return Callback.success(true);
                 }
@@ -83,7 +82,7 @@ public class NewsPeriodicalService {
         NewsPeriodical newsPeriodical = newsPeriodicalMapper.selectByPrimaryKey(id);
         if (newsPeriodical != null) {
             int i = newsPeriodicalMapper.deleteByPrimaryKey(id);
-            List<NewsComment> newsComments = newsCommentMapper.selectCommentByNewId(newsPeriodical.getId());
+            List<NewsComment> newsComments = newsCommentMapper.selectCommentByNewsId(newsPeriodical.getId());
             if (CollectionUtils.isNotEmpty(newsComments)){
                 newsComments.forEach(newsComment -> {
                     newsCommentMapper.deleteComment(newsComment.getId());
@@ -102,4 +101,11 @@ public class NewsPeriodicalService {
         return Callback.error(2, "删除失败");
     }
 
+    public Callback<NewsPeriodical> getNewsDetail(Integer id) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        NewsPeriodical newsPeriodical = newsPeriodicalMapper.selectByPrimaryKey(id);
+        return Callback.success(newsPeriodical);
+    }
 }

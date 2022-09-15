@@ -46,10 +46,34 @@ public class NewsPeriodical {
     private String editionTitle;
 
     /**
-     * 报刊标题对应html位置
+     * 报刊内容
      */
-    @ApiModelProperty(value = "报刊标题对应html位置")
-    private String divPosition;
+    @ApiModelProperty(value = "报刊内容")
+    private String newsContent;
+
+    /**
+     * 报刊内容起点x坐标
+     */
+    @ApiModelProperty(value = "报刊内容起点x坐标")
+    private Integer newsX;
+
+    /**
+     * 报刊内容起点y坐标
+     */
+    @ApiModelProperty(value = "报刊内容起点y坐标")
+    private Integer newsY;
+
+    /**
+     * 报刊内容对应宽度
+     */
+    @ApiModelProperty(value = "报刊内容对应宽度")
+    private Double newsWidth;
+
+    /**
+     * 报刊内容对应高度
+     */
+    @ApiModelProperty(value = "报刊内容对应高度")
+    private Double newsHeight;
 
     /**
      * 创建时间

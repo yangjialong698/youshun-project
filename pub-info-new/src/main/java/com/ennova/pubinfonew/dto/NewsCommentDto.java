@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @ApiModel(value = "新闻评论表")
 @Data
@@ -17,11 +18,11 @@ import javax.validation.constraints.NotBlank;
 public class NewsCommentDto {
 
     /**
-     * 报刊标题对应html位置
+     * 期刊ID
      */
-    @ApiModelProperty(value = "报刊标题对应html位置")
-    @NotBlank(message = "报刊标题对应html位置不能为空!")
-    private String divPosition;
+    @ApiModelProperty(value = "期刊ID")
+    @NotNull(message = "期刊ID不能为空!")
+    private Integer newsId;
 
     /**
      * 评论内容

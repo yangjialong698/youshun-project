@@ -29,7 +29,7 @@ public class NewsCommentVO {
      * 评论期刊标题id
      */
     @ApiModelProperty(value = "评论期刊标题id")
-    private Integer newId;
+    private Integer newsId;
 
     /**
      * 评论期刊标题
@@ -55,12 +55,6 @@ public class NewsCommentVO {
     @ApiModelProperty(value = "评论内容")
     @NotBlank(message = "评论内容(commentContent): 不能为空!")
     private String commentContent;
-
-    /**
-     * 报刊标题对应html位置
-     */
-    @ApiModelProperty(value = "报刊标题对应html位置")
-    private String divPosition;
 
     /**
      * 创建时间
