@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfotask.dao.ReportMapper">
+
+  <select id = "selectSortList" resultType="com.ennova.pubinfotask.vo.SortMasterRateVO">
+    select id,name,rate,
+           (@i:=@i+1) AS sortNum
+    from ys_master_task,
+      (SELECT @i:=0) AS itable
+    <where>
+        <if test="name != null">
+            and name like concat('%',#{name},'%')
+        </if>
+    </where>
+
+    order by rate desc
+  </select>
+
+  <select id="selectVisitList" resultType="com.ennova.pubinfotask.vo.VisitVO">
+    select
+      user_id userId,
+      user_name userName,
+      count(*) as count,
+      date_format(login_date, '%Y-%m') as loginDate
+    from t_login_log
+    <where>
+<!--      date_format(login_date, '%Y-%m') != date_format(now(), '%Y-%m')-->
+<!--      and -->
+
+      date_format(login_date, '%Y-%m') = date_format(date_sub(now(), interval 1 month), '%Y-%m')
+<!--      <if test="userName != null and userName != ''">-->
+<!--        and user_name like concat('%', #{userName}, '%')-->
+<!--      </if>-->
+    </where>
+    group by loginDate, user_id
+    order by count desc, loginDate desc, user_id desc
+  </select>
+
+  <select id="selectLastMothList" resultType="com.ennova.pubinfotask.vo.VisitVO">
+    select
+      user_id userId,
+      user_name userName,
+      count_num as count,
+      login_date as loginDate
+    from ys_login_month
+    where
+      login_date = date_format(date_sub(now(), interval 1 month), '%Y-%m')
+    order by count desc, user_id desc
+    limit 10
+  </select>
+
+  <select id="selectCostDetailList" resultType="com.ennova.pubinfotask.vo.CostDetailVO">
+    select
+       t1.id,
+       t2.name,
+       t4.username,
+       t5.suject,
+       t1.cost,
+       t1.cost_date costDate,
+       t1.remark
+    from ys_master_task_cost t1 left join  ys_master_task t2 on t1.ys_master_task_id = t2.id
+         left join  ys_task_receive t3 on t2.id = t3.ys_master_task_id
+         left join t_user t4 on t3.receive_id = t4.id
+         left join ys_suject t5 on t1.ys_suject_id = t5.id
+    <where>
+      <if test="name != null and name != ''">
+        and t2.name like concat('%',#{name},'%')
+      </if>
+    </where>
+    order by t1.id
+  </select>
+
+  <select id="selectCostList" resultType="com.ennova.pubinfotask.vo.CostVO">
+      select
+          t2.name,
+          sum(t1.cost) as cost
+      from ys_master_task_cost t1 left join  ys_master_task t2 on t1.ys_master_task_id = t2.id
+      group by t1.ys_master_task_id
+      order by cost desc
+      limit 10
+  </select>
+
+  <select id="selecTdailySubmitCount" resultType="com.ennova.pubinfotask.vo.TdailySubmitCountVO">
+      select
+          t.user_id userId,
+          t.username userName,
+          t.ys_master_task_id masterTaskId,
+          t.name name,
+          count(case when check_code = 1 then 1 end) as timely,
+          count(case when check_code = 0 then 1 end) as notTimely
+      from
+          (
+              select
+                  t1.user_id,
+                  t3.username,
+                  t1.ys_master_task_id,
+                  t2.name,
+                  t1.dayrep_time,
+                  case when date_format(t1.dayrep_time, '%Y-%m-%d') = date_format(t1.create_time, '%Y-%m-%d') then 1 else 0 end as check_code
+              from ys_day_rep t1 left join ys_master_task t2 on t1.ys_master_task_id = t2.id
+                                 left join t_user t3 on t1.user_id = t3.id
+              <where>
+                   t1.user_id is not null
+                  <if test="dayNum != null and dayNum !=''">
+                      <![CDATA[ and t1.dayrep_time >= date_sub(now(), interval #{dayNum} day) ]]>
+                  </if>
+                  <![CDATA[ and t1.dayrep_time < date_sub(now(), interval 1 day)  ]]>
+                  <if test="userName != null and userName != ''">
+                      and t3.username like concat('%', #{userName}, '%')
+                    </if>
+              </where>
+              order by t1.dayrep_time desc
+            ) t
+        where user_id is not null
+        group by t.user_id
+  </select>
+
+</mapper>
