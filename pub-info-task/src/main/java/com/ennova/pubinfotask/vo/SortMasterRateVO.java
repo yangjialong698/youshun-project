@@ -12,7 +12,7 @@ public class SortMasterRateVO {
 
     private String name;
 
-    private String username;
+    private String userName;
 
     private Integer rate;
 

@@ -6,7 +6,7 @@
     select
         t1.id,
         t1.name,
-		t3.username,
+		t3.username userName,
 		t1.task_end_date taskEndDate,
         t1.rate,
         (@i:=@i+1) AS sortNum
