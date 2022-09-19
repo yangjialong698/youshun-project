@@ -107,7 +107,7 @@
   select <include refid="Base_Column_List"/>
     from ys_suject
     <where>
-      <if test="suject != null">
+      <if test="suject != null and suject !=''">
         and suject=#{suject,jdbcType=VARCHAR}
       </if>
     </where>
@@ -116,8 +116,8 @@
       select <include refid="Base_Column_List"/>
     from ys_suject
     <where>
-      <if test="suject != null">
-        and suject like CONCAT('%',#{suject,jdbcType=VARCHAR},'%')
+      <if test="suject != null and suject !=''">
+        and suject like CONCAT('%',trim(#{suject,jdbcType=VARCHAR}),'%')
       </if>
     </where>
   </select>
@@ -128,7 +128,7 @@
       <if test="id != null">
             and id != #{id,jdbcType=INTEGER}
       </if>
-      <if test="suject != null">
+      <if test="suject != null and suject !=''">
             and suject=#{suject,jdbcType=VARCHAR}
       </if>
     </where>

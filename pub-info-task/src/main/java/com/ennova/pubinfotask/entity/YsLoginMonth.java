@@ -50,11 +50,13 @@ public class YsLoginMonth {
     * 创建日期
     */
     @ApiModelProperty(value="创建日期")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     /**
     * 更新日期
     */
     @ApiModelProperty(value="更新日期")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 }
