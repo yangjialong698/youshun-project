@@ -124,13 +124,13 @@
       <if test="count != null">
         and count_num=#{count,jdbcType=INTEGER}
       </if>
-      <if test="loginDate != null">
+      <if test="loginDate != null and loginDate !=''">
         and login_date=#{loginDate,jdbcType=VARCHAR}
       </if>
       <if test="userId != null">
         and user_id=#{userId,jdbcType=INTEGER}
       </if>
-      <if test="userName != null">
+      <if test="userName != null and userName !=''">
         and user_name=#{userName,jdbcType=VARCHAR}
       </if>
     </where>
@@ -139,10 +139,10 @@
   select <include refid="Base_Column_List"/>
     from ys_login_month
     <where>
-      <if test="userName != null">
-        and user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+      <if test="userName != null and userName !=''">
+        and user_name like concat('%',trim(#{userName,jdbcType=VARCHAR}),'%')
       </if>
-      <if test="loginDate != null">
+      <if test="loginDate != null and loginDate !=''">
         and login_date=#{loginDate,jdbcType=VARCHAR}
       </if>
     </where>
