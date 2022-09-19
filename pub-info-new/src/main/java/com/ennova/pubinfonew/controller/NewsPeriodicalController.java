@@ -64,5 +64,4 @@ public class NewsPeriodicalController {
         return newsPeriodicalService.getNewsDetail(id);
     }
 
-
 }

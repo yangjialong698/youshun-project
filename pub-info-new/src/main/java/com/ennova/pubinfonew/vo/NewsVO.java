@@ -40,4 +40,16 @@ public class NewsVO {
 
     @ApiModelProperty(value = "文件url")
     private String fileUrl;
+
+    @ApiModelProperty(value = "是否有上一期")
+    private boolean upPeriodical;
+
+    @ApiModelProperty(value = "是否有下一期")
+    private boolean downPeriodical;
+
+    @ApiModelProperty(value = "是否有上一版")
+    private boolean upEdition;
+
+    @ApiModelProperty(value = "是否有下一版")
+    private boolean downEdition;
 }

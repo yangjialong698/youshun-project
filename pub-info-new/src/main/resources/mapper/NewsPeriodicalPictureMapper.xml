@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfonew.dao.NewsPeriodicalPictureMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfonew.entity.NewsPeriodicalPicture">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="news_periodical_num" jdbcType="INTEGER" property="newsPeriodicalNum" />
+    <result column="news_edition_num" jdbcType="INTEGER" property="newsEditionNum" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="file_md5" jdbcType="VARCHAR" property="fileMd5" />
+    <result column="file_size" jdbcType="VARCHAR" property="fileSize" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
+    <result column="open_file" jdbcType="INTEGER" property="openFile" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, news_periodical_num, news_edition_num, name, file_md5, file_size, file_url, del_flag, 
+    open_file, create_time, update_time, user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from news_periodical_picture
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from news_periodical_picture
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfonew.entity.NewsPeriodicalPicture" useGeneratedKeys="true">
+    insert into news_periodical_picture (news_periodical_num, news_edition_num, 
+      name, file_md5, file_size, 
+      file_url, del_flag, open_file, 
+      create_time, update_time, user_id
+      )
+    values (#{newsPeriodicalNum,jdbcType=INTEGER}, #{newsEditionNum,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{fileMd5,jdbcType=VARCHAR}, #{fileSize,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR}, #{delFlag,jdbcType=INTEGER}, #{openFile,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfonew.entity.NewsPeriodicalPicture" useGeneratedKeys="true">
+    insert into news_periodical_picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="newsPeriodicalNum != null">
+        news_periodical_num,
+      </if>
+      <if test="newsEditionNum != null">
+        news_edition_num,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="fileMd5 != null">
+        file_md5,
+      </if>
+      <if test="fileSize != null">
+        file_size,
+      </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+      <if test="openFile != null">
+        open_file,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="newsPeriodicalNum != null">
+        #{newsPeriodicalNum,jdbcType=INTEGER},
+      </if>
+      <if test="newsEditionNum != null">
+        #{newsEditionNum,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fileMd5 != null">
+        #{fileMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null">
+        #{fileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="openFile != null">
+        #{openFile,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfonew.entity.NewsPeriodicalPicture">
+    update news_periodical_picture
+    <set>
+      <if test="newsPeriodicalNum != null">
+        news_periodical_num = #{newsPeriodicalNum,jdbcType=INTEGER},
+      </if>
+      <if test="newsEditionNum != null">
+        news_edition_num = #{newsEditionNum,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fileMd5 != null">
+        file_md5 = #{fileMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null">
+        file_size = #{fileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="openFile != null">
+        open_file = #{openFile,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfonew.entity.NewsPeriodicalPicture">
+    update news_periodical_picture
+    set news_periodical_num = #{newsPeriodicalNum,jdbcType=INTEGER},
+      news_edition_num = #{newsEditionNum,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      file_md5 = #{fileMd5,jdbcType=VARCHAR},
+      file_size = #{fileSize,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=INTEGER},
+      open_file = #{openFile,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectPeriodicalPicture" resultType="com.ennova.pubinfonew.vo.NewsVO">
+    select
+    npf.id,
+    npf.news_periodical_num AS periodicalNum,
+    npf.news_edition_num AS editionNum,
+    npf.create_time AS createTime,
+    npf.name AS fileName,
+    npf.file_md5 AS newfileName,
+    npf.user_id AS userId,
+    npf.file_url AS fileUrl
+    from news_periodical_picture npf
+    <where>
+      del_flag = 0
+      <if test="periodicalNum != null">
+        and npf.news_periodical_num = #{periodicalNum}
+      </if>
+      <if test="editionNum != null">
+        and npf.news_edition_num = #{editionNum}
+      </if>
+    </where>
+    order by createTime desc
+  </select>
+
+  <select id="selectPeriodicalAndedition" resultType="com.ennova.pubinfonew.vo.NewsVO">
+    select
+    npf.id,
+    npf.news_periodical_num AS periodicalNum,
+    npf.news_edition_num AS editionNum,
+    npf.create_time AS createTime,
+    npf.name AS fileName,
+    npf.file_md5 AS newfileName,
+    npf.user_id AS userId,
+    npf.file_url AS fileUrl
+    from news_periodical_picture npf
+    <where>
+      del_flag = 0
+      <if test="periodicalNum != null">
+        and npf.news_periodical_num = #{periodicalNum}
+      </if>
+      <if test="editionNum != null">
+        and npf.news_edition_num = #{editionNum}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectAllByFileMd5AndUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from news_periodical_picture
+    <where>
+      del_flag = 0
+      <if test="fileMd5 != null">
+        and file_md5 = #{fileMd5,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <select id="selectByFileMd5" resultType="java.lang.Integer">
+    select count(id)
+    from news_periodical_picture
+    where del_flag = 0 and file_md5 = #{fileMd5}
+  </select>
+</mapper>

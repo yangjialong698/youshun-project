@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * @author yangjialong
@@ -36,12 +35,6 @@ public class NewsPeriodicalFileController {
     @PostMapping("/selectFile")
     public Callback<FileVO> selectFile(MultipartFile file){
         return newsPeriodicalFileService.selectFile(file);
-    }
-
-    @ApiOperation(value = "期刊文件 - 选择期数")
-    @GetMapping("/getPeriodicalNum")
-    public Callback<List<Integer>> getPeriodicalNum(){
-        return newsPeriodicalFileService.getPeriodicalNum();
     }
 
     @ApiOperation(value = "期刊文件 - 上传文件")
@@ -74,15 +67,4 @@ public class NewsPeriodicalFileController {
         return newsPeriodicalFileService.selectPeriodicalFile(page, pageSize, periodicalNum, editionNum);
     }
 
-    @ApiOperation(value = "期刊图片 - 分页列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "开始页"),
-            @ApiImplicitParam(name = "pageSize", value = "显示条数"),
-            @ApiImplicitParam(name = "PeriodicalNum", value = "报刊期数")
-    })
-    @GetMapping("/selectPeriodicalPicture")
-    public Callback<BaseVO<NewsVO>> selectPeriodicalPicture(@RequestParam(defaultValue = "1") Integer page,
-                                                         @RequestParam(defaultValue = "10") Integer pageSize, Integer periodicalNum, Integer editionNum){
-        return newsPeriodicalFileService.selectPeriodicalPicture(page, pageSize, periodicalNum, editionNum);
-    }
 }
