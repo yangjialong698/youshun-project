@@ -8,6 +8,7 @@ import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfonew.dao.NewsPeriodicalFileMapper;
 import com.ennova.pubinfonew.dao.NewsPeriodicalMapper;
+import com.ennova.pubinfonew.dao.NewsPeriodicalPictureMapper;
 import com.ennova.pubinfonew.dto.FileDelDTO;
 import com.ennova.pubinfonew.dto.FileDto;
 import com.ennova.pubinfonew.entity.NewsPeriodicalFile;
@@ -54,6 +55,7 @@ public class NewsPeriodicalFileService {
     private final HttpServletRequest request;
     private final NewsPeriodicalFileMapper newsPeriodicalFileMapper;
     private final NewsPeriodicalMapper newsPeriodicalMapper;
+    private final NewsPeriodicalPictureMapper newsPeriodicalPictureMapper;
 
     /**
      * 本地路径
@@ -156,7 +158,8 @@ public class NewsPeriodicalFileService {
                 if (file.exists()) {
                     //查看是否唯一
                     int count = newsPeriodicalFileMapper.selectByFileMd5(fileVo.getNewfileName());
-                    if (count == 1) {
+                    int i = newsPeriodicalPictureMapper.selectByFileMd5(fileVo.getNewfileName());
+                    if (count + i <= 1) {
                         file.delete();
                     }
                     newsPeriodicalFileMapper.deleteByPrimaryKey(fileVo.getId());

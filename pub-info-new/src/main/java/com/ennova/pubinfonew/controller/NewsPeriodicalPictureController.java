@@ -85,4 +85,10 @@ public class NewsPeriodicalPictureController {
                                                             @RequestParam(defaultValue = "10") Integer pageSize, Integer periodicalNum, Integer editionNum){
         return newsPeriodicalPictureService.selectPeriodicalPicture(page, pageSize, periodicalNum, editionNum);
     }
+
+    @ApiOperation(value = "期刊图片 - 修改按钮判断条件")
+    @GetMapping("/selectPeriodicalChangeStatus")
+    public Callback<NewsVO> selectPeriodicalChangeStatus(Integer periodicalNum, Integer editionNum){
+        return newsPeriodicalPictureService.selectPeriodicalChangeStatus(periodicalNum, editionNum);
+    }
 }

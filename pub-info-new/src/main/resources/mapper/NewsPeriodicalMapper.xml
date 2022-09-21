@@ -11,13 +11,14 @@
     <result column="news_width" jdbcType="DOUBLE" property="newsWidth" />
     <result column="news_height" jdbcType="DOUBLE" property="newsHeight" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ennova.pubinfonew.entity.NewsPeriodical">
     <result column="news_content" jdbcType="LONGVARCHAR" property="newsContent" />
   </resultMap>
   <sql id="Base_Column_List">
     id, periodical_num, edition_num, edition_title, news_x, news_y, news_width, news_height,
-    create_time
+    create_time, user_id
   </sql>
   <sql id="Blob_Column_List">
     news_content
@@ -42,7 +43,8 @@
     np.news_y AS newsY,
     np.news_width AS newsWidth,
     np.news_height AS newsHeight,
-    np.create_time AS createTime
+    np.create_time AS createTime,
+    np.user_id AS userId
     from news_periodical np
     <where>
       <if test="periodicalNum != null">
@@ -63,10 +65,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfonew.entity.NewsPeriodical" useGeneratedKeys="true">
-    insert into news_periodical (periodical_num, edition_num, edition_title, 
-      div_position)
-    values (#{periodicalNum,jdbcType=INTEGER}, #{editionNum,jdbcType=INTEGER}, #{editionTitle,jdbcType=VARCHAR}, 
-      #{divPosition,jdbcType=VARCHAR})
+    insert into news_periodical (periodical_num, edition_num, edition_title,
+      div_position, user_id)
+    values (#{periodicalNum,jdbcType=INTEGER}, #{editionNum,jdbcType=INTEGER}, #{editionTitle,jdbcType=VARCHAR},
+      #{divPosition,jdbcType=VARCHAR},  #{userId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfonew.entity.NewsPeriodical" useGeneratedKeys="true">
     insert into news_periodical
@@ -98,6 +100,9 @@
       <if test="newsContent != null">
         news_content,
       </if>
+      <if test="userId != null">
+        user_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="periodicalNum != null">
@@ -126,6 +131,9 @@
       </if>
       <if test="newsContent != null">
         #{newsContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -157,7 +165,8 @@
         news_width = #{newsWidth,jdbcType=DOUBLE},
         news_height = #{newsHeight,jdbcType=DOUBLE},
         create_time = #{createTime,jdbcType=TIMESTAMP},
-        news_content = #{newsContent,jdbcType=LONGVARCHAR}
+        news_content = #{newsContent,jdbcType=LONGVARCHAR},
+        user_id = #{userId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
@@ -178,5 +187,33 @@
     <include refid="Base_Column_List" />
     from news_periodical
     where div_position = #{divPosition,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectPeriodicalAndedition" resultType="com.ennova.pubinfonew.vo.NewsPeriodicalVO">
+    select
+    np.id,
+    np.periodical_num AS periodicalNum,
+    np.edition_num AS editionNum,
+    np.edition_title AS editionTitle,
+    np.news_content AS newsContent,
+    np.news_x AS newsX,
+    np.news_y AS newsY,
+    np.news_width AS newsWidth,
+    np.news_height AS newsHeight,
+    np.create_time AS createTime,
+    np.user_id AS userId
+    from news_periodical np
+    <where>
+      <if test="periodicalNum != null">
+        np.periodical_num = #{periodicalNum}
+      </if>
+      <if test="editionNum != null">
+        and np.edition_num = #{editionNum}
+      </if>
+      <if test="editionTitle != null and editionTitle != ''">
+        and np.edition_title like CONCAT('%', trim(#{editionTitle}), '%')
+      </if>
+    </where>
+    order by createTime desc
   </select>
 </mapper>

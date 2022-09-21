@@ -52,4 +52,7 @@ public class NewsVO {
 
     @ApiModelProperty(value = "是否有下一版")
     private boolean downEdition;
+
+    @ApiModelProperty(value = "是否可以修改删除")
+    private boolean changeStatus;
 }

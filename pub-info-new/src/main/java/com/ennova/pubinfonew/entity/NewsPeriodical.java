@@ -80,4 +80,10 @@ public class NewsPeriodical {
      */
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
+
+    /**
+     * 用户id
+     */
+    @ApiModelProperty(value = "用户id")
+    private Integer userId;
 }

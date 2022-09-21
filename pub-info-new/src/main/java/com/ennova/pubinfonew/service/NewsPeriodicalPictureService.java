@@ -1,5 +1,6 @@
 package com.ennova.pubinfonew.service;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.FileUtils;
 import com.ennova.pubinfocommon.utils.JWTUtil;
@@ -12,6 +13,7 @@ import com.ennova.pubinfonew.dto.FileDelDTO;
 import com.ennova.pubinfonew.dto.FileDto;
 import com.ennova.pubinfonew.entity.NewsPeriodicalPicture;
 import com.ennova.pubinfonew.vo.FileVO;
+import com.ennova.pubinfonew.vo.NewsPeriodicalVO;
 import com.ennova.pubinfonew.vo.NewsVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
@@ -34,10 +36,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -98,16 +97,18 @@ public class NewsPeriodicalPictureService {
 
     public Callback<List<Integer>> getEditionNum(Integer periodicalNum) {
         List<NewsVO> newsVOS = newsPeriodicalPictureMapper.selectPeriodicalPicture(periodicalNum, null);
-        List<Integer> editionNums = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null).map(newsVO -> newsVO.getEditionNum()).collect(Collectors.toList());
-        List<Integer> collect = editionNums.stream().distinct().collect(Collectors.toList());
-        return Callback.success(collect);
+        List<NewsVO> collect = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null).sorted(Comparator.comparing(NewsVO::getEditionNum)).collect(Collectors.toList());
+        List<Integer> editionNums = collect.stream().map(newsVO -> newsVO.getEditionNum()).collect(Collectors.toList());
+        List<Integer> collect1 = editionNums.stream().distinct().collect(Collectors.toList());
+        return Callback.success(collect1);
     }
 
     public Callback<List<Integer>> getPeriodicalNum() {
         List<NewsVO> newsVOS = newsPeriodicalPictureMapper.selectPeriodicalPicture(null, null);
-        List<Integer> periodicalNums = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null).map(newsVO -> newsVO.getPeriodicalNum()).collect(Collectors.toList());
-        List<Integer> collect = periodicalNums.stream().distinct().collect(Collectors.toList());
-        return Callback.success(collect);
+        List<NewsVO> collect = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null).sorted(Comparator.comparing(NewsVO::getPeriodicalNum).reversed()).collect(Collectors.toList());
+        List<Integer> periodicalNums = collect.stream().map(newsVO -> newsVO.getPeriodicalNum()).collect(Collectors.toList());
+        List<Integer> collect1 = periodicalNums.stream().distinct().collect(Collectors.toList());
+        return Callback.success(collect1);
     }
 
     public Callback<NewsVO> getPeriodicalAndEditionNum(Integer periodicalNum, Integer editionNum) {
@@ -150,7 +151,7 @@ public class NewsPeriodicalPictureService {
         if (fileDto.getPeriodicalNum() != null) {
             List<NewsVO> newsVOS = newsPeriodicalPictureMapper.selectPeriodicalPicture(fileDto.getPeriodicalNum(), fileDto.getEditionNum());
             if (newsVOS.size() > 0) {
-                return Callback.error("请勿重复上传重复期刊图片");
+                return Callback.error("该期对应版数已存在，请勿重复上传");
             }
             NewsPeriodicalPicture newsPeriodicalPicture = newsPeriodicalPictureMapper.selectByPrimaryKey(fileDto.getId());
             newsPeriodicalPicture.setNewsPeriodicalNum(fileDto.getPeriodicalNum());
@@ -223,8 +224,33 @@ public class NewsPeriodicalPictureService {
         assert userVo != null;
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
         List<NewsVO> newsVOS = newsPeriodicalPictureMapper.selectPeriodicalPicture(periodicalNum, editionNum);
+        for (NewsVO newsVO : newsVOS) {
+            List<NewsPeriodicalVO> newsPeriodicalVOS = newsPeriodicalMapper.selectAllNewPeriodical(newsVO.getPeriodicalNum(), newsVO.getEditionNum(), null);
+            if (CollectionUtil.isNotEmpty(newsPeriodicalVOS)) {
+                newsVO.setChangeStatus(false);
+            } else {
+                newsVO.setChangeStatus(true);
+            }
+        }
         List<NewsVO> collect = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null).collect(Collectors.toList());
         BaseVO<NewsVO> baseVO = new BaseVO<>(collect, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
+    }
+
+    public Callback<NewsVO> selectPeriodicalChangeStatus(Integer periodicalNum, Integer editionNum) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        if (periodicalNum == null && editionNum == null) {
+            return Callback.error(2, "期刊期数和版数不能为空");
+        }
+        List<NewsPeriodicalVO> newsPeriodicalVOS = newsPeriodicalMapper.selectAllNewPeriodical(periodicalNum, editionNum, null);
+        if (CollectionUtil.isNotEmpty(newsPeriodicalVOS)) {
+            NewsVO newsVO = newsPeriodicalPictureMapper.selectPeriodicalAndedition(periodicalNum, editionNum);
+            newsVO.setChangeStatus(false);
+            return Callback.success(newsVO);
+        } else {
+            return Callback.success(NewsVO.builder().changeStatus(true).build());
+        }
     }
 }

@@ -28,4 +28,6 @@ public interface NewsPeriodicalMapper {
     List<Integer> selectPeriodicalNum();
 
     NewsPeriodical selectNewIdByDivPosition(@Param("divPosition") String divPosition);
+
+    NewsPeriodicalVO selectPeriodicalAndedition(@Param("periodicalNum")Integer periodicalNum, @Param("editionNum")Integer editionNum);
 }
