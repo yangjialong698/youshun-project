@@ -264,9 +264,9 @@ public class CgPurchaseInfoService {
     }
 
     public Callback<BaseVO<CgPurchaseInfoVO>> selectPurchaseInfo(Integer page, Integer pageSize, String name) {
-        String token = request.getHeader("Authorization");
+       /* String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
+        assert userVo != null;*/
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
         List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name);
         cgPurchaseInfos.forEach(cgPurchaseInfoVO -> {

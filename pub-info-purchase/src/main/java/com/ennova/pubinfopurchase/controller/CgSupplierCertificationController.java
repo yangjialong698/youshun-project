@@ -81,7 +81,6 @@ public class CgSupplierCertificationController {
     }
 
     @ApiOperation(value = "供应商 - 审核")
-    @ApiOperationSort(value = 7)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "供应商id"),
             @ApiImplicitParam(name = "status", value = "状态   0:待审核 1:审核通过 2:审核不通过 - 驳回"),
