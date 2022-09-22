@@ -30,7 +30,7 @@ public interface NewsCommentMapper {
 
     int updateSortIdsById(@Param("id") Integer id);
 
-    List<NewsCommentVO> selectCommentByEditionTitle();
+    List<NewsCommentVO> selectCommentByEditionTitle(@Param("editionTitle")String editionTitle);
 
     int deleteComment(@Param("id") Integer id);
 

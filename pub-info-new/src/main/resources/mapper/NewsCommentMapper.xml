@@ -128,13 +128,19 @@
 
     <select id="selectCommentByEditionTitle" resultType="com.ennova.pubinfonew.vo.NewsCommentVO">
         select nc.id,
-               nc.news_id          AS newsId,
-               nc.comment_user_id AS commentUserId,
-               nc.comment_content AS commentContent,
-               nc.create_time     AS createTime,
-               nc.sort_id         AS sortId
-        from news_comment nc
-        where nc.is_delete = 0
+        nc.news_id AS newsId,
+        nc.comment_user_id AS commentUserId,
+        nc.comment_content AS commentContent,
+        nc.create_time AS createTime,
+        nc.sort_id AS sortId,
+        np.edition_title AS editionTitle
+        from news_comment nc join news_periodical np on nc.news_id = np.id
+        <where>
+            nc.is_delete = 0
+            <if test="editionTitle != null and editionTitle != ''">
+                and np.edition_title like CONCAT('%', trim(#{editionTitle}), '%')
+            </if>
+        </where>
         order by sortId desc, createTime desc
     </select>
 

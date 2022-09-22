@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author yangjialong
@@ -95,15 +94,13 @@ public class NewsCommentService {
     }
 
     public Callback<BaseVO<NewsCommentVO>> getCommentList(Integer page, Integer pageSize, String editionTitle){
-
         Page<NewsCommentVO> startPage = PageMethod.startPage(page, pageSize);
-        List<NewsCommentVO> newsCommentVOS = newsCommentMapper.selectCommentByEditionTitle();
+        List<NewsCommentVO> newsCommentVOS = newsCommentMapper.selectCommentByEditionTitle(editionTitle);
         for (NewsCommentVO newsCommentVO : newsCommentVOS) {
             newsCommentVO.setCommentUser(userMapper.selectCurrentUser(newsCommentVO.getCommentUserId()).getUsername());
             newsCommentVO.setEditionTitle(newsPeriodicalMapper.selectByPrimaryKey(newsCommentVO.getNewsId()).getEditionTitle());
         }
-        List<NewsCommentVO> collect = newsCommentVOS.stream().filter(newsCommentVO -> newsCommentVO.getEditionTitle().contains(editionTitle)).collect(Collectors.toList());
-        BaseVO<NewsCommentVO> baseVO = new BaseVO<>(collect, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        BaseVO<NewsCommentVO> baseVO = new BaseVO<>(newsCommentVOS, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
 

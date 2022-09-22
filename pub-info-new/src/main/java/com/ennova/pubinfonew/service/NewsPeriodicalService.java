@@ -6,7 +6,6 @@ import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfonew.dao.NewsCommentMapper;
-import com.ennova.pubinfonew.dao.NewsPeriodicalFileMapper;
 import com.ennova.pubinfonew.dao.NewsPeriodicalMapper;
 import com.ennova.pubinfonew.dao.NewsPeriodicalPictureMapper;
 import com.ennova.pubinfonew.entity.NewsComment;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -40,10 +38,9 @@ public class NewsPeriodicalService {
     private final HttpServletRequest request;
     private final NewsPeriodicalMapper newsPeriodicalMapper;
     private final NewsCommentMapper newsCommentMapper;
-    private final NewsPeriodicalFileMapper newsPeriodicalFileMapper;
     private final NewsPeriodicalPictureMapper newsPeriodicalPictureMapper;
 
-    public Callback insertOrUpdate(NewsPeriodicalVO newsPeriodicalVO) throws IOException {
+    public Callback insertOrUpdate(NewsPeriodicalVO newsPeriodicalVO){
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;

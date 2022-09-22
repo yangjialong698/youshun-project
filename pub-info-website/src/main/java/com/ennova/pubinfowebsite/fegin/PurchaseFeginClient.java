@@ -18,5 +18,6 @@ public interface PurchaseFeginClient {
 
     @ApiOperation(value = "获取公共信息采购系统 - 采购信息列表")
     @GetMapping("/api//purchase/selectPurchaseInfo")
-    public Callback<BaseVO<CgPurchaseInfoVO>> selectPurchaseInfo(@RequestParam("name")String name);
+    public Callback<BaseVO<CgPurchaseInfoVO>> selectPurchaseInfo(@RequestParam("page") Integer page,
+                                                                 @RequestParam("pageSize") Integer pageSize,@RequestParam("name")String name);
 }

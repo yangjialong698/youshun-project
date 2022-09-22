@@ -1,9 +1,9 @@
 package com.ennova.pubinfowebsite.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfowebsite.fegin.PurchaseFeginClient;
 import com.ennova.pubinfowebsite.vo.BaseVO;
 import com.ennova.pubinfowebsite.vo.CgPurchaseInfoVO;
-import com.ennova.pubinfowebsite.fegin.PurchaseFeginClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +38,10 @@ public class WebsiteController {
     private final PurchaseFeginClient client;
 
     @ApiOperation(value = "公司官网 - 获取公共信息采购系统 - 采购信息列表")
-    @GetMapping("/getPurchaseInfo ")
-    public Callback<BaseVO<CgPurchaseInfoVO>> getPurchaseInfo(String name) {
+    @GetMapping("/getPurchaseInfo")
+    public Callback<BaseVO<CgPurchaseInfoVO>> getPurchaseInfo(Integer page,Integer pageSize,String name) {
 
-        BaseVO<CgPurchaseInfoVO> data = client.selectPurchaseInfo(name).getData();
+        BaseVO<CgPurchaseInfoVO> data = client.selectPurchaseInfo(page, pageSize, name).getData();
 
         return Callback.success(data);
     }

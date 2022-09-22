@@ -32,7 +32,7 @@ public class NewsPeriodicalController {
 
     @ApiOperation(value = "新闻期刊 - 发布和修改新闻期刊")
     @PostMapping("/insertOrUpdate")
-    public Callback insertOrUpdate(@RequestBody @Validated NewsPeriodicalVO newsPeriodicalVO) throws Exception {
+    public Callback insertOrUpdate(@RequestBody @Validated NewsPeriodicalVO newsPeriodicalVO) {
         return newsPeriodicalService.insertOrUpdate(newsPeriodicalVO);
     }
 

@@ -9,30 +9,18 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@ApiModel(value = "期刊图片表")
+@ApiModel(value = "期刊图片热区表")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewsPeriodicalPicture {
+public class NewsPeriodicalHotPicture {
 
     /**
      * ID
      */
     @ApiModelProperty(value = "ID", example = "1")
     private Integer id;
-
-    /**
-     * 报刊期数
-     */
-    @ApiModelProperty(value = "报刊期数")
-    private Integer newsPeriodicalNum;
-
-    /**
-     * 报刊版数
-     */
-    @ApiModelProperty(value = "报刊版数")
-    private Integer newsEditionNum;
 
     /**
      * 原文件名

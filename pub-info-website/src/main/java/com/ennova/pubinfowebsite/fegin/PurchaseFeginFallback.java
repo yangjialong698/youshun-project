@@ -10,8 +10,9 @@ import com.ennova.pubinfowebsite.vo.CgPurchaseInfoVO;
  * @date 2022/9/20
  */
 public class PurchaseFeginFallback implements PurchaseFeginClient{
+
     @Override
-    public Callback<BaseVO<CgPurchaseInfoVO>> selectPurchaseInfo(String name) {
+    public Callback<BaseVO<CgPurchaseInfoVO>> selectPurchaseInfo(Integer page, Integer pageSize, String name) {
         return Callback.error("获取公共信息采购系统列表 - 失败");
     }
 }
