@@ -114,6 +114,7 @@
                                  left join t_user t3 on t1.user_id = t3.id
               <where>
                    t1.user_id is not null
+                   and t2.name is not null
                   <if test="dayNum != null and dayNum !=''">
                       <![CDATA[ and t1.dayrep_time >= date_sub(now(), interval #{dayNum} day) ]]>
                   </if>

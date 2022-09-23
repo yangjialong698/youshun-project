@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务进度排名</title>
+</head>
+<body>
+    <table border="1" cellspacing="0" cellpadding="10">
+        <caption style="margin:10px ;font-weight: bold;">任务进度排名表</caption>
+        <thead>
+        <th>进度排名</th>
+        <th>任务名称</th>
+        <th>负责人</th>
+        <th>任务进度</th>
+        <th>截止日期</th>
+        </thead>
+        <tbody>
+        <tr align="center" th:each="task:${taskList}">
+            <td th:text="${task.sortNum}"></td>
+            <td th:text="${task.name}"></td>
+            <td th:text="${task.userName}"></td>
+            <td th:text="${task.rate}"></td>
+            <!-- 时间格式化为年月日时分秒 --->
+            <td th:text="${#dates.format(task.taskEndDate,'yyyy-MM-dd')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

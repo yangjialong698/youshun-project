@@ -223,8 +223,6 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             log.info("收到消息：" + frame.text());
 
 
-
-
             Map<String, Channel> getConnects = ChannelHandlerPool.getConnects;
             getConnects.forEach((k, v) -> {
                 if (v.equals(ctx.channel())) {
@@ -232,8 +230,6 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
                     log.info("收到消息：" + frame.text());
                 }
             });
-
-
 
 //            getConnects.forEach((k, v) -> {
 //                log.info("推送消息a1：" + k);
@@ -291,8 +287,15 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         //
         //    }
 
-        return req.method().equals(HttpMethod.GET)
-                && headers.get(HttpHeaderNames.UPGRADE).equals("websocket");
+
+        if (req.method().equals(HttpMethod.GET) && headers != null && headers.contains("Upgrade", "websocket", true)) {
+            return true;
+        }
+
+        return false;
+
+//        return req.method().equals(HttpMethod.GET)
+//                && headers.get(HttpHeaderNames.UPGRADE).equals("websocket");
     }
 
 
@@ -348,7 +351,20 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         } else {
             return map;
         }
+    }
 
+
+    /**
+     * 服务端在对端 Socket 连接关闭后仍然向其传输数据引起的，但是对端关闭连接的原因却是未知的。
+     * 异常： Connection reset by peer
+     * @param ctx
+     * @param cause
+     */
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        log.error("异常信息：\r\n" + cause.getMessage());
+        cause.printStackTrace();
+        ctx.close();
     }
 
 
