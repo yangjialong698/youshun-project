@@ -2,8 +2,10 @@ package com.ennova.pubinfowebsite.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfowebsite.fegin.PurchaseFeginClient;
+import com.ennova.pubinfowebsite.service.WebsiteService;
 import com.ennova.pubinfowebsite.vo.BaseVO;
 import com.ennova.pubinfowebsite.vo.CgPurchaseInfoVO;
+import com.ennova.pubinfowebsite.vo.GwMessageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +18,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -36,6 +37,7 @@ import java.net.URISyntaxException;
 public class WebsiteController {
 
     private final PurchaseFeginClient client;
+    private final WebsiteService websiteService;
 
     @ApiOperation(value = "公司官网 - 获取公共信息采购系统 - 采购信息列表")
     @GetMapping("/getPurchaseInfo")
@@ -44,6 +46,12 @@ public class WebsiteController {
         BaseVO<CgPurchaseInfoVO> data = client.selectPurchaseInfo(page, pageSize, name).getData();
 
         return Callback.success(data);
+    }
+
+    @ApiOperation(value = "公司官网 - 在线留言")
+    @PostMapping("/onlineMessage")
+    public Callback onlineMessage(@RequestBody @Validated GwMessageVO gwMessageVO){
+        return websiteService.onlineMessage(gwMessageVO);
     }
 
     @GetMapping("/useRpcToCaiGou")

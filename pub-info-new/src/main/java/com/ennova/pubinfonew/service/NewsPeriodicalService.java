@@ -51,7 +51,6 @@ public class NewsPeriodicalService {
             NewsPeriodical newsPeriodicals = newsPeriodicalMapper.selectByPrimaryKey(newsPeriodicalVO.getId());
             newsPeriodical.setUserId(userVo.getId());
             if (newsPeriodicals != null) {
-                newsPeriodical.setCreateTime(new Date());
                 int i = newsPeriodicalMapper.updateByPrimaryKeyWithBLOBs(newsPeriodical);
                 if (i > 0) {
                     return Callback.success(true);

@@ -57,7 +57,7 @@
         and np.edition_title like CONCAT('%', trim(#{editionTitle}), '%')
       </if>
     </where>
-    order by createTime desc
+    order by createTime asc
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

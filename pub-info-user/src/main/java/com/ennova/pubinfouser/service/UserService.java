@@ -44,6 +44,7 @@ public class UserService extends BaseService<UserEntity> {
     private String purchaseSystem = "1002";
     private String scanSystem = "1003";
     private String newsSystem = "1004";
+    private String reportSystem = "1005";
 
     @Resource
     private UserDao userDao;
@@ -221,6 +222,13 @@ public class UserService extends BaseService<UserEntity> {
                 }
                 if (sysNum.equals(newsSystem)){
                     List<MenuVO> menuList = roleService.getMenuBySysNum("1004");
+                    newMenuVO.setSysNum(sysNum);
+                    newMenuVO.setSysName(tUserSystem.getSysName());
+                    newMenuVO.setMenu(menuList);
+                    newMenuVOS.add(newMenuVO);
+                }
+                if (sysNum.equals(reportSystem)){
+                    List<MenuVO> menuList = roleService.getMenuBySysNum("1005");
                     newMenuVO.setSysNum(sysNum);
                     newMenuVO.setSysName(tUserSystem.getSysName());
                     newMenuVO.setMenu(menuList);
