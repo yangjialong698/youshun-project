@@ -16,7 +16,7 @@
         t1.name,
 		t3.username userName,
 		t1.task_end_date taskEndDate,
-        t1.rate
+        ifnull(t1.rate,0) rate
     from ys_master_task t1,ys_task_receive t2,t_user t3
     <where>
         t1.id=t2.ys_master_task_id

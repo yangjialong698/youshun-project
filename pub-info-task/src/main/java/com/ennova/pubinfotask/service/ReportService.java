@@ -56,6 +56,9 @@ public class ReportService {
     @Value("${spring.mail.username}")
     private String mailFrom;
 
+    @Value("${spring.mail.mailFromNick}")
+    private String mailFromNick;
+
 
 
     //定时任务，每个月1号0点1分执行
@@ -138,11 +141,12 @@ public class ReportService {
 
     //每天早上9点执行定时任务
     @Scheduled(cron = "0 0 9 * * ?")
+    //@Scheduled(cron = "00 57 09 * * ?")
     public void sendHtmlMailThymeLeaf() {
-        // 发件人
+        // 发件人，配置文件中加载
         String mailFrom = this.mailFrom;
-        // 发件人昵称
-        String mailFromNick = "IT运维";
+        // 发件人昵称，配置文件中加载，此处省略
+        //String mailFromNick = "浦江在线服务";
         // 抄送人
         String cc = null;
         // 主题
