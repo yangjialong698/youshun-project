@@ -3,73 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <title>任务进度排名</title>
-    <style>
-        table {
-            font-size: 14px;
-        }
-
-        .green {
-            width: 90px;
-            height: 5px;
-            background-color: #50E682;
-            position: relative;
-            border-radius: 20px;
-        }
-
-        .grey {
-            width: 100px;
-            height: 5px;
-            background-color: #ccc;
-            color: #fff;
-            border-radius: 20px;
-        }
-
-        .p-title {
-            text-align: center;
-            font-size: 13px;
-        }
-
-        .trs:nth-child(odd) {
-            background-color: #F4FCFF;
-        }
-    </style>
 </head>
-<body>
+<style>
 
-<table cellspacing="0" cellpadding="10">
-    <caption style="margin:10px ;font-weight: bold;">任务进度排名</caption>
-    <thead>
-    <th>排名</th>
-    <th>任务名称</th>
-    <th>负责人</th>
-    <th>任务进度</th>
-    <th>截止日期</th>
-    </thead>
-    <tbody>
+    .style-body{
+        padding: 0;
+        margin: 0 auto;
+    }
 
-    <tr align="center" th:each="task:${taskList}" class="trs">
+    .title-thead{
+        background-color: #678FDF;
+        color: #ffffff;
+        text-align: center;
+        font-weight: bold;
+    }
 
-        <td th:if="${task.sortNum eq 1}" > <img style="width: 20px;height: 25px;"
-                                                src=" https://ceshi.paifangzaixian.com/ysapp/pubinfo/mail/p1.png" alt=""></td>
-        <td th:if="${task.sortNum eq 2}" > <img style="width: 20px;height: 25px;"
-                                                src=" https://ceshi.paifangzaixian.com/ysapp/pubinfo/mail/p2.png" alt=""></td>
-        <td th:if="${task.sortNum eq 3}" > <img style="width: 20px;height: 25px;"
-                                                src=" https://ceshi.paifangzaixian.com/ysapp/pubinfo/mail/p3.png" alt=""></td>
-        <td th:if="${task.sortNum gt 3}" th:text="${task.sortNum}"></td>
-        <td th:text="${task.name}"></td>
-        <td th:text="${task.userName}"></td>
-        <td style="width: 100px;" align="left">
-            <div class="p-title" th:text="${task.rate} + '%'"></div>
-            <div class="grey">
-                <div class="green" th:style="'width:' + ${task.rate} + 'px'">
-                </div>
-            </div>
-        </td>
+    .style-table {
+        min-width: 75%;
+        max-width: 75%;
+        border-collapse: collapse;
+        font-size: 0.9em;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        margin: 30px 10% 0 10%;
+    }
 
-        <!-- 时间格式化为年月日时分秒 --->
-        <td th:text="${#dates.format(task.taskEndDate,'yyyy-MM-dd')}"></td>
-    </tr>
-    </tbody>
-</table>
+    /*!*!** 手机端 *!*!*/
+    /*@media screen and (max-width: 768px) {*/
+    /*    .style-table {*/
+    /*        margin: 30px 0 0 0;*/
+    /*    }*/
+    /*}*/
+    /*!*!** PC端 *!*!*/
+    /*@media screen and (min-width: 768px) {*/
+    /*    .style-table {*/
+    /*        margin: 30px 10% 0 10%;*/
+    /*    }*/
+    /*}*/
+
+    .style-table tbody tr:nth-of-type(even) {
+        background-color: #F5FCFF;
+    }
+
+   .style-table the a dtr {
+       background-color: #0398dd;
+       color: #ff ffff;
+       text-align: left;
+   }
+
+    .style-table th, .style-table td{
+        text-align: center;
+        padding: 12px 15px;
+        width: 10%;
+    }
+
+    .style-tablet body tr{
+        /*文字居中*/
+        text-align: left;
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .style-table tbody tr:last-of-type{
+        border-bottom: 2px solid #678FDF;
+    }
+
+    .style-table tbody tr.active-row{
+        font-weight: bold;
+        color: #0398dd;
+    }
+
+    td .bar-text{
+        display: block;
+        text-align: center;
+        color: #000000;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+
+    .bar::after{
+        height: 10px;
+        border-radius: 10px;
+        display: block;
+        counter-reset: progress var(--precent);
+        counter-reset: progress var(--precent);
+        content: counter(progress) '%';
+        width: calc(1% * var(--precent));
+        color: #2486ff;
+        background-color: #2486ff;
+        text-align: center ;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    tbody tr td .bar-hight{
+        height: 6px;
+    }
+</style>
+<body class="style-body">
+    <!-- 调用isPc方法，如果为true，设置宽度为100%，如果不是true，宽度设置为60%-->
+
+
+    <table class="style-table" >
+        <thead>
+            <tr class="title-thead">
+                <th>进度排名</th>
+                <th>任务名称</th>
+                <th>负责人</th>
+                <th>任务进度</th>
+                <th>截止日期</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr align="center" th:each="task,taskStat:${taskList}">
+                 <td th:if="${task.sortNum eq 1}" > <img style="width: 20px;height: 25px;"
+                                                                src=" https://ceshi.paifangzaixian.com/ysapp/pubinfo/mail/p1.png" alt=""></td>
+                <td th:if="${task.sortNum eq 2}" > <img style="width: 20px;height: 25px;"
+                                                        src=" https://ceshi.paifangzaixian.com/ysapp/pubinfo/mail/p2.png" alt=""></td>
+                <td th:if="${task.sortNum eq 3}" > <img style="width: 20px;height: 25px;"
+                                                        src=" https://ceshi.paifangzaixian.com/ysapp/pubinfo/mail/p3.png" alt=""></td>
+                <td th:if="${task.sortNum gt 3}" th:text="${task.sortNum}"></td>
+                <td th:text="${task.name}"></td>
+                <td th:text="${task.userName}"></td>
+                <td>
+                    <!--将$变量放到span标签中-->
+                    <span class="bar-text" style=""></span>
+                    <span class="bar-text" th:text="${task.rate} + '%'"></span>
+                    <div class="bar-hight"></div>
+                    <span class="bar" th:style="'--precent:' + ${task.rate}"></span>
+                </td>
+                <!-- 时间格式化为年月日时分秒 --->
+                <td th:text="${#dates.format(task.taskEndDate,'yyyy-MM-dd')}"></td>
+            </tr>
+        </tbody>
+    </table>
 </body>
+<!--<script>-->
+<!--    function isPC() {-->
+<!--        var userAgentInfo = navigator.userAgent;-->
+<!--        var Agents = ["Android", "iPhone",-->
+<!--            "SymbianOS", "Windows Phone",-->
+<!--            "iPad", "iPod"];-->
+<!--        var flag = true;-->
+<!--        for (var v = 0; v < Agents.length; v++) {-->
+<!--            if (userAgentInfo.indexOf(Agents[v]) > 0) {-->
+<!--                flag = false;-->
+<!--                break;-->
+<!--            }-->
+<!--        }-->
+<!--        return flag;-->
+<!--    }-->
+
+<!--    window.onload = function () {-->
+<!--        if (isPC()) {-->
+<!--            var style = document.createElement('style');-->
+<!--            style.innerHTML = `-->
+<!--            .style-table {-->
+<!--                max-width: 60%;-->
+<!--                min-width: 60%;-->
+<!--            }-->
+<!--            `;-->
+<!--            document.head.appendChild(style);-->
+<!--        } else {-->
+<!--            var style = document.createElement('style');-->
+<!--            style.innerHTML = `-->
+<!--            .style-table {-->
+<!--                max-width: 100%;-->
+<!--                min-width: 100%;-->
+<!--            }-->
+<!--            `;-->
+<!--            document.head.appendChild(style);-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
 </html>

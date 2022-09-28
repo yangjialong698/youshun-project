@@ -141,10 +141,10 @@ public class ReportService {
 
     //每天早上9点执行定时任务
     @Scheduled(cron = "0 0 9 * * ?")
-    //@Scheduled(cron = "00 57 09 * * ?")
+//    @Scheduled(cron = "00 34 16 * * ?")
     public void sendHtmlMailThymeLeaf() {
         // 发件人，配置文件中加载
-        String mailFrom = this.mailFrom;
+        //String mailFrom = this.mailFrom;
         // 发件人昵称，配置文件中加载，此处省略
         //String mailFromNick = "浦江在线服务";
         // 抄送人
