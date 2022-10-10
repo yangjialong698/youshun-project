@@ -12,6 +12,7 @@ import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -287,9 +288,10 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         //
         //    }
 
-
-        if (req.method().equals(HttpMethod.GET) && headers != null && headers.contains("Upgrade", "websocket", true)) {
-            return true;
+        if (headers != null){
+            if (req.method().equals(HttpMethod.GET) && headers != null && headers.contains("Upgrade", "websocket", true)) {
+                return true;
+            }
         }
 
         return false;
@@ -354,18 +356,31 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     }
 
 
-    /**
-     * 服务端在对端 Socket 连接关闭后仍然向其传输数据引起的，但是对端关闭连接的原因却是未知的。
-     * 异常： Connection reset by peer
-     * @param ctx
-     * @param cause
-     */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         log.error("异常信息：\r\n" + cause.getMessage());
         cause.printStackTrace();
         ctx.close();
     }
+
+    /***
+     *  An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+     *
+     *  java.io.IOException: Connection reset by peer
+     */
+    @Override
+    public void handlerRemoved(ChannelHandlerContext ctx) {
+        log.info("handlerRemoved");
+        userMap.remove(channelMap.get(ctx.channel()));
+        channelMap.remove(ctx.channel());
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+        ctx.flush();
+    }
+
+
 
 
     /**

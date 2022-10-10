@@ -139,8 +139,11 @@ public class ReportService {
         return Callback.success(baseVO);
     }
 
+    /**
+     * 测试服务器，需停用
+     */
     //每天早上9点执行定时任务
-    @Scheduled(cron = "0 0 9 * * ?")
+    //@Scheduled(cron = "0 0 9 * * ?")
 //    @Scheduled(cron = "00 34 16 * * ?")
     public void sendHtmlMailThymeLeaf() {
         // 发件人，配置文件中加载

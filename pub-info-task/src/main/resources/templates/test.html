@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务进度排名</title>
+</head>
+<style>
+    /*.style-body {*/
+    /*    margin-top: 30px;*/
+    /*    margin-left: 50px;*/
+    /*    margin-right: 50px;*/
+    /*    margin-bottom: 50px;*/
+    /*}*/
+    /*.style-table {*/
+    /*    border-collapse: collapse;*/
+    /*    font-size: 0.9em;*/
+    /*    margin-left: 0  0 0 auto;*/
+    /*    width: 100%;*/
+    /*    border-radius: 5px;*/
+    /*    overflow: hidden;*/
+    /*    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);*/
+    /*}*/
+
+    /*!** 手机端 *!*/
+    /*@media screen and (max-width: 768px) {*/
+    /*    .style-table {*/
+    /*        margin: 30px 0 0 0;*/
+    /*    }*/
+    /*}*/
+    /*!*!** PC端 *!*!*/
+    /*@media screen and (min-width: 768px) {*/
+    /*    .style-table {*/
+    /*        margin: 30px 10% 0 10%;*/
+    /*    }*/
+    /*}*/
+
+    .style-body{
+        margin: 0 auto;
+        padding: 0;
+    }
+
+
+    .title-thead{
+        background-color: #678FDF;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    .style-table {
+        border-collapse: collapse;
+        /*margin: 30px 10% 0 10%;*/
+        margin: 35px auto;
+        max-width: 70%;
+        min-width: 70%;
+        font-size: 0.9em;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        /**居中显示*/
+        text-align: center;
+    }
+
+    .style-table tbody tr:nth-of-type(even) {
+        background-color: #F5FCFF;
+    }
+
+    .style-table the a dtr {
+        background-color: #0398dd;
+        color: #ffffff;
+        text-align: left;
+    }
+
+    .style-table th, .style-table td{
+        text-align: center;
+        padding: 12px 15px;
+        width: 10%;
+    }
+
+    .style-tablet body tr{
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .style-table tbody tr:last-of-type{
+        border-bottom: 2px solid #678FDF;
+    }
+
+    .style-table tbody tr.active-row{
+        font-weight: bold;
+        color: #0398dd;
+    }
+
+    td .bar-text{
+        display: block;
+        text-align: center;
+        color: #000000;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+
+    .bar::after{
+        height: 10px;
+        border-radius: 10px;
+        display: block;
+        counter-reset: progress var(--precent);
+        counter-reset: progress var(--precent);
+        content: counter(progress) '%';
+        width: calc(1% * var(--precent));
+        color: #2486ff;
+        background-color: #2486ff;
+        text-align: center ;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    tbody tr td .bar-hight{
+        height: 6px;
+    }
+
+</style>
+<body class="style-body">
+<table class="style-table">
+    <thead>
+    <tr class="title-thead">
+        <th>进度排名</th>
+        <th>任务名称</th>
+        <th>负责人</th>
+        <th>任务进度</th>
+        <th>截止日期</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+
+        <td>
+            <img style="width: 20px;height: 25px;"
+                 src=" https://ceshi.paifangzaixian.com/ysapp/pubinfo/mail/p1.png" alt="">
+        </td>
+        <td>公共信息</td>
+        <td>张亚军</td>
+        <td>
+            <!--文字标签-->
+            <span class="bar-text">99%</span>
+            <!-- 更改 <div class="bar-hight"></div>的高度和宽度为0 -->
+            <div class="bar-hight"></div>
+            <span class="bar" style="--precent:99;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+    <tr>
+        <td>
+            <img style="width: 20px;height: 25px;"
+                 src=" https://ceshi.paifangzaixian.com/ysapp/pubinfo/mail/p2.png" alt="">
+        </td>
+        <td>制造部</td>
+        <td>高秋华</td>
+        <td>
+            <span class="bar-text">90%</span>
+             <div class="bar-hight"></div>
+            <span class="bar" style="--precent:90;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+    <tr>
+        <td>
+            <img style="width: 20px;height: 25px;"
+                 src=" https://ceshi.paifangzaixian.com/ysapp/pubinfo/mail/p3.png" alt="">
+        </td>
+        <td>7.30新建任务</td>
+        <td>高振源</td>
+        <td>
+            <!--文字标签-->
+            <span class="bar-text">90%</span>
+             <div class="bar-hight"></div>
+            <span class="bar" style="--precent:90;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>实验院</td>
+        <td>赵晓云</td>
+        <td>
+            <!--文字标签-->
+            <span class="bar-text">65%</span>
+             <div class="bar-hight"></div>
+            <span class="bar" style="--precent:65;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>综合传感器（李圣杰）</td>
+        <td>李圣杰</td>
+        <td>
+            <!--文字标签-->
+            <span class="bar-text">10%</span>
+             <div class="bar-hight"></div>
+            <span class="bar" style="--precent:10;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>专利部</td>
+        <td>胡灵芝</td>
+        <td>
+            <!--文字标签-->
+            <span class="bar-text">10%</span>
+             <div class="bar-hight"></div>
+            <span class="bar" style="--precent:10;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+
+    <tr>
+        <td>7</td>
+        <td>工艺二部 （工业电场自动化生产线设计）</td>
+        <td>陆相鹏</td>
+        <td>
+            <!--文字标签-->
+            <span class="bar-text">0%</span>
+            <div class="bar-hight"></div>
+            <span class="bar" style="--precent:0;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+
+    <tr>
+        <td>8</td>
+        <td>企业管理</td>
+        <td>张亚军</td>
+        <td>
+            <!--文字标签-->
+            <span class="bar-text">0%</span>
+            <div class="bar-hight"></div>
+            <span class="bar" style="--precent:0;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+
+    <tr>
+        <td>9</td>
+        <td>主任务名称不能重复</td>
+        <td>胡灵芝</td>
+        <td>
+            <!--文字标签-->
+            <span class="bar-text">0%</span>
+            <div class="bar-hight"></div>
+            <span class="bar" style="--precent:0;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+
+    <tr>
+        <td>10</td>
+        <td>颗粒净化</td>
+        <td>郭振远</td>
+        <td>
+            <!--文字标签-->
+            <span class="bar-text">0%</span>
+            <div class="bar-hight"></div>
+            <span class="bar" style="--precent:0;"></span>
+        </td>
+        <td>2020-12-12</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+<!--<script>-->
+<!--    function isPC() {-->
+<!--        var userAgentInfo = navigator.userAgent;-->
+<!--        var Agents = ["Android", "iPhone",-->
+<!--            "SymbianOS", "Windows Phone",-->
+<!--            "iPad", "iPod"];-->
+<!--        var flag = true;-->
+<!--        for (var v = 0; v < Agents.length; v++) {-->
+<!--            if (userAgentInfo.indexOf(Agents[v]) > 0) {-->
+<!--                flag = false;-->
+<!--                break;-->
+<!--            }-->
+<!--        }-->
+<!--        return flag;-->
+<!--    }-->
+
+<!--    window.onload = function () {-->
+<!--        if (isPC()) {-->
+<!--            var style = document.createElement('style');-->
+<!--            style.innerHTML = `-->
+<!--            .style-table {-->
+<!--                max-width: 60%;-->
+<!--                min-width: 60%;-->
+<!--            }-->
+<!--            `;-->
+<!--            document.head.appendChild(style);-->
+<!--        } else {-->
+<!--            var style = document.createElement('style');-->
+<!--            style.innerHTML = `-->
+<!--            .style-table {-->
+<!--                max-width: 100%;-->
+<!--                min-width: 100%;-->
+<!--            }-->
+<!--            `;-->
+<!--            document.head.appendChild(style);-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
+</html>
