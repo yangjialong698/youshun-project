@@ -11,13 +11,27 @@ spring:
 #        server-addr: 123.60.73.204:8848
         #开发
 #        server-addr: 139.196.150.88:8848
-      server-addr: 192.168.150.1:8848
+      server-addr: 172.16.52.6:8848
+  datasource:
+    one:
+      druid:
+        url: jdbc:sqlserver://192.168.11.8:1433;DatabaseName=CESHI202001
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        username: sypt
+        password: 123456
+        type: com.alibaba.druid.pool.DruidDataSource
+        #druid连接池配置
+        initial-size: 5
+        min-idle: 5
+        max-active: 50
+        #超时时间（毫秒）
+        max-wait: 60000
 
 
-logging:
-  level:
-    com:
-      ennova:
-        pubinfowebsite:
-          dao: debug
+#logging:
+#  level:
+#    com:
+#      ennova:
+#        pubinfowebsite:
+#          dao: debug
 
