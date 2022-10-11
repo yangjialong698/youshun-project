@@ -26,6 +26,7 @@
         <module>pub-info-new</module>
         <module>pub-info-daily</module>
         <module>pub-info-website</module>
+        <module>pub-info-product</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
