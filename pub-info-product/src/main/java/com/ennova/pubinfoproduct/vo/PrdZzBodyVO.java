@@ -32,7 +32,4 @@ public class PrdZzBodyVO {
     private Integer transferAmount;
     @ApiModelProperty(value = "在产品数量")
     private Integer leaveAmount;
-
-
-
 }

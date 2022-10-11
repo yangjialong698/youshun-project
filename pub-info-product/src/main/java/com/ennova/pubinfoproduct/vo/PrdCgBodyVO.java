@@ -36,7 +36,4 @@ public class PrdCgBodyVO {
     private Integer deliveredAmount;
     @ApiModelProperty(value = "未交数量")
     private Integer undeliveredAmount ;
-
-
-
 }
