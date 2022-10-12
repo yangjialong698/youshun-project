@@ -12,8 +12,6 @@ public class PrdZzBodyVO {
     private String workOrderKind;
     @ApiModelProperty(value = "工单单号")
     private String workOrderNo;
-    @ApiModelProperty(value = "工单状态")
-    private String workOrderStatus;
     @ApiModelProperty(value = "加工顺序")
     private String processingSequence;
     @ApiModelProperty(value = "工艺")

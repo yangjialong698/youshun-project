@@ -13,6 +13,8 @@ public class PrdDetailHeadVO {
     private String prdName;
     @ApiModelProperty(value = "属性")
     private String prdProperty;
+    @ApiModelProperty(value = "规格")
+    private String specs;
     @ApiModelProperty(value = "安全库存")
     private Integer safeStock;
     @ApiModelProperty(value = "总库存")
