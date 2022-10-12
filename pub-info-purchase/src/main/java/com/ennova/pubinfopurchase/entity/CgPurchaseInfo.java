@@ -1,24 +1,17 @@
 package com.ennova.pubinfopurchase.entity;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
-/**
- * @author yangjialong
- * @version 1.0
- * @date 2022/7/12
- */
-
 /**
  * 采购信息表
- * */
-@ApiOperation(value = "采购信息表")
+ */
+@ApiModel(value = "采购信息表")
 @Data
 @Builder
 @AllArgsConstructor
@@ -27,13 +20,13 @@ public class CgPurchaseInfo {
     /**
      * ID
      */
-    @ApiModelProperty(value = "ID", example = "1")
+    @ApiModelProperty(value = "ID")
     private Integer id;
 
     /**
-     * 编号
+     * 采购编号
      */
-    @ApiModelProperty(value = "采购编号", example = "1")
+    @ApiModelProperty(value = "采购编号")
     private Integer serialNumber;
 
     /**
@@ -43,7 +36,7 @@ public class CgPurchaseInfo {
     private String name;
 
     /**
-     * 申请人
+     * 请购人
      */
     @ApiModelProperty(value = "请购人")
     private String applyName;
@@ -55,9 +48,9 @@ public class CgPurchaseInfo {
     private String taskNumber;
 
     /**
-     * 发布时间
+     * 发布日期
      */
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "发布日期")
     private Date createTime;
 
     /**
@@ -67,15 +60,15 @@ public class CgPurchaseInfo {
     private String purchaseRequirements;
 
     /**
-     * 修改时间
+     * 更新日期
      */
-    @ApiModelProperty(value = "修改时间")
+    @ApiModelProperty(value = "更新日期")
     private Date updateTime;
 
     /**
      * 发布人id
      */
-    @ApiModelProperty(value = "发布人id", example = "1")
+    @ApiModelProperty(value = "发布人id")
     private Integer issuerId;
 
     /**
@@ -83,4 +76,10 @@ public class CgPurchaseInfo {
      */
     @ApiModelProperty(value = "到货日期")
     private Date deliveryTime;
+
+    /**
+     * 部门id
+     */
+    @ApiModelProperty(value = "部门id")
+    private Long deptId;
 }

@@ -28,6 +28,19 @@ public class CgPurchaseInfoVO {
     private Integer id;
 
     /**
+     * 部门ID
+     */
+    @ApiModelProperty(value="部门ID")
+    private Long deptId;
+
+
+    /**
+     * 部门名称
+     */
+    @ApiModelProperty(value="部门名称")
+    private String deptName;
+
+    /**
      * 物料名称
      */
     @ApiModelProperty(value = "物料名称")
