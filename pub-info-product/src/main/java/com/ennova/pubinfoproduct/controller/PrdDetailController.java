@@ -23,6 +23,7 @@ public class PrdDetailController {
     @ApiOperation(value = "根据货品号查询详情",tags = "货品API")
     @GetMapping("/selectPrdDetail")
     public Callback<PrdDetailVO> selectPrdDetail(String prdNo){
+
         return prdDetailService.selectPrdDetail(prdNo);
     }
 }

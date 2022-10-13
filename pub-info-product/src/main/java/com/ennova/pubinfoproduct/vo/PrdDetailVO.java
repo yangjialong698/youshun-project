@@ -14,7 +14,7 @@ public class PrdDetailVO {
     private  PrdDetailHeadVO prdDetailHeadVO;
 
     @ApiModelProperty(value = "货品自制表身集合")
-    private List<PrdZzBodyVO> prdZzBodyVOList;
+    private List<PrdZzBodyFinVO> prdZzBodyFinVOList;
 
     @ApiModelProperty(value = "货品采购表身集合")
     private List<PrdCgBodyVO> prdCgBodyVOList;

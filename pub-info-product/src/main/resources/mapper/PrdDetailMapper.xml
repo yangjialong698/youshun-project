@@ -14,40 +14,14 @@
             dbo.INVMB.MB001 = #{prdNo,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectZzBodyByPrdNo" resultType="com.ennova.pubinfoproduct.vo.PrdZzBodyVO">
-        SELECT
-            dbo.MOCTA.TA001 AS workOrderKind,
-            dbo.MOCTA.TA002 AS workOrderNo,
-            dbo.SFCTA.TA003 AS processingSequence,
-            dbo.SFCTA.TA004 AS technology,
-            dbo.SFCTA.TA006 AS supplierCode,
-            dbo.SFCTA.TA007 AS supplierName,
-            dbo.SFCTA.TA010 AS inputAmount,
-            dbo.SFCTA.TA011 AS finishAmount,
-            dbo.SFCTA.TA012 AS scrapAmount,
-            dbo.SFCTA.TA017 AS transferAmount,
-            dbo.SFCTA.TA010 + dbo.SFCTA.TA013 + dbo.SFCTA.TA016 - dbo.SFCTA.TA011 - dbo.SFCTA.TA012 - dbo.SFCTA.TA014 - dbo.SFCTA.TA015 - dbo.SFCTA.TA048 AS leaveAmount
-        FROM
-            dbo.INVMB
-                INNER JOIN dbo.MOCTA ON dbo.INVMB.MB001 = dbo.MOCTA.TA006
-                INNER JOIN dbo.SFCTA ON dbo.MOCTA.TA001 = dbo.SFCTA.TA001
-                AND dbo.MOCTA.TA002 = dbo.SFCTA.TA002
-        WHERE
-            ( dbo.MOCTA.TA011 = '3' )
-          AND dbo.INVMB.MB001 = #{prdNo,jdbcType=VARCHAR}
-    </select>
-
     <select id="selectCgBodyByPrdNo" resultType="com.ennova.pubinfoproduct.vo.PrdCgBodyVO">
         SELECT
             dbo.PURTD.TD001 AS purchaseKind,
             dbo.PURTD.TD002 AS purchaseNumber,
+            dbo.PURTC.TC003 AS purchaseTime,
             dbo.PURMA.MA003 AS supplierName,
-            dbo.CMSMV.MV002 AS purchaser,
-            dbo.PURTD.TD004 AS prdNo,
-            dbo.PURTD.TD005 AS prdName,
             dbo.PURTD.TD008 AS purchaseAmount,
             dbo.PURTD.TD009 AS unit,
-            dbo.PURTD.TD012 AS deliveryTime,
             dbo.PURTD.TD015 AS deliveredAmount,
             dbo.PURTD.TD008- dbo.PURTD.TD015 AS undeliveredAmount
         FROM
@@ -57,10 +31,38 @@
                 AND dbo.PURTD.TD002 = dbo.PURTC.TC002
                 AND dbo.PURTD.TD001 = dbo.PURTC.TC001
                 AND dbo.PURTD.TD002 = dbo.PURTC.TC002
-                INNER JOIN dbo.CMSMV ON dbo.PURTC.TC011 = dbo.CMSMV.MV001
                 INNER JOIN dbo.PURMA ON dbo.PURTC.TC004 = dbo.PURMA.MA001
+                INNER JOIN dbo.PURTH ON dbo.INVMB.MB001 = dbo.PURTH.TH004
+                                            AND dbo.PURTH.TH013 = dbo.PURTD.TD003
+                                            AND dbo.PURTD.TD001 = dbo.PURTH.TH011
+                                            AND dbo.PURTD.TD002 =dbo.PURTH.TH012
         WHERE
             ( dbo.PURTD.TD016 = 'N' )
+          AND ( dbo.PURTH.TH028 = '1' )
+          AND dbo.INVMB.MB001 = #{prdNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectZzBodyByPrdNo" resultType="com.ennova.pubinfoproduct.vo.PrdZzBodyVO">
+        SELECT
+            dbo.INVMB.MB001 AS prdNo,
+            dbo.MOCTA.TA001 AS workOrderKind,
+            dbo.MOCTA.TA002 AS workOrderNo,
+            dbo.INVMI.MI002 AS properties,
+            dbo.SFCTA.TA003 AS processingSequence,
+            dbo.SFCTA.TA010 AS inputAmount,
+            dbo.SFCTA.TA011 AS finishAmount,
+            dbo.SFCTA.TA012 AS scrapAmount,
+            dbo.SFCTA.TA017 AS transferAmount,
+            dbo.SFCTA.TA006 AS supplierNo,
+            dbo.SFCTA.TA010 + dbo.SFCTA.TA013 + dbo.SFCTA.TA016 - dbo.SFCTA.TA011 - dbo.SFCTA.TA012 - dbo.SFCTA.TA014 - dbo.SFCTA.TA015 - dbo.SFCTA.TA048 AS leaveAmount
+        FROM
+            dbo.INVMB
+                INNER JOIN dbo.MOCTA ON dbo.INVMB.MB001 = dbo.MOCTA.TA006
+                INNER JOIN dbo.SFCTA ON dbo.MOCTA.TA001 = dbo.SFCTA.TA001
+                INNER JOIN dbo.INVMI ON dbo.INVMB.MB025 = dbo.INVMI.MI001
+                AND dbo.MOCTA.TA002 = dbo.SFCTA.TA002
+        WHERE
+            dbo.MOCTA.TA011 = '3'
           AND dbo.INVMB.MB001 = #{prdNo,jdbcType=VARCHAR}
     </select>
 </mapper>

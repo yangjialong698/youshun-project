@@ -15,14 +15,13 @@ public class PrdDetailHeadVO {
     private String prdProperty;
     @ApiModelProperty(value = "规格")
     private String specs;
-    @ApiModelProperty(value = "安全库存")
-    private Integer safeStock;
     @ApiModelProperty(value = "总库存")
     private Integer totalStock;
-    @ApiModelProperty(value = "外点仓名称")
-    private String outPointStore;
-    @ApiModelProperty(value = "采购订单数量")
-    private Integer cgOrder;
-    @ApiModelProperty(value = "在制订单数量")
-    private Integer zzOrder;
+
+    @ApiModelProperty(value = "采购未交数量")
+    private Integer cgUnHandOrder;
+    @ApiModelProperty(value = "采购待检数量")
+    private Integer cgUnCheckCount;
+    @ApiModelProperty(value = "在制产品数量")
+    private Integer zzPrdCount;
 }

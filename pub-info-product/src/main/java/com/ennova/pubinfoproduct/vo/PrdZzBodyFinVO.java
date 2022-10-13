@@ -1,13 +1,10 @@
 package com.ennova.pubinfoproduct.vo;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-@ApiModel(value = "货品自制表身")
+
 @Data
-public class PrdZzBodyVO {
-    @ApiModelProperty(value = "品号")
-    private String prdNo;
+public class PrdZzBodyFinVO {
     @ApiModelProperty(value = "工单类别")
     private String workOrderKind;
     @ApiModelProperty(value = "工单单号")
@@ -22,18 +19,8 @@ public class PrdZzBodyVO {
     private Integer jjybHclAmount;
     @ApiModelProperty(value = "装配数量")
     private Integer assemblyAmount;
+    @ApiModelProperty(value = "报废数量")
+    private Integer scrappedAmount;
     @ApiModelProperty(value = "合计在产数量")
     private Integer onProduceAmount;
-    @ApiModelProperty(value = "完成数量")
-    private Integer finishAmount;
-    @ApiModelProperty(value = "报废数量")
-    private Integer scrapAmount;
-    @ApiModelProperty(value = "待转数量")
-    private Integer transferAmount;
-    @ApiModelProperty(value = "供应商代号")
-    private String supplierNo;
-    @ApiModelProperty(value = "在产品数量")
-    private Integer leaveAmount;
-    @ApiModelProperty(value = "加工顺序")
-    private String processingSequence;
 }

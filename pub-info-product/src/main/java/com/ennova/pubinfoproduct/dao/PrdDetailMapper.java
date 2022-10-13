@@ -12,7 +12,7 @@ public interface PrdDetailMapper {
 
     PrdDetailHeadVO selectHeadByPrdNo(String prdNo);
 
-    List<PrdZzBodyVO> selectZzBodyByPrdNo(String prdNo);
-
     List<PrdCgBodyVO> selectCgBodyByPrdNo(String prdNo);
+
+    List<PrdZzBodyVO> selectZzBodyByPrdNo(String prdNo);
 }
