@@ -11,7 +11,7 @@
     <groupId>com.ennova</groupId>
     <artifactId>pub-info-product</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pub-info-website</name>
+    <name>pub-info-product</name>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
@@ -132,7 +132,7 @@
     </dependencies>
 
     <build>
-        <finalName>pub-info-website-0.0.1-SNAPSHOT</finalName>
+        <finalName>pub-info-product-0.0.1-SNAPSHOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
