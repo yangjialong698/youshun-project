@@ -83,15 +83,13 @@
 
     <select id="selectStockInfo" resultType="com.ennova.pubinfoproduct.vo.StockDetailVO">
         SELECT
-            dbo.CMSMC.MC002 AS WareHouse,
-            dbo.INVMB.MB064 AS WareCount
+        dbo.CMSMC.MC002 AS WareHouse,
+        dbo.INVMC.MC007 AS WareCount
         FROM
-            dbo.BOMCB
-                INNER JOIN dbo.INVMB ON dbo.BOMCB.CB005 = dbo.INVMB.MB001
-                INNER JOIN dbo.INVMI ON dbo.INVMB.MB025 = dbo.INVMI.MI001
-                INNER JOIN dbo.INVMC ON dbo.INVMB.MB001 = dbo.INVMC.MC001
-                INNER JOIN dbo.CMSMC ON dbo.INVMC.MC002 = dbo.CMSMC.MC001
+        dbo.INVMC
+        INNER JOIN dbo.CMSMC ON dbo.INVMC.MC002 = dbo.CMSMC.MC001
         WHERE
-            dbo.BOMCB.CB001 = #{prdNo,jdbcType=VARCHAR}
+        dbo.BOMCB.CB001 = #{prdNo,jdbcType=VARCHAR}
+
     </select>
 </mapper>
