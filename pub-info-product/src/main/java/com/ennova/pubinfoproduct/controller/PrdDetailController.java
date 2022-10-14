@@ -3,6 +3,8 @@ package com.ennova.pubinfoproduct.controller;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfoproduct.service.PrdDetailService;
 import com.ennova.pubinfoproduct.vo.PrdDetailVO;
+import com.ennova.pubinfoproduct.vo.PrdInfoVO;
+import com.ennova.pubinfoproduct.vo.StockDetailVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +27,19 @@ public class PrdDetailController {
     public Callback<PrdDetailVO> selectPrdDetail(String prdNo){
 
         return prdDetailService.selectPrdDetail(prdNo);
+    }
+
+    @ApiOperation(value = "品号信息",tags = "货品API")
+    @GetMapping("/selectPrdInfo")
+    public Callback<List<PrdInfoVO>> selectPrdInfo(String prdNo){
+
+        return prdDetailService.selectPrdInfo(prdNo);
+    }
+
+    @ApiOperation(value = "总库存数量分布信息",tags = "货品API")
+    @GetMapping("/selectStockInfo")
+    public Callback<List<StockDetailVO>> selectStockInfo(String prdNo){
+
+        return prdDetailService.selectStockInfo(prdNo);
     }
 }

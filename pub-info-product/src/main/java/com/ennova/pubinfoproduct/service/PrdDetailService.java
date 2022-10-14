@@ -70,4 +70,14 @@ public class PrdDetailService {
         prdDetailVO.setPrdDetailHeadVO(prdDetailHeadVO);
         return Callback.success(prdDetailVO);
     }
+
+    public Callback<List<PrdInfoVO>> selectPrdInfo(String prdNo) {
+        List<PrdInfoVO> prdInfoVOList = prdDetailMapper.selectPrdInfo(prdNo);
+        return Callback.success(prdInfoVOList);
+    }
+
+    public Callback<List<StockDetailVO>> selectStockInfo(String prdNo) {
+        List<StockDetailVO> stockDetailVOList = prdDetailMapper.selectStockInfo(prdNo);
+        return Callback.success(stockDetailVOList);
+    }
 }

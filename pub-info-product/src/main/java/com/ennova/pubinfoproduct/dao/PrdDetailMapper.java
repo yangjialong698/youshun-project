@@ -1,8 +1,6 @@
 package com.ennova.pubinfoproduct.dao;
 
-import com.ennova.pubinfoproduct.vo.PrdCgBodyVO;
-import com.ennova.pubinfoproduct.vo.PrdDetailHeadVO;
-import com.ennova.pubinfoproduct.vo.PrdZzBodyVO;
+import com.ennova.pubinfoproduct.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,4 +13,9 @@ public interface PrdDetailMapper {
     List<PrdCgBodyVO> selectCgBodyByPrdNo(String prdNo);
 
     List<PrdZzBodyVO> selectZzBodyByPrdNo(String prdNo);
+
+    List<PrdInfoVO> selectPrdInfo(String prdNo);
+
+    List<StockDetailVO> selectStockInfo(String prdNo);
+
 }
