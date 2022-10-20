@@ -89,7 +89,7 @@
         dbo.INVMC
         INNER JOIN dbo.CMSMC ON dbo.INVMC.MC002 = dbo.CMSMC.MC001
         WHERE
-        dbo.BOMCB.CB001 = #{prdNo,jdbcType=VARCHAR}
+        dbo.INVMC.MC001 = #{prdNo,jdbcType=VARCHAR}
 
     </select>
 </mapper>
