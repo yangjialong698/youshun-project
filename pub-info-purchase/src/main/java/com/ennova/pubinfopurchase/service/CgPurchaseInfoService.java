@@ -195,7 +195,7 @@ public class CgPurchaseInfoService {
             cgPurchaseInfo.setSerialNumber(serialNumber);
             cgPurchaseInfo.setCreateTime(new Date());
             cgPurchaseInfo.setIssuerId(userVo.getId());
-            cgPurchaseInfoMapper.insertInfoSelective(cgPurchaseInfo);
+            cgPurchaseInfoMapper.insertSelective(cgPurchaseInfo);
             if (cgPurchaseInfoVO.getFileVOList() != null && !cgPurchaseInfoVO.getFileVOList().isEmpty()) {
                 for (FileVO fileVO : cgPurchaseInfoVO.getFileVOList()) {
                     CgPurchaseFile cgPurchaseFile = cgPurchaseFileMapper.selectByPrimaryKey(fileVO.getId());
@@ -263,12 +263,12 @@ public class CgPurchaseInfoService {
         return Integer.parseInt(newNumber);
     }
 
-    public Callback<BaseVO<CgPurchaseInfoVO>> selectPurchaseInfo(Integer page, Integer pageSize, String name) {
+    public Callback<BaseVO<CgPurchaseInfoVO>> selectPurchaseInfo(Integer page, Integer pageSize, String name, Integer type) {
        /* String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;*/
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
-        List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name);
+        List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name,type);
         cgPurchaseInfos.forEach(cgPurchaseInfoVO -> {
             List<FileVO> fileVOS = cgPurchaseFileMapper.selectByPurchaseInfoId(cgPurchaseInfoVO.getId());
             if (CollectionUtil.isNotEmpty(fileVOS)){
@@ -285,7 +285,7 @@ public class CgPurchaseInfoService {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
-        List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name);
+        List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name,null);
         return Callback.success(cgPurchaseInfos);
     }
 

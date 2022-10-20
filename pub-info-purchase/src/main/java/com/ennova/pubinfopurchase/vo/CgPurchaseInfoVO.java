@@ -99,4 +99,10 @@ public class CgPurchaseInfoVO {
     @ApiModelProperty(value = "到货日期")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date deliveryTime;
+
+    /**
+     * 类型：0-采购 1-合作
+     */
+    @ApiModelProperty(value = "类型：0-采购 1-合作")
+    private Integer type;
 }

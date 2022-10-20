@@ -78,8 +78,8 @@ public class CgPurchaseInfo {
     private Date deliveryTime;
 
     /**
-     * 部门id
+     * 类型：0-采购 1-合作
      */
-    @ApiModelProperty(value = "部门id")
-    private Long deptId;
+    @ApiModelProperty(value = "类型：0-采购 1-合作")
+    private Integer type;
 }

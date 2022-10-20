@@ -73,12 +73,15 @@ public class CgPurchaseInfoController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "开始页"),
             @ApiImplicitParam(name = "pageSize", value = "显示条数"),
-            @ApiImplicitParam(name = "name", value = "物料名称")
+            @ApiImplicitParam(name = "name", value = "物料名称"),
+            @ApiImplicitParam(name = "type", value = "类型： 0：采购 1：合作"),
     })
     @GetMapping("/selectPurchaseInfo")
     public Callback<BaseVO<CgPurchaseInfoVO>> selectPurchaseInfo(@RequestParam(defaultValue = "1") Integer page,
-                                                              @RequestParam(defaultValue = "10") Integer pageSize, String name){
-        return cgPurchaseInfoService.selectPurchaseInfo(page, pageSize, name);
+                                                              @RequestParam(defaultValue = "10") Integer pageSize,
+                                                              @RequestParam("name") String name,
+                                                              @RequestParam("type") Integer type) {
+        return cgPurchaseInfoService.selectPurchaseInfo(page, pageSize, name, type);
     }
 
     @ApiOperation(value = "采购信息 - 采购信息首页不分页列表")

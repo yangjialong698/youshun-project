@@ -8,24 +8,23 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-/**
- * @author yangjialong
- * @version 1.0
- * @date 2022/7/12
- */
 @Mapper
 public interface CgPurchaseInfoMapper {
-    int insertInfoSelective(CgPurchaseInfo cgPurchaseInfo);
+    int deleteByPrimaryKey(Integer id);
 
-    Integer selectLastSerialNumber();
+    int insert(CgPurchaseInfo record);
+
+    int insertSelective(CgPurchaseInfo record);
 
     CgPurchaseInfo selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKey(CgPurchaseInfo cgPurchaseInfo);
+    int updateByPrimaryKeySelective(CgPurchaseInfo record);
 
-    List<CgPurchaseInfoVO> selectPurchaseInfo(@Param("name") String name);
+    int updateByPrimaryKey(CgPurchaseInfo record);
 
-    int deleteByPrimaryKey(Integer id);
+    Integer selectLastSerialNumber();
+
+    List<CgPurchaseInfoVO> selectPurchaseInfo(@Param("name") String name, @Param("type") Integer type);
 
     List<TaskNumber> selectTaskNumber(@Param("name") String name);
 

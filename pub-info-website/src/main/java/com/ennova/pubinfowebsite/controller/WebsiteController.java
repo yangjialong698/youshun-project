@@ -1,9 +1,9 @@
 package com.ennova.pubinfowebsite.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfowebsite.fegin.PurchaseFeginClient;
+import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfowebsite.fegin.PurchaseClient;
 import com.ennova.pubinfowebsite.service.WebsiteService;
-import com.ennova.pubinfowebsite.vo.BaseVO;
 import com.ennova.pubinfowebsite.vo.CgPurchaseInfoVO;
 import com.ennova.pubinfowebsite.vo.GwMessageVO;
 import io.swagger.annotations.Api;
@@ -36,15 +36,14 @@ import java.net.URISyntaxException;
 @RequestMapping("/website")
 public class WebsiteController {
 
-    private final PurchaseFeginClient client;
+    //private final PurchaseFeginClient client;
+    private final PurchaseClient purchaseClient;
     private final WebsiteService websiteService;
 
     @ApiOperation(value = "公司官网 - 获取公共信息采购系统 - 采购信息列表")
     @GetMapping("/getPurchaseInfo")
-    public Callback<BaseVO<CgPurchaseInfoVO>> getPurchaseInfo(Integer page,Integer pageSize,String name) {
-
-        BaseVO<CgPurchaseInfoVO> data = client.selectPurchaseInfo(page, pageSize, name).getData();
-
+    public Callback<BaseVO<CgPurchaseInfoVO>> getPurchaseInfo(Integer page, Integer pageSize, String name, Integer type) {
+        BaseVO<CgPurchaseInfoVO> data = purchaseClient.selectPurchaseInfo(page, pageSize, name, type).getData();
         return Callback.success(data);
     }
 
