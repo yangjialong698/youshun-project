@@ -69,7 +69,7 @@ public class CgPurchaseInfoController {
         return cgPurchaseInfoService.delete(id);
     }
 
-    @ApiOperation(value = "采购信息 - 采购信息首页分页列表")
+    @ApiOperation(value = "采购信息 - 采购信息首页分页列表(后台列表查询，官网Fegin调用)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "开始页"),
             @ApiImplicitParam(name = "pageSize", value = "显示条数"),
