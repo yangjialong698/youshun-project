@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.dao.ProduceMapper">
+    <select id="selectProduceList" resultType="com.ennova.pubinfoproduct.vo.ProduceDetailVO">
+        SELECT dbo.SFCTB.TB005 AS processNo,
+               dbo.SFCTB.TB006 AS processName,
+               dbo.SFCTC.TC005 AS workOrderNo,
+               dbo.SFCTC.TC036 AS count,
+        dbo.SFCTC.TC014 AS normalNum,
+        dbo.SFCTC.TC016 AS scrappedNum
+        FROM
+            dbo.SFCTB
+            INNER JOIN dbo.SFCTC
+        ON dbo.SFCTB.TB001 = dbo.SFCTC.TC001
+            AND dbo.SFCTB.TB002 = dbo.SFCTC.TC002
+            INNER JOIN dbo.MOCTA ON dbo.SFCTC.TC004 = dbo.MOCTA.TA001
+            AND dbo.SFCTC.TC005 = dbo.MOCTA.TA002
+        WHERE
+            dbo.MOCTA.TA011 = '3'
+          AND dbo.SFCTB.TB003 &gt;= #{startTime,jdbcType=TIMESTAMP}
+          AND dbo.SFCTB.TB003 &lt;= #{endTime,jdbcType=TIMESTAMP}
+        <if test="workOrderNo != null and workOrderNo != ''">
+            AND dbo.SFCTC.TC005 = #{workOrderNo,jdbcType=VARCHAR}
+        </if>
+        <if test="processNo != null and processNo != ''">
+            AND dbo.SFCTB.TB005 = #{processNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selOrderNumByOrderNo" resultType="java.lang.Integer">
+        SELECT  dbo.SFCTA.TA010
+        FROM dbo.SFCTA
+        WHERE dbo.SFCTA.TA002= #{workOrderNo,jdbcType=VARCHAR}
+    </select>
+</mapper>
