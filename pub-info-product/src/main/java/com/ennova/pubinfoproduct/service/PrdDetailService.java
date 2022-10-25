@@ -24,12 +24,21 @@ public class PrdDetailService {
         PrdDetailVO prdDetailVO = new PrdDetailVO();
         //1.根据货品号查询表头
         PrdDetailHeadVO prdDetailHeadVO = prdDetailMapper.selectHeadByPrdNo(prdNo);
+        //查询成品仓名称+数量
+        List<StockDetailVO> stockDetailVOList = prdDetailMapper.selectFinishPrdInfo(prdNo);
+        if (CollectionUtil.isNotEmpty(stockDetailVOList)){
+            StockDetailVO stockDetailVO = stockDetailVOList.get(0);
+            prdDetailHeadVO.setFinishPrdName(stockDetailVO.getWareHouse());
+            prdDetailHeadVO.setFinishPrdCount(stockDetailVO.getWareCount());
+        }
         //2.根据货品号查询采购单表身集合
         List<PrdCgBodyVO> prdCgBodyVOList = prdDetailMapper.selectCgBodyByPrdNo(prdNo);
         if (CollectionUtil.isNotEmpty(prdCgBodyVOList)){
             prdDetailVO.setPrdCgBodyVOList(prdCgBodyVOList);
-            int sumUndeliveredAmount = prdCgBodyVOList.stream().mapToInt(PrdCgBodyVO::getUndeliveredAmount).sum();//未交数量统计
+            int sumUndeliveredAmount = prdCgBodyVOList.stream().mapToInt(PrdCgBodyVO::getUndeliveredAmount).sum();//采购未交数量统计
             prdDetailHeadVO.setCgUnHandOrder(sumUndeliveredAmount);
+            int sumUnCheckAmount = prdCgBodyVOList.stream().mapToInt(PrdCgBodyVO::getUnCheckAmount).sum();//采购待检数量统计
+            prdDetailHeadVO.setCgUnCheckCount(sumUnCheckAmount);
         }
         //3.根据货品号查询自制单表身集合
         List<PrdZzBodyVO> prdZzBodyVOList = prdDetailMapper.selectZzBodyByPrdNo(prdNo);
@@ -66,6 +75,8 @@ public class PrdDetailService {
             }).collect(Collectors.toList());
 
         }
+        int OnProduceAmount = prdZzBodyFinVOS.stream().mapToInt(PrdZzBodyFinVO::getOnProduceAmount).sum();
+        prdDetailHeadVO.setZzPrdCount(OnProduceAmount);
         prdDetailVO.setPrdZzBodyFinVOList(prdZzBodyFinVOS);
         prdDetailVO.setPrdDetailHeadVO(prdDetailHeadVO);
         return Callback.success(prdDetailVO);

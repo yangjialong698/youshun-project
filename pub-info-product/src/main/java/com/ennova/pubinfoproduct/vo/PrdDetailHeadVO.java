@@ -24,4 +24,10 @@ public class PrdDetailHeadVO {
     private Integer cgUnCheckCount;
     @ApiModelProperty(value = "在制产品数量")
     private Integer zzPrdCount;
+
+    @ApiModelProperty(value = "成品仓名称")
+    private String finishPrdName;
+    @ApiModelProperty(value = "成品仓数量")
+    private Integer finishPrdCount;
+
 }

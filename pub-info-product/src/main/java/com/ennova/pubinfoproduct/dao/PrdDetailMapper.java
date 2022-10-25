@@ -18,4 +18,5 @@ public interface PrdDetailMapper {
 
     List<StockDetailVO> selectStockInfo(String prdNo);
 
+    List<StockDetailVO> selectFinishPrdInfo(String prdNo);
 }

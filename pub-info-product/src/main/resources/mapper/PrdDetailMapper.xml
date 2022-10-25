@@ -5,11 +5,12 @@
         SELECT
             dbo.INVMB.MB002 AS prdName,
             dbo.INVMB.MB001 AS prdNo,
-            dbo.INVMB.MB025 AS prdProperty,
+            dbo.INVMI.MI002 AS prdProperty,
             dbo.INVMB.MB003 AS specs,
             dbo.INVMB.MB064 AS totalStock
         FROM
             dbo.INVMB
+        INNER JOIN dbo.INVMI ON dbo.INVMB.MB025 = dbo.INVMI.MI001
         WHERE
             dbo.INVMB.MB001 = #{prdNo,jdbcType=VARCHAR}
     </select>
@@ -23,6 +24,7 @@
             dbo.PURTD.TD008 AS purchaseAmount,
             dbo.PURTD.TD009 AS unit,
             dbo.PURTD.TD015 AS deliveredAmount,
+            dbo.PURTH.TH007 AS unCheckAmount,
             dbo.PURTD.TD008- dbo.PURTD.TD015 AS undeliveredAmount
         FROM
             dbo.INVMB
@@ -89,6 +91,18 @@
         INNER JOIN dbo.CMSMC ON dbo.INVMC.MC002 = dbo.CMSMC.MC001
         WHERE
         dbo.INVMC.MC001 = #{prdNo,jdbcType=VARCHAR}
+        AND dbo.INVMC.MC002 NOT IN ('1305','1306','1402','1403','1408','2301')
+    </select>
 
+    <select id="selectFinishPrdInfo" resultType="com.ennova.pubinfoproduct.vo.StockDetailVO">
+        SELECT
+        dbo.CMSMC.MC002 AS WareHouse,
+        dbo.INVMC.MC007 AS WareCount
+        FROM
+        dbo.INVMC
+        INNER JOIN dbo.CMSMC ON dbo.INVMC.MC002 = dbo.CMSMC.MC001
+        WHERE
+        dbo.INVMC.MC001 = #{prdNo,jdbcType=VARCHAR}
+        AND dbo.INVMC.MC002  IN ('1001','2001','8001')
     </select>
 </mapper>
