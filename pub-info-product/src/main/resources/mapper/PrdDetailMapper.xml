@@ -18,7 +18,7 @@
         SELECT
             dbo.PURTD.TD001 AS purchaseKind,
             dbo.PURTD.TD002 AS purchaseNumber,
-            dbo.PURTC.TC003 AS purchaseTime,
+            convert(datetime,dbo.PURTC.TC003,121) AS purchaseTime,
             dbo.PURMA.MA003 AS supplierName,
             dbo.PURTD.TD008 AS purchaseAmount,
             dbo.PURTD.TD009 AS unit,
@@ -37,8 +37,7 @@
                                             AND dbo.PURTD.TD001 = dbo.PURTH.TH011
                                             AND dbo.PURTD.TD002 =dbo.PURTH.TH012
         WHERE
-            ( dbo.PURTD.TD016 = 'N' )
-          AND ( dbo.PURTH.TH028 = '1' )
+              dbo.PURTD.TD016 = 'N'
           AND dbo.INVMB.MB001 = #{prdNo,jdbcType=VARCHAR}
     </select>
 
