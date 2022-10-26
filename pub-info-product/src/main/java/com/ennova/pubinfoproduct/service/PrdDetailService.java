@@ -76,9 +76,12 @@ public class PrdDetailService {
 
         }
         int OnProduceAmount = prdZzBodyFinVOS.stream().mapToInt(PrdZzBodyFinVO::getOnProduceAmount).sum();
-        prdDetailHeadVO.setZzPrdCount(OnProduceAmount);
+        if (null != prdDetailHeadVO){
+            prdDetailHeadVO.setZzPrdCount(OnProduceAmount);
+            prdDetailVO.setPrdDetailHeadVO(prdDetailHeadVO);
+        }
         prdDetailVO.setPrdZzBodyFinVOList(prdZzBodyFinVOS);
-        prdDetailVO.setPrdDetailHeadVO(prdDetailHeadVO);
+
         return Callback.success(prdDetailVO);
     }
 
