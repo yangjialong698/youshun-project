@@ -19,6 +19,7 @@
         SELECT
             dbo.PURTD.TD001 AS purchaseKind,
             dbo.PURTD.TD002 AS purchaseNumber,
+            dbo.PURTH.TH002 AS stockNumber,
             convert(datetime,dbo.PURTC.TC003,121) AS purchaseTime,
             dbo.PURMA.MA003 AS supplierName,
             dbo.PURTD.TD008 AS purchaseAmount,

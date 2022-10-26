@@ -15,6 +15,8 @@ public class PrdCgBodyVO {
     private String purchaseKind;
     @ApiModelProperty(value = "采购单号")
     private String purchaseNumber;
+    @ApiModelProperty(value = "进货单号")
+    private String stockNumber;
     @ApiModelProperty(value = "采购日期")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date purchaseTime;
