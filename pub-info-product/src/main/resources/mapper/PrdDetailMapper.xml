@@ -26,7 +26,7 @@
             dbo.PURTD.TD009 AS unit,
             dbo.PURTD.TD015 AS deliveredAmount,
             dbo.PURTH.TH007 AS unCheckAmount,
-            dbo.PURTD.TD008- dbo.PURTD.TD015 AS undeliveredAmount
+            dbo.PURTD.TD008- dbo.PURTD.TD015 - dbo.PURTH.TH007 AS undeliveredAmount
         FROM
             dbo.INVMB
                 INNER JOIN dbo.PURTD ON dbo.INVMB.MB001 = dbo.PURTD.TD004
@@ -41,6 +41,7 @@
                                             AND dbo.PURTD.TD002 =dbo.PURTH.TH012
         WHERE
               dbo.PURTD.TD016 = 'N'
+          AND dbo.PURTH.TH030 ='N'
           AND dbo.INVMB.MB001 = #{prdNo,jdbcType=VARCHAR}
     </select>
 
