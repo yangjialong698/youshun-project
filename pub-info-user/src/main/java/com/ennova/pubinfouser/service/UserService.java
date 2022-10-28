@@ -39,14 +39,22 @@ import static org.springframework.util.DigestUtils.md5DigestAsHex;
 @Service
 @Slf4j
 public class UserService extends BaseService<UserEntity> {
-
+    
+    //任务系统
     private String taskSystem = "1001";
+    // 采购
     private String purchaseSystem = "1002";
+    // 扫描
     private String scanSystem = "1003";
+    // 新闻期刊
     private String newsSystem = "1004";
+    // 报表
     private String reportSystem = "1005";
+    // 公告
     private String AFFICHE = "1006";
+    // ERP
     private String ERP = "1007";
+    // 意见箱
     private String OPINIONBOX = "1008";
 
     @Resource
