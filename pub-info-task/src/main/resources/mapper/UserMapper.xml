@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ennova.pubinfotask.dao.UserMapper">
     <select id="selectCurrentUser" resultType="com.ennova.pubinfotask.vo.CurrentUserVO">
-        SELECT
+        SELECT distinct
             t1.id userId,
             t1.username,
             t3.role_name roleName,
