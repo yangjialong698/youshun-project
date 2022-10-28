@@ -374,7 +374,7 @@ public class UserService extends BaseService<UserEntity> {
             pageSize = 10;
         }
         Page<UserVO> startPage = PageHelper.startPage(page, pageSize);
-        List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey);
+        List<UserVO> userVOList = userDao.listUsers(company, roleId,department,searchKey).stream().filter(userVO -> StringUtils.isNotEmpty(userVO.getUserId())).collect(Collectors.toList());
         List<UserVO> userVOS = userDao.listManagerUsers();
         List<DeptVO> deptVOList = deptService.listDeptList(53).getData();
         if (CollectionUtil.isNotEmpty(deptVOList)){
