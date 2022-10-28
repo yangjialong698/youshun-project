@@ -30,6 +30,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -197,7 +198,8 @@ public class UserService extends BaseService<UserEntity> {
         if(userVO.getStatus().equals("1")) {
             return Callback.error("账号已被禁用，请确认");
         }
-        List<TUserSystem> tUserSystems = tUserSystemMapper.queryByUserId(userVO.getId());
+        List<TUserSystem> filterList = tUserSystemMapper.queryByUserId(userVO.getId());
+        List<TUserSystem> tUserSystems = filterList.stream().sorted(Comparator.comparing(TUserSystem::getSysNum)).collect(Collectors.toList());
         //生成token
         String token = JWTUtil.generateTokenForLog(account,userVO.getId(), userVO.getCompany().toString());
         //生成刷新token
