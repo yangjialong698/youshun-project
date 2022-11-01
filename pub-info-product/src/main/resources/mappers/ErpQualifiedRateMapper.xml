@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.daos.ErpQualifiedRateMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ErpQualifiedRate">
+    <!--@mbg.generated-->
+    <!--@Table erp_qualified_rate-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="work_order_no" jdbcType="VARCHAR" property="workOrderNo" />
+    <result column="prd_no" jdbcType="VARCHAR" property="prdNo" />
+    <result column="prd_name" jdbcType="VARCHAR" property="prdName" />
+    <result column="zz_prd_count" jdbcType="INTEGER" property="zzPrdCount" />
+    <result column="qualified_rate" jdbcType="VARCHAR" property="qualifiedRate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, create_time, work_order_no, prd_no, prd_name, zz_prd_count, qualified_rate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from erp_qualified_rate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from erp_qualified_rate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpQualifiedRate" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_qualified_rate (create_time, work_order_no, prd_no, 
+      prd_name, zz_prd_count, qualified_rate
+      )
+    values (#{createTime,jdbcType=TIMESTAMP}, #{workOrderNo,jdbcType=VARCHAR}, #{prdNo,jdbcType=VARCHAR}, 
+      #{prdName,jdbcType=VARCHAR}, #{zzPrdCount,jdbcType=INTEGER}, #{qualifiedRate,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpQualifiedRate" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_qualified_rate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="workOrderNo != null">
+        work_order_no,
+      </if>
+      <if test="prdNo != null">
+        prd_no,
+      </if>
+      <if test="prdName != null">
+        prd_name,
+      </if>
+      <if test="zzPrdCount != null">
+        zz_prd_count,
+      </if>
+      <if test="qualifiedRate != null">
+        qualified_rate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workOrderNo != null">
+        #{workOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdNo != null">
+        #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="zzPrdCount != null">
+        #{zzPrdCount,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedRate != null">
+        #{qualifiedRate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.ErpQualifiedRate">
+    <!--@mbg.generated-->
+    update erp_qualified_rate
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workOrderNo != null">
+        work_order_no = #{workOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdNo != null">
+        prd_no = #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        prd_name = #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="zzPrdCount != null">
+        zz_prd_count = #{zzPrdCount,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedRate != null">
+        qualified_rate = #{qualifiedRate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.ErpQualifiedRate">
+    <!--@mbg.generated-->
+    update erp_qualified_rate
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      work_order_no = #{workOrderNo,jdbcType=VARCHAR},
+      prd_no = #{prdNo,jdbcType=VARCHAR},
+      prd_name = #{prdName,jdbcType=VARCHAR},
+      zz_prd_count = #{zzPrdCount,jdbcType=INTEGER},
+      qualified_rate = #{qualifiedRate,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectAllByToday" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from erp_qualified_rate
+    where DATE_SUB(CURDATE(),INTERVAL 30 DAY) &lt;= DATE(create_time)
+  </select>
+</mapper>
