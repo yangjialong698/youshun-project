@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.dao.MaterialConsumMapper">
+
+    <select id="listMaterialConsumByGd" resultType="com.ennova.pubinfoproduct.vo.MaterialConsumVO">
+        SELECT
+            dbo.MOCTE.TE002 AS consumNo,
+            convert(datetime,dbo.MOCTE.TE003,121) AS consumTime,
+            dbo.MOCTA.TA002 AS workOrderNo,
+            dbo.MOCTE.TE004 AS prdNo,
+            dbo.MOCTE.TE017 AS prdName,
+            dbo.MOCTE.TE005 AS perAmount,
+            dbo.INVMB.MB049 * dbo.MOCTE.TE005 AS amount
+        FROM
+            dbo.MOCTA
+                INNER JOIN dbo.MOCTE ON dbo.MOCTA.TA001 = dbo.MOCTE.TE011
+                AND dbo.MOCTA.TA002 = dbo.MOCTE.TE012
+                INNER JOIN dbo.INVMB ON dbo.MOCTE.TE004 = dbo.INVMB.MB001
+        WHERE
+            dbo.MOCTA.TA011 = '3'
+        AND consumTime &gt;= #{startTime,jdbcType=TIMESTAMP}
+        AND consumTime &lt;= #{endTime,jdbcType=TIMESTAMP}
+        <if test="workOrderNo != null and workOrderNo != ''">
+            AND dbo.MOCTA.TA002 = #{workOrderNo,jdbcType=VARCHAR}
+        </if>
+        <if test="consumNo != null and consumNo != ''">
+            AND dbo.MOCTE.TE002 = #{consumNo,jdbcType=VARCHAR}
+        </if>
+        <if test="prdName != null and prdName != ''">
+            AND dbo.MOCTE.TE017 = #{prdName,jdbcType=VARCHAR}
+        </if>
+        <if test="prdNo != null and prdNo != ''">
+            AND dbo.MOCTE.TE004 = #{prdNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="listMaterialConsumByFy" resultType="com.ennova.pubinfoproduct.vo.MaterialConsumVO">
+
+    </select>
+
+</mapper>
