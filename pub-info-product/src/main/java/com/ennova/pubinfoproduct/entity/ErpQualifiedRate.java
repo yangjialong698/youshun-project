@@ -22,12 +22,6 @@ public class ErpQualifiedRate {
     private Integer id;
 
     /**
-    * 日期
-    */
-    @ApiModelProperty(value="日期")
-    private Date createTime;
-
-    /**
     * 工单号
     */
     @ApiModelProperty(value="工单号")
@@ -46,14 +40,38 @@ public class ErpQualifiedRate {
     private String prdName;
 
     /**
+    * 工单状态
+    */
+    @ApiModelProperty(value="工单状态")
+    private String workOrderStatus;
+
+    /**
+    * 模块编号
+    */
+    @ApiModelProperty(value="模块编号")
+    private String moduleNo;
+
+    /**
     * 在制产品数量
     */
     @ApiModelProperty(value="在制产品数量")
     private Integer zzPrdCount;
 
     /**
-    * 合格率
+    * 报废量
     */
-    @ApiModelProperty(value="合格率")
-    private String qualifiedRate;
+    @ApiModelProperty(value="报废量")
+    private Integer scrapCount;
+
+    /**
+    * 报废率
+    */
+    @ApiModelProperty(value="报废率")
+    private String scrapRate;
+
+    /**
+    * 日期
+    */
+    @ApiModelProperty(value="日期")
+    private Date createTime;
 }

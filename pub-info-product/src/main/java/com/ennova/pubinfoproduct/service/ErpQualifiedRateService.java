@@ -14,38 +14,9 @@ public class ErpQualifiedRateService{
     @Resource
     private ErpQualifiedRateMapper erpQualifiedRateMapper;
 
-    
-    public int deleteByPrimaryKey(Integer id) {
-        return erpQualifiedRateMapper.deleteByPrimaryKey(id);
-    }
 
-    
-    public int insert(ErpQualifiedRate record) {
-        return erpQualifiedRateMapper.insert(record);
-    }
-
-    
-    public int insertSelective(ErpQualifiedRate record) {
-        return erpQualifiedRateMapper.insertSelective(record);
-    }
-
-    
-    public ErpQualifiedRate selectByPrimaryKey(Integer id) {
-        return erpQualifiedRateMapper.selectByPrimaryKey(id);
-    }
-
-    
-    public int updateByPrimaryKeySelective(ErpQualifiedRate record) {
-        return erpQualifiedRateMapper.updateByPrimaryKeySelective(record);
-    }
-
-    
-    public int updateByPrimaryKey(ErpQualifiedRate record) {
-        return erpQualifiedRateMapper.updateByPrimaryKey(record);
-    }
-
-    public Callback<List<ErpQualifiedRate>> erpQualifiedRate() {
-        List<ErpQualifiedRate> erpQualifiedRates = erpQualifiedRateMapper.selectAllByToday();
+    public Callback<List<ErpQualifiedRate>> erpQualifiedRate(String moduleNo) {
+        List<ErpQualifiedRate> erpQualifiedRates = erpQualifiedRateMapper.selectAllByModuleNo(moduleNo);
         return Callback.success(erpQualifiedRates);
     }
 }
