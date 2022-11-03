@@ -3,6 +3,7 @@ package com.ennova.pubinfoproduct.controller;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfoproduct.entity.ErpQualifiedRate;
 import com.ennova.pubinfoproduct.service.ErpQualifiedRateService;
+import com.ennova.pubinfoproduct.vo.ErpQualifiedRateVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class ErpQualifiedRateController {
 
     @ApiOperation(value = "当日统计数据", tags = "合格率报表")
     @GetMapping("/accountday")
-    public Callback<List<ErpQualifiedRate>> erpAccountDay(String moduleNo) {
+    public Callback<List<ErpQualifiedRateVO>> erpAccountDay(String moduleNo) {
 
         return erpQualifiedRateService.erpQualifiedRate(moduleNo);
     }

@@ -1,7 +1,6 @@
 package com.ennova.pubinfoproduct.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfoproduct.entity.ErpTransferOrder;
 import com.ennova.pubinfoproduct.service.ErpTransferOrderService;
 import com.ennova.pubinfoproduct.vo.ScrapVO;
 import io.swagger.annotations.ApiOperation;

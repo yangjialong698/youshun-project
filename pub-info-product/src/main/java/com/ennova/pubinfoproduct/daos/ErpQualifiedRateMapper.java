@@ -1,10 +1,10 @@
 package com.ennova.pubinfoproduct.daos;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
-import com.ennova.pubinfoproduct.entity.ErpQualifiedRate;
+import com.ennova.pubinfoproduct.vo.ErpQualifiedRateVO;
+import org.apache.ibatis.annotations.Param;import java.util.List;
 
 public interface ErpQualifiedRateMapper {
 
-    List<ErpQualifiedRate> selectAllByModuleNo(@Param("moduleNo") String moduleNo);
+
+    List<ErpQualifiedRateVO> selectAllByModuleNo(@Param("moduleNo") String moduleNo);
 }

@@ -12,15 +12,31 @@
     <result column="scrap_count" jdbcType="INTEGER" property="scrapCount" />
     <result column="scrap_rate" jdbcType="VARCHAR" property="scrapRate" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="prd_unit" jdbcType="VARCHAR" property="prdUnit" />
+    <result column="estimated_output" jdbcType="INTEGER" property="estimatedOutput" />
+    <result column="start_work_date" jdbcType="TIMESTAMP" property="startWorkDate" />
   </resultMap>
   <sql id="Base_Column_List">
     id, work_order_no, prd_no, prd_name, work_order_status, module_no, zz_prd_count, 
-    scrap_count, scrap_rate, create_time
+    scrap_count, scrap_rate, create_time, prd_unit, estimated_output, start_work_date
   </sql>
 
-    <select id="selectAllByModuleNo" resultMap="BaseResultMap">
+
+    <select id="selectAllByModuleNo" resultType="com.ennova.pubinfoproduct.vo.ErpQualifiedRateVO">
         select
-        <include refid="Base_Column_List"/>
+        work_order_no AS workOrderNo,
+        prd_no AS prdNo,
+        prd_name AS prdName,
+        work_order_status AS workOrderStatus,
+        module_no AS moduleNo,
+        zz_prd_count AS zzPrdCount,
+        scrap_count AS scrapCount,
+        scrap_rate AS scrapRate,
+        create_time AS createTime,
+        prd_unit AS prdUnit,
+        estimated_output AS estimatedOutput,
+        start_work_date AS startWorkDate,
+        DATEDIFF(NOW(),start_work_date) AS onPrdDay
         from erp_qualified_rate
         where
         module_no = #{moduleNo,jdbcType=VARCHAR}
