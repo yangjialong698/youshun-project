@@ -25,6 +25,7 @@
         where
         module_no = #{moduleNo,jdbcType=VARCHAR}
         AND zz_prd_count != 0
-        AND to_days(create_time) = to_days(now())
+        AND DATE_FORMAT( create_time, '%Y-%m-%d' ) =
+        ( SELECT DATE_FORMAT( max( create_time ), '%Y-%m-%d' ) FROM erp_qualified_rate)
     </select>
 </mapper>
