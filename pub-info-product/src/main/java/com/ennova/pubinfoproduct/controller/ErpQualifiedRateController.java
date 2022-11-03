@@ -22,7 +22,7 @@ public class ErpQualifiedRateController {
     @Autowired
     private ErpQualifiedRateService erpQualifiedRateService;
 
-    @ApiOperation(value = "当日统计数据", tags = "合格率报表")
+    @ApiOperation(value = "当日统计数据", tags = "当日统计数据")
     @GetMapping("/accountday")
     public Callback<List<ErpQualifiedRateVO>> erpAccountDay(String moduleNo) {
 
