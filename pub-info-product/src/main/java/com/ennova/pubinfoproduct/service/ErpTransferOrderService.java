@@ -10,10 +10,7 @@ import com.ennova.pubinfoproduct.daos.ErpTransferOrderMapper;
 import com.ennova.pubinfoproduct.entity.ErpTransferOrder;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +31,7 @@ public class ErpTransferOrderService{
         List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectAllByMoveOutNo(gxList);
         ArrayList<ScrapVO> scrapVOArrayList = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(erpTransferOrders)){
-            Map<String, List<ErpTransferOrder>> listMap = erpTransferOrders.stream().collect(Collectors.groupingBy(ErpTransferOrder::getMoveOutNo));
+            Map<Date, List<ErpTransferOrder>> listMap = erpTransferOrders.stream().collect(Collectors.groupingBy(ErpTransferOrder::getOrderDate));
             listMap.entrySet().stream().map(key->{
                 ScrapVO scrapVO = new ScrapVO();
                 List<ErpTransferOrder> value = key.getValue();
@@ -48,9 +45,7 @@ public class ErpTransferOrderService{
                 scrapVOArrayList.add(scrapVO);
                 return scrapVOArrayList;
             }).collect(Collectors.toList());
-
         }
         return Callback.success(scrapVOArrayList);
-
     }
 }
