@@ -27,7 +27,7 @@ public class ErpTransferOrderService{
         List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectAllByMoveOutNo(gxList);
         ArrayList<ScrapVO> scrapVOArrayList = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(erpTransferOrders)){
-            Map<Date, List<ErpTransferOrder>> listMap = erpTransferOrders.stream().collect(Collectors.groupingBy(ErpTransferOrder::getOrderDate));
+            Map<String, List<ErpTransferOrder>> listMap = erpTransferOrders.stream().collect(Collectors.groupingBy(ErpTransferOrder::getOrderDate));
             listMap.entrySet().stream().map(key->{
                 ScrapVO scrapVO = new ScrapVO();
                 List<ErpTransferOrder> value = key.getValue();

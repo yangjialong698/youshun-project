@@ -1,6 +1,7 @@
 package com.ennova.pubinfoproduct.vo;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -72,7 +73,8 @@ public class ErpQualifiedRateVO {
      * 日期
      */
     @ApiModelProperty(value = "日期")
-    private Date createTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    private String createTime;
 
     /**
      * 单位
@@ -90,7 +92,8 @@ public class ErpQualifiedRateVO {
      * 开工日期
      */
     @ApiModelProperty(value = "开工日期")
-    private Date startWorkDate;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    private String startWorkDate;
 
     /**
      * 在产天数

@@ -32,10 +32,10 @@
         zz_prd_count AS zzPrdCount,
         scrap_count AS scrapCount,
         scrap_rate AS scrapRate,
-        create_time AS createTime,
+        DATE_FORMAT( create_time, '%Y-%m-%d' ) AS createTime,
         prd_unit AS prdUnit,
         estimated_output AS estimatedOutput,
-        start_work_date AS startWorkDate,
+        DATE_FORMAT( start_work_date, '%Y-%m-%d' ) AS startWorkDate,
         DATEDIFF(NOW(),start_work_date) AS onPrdDay
         from erp_qualified_rate
         where

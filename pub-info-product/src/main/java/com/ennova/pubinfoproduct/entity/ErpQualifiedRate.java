@@ -1,5 +1,6 @@
 package com.ennova.pubinfoproduct.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
@@ -73,7 +74,8 @@ public class ErpQualifiedRate {
      * 日期
      */
     @ApiModelProperty(value = "日期")
-    private Date createTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    private String createTime;
 
     /**
      * 单位
