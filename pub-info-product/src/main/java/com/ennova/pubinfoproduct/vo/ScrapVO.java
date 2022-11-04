@@ -11,8 +11,8 @@ public class ScrapVO {
     @ApiModelProperty(value="单据日期")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private String orderDate;
-    @ApiModelProperty(value="入库量")
-    private Integer totalNum;
+    @ApiModelProperty(value="报废量")
+    private Integer scrapNum;
     @ApiModelProperty(value="日产量")
     private Integer dayPrdNum;
     @ApiModelProperty(value="报废率")

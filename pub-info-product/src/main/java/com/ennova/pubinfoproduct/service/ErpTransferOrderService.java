@@ -38,7 +38,7 @@ public class ErpTransferOrderService{
                 NumberFormat num = NumberFormat.getInstance();
                 num.setMaximumFractionDigits(2);
                 String percent = num.format((float) bfCount / (float) rkCount * 100);
-                scrapVO.setTotalNum(rkCount);
+                scrapVO.setScrapNum(bfCount);
                 scrapVO.setDayPrdNum(rcCount);
                 scrapVO.setOrderDate(value.get(0).getOrderDate());
                 scrapVO.setScrapRate(percent);
