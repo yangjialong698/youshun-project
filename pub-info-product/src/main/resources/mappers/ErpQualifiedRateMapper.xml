@@ -14,7 +14,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="prd_unit" jdbcType="VARCHAR" property="prdUnit" />
     <result column="estimated_output" jdbcType="INTEGER" property="estimatedOutput" />
-    <result column="start_work_date" jdbcType="TIMESTAMP" property="startWorkDate" />
+    <result column="start_work_date" jdbcType="VARCHAR" property="startWorkDate" />
   </resultMap>
   <sql id="Base_Column_List">
     id, work_order_no, prd_no, prd_name, work_order_status, module_no, zz_prd_count, 

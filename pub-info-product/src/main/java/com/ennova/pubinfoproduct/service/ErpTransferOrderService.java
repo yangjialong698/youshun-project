@@ -34,16 +34,17 @@ public class ErpTransferOrderService{
                 int rcCount = value.stream().mapToInt(ErpTransferOrder::getAcceptanceNum).sum(); // 日产量单品汇总
                 int rkCount = value.stream().mapToInt(ErpTransferOrder::getTotalNum).sum(); // 入库数量单品汇总
                 int bfCount = value.stream().mapToInt(ErpTransferOrder::getScrapNum).sum(); // 报废数量单品汇总
-                BigDecimal decimal = new BigDecimal(bfCount).divide(new BigDecimal(rkCount),2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
-                Integer scrapRate = decimal.intValue();
+                BigDecimal bigDecimal = new BigDecimal((Double.valueOf(bfCount)) / (Double.valueOf(rkCount)));
+                double percent = bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() * 100;
                 scrapVO.setTotalNum(rkCount);
                 scrapVO.setDayPrdNum(rcCount);
                 scrapVO.setOrderDate(value.get(0).getOrderDate());
-                scrapVO.setScrapRate(scrapRate);
+                scrapVO.setScrapRate(percent);
                 scrapVOArrayList.add(scrapVO);
                 return scrapVOArrayList;
             }).collect(Collectors.toList());
         }
-        return Callback.success(scrapVOArrayList);
+        List<ScrapVO> collect = scrapVOArrayList.stream().sorted(Comparator.comparing(ScrapVO::getOrderDate)).collect(Collectors.toList());
+        return Callback.success(collect);
     }
 }

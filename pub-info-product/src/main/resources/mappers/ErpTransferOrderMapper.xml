@@ -3,7 +3,7 @@
 <mapper namespace="com.ennova.pubinfoproduct.daos.ErpTransferOrderMapper">
   <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ErpTransferOrder">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="order_date" jdbcType="TIMESTAMP" property="orderDate" />
+    <result column="order_date" jdbcType="VARCHAR" property="orderDate" />
     <result column="transfer_order_no" jdbcType="VARCHAR" property="transferOrderNo" />
     <result column="move_out_no" jdbcType="VARCHAR" property="moveOutNo" />
     <result column="move_in_no" jdbcType="VARCHAR" property="moveInNo" />
