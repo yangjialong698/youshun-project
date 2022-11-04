@@ -85,12 +85,9 @@ public class CgPurchaseInfoController {
     }
 
     @ApiOperation(value = "采购信息 - 采购信息首页不分页列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "物料名称")
-    })
     @GetMapping("/selectAllPurchaseInfo")
-    public Callback<List<CgPurchaseInfoVO>> selectAllPurchaseInfo(String name){
-        return cgPurchaseInfoService.selectAllPurchaseInfo(name);
+    public Callback<List<CgPurchaseInfoVO>> selectAllPurchaseInfo(){
+        return cgPurchaseInfoService.selectAllPurchaseInfo();
     }
 
     @ApiOperation(value = "采购信息 - 采购信息查看详情")

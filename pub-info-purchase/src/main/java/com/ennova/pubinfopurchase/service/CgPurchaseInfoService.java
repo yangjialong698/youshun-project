@@ -281,11 +281,11 @@ public class CgPurchaseInfoService {
         return Callback.success(baseVO);
     }
 
-    public Callback<List<CgPurchaseInfoVO>> selectAllPurchaseInfo(String name) {
+    public Callback<List<CgPurchaseInfoVO>> selectAllPurchaseInfo() {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
-        List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name,null);
+        List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfos();
         return Callback.success(cgPurchaseInfos);
     }
 

@@ -38,4 +38,19 @@ public class WebsiteService {
         }
         return Callback.error("提交失败");
     }
+
+    public Callback delete(Integer id) {
+
+        GwMessage gwMessage = gwMessageMapper.selectByPrimaryKey(id);
+        if (gwMessage != null) {
+            int i = gwMessageMapper.deleteByPrimaryKey(id);
+            if (i > 0) {
+                return Callback.success(true);
+            }
+        }
+        return Callback.error(2, "删除失败");
+    }
+
+
+
 }
