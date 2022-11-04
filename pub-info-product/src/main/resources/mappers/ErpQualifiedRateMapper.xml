@@ -39,7 +39,10 @@
         DATEDIFF(NOW(),start_work_date) AS onPrdDay
         from erp_qualified_rate
         where
-        module_no = #{moduleNo,jdbcType=VARCHAR}
+        module_no in
+        <foreach item="item" index="index" collection="gxList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
         AND zz_prd_count != 0
         AND DATE_FORMAT( create_time, '%Y-%m-%d' ) =
         ( SELECT DATE_FORMAT( max( create_time ), '%Y-%m-%d' ) FROM erp_qualified_rate)

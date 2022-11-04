@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Param;import java.util.List;
 public interface ErpQualifiedRateMapper {
 
 
-    List<ErpQualifiedRateVO> selectAllByModuleNo(@Param("moduleNo") String moduleNo);
+    List<ErpQualifiedRateVO> selectAllByModuleNo(@Param("gxList")  List<String> gxList);
 }
