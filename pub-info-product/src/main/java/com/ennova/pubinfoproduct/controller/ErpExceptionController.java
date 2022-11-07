@@ -1,11 +1,11 @@
-package com.ennova.pubinfowebsite.controller;
+package com.ennova.pubinfoproduct.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
-import com.ennova.pubinfowebsite.entity.ErpException;
-import com.ennova.pubinfowebsite.service.ErpExceptionService;
-import com.ennova.pubinfowebsite.vo.ErpExceptionCountVO;
-import com.ennova.pubinfowebsite.vo.ErpExceptionVO;
+import com.ennova.pubinfoproduct.entity.ErpException;
+import com.ennova.pubinfoproduct.service.ErpExceptionService;
+import com.ennova.pubinfoproduct.vo.ErpExceptionCountVO;
+import com.ennova.pubinfoproduct.vo.ErpExceptionVO;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class ErpExceptionController {
     @ApiOperation(value = "查看异常信息列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码"),
-            @ApiImplicitParam(name = "size", value = "每页条数"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数"),
             @ApiImplicitParam(name = "muduleType", value = "模块类型：1-机加摇臂 2-摇臂轴 3-摇臂后处理 4-装配")
     })
     @GetMapping("/exceptionList")

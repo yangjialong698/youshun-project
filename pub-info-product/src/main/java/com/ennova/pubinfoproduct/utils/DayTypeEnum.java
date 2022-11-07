@@ -1,4 +1,4 @@
-package com.ennova.pubinfowebsite.utils;
+package com.ennova.pubinfoproduct.utils;
 
 public enum DayTypeEnum {
     DAYNULL(0, ""), DAYTHREE(1, "3");

@@ -1,4 +1,4 @@
-package com.ennova.pubinfowebsite.entity;
+package com.ennova.pubinfoproduct.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

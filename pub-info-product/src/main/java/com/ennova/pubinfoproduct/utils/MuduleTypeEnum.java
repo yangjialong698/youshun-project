@@ -1,4 +1,4 @@
-package com.ennova.pubinfowebsite.utils;
+package com.ennova.pubinfoproduct.utils;
 
 public enum MuduleTypeEnum {
 

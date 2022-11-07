@@ -1,13 +1,11 @@
-package com.ennova.pubinfowebsite.dao;
+package com.ennova.pubinfoproduct.daos;
 
-import com.ennova.pubinfowebsite.entity.ErpException;
-import com.ennova.pubinfowebsite.vo.ErpExceptionVO;
-import org.apache.ibatis.annotations.Mapper;
+import com.ennova.pubinfoproduct.entity.ErpException;
+import com.ennova.pubinfoproduct.vo.ErpExceptionVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-@Mapper
 public interface ErpExceptionMapper {
     int deleteByPrimaryKey(Integer id);
 
