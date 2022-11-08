@@ -40,6 +40,7 @@ public class ErpTransferOrderService{
                 num.setMaximumFractionDigits(2);
                 String percent = num.format((float) (bfCount+badCount) / (float) rkCount * 100);
                 scrapVO.setScrapNum(bfCount);
+                scrapVO.setBadNum(badCount);
                 scrapVO.setDayPrdNum(rcCount);
                 scrapVO.setOrderDate(value.get(0).getOrderDate());
                 if (percent.compareTo("15") >= 0){

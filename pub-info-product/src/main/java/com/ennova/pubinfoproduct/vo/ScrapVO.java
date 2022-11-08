@@ -15,6 +15,8 @@ public class ScrapVO {
     private Integer scrapNum;
     @ApiModelProperty(value="日产量")
     private Integer dayPrdNum;
+    @ApiModelProperty(value="不良数")
+    private Integer badNum;
     @ApiModelProperty(value="不良及报废率")
     private String badScrapRate;
 }
