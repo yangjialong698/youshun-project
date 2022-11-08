@@ -177,7 +177,7 @@
                 and erp.mudule_type = #{muduleType,jdbcType=INTEGER}
             </if>
         </where>
-        order by erp.create_time desc
+        order by erp.create_time asc
     </select>
 
     <select id="selectExceptionCountList" parameterType="java.lang.Integer"

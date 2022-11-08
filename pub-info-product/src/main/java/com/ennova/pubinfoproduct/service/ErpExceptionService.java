@@ -18,14 +18,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@Transactional(rollbackFor = Exception.class)
+//@Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class ErpExceptionService {
 
@@ -110,7 +109,9 @@ public class ErpExceptionService {
             erpExceptionCountVO.setModuleExceptionMessage(list);
             erpExceptionCountVOList.add(erpExceptionCountVO);
         }
-        BaseVO<ErpExceptionCountVO> erpExceptionCountVOBaseVO = new BaseVO<>(erpExceptionCountVOList, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        List<ErpExceptionCountVO> erpExceptionCountVOLists = erpExceptionCountVOList.stream().sorted(Comparator.comparing(erpExceptionCountVO -> erpExceptionCountVO.getCreateTime())).collect(Collectors.toList());
+        Collections.reverse(erpExceptionCountVOLists);
+        BaseVO<ErpExceptionCountVO> erpExceptionCountVOBaseVO = new BaseVO<>(erpExceptionCountVOLists, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(erpExceptionCountVOBaseVO);
     }
 }
