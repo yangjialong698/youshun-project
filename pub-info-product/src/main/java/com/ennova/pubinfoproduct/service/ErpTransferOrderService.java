@@ -32,16 +32,20 @@ public class ErpTransferOrderService{
             listMap.entrySet().stream().map(key->{
                 ScrapVO scrapVO = new ScrapVO();
                 List<ErpTransferOrder> value = key.getValue();
-                int rcCount = value.stream().mapToInt(ErpTransferOrder::getAcceptanceNum).sum(); // 日产量单品汇总
-                int rkCount = value.stream().mapToInt(ErpTransferOrder::getTotalNum).sum(); // 入库数量单品汇总
-                int bfCount = value.stream().mapToInt(ErpTransferOrder::getScrapNum).sum(); // 报废数量单品汇总
+                int rcCount = value.stream().mapToInt(o->Objects.isNull(o.getAcceptanceNum()) ? 0 :o.getAcceptanceNum()).sum();// 日产量单品汇总
+                int rkCount = value.stream().mapToInt(o->Objects.isNull(o.getTotalNum()) ? 0 :o.getTotalNum()).sum(); // 入库数量单品汇总
+                int bfCount = value.stream().mapToInt(o->Objects.isNull(o.getScrapNum()) ? 0 :o.getScrapNum()).sum(); // 报废数量单品汇总
+                int badCount = value.stream().mapToInt(o->Objects.isNull(o.getBadNum()) ? 0 :o.getBadNum()).sum(); // 不良数量单品汇总
                 NumberFormat num = NumberFormat.getInstance();
                 num.setMaximumFractionDigits(2);
-                String percent = num.format((float) bfCount / (float) rkCount * 100);
+                String percent = num.format((float) (bfCount+badCount) / (float) rkCount * 100);
                 scrapVO.setScrapNum(bfCount);
                 scrapVO.setDayPrdNum(rcCount);
                 scrapVO.setOrderDate(value.get(0).getOrderDate());
-                scrapVO.setScrapRate(percent);
+                if (percent.compareTo("15") >= 0){
+                    percent = String.valueOf(15);
+                }
+                scrapVO.setBadScrapRate(percent);
                 scrapVOArrayList.add(scrapVO);
                 return scrapVOArrayList;
             }).collect(Collectors.toList());

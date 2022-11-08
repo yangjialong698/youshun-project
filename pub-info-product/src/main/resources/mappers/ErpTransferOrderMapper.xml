@@ -12,11 +12,12 @@
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="acceptance_num" jdbcType="INTEGER" property="acceptanceNum" />
     <result column="scrap_num" jdbcType="INTEGER" property="scrapNum" />
+    <result column="bad_num" jdbcType="INTEGER" property="badNum" />
     <result column="total_num" jdbcType="INTEGER" property="totalNum" />
   </resultMap>
   <sql id="Base_Column_List">
     id, order_date, transfer_order_no, move_out_no, move_in_no, work_order_no, product_no, 
-    product_name, acceptance_num, scrap_num, total_num
+    product_name, acceptance_num, scrap_num,bad_num, total_num
   </sql>
 
   <select id="selectAllByMoveOutNo" resultMap="BaseResultMap">

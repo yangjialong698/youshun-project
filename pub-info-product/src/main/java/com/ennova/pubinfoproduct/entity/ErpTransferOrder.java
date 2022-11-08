@@ -69,6 +69,12 @@ public class ErpTransferOrder {
     private Integer scrapNum;
 
     /**
+     * 不良数量
+     */
+    @ApiModelProperty(value="不良数量")
+    private Integer badNum;
+
+    /**
     * 总量：验收量+报废量
     */
     @ApiModelProperty(value="总量：验收量+报废量")
