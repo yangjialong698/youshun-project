@@ -43,7 +43,8 @@ public class ErpTransferOrderService{
                 scrapVO.setBadNum(badCount);
                 scrapVO.setDayPrdNum(rcCount);
                 scrapVO.setOrderDate(value.get(0).getOrderDate());
-                if (percent.compareTo("15") >= 0){
+                BigDecimal decimalPercent = new BigDecimal(percent);
+                if (decimalPercent.compareTo(new BigDecimal(15))>=0){
                     percent = String.valueOf(15);
                 }
                 scrapVO.setBadScrapRate(percent);
