@@ -2,22 +2,20 @@ package com.ennova.pubinfouser.service;
 
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.*;
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfouser.dao.DeptDao;
-import com.ennova.pubinfouser.dao.TDeptDingMapper;
-import com.ennova.pubinfouser.dao.TUserDingMapper;
-import com.ennova.pubinfouser.dao.UserDao;
-import com.ennova.pubinfouser.entity.DeptEntity;
-import com.ennova.pubinfouser.entity.TDeptDing;
-import com.ennova.pubinfouser.entity.TUserDing;
-import com.ennova.pubinfouser.entity.UserEntity;
+import com.ennova.pubinfouser.dao.*;
+import com.ennova.pubinfouser.entity.*;
 import com.ennova.pubinfouser.utils.DingDingUtil;
 import com.ennova.pubinfouser.vo.DingDeptVO;
 import com.ennova.pubinfouser.vo.DingUserVO;
+import com.ennova.pubinfouser.vo.TDingClockVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,6 +42,8 @@ public class DingDingService  {
     private UserDao userDao;
     @Autowired
     private DeptDao deptDao;
+    @Autowired
+    private TDingClockMapper tDingClockMapper;
 
     //获取最后一级部门接口
     public Callback<List<Long>> lastDeptIds() {
@@ -333,6 +333,66 @@ public class DingDingService  {
                 deptDao.deleteDept(e.getDeptId());
             });
         }
+    }
+
+//    @Scheduled(cron="0 0 10 * * ? ")
+    public void listClockTime(String checkDateFrom, String checkDateTo) {
+        List<String> userIdList = tUserDingMapper.selectAllUserId();
+        int size = userIdList.size();
+        int maxSize = 50;
+        int loopNum =(int) Math.ceil(size * NumberUtils.DOUBLE_ONE / maxSize);
+        for (int i = 0; i < loopNum; i++) {
+            List<String> subUserIds = userIdList.stream().skip(i * maxSize).limit((i + 1) * maxSize).collect(Collectors.toList());
+            String accesstoken = DingDingUtil.getAccess_Token();
+            List<OapiAttendanceListRecordResponse.Recordresult> dingTime = DingDingUtil.getOnClassTime(subUserIds, checkDateFrom, checkDateTo, accesstoken);
+//            List<TDingClock> tDingClocks = JSONObject.parseArray(dingTime, TDingClock.class);
+//            tDingClockMapper.batchInsert(tDingClocks);
+        }
+    }
+
+    public Callback<List<TDingClock>> listClock(String userIds, String checkDateFrom, String checkDateTo) {
+        List<String> userIdList = Arrays.asList(userIds.split(","));
+        String s = userIdList.get(0);
+        ArrayList<TDingClockVO> tDingClocksVoList = new ArrayList<>();
+        ArrayList<TDingClock> tDingClocks = new ArrayList<>();
+        int size = userIdList.size();
+        int maxSize = 50;
+        int loopNum =(int) Math.ceil(size * NumberUtils.DOUBLE_ONE / maxSize);
+        for (int i = 0; i < loopNum; i++) {
+            List<String> subUserIds = userIdList.stream().skip(i * maxSize).limit((i + 1) * maxSize).collect(Collectors.toList());
+            String accesstoken = DingDingUtil.getAccess_Token();
+            //调用钉钉API获取用户每天打卡详情
+            List<OapiAttendanceListRecordResponse.Recordresult> dingClockList = DingDingUtil.getOnClassTime(subUserIds, checkDateFrom, checkDateTo, accesstoken);
+            for (OapiAttendanceListRecordResponse.Recordresult recordresult : dingClockList) {
+                TDingClockVO tDingClockVO = new TDingClockVO();
+                BeanUtils.copyProperties(recordresult,tDingClockVO);
+                tDingClocksVoList.add(tDingClockVO);
+            }
+        }
+        Map<Date, Map<String, List<TDingClockVO>>> listMap = tDingClocksVoList.stream().collect(Collectors.groupingBy(TDingClockVO::getWorkDate, Collectors.groupingBy(TDingClockVO::getUserId)));
+        listMap.entrySet().stream().map(key->{
+            Map<String, List<TDingClockVO>> value1 = key.getValue();
+            value1.entrySet().stream().map(key1->{
+                // 某一天某个用户的打卡详情
+                List<TDingClockVO> tDingClockVOS = key1.getValue();
+                List<TDingClockVO> collect = tDingClockVOS.stream().sorted(Comparator.comparing(TDingClockVO::getUserCheckTime)).collect(Collectors.toList());
+                //todo...
+                TDingClockVO tDingClockVoFirst = collect.get(0);
+                TDingClockVO tDingClockVoLast = collect.get(collect.size() - 1);
+                TDingClock tDingClock = new TDingClock();
+                tDingClock.setUserId(tDingClockVoFirst.getUserId());
+                tDingClock.setUserCheckOn(tDingClockVoFirst.getUserCheckTime());
+                tDingClock.setUserCheckOff(tDingClockVoLast.getUserCheckTime());
+                tDingClock.setBaseCheckOn(tDingClockVoFirst.getBaseCheckTime());
+                tDingClock.setBaseCheckOff(tDingClockVoLast.getBaseCheckTime());
+                tDingClock.setWorkDate(tDingClockVoFirst.getWorkDate());
+                tDingClock.setWorkTime(DateUtil.between(tDingClockVoFirst.getUserCheckTime(), tDingClockVoLast.getUserCheckTime(), DateUnit.MINUTE)+" 分钟");
+                return tDingClocks.add(tDingClock);
+            }).collect(Collectors.toList());
+            return tDingClocks;
+        }).collect(Collectors.toList());
+        tDingClockMapper.batchInsert(tDingClocks);
+        return Callback.success(tDingClocks);
     }
 }
 

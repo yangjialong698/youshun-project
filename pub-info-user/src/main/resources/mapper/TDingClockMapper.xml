@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfouser.dao.TDingClockMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfouser.entity.TDingClock">
+    <!--@mbg.generated-->
+    <!--@Table t_ding_clock-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_check_on" jdbcType="TIMESTAMP" property="userCheckOn" />
+    <result column="user_check_off" jdbcType="TIMESTAMP" property="userCheckOff" />
+    <result column="base_check_on" jdbcType="TIMESTAMP" property="baseCheckOn" />
+    <result column="base_check_off" jdbcType="TIMESTAMP" property="baseCheckOff" />
+    <result column="work_date" jdbcType="TIMESTAMP" property="workDate" />
+    <result column="work_time" jdbcType="VARCHAR" property="workTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, user_check_on, user_check_off, base_check_on, base_check_off, work_date, 
+    work_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from t_ding_clock
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from t_ding_clock
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfouser.entity.TDingClock" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_ding_clock (user_id, user_check_on, user_check_off, 
+      base_check_on, base_check_off, work_date, 
+      work_time)
+    values (#{userId,jdbcType=VARCHAR}, #{userCheckOn,jdbcType=TIMESTAMP}, #{userCheckOff,jdbcType=TIMESTAMP}, 
+      #{baseCheckOn,jdbcType=TIMESTAMP}, #{baseCheckOff,jdbcType=TIMESTAMP}, #{workDate,jdbcType=TIMESTAMP}, 
+      #{workTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfouser.entity.TDingClock" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_ding_clock
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userCheckOn != null">
+        user_check_on,
+      </if>
+      <if test="userCheckOff != null">
+        user_check_off,
+      </if>
+      <if test="baseCheckOn != null">
+        base_check_on,
+      </if>
+      <if test="baseCheckOff != null">
+        base_check_off,
+      </if>
+      <if test="workDate != null">
+        work_date,
+      </if>
+      <if test="workTime != null">
+        work_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userCheckOn != null">
+        #{userCheckOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCheckOff != null">
+        #{userCheckOff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="baseCheckOn != null">
+        #{baseCheckOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="baseCheckOff != null">
+        #{baseCheckOff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workDate != null">
+        #{workDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workTime != null">
+        #{workTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfouser.entity.TDingClock">
+    <!--@mbg.generated-->
+    update t_ding_clock
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userCheckOn != null">
+        user_check_on = #{userCheckOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCheckOff != null">
+        user_check_off = #{userCheckOff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="baseCheckOn != null">
+        base_check_on = #{baseCheckOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="baseCheckOff != null">
+        base_check_off = #{baseCheckOff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workDate != null">
+        work_date = #{workDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workTime != null">
+        work_time = #{workTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfouser.entity.TDingClock">
+    <!--@mbg.generated-->
+    update t_ding_clock
+    set user_id = #{userId,jdbcType=VARCHAR},
+      user_check_on = #{userCheckOn,jdbcType=TIMESTAMP},
+      user_check_off = #{userCheckOff,jdbcType=TIMESTAMP},
+      base_check_on = #{baseCheckOn,jdbcType=TIMESTAMP},
+      base_check_off = #{baseCheckOff,jdbcType=TIMESTAMP},
+      work_date = #{workDate,jdbcType=TIMESTAMP},
+      work_time = #{workTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update t_ding_clock
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="user_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.userId,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="user_check_on = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.userCheckOn,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="user_check_off = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.userCheckOff,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="base_check_on = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.baseCheckOn,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="base_check_off = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.baseCheckOff,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="work_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.workDate,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="work_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.workTime,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_ding_clock
+    (user_id, user_check_on, user_check_off, base_check_on, base_check_off, work_date, 
+      work_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.userId,jdbcType=VARCHAR}, #{item.userCheckOn,jdbcType=TIMESTAMP}, #{item.userCheckOff,jdbcType=TIMESTAMP}, 
+        #{item.baseCheckOn,jdbcType=TIMESTAMP}, #{item.baseCheckOff,jdbcType=TIMESTAMP}, 
+        #{item.workDate,jdbcType=TIMESTAMP}, #{item.workTime,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+</mapper>

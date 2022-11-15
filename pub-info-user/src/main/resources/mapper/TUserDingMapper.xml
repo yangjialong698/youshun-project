@@ -472,4 +472,9 @@
     where tud.job_num
     not in (select job_num from t_user)
   </select>
+
+  <select id="selectAllUserId" resultType="java.lang.String">
+        select user_id
+        from t_user_ding
+    </select>
 </mapper>

@@ -133,7 +133,7 @@ public class DingDingUtil {
 
 
     //获取用户打卡记录
-    public static String getOnClassTime(List<String> userIds, String checkDateFrom, String checkDateTo,String accesstoken){
+    public static List<OapiAttendanceListRecordResponse.Recordresult> getOnClassTime(List<String> userIds, String checkDateFrom, String checkDateTo,String accesstoken){
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/attendance/listRecord");
         OapiAttendanceListRecordRequest req = new OapiAttendanceListRecordRequest();
         req.setUserIds(userIds);
@@ -142,7 +142,7 @@ public class DingDingUtil {
         req.setIsI18n(false);
         try {
             OapiAttendanceListRecordResponse response = client.execute(req, accesstoken);
-            return response.getBody();
+            return response.getRecordresult();
         } catch (ApiException e) {
             e.printStackTrace();
         }
@@ -156,7 +156,7 @@ public class DingDingUtil {
         List<String> userList = Arrays.asList("5195");
         String checkDateFrom = "2022-11-09 05:00:00";
         String checkDateTo = "2022-11-11 20:00:00";
-        String onClassDetail = DingDingUtil.getOnClassTime(userList,checkDateFrom,checkDateTo,accesstoken);
+        List<OapiAttendanceListRecordResponse.Recordresult> onClassDetail = DingDingUtil.getOnClassTime(userList,checkDateFrom,checkDateTo,accesstoken);
         System.out.println(onClassDetail);
 
 

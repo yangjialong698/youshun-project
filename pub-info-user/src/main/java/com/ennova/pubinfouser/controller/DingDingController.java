@@ -3,9 +3,11 @@ package com.ennova.pubinfouser.controller;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfouser.dto.BaseDTO;
 import com.ennova.pubinfouser.dto.RoleDTO;
+import com.ennova.pubinfouser.entity.TDingClock;
 import com.ennova.pubinfouser.service.DingDingService;
 import com.ennova.pubinfouser.vo.DingDeptVO;
 import com.ennova.pubinfouser.vo.DingUserVO;
+import com.ennova.pubinfouser.vo.TDingClockVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -50,5 +52,11 @@ public class DingDingController {
     @GetMapping("/deptDetails")
     public Callback<List<DingDeptVO>> deptDetails() {
         return dingDingService.deptDetails();
+    }
+
+    @ApiOperation(value = "钉钉-根据用户ID获取打卡记录", tags = "钉钉API")
+    @GetMapping("/listClock")
+    public Callback<List<TDingClock>> listClock(String userIds, String checkDateFrom, String checkDateTo) {
+        return dingDingService.listClock(userIds,checkDateFrom,checkDateTo);
     }
 }

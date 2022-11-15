@@ -29,4 +29,8 @@ public interface TUserDingMapper {
 
     List<TUserDing> selectEntry();
 
+    List<String> selectAllUserId();
+
+
+
 }
