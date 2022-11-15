@@ -352,7 +352,6 @@ public class DingDingService  {
 
     public Callback<List<TDingClock>> listClock(String userIds, String checkDateFrom, String checkDateTo) {
         List<String> userIdList = Arrays.asList(userIds.split(","));
-        String s = userIdList.get(0);
         ArrayList<TDingClockVO> tDingClocksVoList = new ArrayList<>();
         ArrayList<TDingClock> tDingClocks = new ArrayList<>();
         int size = userIdList.size();
@@ -375,18 +374,23 @@ public class DingDingService  {
             value1.entrySet().stream().map(key1->{
                 // 某一天某个用户的打卡详情
                 List<TDingClockVO> tDingClockVOS = key1.getValue();
-                List<TDingClockVO> collect = tDingClockVOS.stream().sorted(Comparator.comparing(TDingClockVO::getUserCheckTime)).collect(Collectors.toList());
-                //todo...
-                TDingClockVO tDingClockVoFirst = collect.get(0);
-                TDingClockVO tDingClockVoLast = collect.get(collect.size() - 1);
+                TDingClockVO tDingClockVoFirst = null;
+                TDingClockVO tDingClockVoLast = null;
+                List<TDingClockVO> tDingClockVOList = tDingClockVOS.stream().sorted(Comparator.comparing(TDingClockVO::getUserCheckTime)).collect(Collectors.toList());
+                boolean onDuty = tDingClockVOList.stream().filter(m -> m.getCheckType().equals("OnDuty")).findAny().isPresent();
+                boolean offDuty = tDingClockVOList.stream().filter(m -> m.getCheckType().equals("OffDuty")).findAny().isPresent();
                 TDingClock tDingClock = new TDingClock();
-                tDingClock.setUserId(tDingClockVoFirst.getUserId());
-                tDingClock.setUserCheckOn(tDingClockVoFirst.getUserCheckTime());
-                tDingClock.setUserCheckOff(tDingClockVoLast.getUserCheckTime());
-                tDingClock.setBaseCheckOn(tDingClockVoFirst.getBaseCheckTime());
-                tDingClock.setBaseCheckOff(tDingClockVoLast.getBaseCheckTime());
-                tDingClock.setWorkDate(tDingClockVoFirst.getWorkDate());
-                tDingClock.setWorkTime(DateUtil.between(tDingClockVoFirst.getUserCheckTime(), tDingClockVoLast.getUserCheckTime(), DateUnit.MINUTE)+" 分钟");
+                if (onDuty && offDuty){
+                    tDingClockVoFirst = tDingClockVOList.get(0);
+                    tDingClockVoLast = tDingClockVOList.get(tDingClockVOList.size() - 1);
+                    tDingClock.setUserId(tDingClockVoFirst.getUserId());
+                    tDingClock.setUserCheckOn(tDingClockVoFirst.getUserCheckTime());
+                    tDingClock.setUserCheckOff(tDingClockVoLast.getUserCheckTime());
+                    tDingClock.setBaseCheckOn(tDingClockVoFirst.getBaseCheckTime());
+                    tDingClock.setBaseCheckOff(tDingClockVoLast.getBaseCheckTime());
+                    tDingClock.setWorkDate(tDingClockVoFirst.getWorkDate());
+                    tDingClock.setWorkTime(DateUtil.between(tDingClockVoFirst.getUserCheckTime(), tDingClockVoLast.getUserCheckTime(), DateUnit.MINUTE)+" 分钟");
+                }
                 return tDingClocks.add(tDingClock);
             }).collect(Collectors.toList());
             return tDingClocks;
