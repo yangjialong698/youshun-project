@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.daos.ErpExceptionMapper">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ErpException">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="mudule_type" jdbcType="INTEGER" property="muduleType"/>
+        <result column="module_exception_message" jdbcType="LONGVARCHAR" property="moduleExceptionMessage"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        mudule_type,
+        module_exception_message,
+        del_flag,
+        create_time,
+        update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from erp_exception
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        update erp_exception
+        <set>
+            del_flag = 1
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.ennova.pubinfoproduct.entity.ErpException">
+        <!--@mbg.generated-->
+        insert into erp_exception (id, mudule_type, module_exception_message,
+                                   del_flag, create_time, update_time)
+        values (#{id,jdbcType=INTEGER}, #{muduleType,jdbcType=INTEGER}, #{moduleExceptionMessage,jdbcType=LONGVARCHAR},
+                #{delFlag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.ennova.pubinfoproduct.entity.ErpException">
+        <!--@mbg.generated-->
+        insert into erp_exception
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="muduleType != null">
+                mudule_type,
+            </if>
+            <if test="moduleExceptionMessage != null">
+                module_exception_message,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="muduleType != null">
+                #{muduleType,jdbcType=INTEGER},
+            </if>
+            <if test="moduleExceptionMessage != null">
+                #{moduleExceptionMessage,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.ErpException">
+        <!--@mbg.generated-->
+        update erp_exception
+        <set>
+            <if test="muduleType != null">
+                mudule_type = #{muduleType,jdbcType=INTEGER},
+            </if>
+            <if test="moduleExceptionMessage != null">
+                module_exception_message = #{moduleExceptionMessage,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.ErpException">
+        <!--@mbg.generated-->
+        update erp_exception
+        set mudule_type              = #{muduleType,jdbcType=INTEGER},
+            module_exception_message = #{moduleExceptionMessage,jdbcType=LONGVARCHAR},
+            del_flag                 = #{delFlag,jdbcType=INTEGER},
+            create_time              = #{createTime,jdbcType=TIMESTAMP},
+            update_time              = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update erp_exception
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="mudule_type = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.muduleType,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="module_exception_message = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.moduleExceptionMessage,jdbcType=LONGVARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.delFlag,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="update_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <insert id="batchInsert" parameterType="map">
+        <!--@mbg.generated-->
+        insert into erp_exception
+        (id, mudule_type, module_exception_message, del_flag, create_time, update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id,jdbcType=INTEGER}, #{item.muduleType,jdbcType=INTEGER},
+             #{item.moduleExceptionMessage,jdbcType=LONGVARCHAR},
+             #{item.delFlag,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP},
+             #{item.updateTime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
+    <select id="selectBymuduleTypeLike" parameterType="java.lang.Integer"
+            resultType="com.ennova.pubinfoproduct.vo.ErpExceptionVO">
+        select erp.id,
+               erp.mudule_type              as muduleType,
+               erp.module_exception_message as moduleExceptionMessage,
+               erp.del_flag                 as delFlag,
+               erp.create_time              as createTime,
+               erp.update_time              as updateTime
+        from erp_exception erp
+        <where>
+            erp.del_flag = 0
+            <if test="muduleType != null">
+                and erp.mudule_type = #{muduleType,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by erp.create_time asc
+    </select>
+
+    <select id="selectExceptionCountList" parameterType="java.lang.Integer"
+            resultType="com.ennova.pubinfoproduct.vo.ErpExceptionVO">
+        SELECT e.mudule_type as muduleType, e.module_exception_message as moduleExceptionMessage
+        FROM erp_exception e
+        <where>
+            e.del_flag = 0
+            <if test="dayNum != null and dayNum != ''">
+                <![CDATA[
+                and date_format(e.create_time, '%Y-%m-%d') >= date_sub(now(), interval #{dayNum} day)
+                ]]>
+            </if>
+        </where>
+    </select>
+
+</mapper>

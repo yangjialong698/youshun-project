@@ -1,21 +1,20 @@
-package com.ennova.pubinfoproduct.entity;
+package com.ennova.pubinfoproduct.vo;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * erp合格率表
- */
-@ApiModel(value = "erp合格率表")
+import java.util.Date;
+
+
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErpQualifiedRate {
+public class ErpQualifiedRateVO {
     /**
      * id
      */
@@ -93,5 +92,12 @@ public class ErpQualifiedRate {
      * 开工日期
      */
     @ApiModelProperty(value = "开工日期")
-    private Date startWorkDate;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    private String startWorkDate;
+
+    /**
+     * 在产天数
+     */
+    @ApiModelProperty(value = "在产天数")
+    private Integer onPrdDay;
 }

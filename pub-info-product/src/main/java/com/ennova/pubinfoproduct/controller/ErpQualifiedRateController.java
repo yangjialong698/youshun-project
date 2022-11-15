@@ -1,9 +1,9 @@
 package com.ennova.pubinfoproduct.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfoproduct.entity.ErpInputScrap;
 import com.ennova.pubinfoproduct.entity.ErpQualifiedRate;
 import com.ennova.pubinfoproduct.service.ErpQualifiedRateService;
+import com.ennova.pubinfoproduct.vo.ErpQualifiedRateVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +15,17 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/erpqualifiedrate")
+@RequestMapping("/erpaccount")
 @Slf4j
 public class ErpQualifiedRateController {
 
     @Autowired
     private ErpQualifiedRateService erpQualifiedRateService;
 
-    @ApiOperation(value = "合格率报表", tags = "合格率报表")
-    @GetMapping("/erpQualifiedRate")
-    public Callback<List<ErpQualifiedRate>> erpQualifiedRate() {
+    @ApiOperation(value = "当日统计数据", tags = "当日统计数据")
+    @GetMapping("/accountday")
+    public Callback<List<ErpQualifiedRateVO>> erpAccountDay(String moduleNo) {
 
-        return erpQualifiedRateService.erpQualifiedRate();
+        return erpQualifiedRateService.erpQualifiedRate(moduleNo);
     }
 }

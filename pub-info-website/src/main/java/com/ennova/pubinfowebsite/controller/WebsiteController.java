@@ -37,7 +37,6 @@ import java.net.URISyntaxException;
 public class WebsiteController {
 
     private final PurchaseFeginClient client;
-    //private final PurchaseClient purchaseClient;
     private final WebsiteService websiteService;
 
     @ApiOperation(value = "公司官网 - 获取公共信息采购系统 - 采购信息列表")
@@ -47,10 +46,16 @@ public class WebsiteController {
         return Callback.success(data);
     }
 
-    @ApiOperation(value = "公司官网 - 在线留言")
+    @ApiOperation(value = "公司官网 - 在线留言 - 新增")
     @PostMapping("/onlineMessage")
     public Callback onlineMessage(@RequestBody @Validated GwMessageVO gwMessageVO){
         return websiteService.onlineMessage(gwMessageVO);
+    }
+
+    @ApiOperation(value = "公司官网 - 在线留言 - 删除")
+    @GetMapping("/delete")
+    public Callback delete(Integer id) {
+        return websiteService.delete(id);
     }
 
     @GetMapping("/useRpcToCaiGou")

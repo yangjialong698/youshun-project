@@ -1,9 +1,8 @@
 package com.ennova.pubinfoproduct.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfoproduct.entity.ErpInputScrap;
-import com.ennova.pubinfoproduct.service.ErpInputScrapService;
-import com.ennova.pubinfoproduct.vo.MaterialConsumVO;
+import com.ennova.pubinfoproduct.service.ErpTransferOrderService;
+import com.ennova.pubinfoproduct.vo.ScrapVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +19,12 @@ import java.util.List;
 public class ErpInputScrapController {
 
     @Autowired
-    private ErpInputScrapService erpInputScrapService;
+    private ErpTransferOrderService erpTransferOrderService;
 
-    @ApiOperation(value = "入库报废曲线图", tags = "入库报废曲线图")
+    @ApiOperation(value = "近一个月入库量与报废率统计数据", tags = "近一个月入库量与报废率统计数据")
     @GetMapping("/erpInputScrap")
-    public Callback<List<ErpInputScrap>> erpinputscrap() {
+    public Callback<List<ScrapVO>> erpinputscrap(String moveOutNo) {
 
-        return erpInputScrapService.erpinputscrap();
+        return erpTransferOrderService.erpinputscrap(moveOutNo);
     }
 }

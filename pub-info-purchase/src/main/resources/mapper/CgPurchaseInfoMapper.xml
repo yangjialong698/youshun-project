@@ -195,6 +195,22 @@
         order by cpf.create_time desc
     </select>
 
+    <select id="selectPurchaseInfos" resultType="com.ennova.pubinfopurchase.vo.CgPurchaseInfoVO">
+        select
+        cpf.id,
+        cpf.serial_number AS serialNumber,
+        cpf.name AS name,
+        cpf.apply_name AS applyName,
+        cpf.task_number AS taskNumber,
+        cpf.create_time AS createTime,
+        cpf.purchase_requirements AS purchaseRequirements,
+        cpf.issuer_id AS issuerId,
+        cpf.delivery_time AS deliveryTime,
+        cpf.type AS type
+        from cg_purchase_info cpf
+        order by cpf.create_time desc
+    </select>
+
     <select id="selectTaskNumber" resultType="com.ennova.pubinfopurchase.vo.TaskNumber">
         SELECT DISTINCT
         t1.id,

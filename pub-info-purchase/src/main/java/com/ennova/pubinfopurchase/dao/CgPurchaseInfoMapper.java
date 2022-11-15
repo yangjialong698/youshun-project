@@ -26,6 +26,8 @@ public interface CgPurchaseInfoMapper {
 
     List<CgPurchaseInfoVO> selectPurchaseInfo(@Param("name") String name, @Param("type") Integer type);
 
+    List<CgPurchaseInfoVO> selectPurchaseInfos();
+
     List<TaskNumber> selectTaskNumber(@Param("name") String name);
 
     List<TaskNumber> selectTaskNumberIsExist(@Param("serialNumber") Integer serialNumber);

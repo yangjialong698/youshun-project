@@ -13,6 +13,7 @@ import com.taobao.api.ApiException;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DingDingUtil {
@@ -131,16 +132,41 @@ public class DingDingUtil {
     }
 
 
+    //获取用户打卡记录
+    public static String getOnClassTime(List<String> userIds, String checkDateFrom, String checkDateTo,String accesstoken){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/attendance/listRecord");
+        OapiAttendanceListRecordRequest req = new OapiAttendanceListRecordRequest();
+        req.setUserIds(userIds);
+        req.setCheckDateFrom(checkDateFrom);
+        req.setCheckDateTo(checkDateTo);
+        req.setIsI18n(false);
+        try {
+            OapiAttendanceListRecordResponse response = client.execute(req, accesstoken);
+            return response.getBody();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
     public static void main(String[] args) {
-        String access_token = DingDingUtil.getAccess_Token();
-        OapiV2UserGetResponse.UserGetResponse userDetail = DingDingUtil.getUserDetail("5150", access_token);
-        DingUserVO dingUserVO = new DingUserVO();
-        BeanUtils.copyProperties(userDetail,dingUserVO);
-//        List<String> a = DingDingUtil.getUserIdsByDeptId(578030066L, access_token);
+        String accesstoken = DingDingUtil.getAccess_Token();
+        List<String> userList = Arrays.asList("5195");
+        String checkDateFrom = "2022-11-09 05:00:00";
+        String checkDateTo = "2022-11-11 20:00:00";
+        String onClassDetail = DingDingUtil.getOnClassTime(userList,checkDateFrom,checkDateTo,accesstoken);
+        System.out.println(onClassDetail);
 
-        System.out.println(dingUserVO);
+
+//        String access_token = DingDingUtil.getAccess_Token();
+//        OapiV2UserGetResponse.UserGetResponse userDetail = DingDingUtil.getUserDetail("5195", access_token);
+//        DingUserVO dingUserVO = new DingUserVO();
+//        BeanUtils.copyProperties(userDetail,dingUserVO);
+////        List<String> a = DingDingUtil.getUserIdsByDeptId(578030066L, access_token);
+//
+//        System.out.println(dingUserVO);
 //        ArrayList<DingUserVO> dingUserVOS = new ArrayList<>();
 //        OapiV2UserListResponse.PageResult departmentUser = DingDingUtil.getDepartmentUser(578030066L, 0L, 100L, access_token);
 //        List<OapiV2UserListResponse.ListUserResponse> list = departmentUser.getList();
