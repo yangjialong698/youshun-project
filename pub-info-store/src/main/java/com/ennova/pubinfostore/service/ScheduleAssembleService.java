@@ -151,15 +151,15 @@ public class ScheduleAssembleService {
                 scheduleAssembleListVO.setUserList(assembleUserVOS);
                 // 根据id查询预装人员
                 preAssembleMapper.selectByYsScheduleAssembleId(scheduleAssembleListVO.getId()).forEach(preAssemble -> {
+                    PreAssembleListVO preAssembleListVO = new PreAssembleListVO();
+                    preAssembleListVO.setCreateTime(preAssemble.getCreateTime());
+                    BeanUtils.copyProperties(preAssemble, preAssembleListVO);
                     if(StringUtils.isNotEmpty(preAssemble.getPreAssembleId())){
-                        PreAssembleListVO preAssembleListVO = new PreAssembleListVO();
                         List<Integer> preAssembleIdList = Arrays.asList(preAssemble.getPreAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
                         List<AssembleUserVO> preUserList = scheduleAssembleMapper.selectUserByIds(preAssembleIdList);
-                        preAssembleListVO.setCreateTime(preAssemble.getCreateTime());
-                        BeanUtils.copyProperties(preAssemble, preAssembleListVO);
                         preAssembleListVO.setUserList(preUserList);
-                        preAssembleListVOS.add(preAssembleListVO);
                     }
+                    preAssembleListVOS.add(preAssembleListVO);
                 });
             }
             scheduleAssembleListVO.setPreAssembleList(preAssembleListVOS);
@@ -181,16 +181,17 @@ public class ScheduleAssembleService {
                 // 装配人员
                 scheduleAssembleListVO.setUserList(assembleUserVOS);
                 // 根据id查询预装人员
+                // 根据id查询预装人员
                 preAssembleMapper.selectByYsScheduleAssembleId(scheduleAssembleListVO.getId()).forEach(preAssemble -> {
+                    PreAssembleListVO preAssembleListVO = new PreAssembleListVO();
+                    preAssembleListVO.setCreateTime(preAssemble.getCreateTime());
+                    BeanUtils.copyProperties(preAssemble, preAssembleListVO);
                     if(StringUtils.isNotEmpty(preAssemble.getPreAssembleId())){
-                        PreAssembleListVO preAssembleListVO = new PreAssembleListVO();
                         List<Integer> preAssembleIdList = Arrays.asList(preAssemble.getPreAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
                         List<AssembleUserVO> preUserList = scheduleAssembleMapper.selectUserByIds(preAssembleIdList);
-                        preAssembleListVO.setCreateTime(preAssemble.getCreateTime());
-                        BeanUtils.copyProperties(preAssemble, preAssembleListVO);
                         preAssembleListVO.setUserList(preUserList);
-                        preAssembleListVOS.add(preAssembleListVO);
                     }
+                    preAssembleListVOS.add(preAssembleListVO);
                 });
             }
             scheduleAssembleListVO.setPreAssembleList(preAssembleListVOS);
