@@ -7,12 +7,16 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.*;
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfouser.dao.*;
 import com.ennova.pubinfouser.entity.*;
 import com.ennova.pubinfouser.utils.DingDingUtil;
 import com.ennova.pubinfouser.vo.DingDeptVO;
 import com.ennova.pubinfouser.vo.DingUserVO;
 import com.ennova.pubinfouser.vo.TDingClockVO;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -336,23 +340,23 @@ public class DingDingService  {
         }
     }
 
-//    @Scheduled(cron="0 0 10 * * ? ")
-    public void listClockTime(String checkDateFrom, String checkDateTo) {
-        List<String> userIdList = tUserDingMapper.selectAllUserId();
-        int size = userIdList.size();
-        int maxSize = 50;
-        int loopNum =(int) Math.ceil(size * NumberUtils.DOUBLE_ONE / maxSize);
-        for (int i = 0; i < loopNum; i++) {
-            List<String> subUserIds = userIdList.stream().skip(i * maxSize).limit((i + 1) * maxSize).collect(Collectors.toList());
-            String accesstoken = DingDingUtil.getAccess_Token();
-            List<OapiAttendanceListRecordResponse.Recordresult> dingTime = DingDingUtil.getOnClassTime(subUserIds, checkDateFrom, checkDateTo, accesstoken);
-//            List<TDingClock> tDingClocks = JSONObject.parseArray(dingTime, TDingClock.class);
-//            tDingClockMapper.batchInsert(tDingClocks);
+
+    public Callback<BaseVO<TDingClock>> queryClockList(Integer page, Integer pageSize,String userIds, String checkDateFrom, String checkDateTo) {
+        if (page == null || page < 1) {
+            page = 1;
         }
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
+        }
+        List<String> userIdList = Arrays.asList(userIds.split(","));
+        Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
+        List<TDingClock> list = tDingClockMapper.selectByUserIdsAndDayTime(userIdList,checkDateFrom,checkDateTo);
+        BaseVO<TDingClock>  baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        return Callback.success(baseVO);
     }
 
 
-    //    @Scheduled(cron="0 0 10 * * ? ")//
+    //    @Scheduled(cron="0 0 10 * * ? ")
     public Callback<List<TDingClock>> listClock(String userIds, String checkDateFrom, String checkDateTo) {
 //        List<String> userIdList = Arrays.asList(userIds.split(","));
         List<String> userIdList = tUserDingMapper.selectAllUserId();

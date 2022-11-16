@@ -186,4 +186,23 @@
         #{item.workDate,jdbcType=TIMESTAMP}, #{item.workTime,jdbcType=VARCHAR})
     </foreach>
   </insert>
+
+
+  <select id="selectByUserIdsAndDayTime"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ding_clock tdc
+    WHERE 1=1
+    <if test="checkDateFrom!=null and checkDateFrom!=''">
+      AND tdc.work_date &gt;= #{checkDateFrom,jdbcType=TIMESTAMP}
+    </if>
+    <if test="checkDateTo!=null and checkDateTo!=''">
+      AND tdc.work_date &lt;= #{checkDateTo,jdbcType=TIMESTAMP}
+    </if>
+      AND tdc.user_id in
+    <foreach close=")" collection="userIdList" item="item" open="(" separator=", ">
+      #{item}
+    </foreach>
+    ORDER BY tdc.work_date DESC
+  </select>
 </mapper>

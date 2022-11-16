@@ -1,6 +1,7 @@
 package com.ennova.pubinfouser.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfouser.dto.BaseDTO;
 import com.ennova.pubinfouser.dto.RoleDTO;
 import com.ennova.pubinfouser.entity.TDingClock;
@@ -55,9 +56,14 @@ public class DingDingController {
     }
 
     @ApiOperation(value = "钉钉-根据用户ID获取打卡记录", tags = "钉钉API")
-    @GetMapping("/listClock")//
-    public Callback<List<TDingClock>> listClock(String userIds, String checkDateFrom, String checkDateTo) {
+    @GetMapping("/queryClockList")
+    public Callback<BaseVO<TDingClock>> queryClockList(Integer page, Integer pageSize, String userIds, String checkDateFrom, String checkDateTo) {
+        return dingDingService.queryClockList(page,pageSize,userIds,checkDateFrom,checkDateTo);
+    }
 
+    @ApiOperation(value = "钉钉-测试定时任务打卡记录", tags = "钉钉API")
+    @GetMapping("/listClock")
+    public Callback<List<TDingClock>> listClock(String userIds, String checkDateFrom, String checkDateTo) {
         return dingDingService.listClock(userIds,checkDateFrom,checkDateTo);
     }
 }

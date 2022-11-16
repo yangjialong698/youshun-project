@@ -20,4 +20,8 @@ public interface TDingClockMapper {
     int updateBatch(List<TDingClock> list);
 
     int batchInsert(@Param("list") List<TDingClock> list);
+
+    List<TDingClock> selectByUserIdsAndDayTime(@Param("userIdList")List<String> userIdList,
+                                               @Param("checkDateFrom")String checkDateFrom,
+                                               @Param("checkDateTo")String checkDateTo);
 }
