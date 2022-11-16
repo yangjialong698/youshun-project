@@ -356,7 +356,7 @@ public class DingDingService  {
     }
 
 
-    //    @Scheduled(cron="0 0 10 * * ? ")
+    //    @Scheduled(cron="0 0 12 * * ? ")
     public Callback<List<TDingClock>> listClock(String userIds, String checkDateFrom, String checkDateTo) {
 //        List<String> userIdList = Arrays.asList(userIds.split(","));
         List<String> userIdList = tUserDingMapper.selectAllUserId();
@@ -386,7 +386,7 @@ public class DingDingService  {
         listMap.entrySet().stream().map(key->{
             Map<String, List<TDingClockVO>> value1 = key.getValue();
             value1.entrySet().stream().map(key1->{
-                // 某一天某个用户的打卡详情
+                // key这一天key1这个用户的打卡详情
                 List<TDingClockVO> tDingClockVOS = key1.getValue();
                 TDingClockVO tDingClockVoFirst = null;
                 TDingClockVO tDingClockVoLast = null;
@@ -395,7 +395,7 @@ public class DingDingService  {
                     boolean onDuty = tDingClockVOList.stream().filter(e->e.getCheckType()!=null).filter(m -> m.getCheckType().equalsIgnoreCase("OnDuty")).findAny().isPresent();
                     boolean offDuty = tDingClockVOList.stream().filter(e->e.getCheckType()!=null).filter(m -> m.getCheckType().equalsIgnoreCase("OffDuty")).findAny().isPresent();
                     TDingClock tDingClock = new TDingClock();
-                    if (onDuty && offDuty){ //正常早8晚5班次当天上班+下班
+                    if (onDuty && offDuty){ //正常打开无漏打卡
                         tDingClockVoFirst = tDingClockVOList.get(0);
                         tDingClockVoLast = tDingClockVOList.get(tDingClockVOList.size() - 1);
                         tDingClock.setUserId(tDingClockVoFirst.getUserId());
