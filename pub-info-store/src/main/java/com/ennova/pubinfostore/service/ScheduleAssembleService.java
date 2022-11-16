@@ -142,7 +142,7 @@ public class ScheduleAssembleService {
         // 根据deliverDate、searchKey查询预排产列表
         List<ScheduleAssembleListVO> list = scheduleAssembleMapper.selectPreAssembleList(deliveryDate, searchKey, null);
         list.forEach(scheduleAssembleListVO -> {
-            // scheduleAssembleListVO.getAssembleId() 不为空时，说明是预排人员表数据
+            // scheduleAssembleListVO.getAssembleId() 不为空时，说明是装配人员表数据
             List<PreAssembleListVO> preAssembleListVOS = new ArrayList<>();
             if(StringUtils.isNotEmpty(scheduleAssembleListVO.getAssembleId())){
                 List<Integer> assembleIdList = Arrays.asList(scheduleAssembleListVO.getAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
