@@ -55,8 +55,9 @@ public class DingDingController {
     }
 
     @ApiOperation(value = "钉钉-根据用户ID获取打卡记录", tags = "钉钉API")
-    @GetMapping("/listClock")
+    @GetMapping("/listClock")//
     public Callback<List<TDingClock>> listClock(String userIds, String checkDateFrom, String checkDateTo) {
+
         return dingDingService.listClock(userIds,checkDateFrom,checkDateTo);
     }
 }
