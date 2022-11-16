@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfostore.dao.ScAssembleQualityIssueMapper">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfostore.entity.ScAssembleQualityIssue">
+        <!--@mbg.generated-->
+        <!--@Table sc_assemble_quality_issue-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+        <result column="product_number" jdbcType="VARCHAR" property="productNumber"/>
+        <result column="bad_description" jdbcType="VARCHAR" property="badDescription"/>
+        <result column="bad_number" jdbcType="INTEGER" property="badNumber"/>
+        <result column="duty_unit" jdbcType="VARCHAR" property="dutyUnit"/>
+        <result column="duty_person" jdbcType="VARCHAR" property="dutyPerson"/>
+        <result column="quality_status" jdbcType="VARCHAR" property="qualityStatus"/>
+        <result column="assemble_inspector" jdbcType="VARCHAR" property="assembleInspector"/>
+        <result column="detection_source" jdbcType="VARCHAR" property="detectionSource"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        product_name,
+        product_number,
+        bad_description,
+        bad_number,
+        duty_unit,
+        duty_person,
+        quality_status,
+        assemble_inspector,
+        detection_source,
+        create_time,
+        update_time,
+        del_flag
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from sc_assemble_quality_issue
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        update sc_assemble_quality_issue
+        <set>
+            del_flag = 1
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.ennova.pubinfostore.entity.ScAssembleQualityIssue" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sc_assemble_quality_issue (product_name, product_number, bad_description,
+                                               bad_number, duty_unit, duty_person,
+                                               quality_status, assemble_inspector, detection_source,
+                                               create_time, update_time, del_flag)
+        values (#{productName,jdbcType=VARCHAR}, #{productNumber,jdbcType=VARCHAR}, #{badDescription,jdbcType=VARCHAR},
+                #{badNumber,jdbcType=INTEGER}, #{dutyUnit,jdbcType=VARCHAR}, #{dutyPerson,jdbcType=VARCHAR},
+                #{qualityStatus,jdbcType=VARCHAR}, #{assembleInspector,jdbcType=VARCHAR},
+                #{detectionSource,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.ennova.pubinfostore.entity.ScAssembleQualityIssue" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sc_assemble_quality_issue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productName != null">
+                product_name,
+            </if>
+            <if test="productNumber != null">
+                product_number,
+            </if>
+            <if test="badDescription != null">
+                bad_description,
+            </if>
+            <if test="badNumber != null">
+                bad_number,
+            </if>
+            <if test="dutyUnit != null">
+                duty_unit,
+            </if>
+            <if test="dutyPerson != null">
+                duty_person,
+            </if>
+            <if test="qualityStatus != null">
+                quality_status,
+            </if>
+            <if test="assembleInspector != null">
+                assemble_inspector,
+            </if>
+            <if test="detectionSource != null">
+                detection_source,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productName != null">
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productNumber != null">
+                #{productNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="badDescription != null">
+                #{badDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="badNumber != null">
+                #{badNumber,jdbcType=INTEGER},
+            </if>
+            <if test="dutyUnit != null">
+                #{dutyUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="dutyPerson != null">
+                #{dutyPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="qualityStatus != null">
+                #{qualityStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="assembleInspector != null">
+                #{assembleInspector,jdbcType=VARCHAR},
+            </if>
+            <if test="detectionSource != null">
+                #{detectionSource,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfostore.entity.ScAssembleQualityIssue">
+        <!--@mbg.generated-->
+        update sc_assemble_quality_issue
+        <set>
+            <if test="productName != null">
+                product_name = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productNumber != null">
+                product_number = #{productNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="badDescription != null">
+                bad_description = #{badDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="badNumber != null">
+                bad_number = #{badNumber,jdbcType=INTEGER},
+            </if>
+            <if test="dutyUnit != null">
+                duty_unit = #{dutyUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="dutyPerson != null">
+                duty_person = #{dutyPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="qualityStatus != null">
+                quality_status = #{qualityStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="assembleInspector != null">
+                assemble_inspector = #{assembleInspector,jdbcType=VARCHAR},
+            </if>
+            <if test="detectionSource != null">
+                detection_source = #{detectionSource,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfostore.entity.ScAssembleQualityIssue">
+        <!--@mbg.generated-->
+        update sc_assemble_quality_issue
+        set product_name       = #{productName,jdbcType=VARCHAR},
+            product_number     = #{productNumber,jdbcType=VARCHAR},
+            bad_description    = #{badDescription,jdbcType=VARCHAR},
+            bad_number         = #{badNumber,jdbcType=INTEGER},
+            duty_unit          = #{dutyUnit,jdbcType=VARCHAR},
+            duty_person        = #{dutyPerson,jdbcType=VARCHAR},
+            quality_status     = #{qualityStatus,jdbcType=VARCHAR},
+            assemble_inspector = #{assembleInspector,jdbcType=VARCHAR},
+            detection_source   = #{detectionSource,jdbcType=VARCHAR},
+            create_time        = #{createTime,jdbcType=TIMESTAMP},
+            update_time        = #{updateTime,jdbcType=TIMESTAMP},
+            del_flag           = #{delFlag,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update sc_assemble_quality_issue
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="product_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.productName,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="product_number = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.productNumber,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="bad_description = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.badDescription,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="bad_number = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.badNumber,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="duty_unit = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.dutyUnit,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="duty_person = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.dutyPerson,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="quality_status = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.qualityStatus,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="assemble_inspector = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.assembleInspector,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="detection_source = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.detectionSource,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="update_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.delFlag,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sc_assemble_quality_issue
+        (product_name, product_number, bad_description, bad_number, duty_unit, duty_person,
+         quality_status, assemble_inspector, detection_source, create_time, update_time,
+         del_flag)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.productName,jdbcType=VARCHAR}, #{item.productNumber,jdbcType=VARCHAR},
+             #{item.badDescription,jdbcType=VARCHAR},
+             #{item.badNumber,jdbcType=INTEGER}, #{item.dutyUnit,jdbcType=VARCHAR}, #{item.dutyPerson,jdbcType=VARCHAR},
+             #{item.qualityStatus,jdbcType=VARCHAR}, #{item.assembleInspector,jdbcType=VARCHAR},
+             #{item.detectionSource,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP},
+             #{item.updateTime,jdbcType=TIMESTAMP}, #{item.delFlag,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <select id="selectByProductNumberLike" parameterType="java.lang.String"
+            resultType="com.ennova.pubinfostore.vo.ScAssembleQualityIssueVO">
+        select saqi.id,
+               saqi.product_name       as productName,
+               saqi.product_number     as productNumber,
+               saqi.bad_description    as badDescription,
+               saqi.bad_number         as badNumber,
+               saqi.duty_unit          as dutyUnit,
+               saqi.duty_person        as dutyPerson,
+               saqi.quality_status     as qualityStatus,
+               saqi.assemble_inspector as assembleInspector,
+               saqi.detection_source   as detectionSource,
+               saqi.create_time        as createTime,
+               saqi.update_time        as updateTime,
+               saqi.del_flag           as delFlag
+        from sc_assemble_quality_issue saqi
+        <where>
+            saqi.del_flag = 0
+            <if test="productName != null and productName != ''">
+                and concat(trim(replace(saqi.product_name, ' ', '')), trim(replace(saqi.duty_person, ' ', ''))) like
+                    trim(replace(CONCAT('%', #{productName}, '%'), ' ', ''))
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND  <![CDATA[DATE_FORMAT(saqi.create_time, '%Y-%m-%d %H:%i:%s') >= #{startTime}
+                ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND  <![CDATA[DATE_FORMAT(saqi.create_time, '%Y-%m-%d %H:%i:%s') <= #{endTime}
+                ]]>
+            </if>
+        </where>
+        order by saqi.create_time asc
+    </select>
+
+    <select id="assembleInfoListData" resultType="com.ennova.pubinfostore.vo.ScAssembleQualityIssueVO">
+        select saqi.id,
+               saqi.product_name       as productName,
+               saqi.product_number     as productNumber,
+               saqi.bad_description    as badDescription,
+               saqi.bad_number         as badNumber,
+               saqi.duty_unit          as dutyUnit,
+               saqi.duty_person        as dutyPerson,
+               saqi.quality_status     as qualityStatus,
+               saqi.assemble_inspector as assembleInspector,
+               saqi.detection_source   as detectionSource,
+               saqi.create_time        as createTime,
+               saqi.update_time        as updateTime,
+               saqi.del_flag           as delFlag
+        from sc_assemble_quality_issue saqi
+        <where>
+            saqi.del_flag = 0
+            <if test="productName != null and productName != ''">
+                and concat(trim(replace(saqi.product_name, ' ', '')), trim(replace(saqi.duty_person, ' ', ''))) like
+                    trim(replace(CONCAT('%', #{productName}, '%'), ' ', ''))
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND  <![CDATA[DATE_FORMAT(saqi.create_time, '%Y-%m-%d %H:%i:%s') >= #{startTime}
+                ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND  <![CDATA[DATE_FORMAT(saqi.create_time, '%Y-%m-%d %H:%i:%s') <= #{endTime}
+                ]]>
+            </if>
+        </where>
+        order by saqi.create_time asc
+    </select>
+</mapper>
