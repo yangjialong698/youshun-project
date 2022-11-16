@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfostore.dao.PreAssembleMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfostore.entity.PreAssemble">
+    <!--@mbg.generated-->
+    <!--@Table ys_pre_assemble-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="assemble_item" jdbcType="VARCHAR" property="assembleItem" />
+    <result column="pre_assemble_id" jdbcType="VARCHAR" property="preAssembleId" />
+    <result column="ys_schedule_assemble_id" jdbcType="INTEGER" property="ysScheduleAssembleId" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, assemble_item, pre_assemble_id, ys_schedule_assemble_id, flag, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from ys_pre_assemble
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from ys_pre_assemble
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfostore.entity.PreAssemble" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_pre_assemble (assemble_item, pre_assemble_id, ys_schedule_assemble_id, 
+      flag, create_time, update_time
+      )
+    values (#{assembleItem,jdbcType=VARCHAR}, #{preAssembleId,jdbcType=VARCHAR}, #{ysScheduleAssembleId,jdbcType=INTEGER},
+      #{flag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfostore.entity.PreAssemble">
+    <!--@mbg.generated-->
+    update ys_pre_assemble
+    set assemble_item = #{assembleItem,jdbcType=VARCHAR},
+      pre_assemble_id = #{preAssembleId,jdbcType=VARCHAR},
+      ys_schedule_assemble_id = #{ysScheduleAssembleId,jdbcType=INTEGER},
+      flag = #{flag,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByYsScheduleAssembleId">
+    delete from  ys_pre_assemble
+      <where>
+        <if test="ysScheduleAssembleId != null">
+          and ys_schedule_assemble_id=#{ysScheduleAssembleId,jdbcType=INTEGER}
+        </if>
+      </where>
+  </delete>
+</mapper>

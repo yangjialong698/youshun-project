@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfostore.dao.ScheduleAssembleMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfostore.entity.ScheduleAssemble">
+    <!--@mbg.generated-->
+    <!--@Table ys_schedule_assemble-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="delivery_date" jdbcType="TIMESTAMP" property="deliveryDate" />
+    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="work_order" jdbcType="VARCHAR" property="workOrder" />
+    <result column="total_order" jdbcType="INTEGER" property="totalOrder" />
+    <result column="total_production" jdbcType="INTEGER" property="totalProduction" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="need_date" jdbcType="TIMESTAMP" property="needDate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="assemble_id" jdbcType="VARCHAR" property="assembleId" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, delivery_date, product_id, product_name, work_order, total_order, total_production, 
+    remark, need_date, `status`, assemble_id, flag, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from ys_schedule_assemble
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from ys_schedule_assemble
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfostore.entity.ScheduleAssemble" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_schedule_assemble (delivery_date, product_id, product_name, 
+      work_order, total_order, total_production, 
+      remark, need_date, `status`, 
+      assemble_id, flag,
+      create_time, update_time)
+    values (#{deliveryDate,jdbcType=TIMESTAMP}, #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{workOrder,jdbcType=VARCHAR}, #{totalOrder,jdbcType=INTEGER}, #{totalProduction,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{needDate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{assembleId,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfostore.entity.ScheduleAssemble">
+    <!--@mbg.generated-->
+    update ys_schedule_assemble
+    set delivery_date = #{deliveryDate,jdbcType=TIMESTAMP},
+      product_id = #{productId,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      work_order = #{workOrder,jdbcType=VARCHAR},
+      total_order = #{totalOrder,jdbcType=INTEGER},
+      total_production = #{totalProduction,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      need_date = #{needDate,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      assemble_id = #{assembleId,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectAssembleUserList" resultType="com.ennova.pubinfostore.vo.AssembleUserVO">
+    select
+      t2.id,
+      t2.username
+    from
+      t_dept t1,
+      t_user_ding t2
+    where
+      t1.dept_id = t2.department
+      and t1.dept_name = '装配'
+      <if test="userName != null and userName !=''">
+        and t2.username like concat('%',#{userName},'%')
+      </if>
+  </select>
+
+    <select id="selectUserByIds" resultType="com.ennova.pubinfostore.vo.AssembleUserVO">
+      select
+      t2.id,
+      t2.username
+    from
+      t_dept t1,
+      t_user_ding t2
+    where
+      t1.dept_id = t2.department
+      and t1.dept_name = '装配'
+      and t2.id in
+      <foreach collection="ids" item="id" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </select>
+
+
+  <resultMap id="PreAssembleMap" type="com.ennova.pubinfostore.vo.ScheduleAssembleListVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="delivery_date" jdbcType="TIMESTAMP" property="deliveryDate" />
+    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="work_order" jdbcType="VARCHAR" property="workOrder" />
+    <result column="total_order" jdbcType="INTEGER" property="totalOrder" />
+    <result column="total_production" jdbcType="INTEGER" property="totalProduction" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="need_date" jdbcType="TIMESTAMP" property="needDate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="assemble_id" jdbcType="VARCHAR" property="assembleId" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <!-- 一对多 -->
+    <collection property="preAssembleList" ofType="com.ennova.pubinfostore.vo.PreAssembleListVO">
+      <result column="preAssembleId" jdbcType="INTEGER" property="id" />
+      <result column="assemble_item" jdbcType="VARCHAR" property="assembleItem" />
+      <result column="pre_assemble_id" jdbcType="VARCHAR" property="preAssembleId" />
+      <result column="ys_schedule_assemble_id" jdbcType="INTEGER" property="ysScheduleAssembleId" />
+      <result column="flag" jdbcType="INTEGER" property="flag" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </collection>
+  </resultMap>
+
+
+  <select id="selectPreAssembleList" resultMap="PreAssembleMap">
+    select
+        t1.id,
+        t1.delivery_date,
+        t1.product_id,
+        t1.product_name,
+        t1.work_order,
+        t1.total_order,
+        t1.total_production,
+        t1.remark,
+        t1.need_date,
+        t1.status,
+        t1.assemble_id,
+        t1.flag,
+        t1.create_time,
+        t1.update_time,
+        t2.id as preAssembleId,
+        t2.assemble_item,
+        t2.pre_assemble_id,
+        t2.ys_schedule_assemble_id,
+        t2.flag,
+        t2.create_time,
+        t2.update_time
+    from
+        ys_schedule_assemble t1 right join ys_pre_assemble t2 on t1.id = t2.ys_schedule_assemble_id
+    <where>
+      t2.ys_schedule_assemble_id is not null
+      <if test="deliveryDate != null and deliveryDate != ''">
+        and date_format(t1.delivery_date, '%Y-%m-%d') = date_format(#{deliveryDate}, '%Y-%m-%d')
+      </if>
+      <if test="searchKey != null and searchKey != ''">
+        and (t1.assemble_id in (
+                  select
+                      t2.id
+                  from
+                      t_dept t1,
+                      t_user_ding t2
+                  where
+                      t1.dept_id = t2.department
+                  and t1.dept_name = '装配'
+                  and t2.username like concat('%',#{searchKey},'%')
+          ) or work_order like concat('%',#{searchKey},'%'))
+      </if>
+      <if test="id != null">
+          and t1.id = #{id}
+      </if>
+    </where>
+  </select>
+</mapper>
