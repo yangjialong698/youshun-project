@@ -23,6 +23,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -350,15 +351,24 @@ public class DingDingService  {
         }
     }
 
+
+    //    @Scheduled(cron="0 0 10 * * ? ")//
     public Callback<List<TDingClock>> listClock(String userIds, String checkDateFrom, String checkDateTo) {
-        List<String> userIdList = Arrays.asList(userIds.split(","));
+//        List<String> userIdList = Arrays.asList(userIds.split(","));
+        List<String> userIdList = tUserDingMapper.selectAllUserId();
+//        String checkDateFrom =getYseTime(-1,05);
+//        String checkDateTo =getYseTime(-1,20);
+//        String checkDateFrom =getYseTime(-1,5);
+//        String checkDateTo =getYseTime(0,8);
         ArrayList<TDingClockVO> tDingClocksVoList = new ArrayList<>();
         ArrayList<TDingClock> tDingClocks = new ArrayList<>();
         int size = userIdList.size();
         int maxSize = 50;
         int loopNum =(int) Math.ceil(size * NumberUtils.DOUBLE_ONE / maxSize);
         for (int i = 0; i < loopNum; i++) {
-            List<String> subUserIds = userIdList.stream().skip(i * maxSize).limit((i + 1) * maxSize).collect(Collectors.toList());
+            int endSize = (i + 1) * maxSize;
+            endSize = endSize > size ? size : endSize;
+            List<String> subUserIds = userIdList.subList(i * maxSize, endSize);
             String accesstoken = DingDingUtil.getAccess_Token();
             //调用钉钉API获取用户每天打卡详情
             List<OapiAttendanceListRecordResponse.Recordresult> dingClockList = DingDingUtil.getOnClassTime(subUserIds, checkDateFrom, checkDateTo, accesstoken);
@@ -376,28 +386,47 @@ public class DingDingService  {
                 List<TDingClockVO> tDingClockVOS = key1.getValue();
                 TDingClockVO tDingClockVoFirst = null;
                 TDingClockVO tDingClockVoLast = null;
-                List<TDingClockVO> tDingClockVOList = tDingClockVOS.stream().sorted(Comparator.comparing(TDingClockVO::getUserCheckTime)).collect(Collectors.toList());
-                boolean onDuty = tDingClockVOList.stream().filter(m -> m.getCheckType().equals("OnDuty")).findAny().isPresent();
-                boolean offDuty = tDingClockVOList.stream().filter(m -> m.getCheckType().equals("OffDuty")).findAny().isPresent();
-                TDingClock tDingClock = new TDingClock();
-                if (onDuty && offDuty){
-                    tDingClockVoFirst = tDingClockVOList.get(0);
-                    tDingClockVoLast = tDingClockVOList.get(tDingClockVOList.size() - 1);
-                    tDingClock.setUserId(tDingClockVoFirst.getUserId());
-                    tDingClock.setUserCheckOn(tDingClockVoFirst.getUserCheckTime());
-                    tDingClock.setUserCheckOff(tDingClockVoLast.getUserCheckTime());
-                    tDingClock.setBaseCheckOn(tDingClockVoFirst.getBaseCheckTime());
-                    tDingClock.setBaseCheckOff(tDingClockVoLast.getBaseCheckTime());
-                    tDingClock.setWorkDate(tDingClockVoFirst.getWorkDate());
-                    tDingClock.setWorkTime(DateUtil.between(tDingClockVoFirst.getUserCheckTime(), tDingClockVoLast.getUserCheckTime(), DateUnit.MINUTE)+" 分钟");
+                if (CollectionUtil.isNotEmpty(tDingClockVOS)){
+                    List<TDingClockVO> tDingClockVOList = tDingClockVOS.stream().sorted(Comparator.comparing(TDingClockVO::getUserCheckTime)).collect(Collectors.toList());
+                    boolean onDuty = tDingClockVOList.stream().filter(e->e.getCheckType()!=null).filter(m -> m.getCheckType().equalsIgnoreCase("OnDuty")).findAny().isPresent();
+                    boolean offDuty = tDingClockVOList.stream().filter(e->e.getCheckType()!=null).filter(m -> m.getCheckType().equalsIgnoreCase("OffDuty")).findAny().isPresent();
+                    TDingClock tDingClock = new TDingClock();
+                    if (onDuty && offDuty){ //正常早8晚5班次当天上班+下班
+                        tDingClockVoFirst = tDingClockVOList.get(0);
+                        tDingClockVoLast = tDingClockVOList.get(tDingClockVOList.size() - 1);
+                        tDingClock.setUserId(tDingClockVoFirst.getUserId());
+                        tDingClock.setUserCheckOn(tDingClockVoFirst.getUserCheckTime());
+                        tDingClock.setUserCheckOff(tDingClockVoLast.getUserCheckTime());
+                        tDingClock.setBaseCheckOn(tDingClockVoFirst.getBaseCheckTime());
+                        tDingClock.setBaseCheckOff(tDingClockVoLast.getBaseCheckTime());
+                        tDingClock.setWorkDate(tDingClockVoFirst.getWorkDate());
+                        tDingClock.setWorkTime(DateUtil.between(tDingClockVoFirst.getUserCheckTime(), tDingClockVoLast.getUserCheckTime(), DateUnit.MINUTE)+" 分钟");
+                        tDingClocks.add(tDingClock);
+                    }
                 }
-                return tDingClocks.add(tDingClock);
+                return tDingClocks;
             }).collect(Collectors.toList());
             return tDingClocks;
         }).collect(Collectors.toList());
-        tDingClockMapper.batchInsert(tDingClocks);
+        if(CollectionUtil.isNotEmpty(tDingClocks)){
+            tDingClockMapper.batchInsert(tDingClocks);
+        }
         return Callback.success(tDingClocks);
     }
+
+    public static String getYseTime(Integer day,Integer hour) {
+        Calendar time = Calendar.getInstance();
+        time.add(Calendar.DATE, day);
+        time.set(Calendar.HOUR_OF_DAY, hour);
+        time.set(Calendar.MINUTE, 0);
+        time.set(Calendar.SECOND, 0);
+        time.set(Calendar.MILLISECOND, 0);
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate1 = sdf1.format(time.getTime());
+        return strDate1;
+    }
+
+
 }
 
 
