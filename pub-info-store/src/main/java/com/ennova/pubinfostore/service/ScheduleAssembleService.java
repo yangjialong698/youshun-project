@@ -10,6 +10,7 @@ import com.ennova.pubinfostore.dao.ScheduleAssembleMapper;
 import com.ennova.pubinfostore.entity.PreAssemble;
 import com.ennova.pubinfostore.entity.ScheduleAssemble;
 import com.ennova.pubinfostore.vo.AssembleUserVO;
+import com.ennova.pubinfostore.vo.PreAssembleListVO;
 import com.ennova.pubinfostore.vo.ScheduleAssembleListVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
-public class ScheduleAssembleService{
+public class ScheduleAssembleService {
 
     private final ScheduleAssembleMapper scheduleAssembleMapper;
     private final PreAssembleMapper preAssembleMapper;
@@ -47,15 +48,15 @@ public class ScheduleAssembleService{
 
 
     public Callback insert(ScheduleAssembleListVO scheduleAssembleVO) {
-        if (null != scheduleAssembleVO){
+        if (null != scheduleAssembleVO) {
             ScheduleAssemble scheduleAssemble = new ScheduleAssemble();
-            BeanUtils.copyProperties(scheduleAssembleVO, scheduleAssemble);
+            BeanUtils.copyProperties(scheduleAssembleVO, scheduleAssemble, "updateTime");
             scheduleAssemble.setCreateTime(new Date());
             scheduleAssembleMapper.insert(scheduleAssemble);
-            if (CollectionUtils.isNotEmpty(scheduleAssembleVO.getPreAssembleList())){
+            if (CollectionUtils.isNotEmpty(scheduleAssembleVO.getPreAssembleList())) {
                 scheduleAssembleVO.getPreAssembleList().forEach(preAssembleVO -> {
                     PreAssemble preAssemble = new PreAssemble();
-                    BeanUtils.copyProperties(preAssembleVO, preAssemble);
+                    BeanUtils.copyProperties(preAssembleVO, preAssemble, "updateTime");
                     preAssemble.setCreateTime(new Date());
                     preAssemble.setYsScheduleAssembleId(scheduleAssemble.getId());
                     preAssembleMapper.insert(preAssemble);
@@ -81,19 +82,31 @@ public class ScheduleAssembleService{
         List<ScheduleAssembleListVO> list = scheduleAssembleMapper.selectPreAssembleList(null, null, id);
         if (CollectionUtils.isNotEmpty(list)) {
             list.stream().forEach(scheduleAssembleListVO -> {
-                // 获取用户id
-                List<Integer> userIds = Arrays.stream(scheduleAssembleListVO.getAssembleId().split(",")).map(Integer::parseInt).collect(Collectors.toList());
-                // 根据用户id查询用户姓名
-                List<AssembleUserVO> assembleUserVOList = scheduleAssembleMapper.selectUserByIds(userIds);
-                scheduleAssembleListVO.setUserList(assembleUserVOList);
-
-                scheduleAssembleListVO.getPreAssembleList().stream().forEach(preAssembleListVO -> {
+                // scheduleAssembleListVO.getAssembleId() 不为空时，说明是预排人员表数据
+                if(StringUtils.isNotEmpty(scheduleAssembleListVO.getAssembleId())){
                     // 获取用户id
-                    List<Integer> userIds1 = Arrays.stream(preAssembleListVO.getPreAssembleId().split(",")).map(Integer::parseInt).collect(Collectors.toList());
+                    List<Integer> userIds = Arrays.stream(scheduleAssembleListVO.getAssembleId().split(",")).map(Integer::parseInt).collect(Collectors.toList());
                     // 根据用户id查询用户姓名
-                    List<AssembleUserVO> assembleUserVOList1 = scheduleAssembleMapper.selectUserByIds(userIds1);
-                    preAssembleListVO.setUserList(assembleUserVOList1);
-                });
+                    List<AssembleUserVO> assembleUserVOList = scheduleAssembleMapper.selectUserByIds(userIds);
+                    scheduleAssembleListVO.setUserList(assembleUserVOList);
+
+                    List<PreAssembleListVO> preAssembleListVOS = new ArrayList<>();
+                    // 根据id查询预装人员
+                    preAssembleMapper.selectByYsScheduleAssembleId(scheduleAssembleListVO.getId()).forEach(preAssemble -> {
+                        if(StringUtils.isNotEmpty(preAssemble.getPreAssembleId())){
+                            PreAssembleListVO preAssembleListVO = new PreAssembleListVO();
+                            preAssembleListVO.setCreateTime(preAssemble.getCreateTime());
+                            BeanUtils.copyProperties(preAssemble, preAssembleListVO);
+                            if (StringUtils.isNotEmpty(preAssemble.getPreAssembleId())) {
+                                List<Integer> preAssembleIdList = Arrays.asList(preAssemble.getPreAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
+                                List<AssembleUserVO> preUserList = scheduleAssembleMapper.selectUserByIds(preAssembleIdList);
+                                preAssembleListVO.setUserList(preUserList);
+                            }
+                            preAssembleListVOS.add(preAssembleListVO);
+                        }
+                    });
+                    scheduleAssembleListVO.setPreAssembleList(preAssembleListVOS);
+                }
             });
             return Callback.success(list.get(0));
         }
@@ -102,21 +115,19 @@ public class ScheduleAssembleService{
 
     // 修改排产装配表数据和预排人员表数据
     public Callback update(ScheduleAssembleListVO scheduleAssembleVO) {
-        if (null != scheduleAssembleVO && scheduleAssembleVO.getId() != null){
+        if (null != scheduleAssembleVO && scheduleAssembleVO.getId() != null) {
             ScheduleAssemble scheduleAssemble = new ScheduleAssemble();
-            BeanUtils.copyProperties(scheduleAssembleVO, scheduleAssemble);
-            scheduleAssemble.setCreateTime(scheduleAssembleVO.getCreateTime());
+            BeanUtils.copyProperties(scheduleAssembleVO, scheduleAssemble, "createTime");
             scheduleAssemble.setUpdateTime(new Date());
-            scheduleAssembleMapper.updateByPrimaryKey(scheduleAssemble);
-            if (CollectionUtils.isNotEmpty(scheduleAssembleVO.getPreAssembleList())){
+            scheduleAssembleMapper.updateByPrimaryKeySelective(scheduleAssemble);
+            if (CollectionUtils.isNotEmpty(scheduleAssembleVO.getPreAssembleList())) {
                 scheduleAssembleVO.getPreAssembleList().forEach(preAssembleVO -> {
                     if (preAssembleVO.getId() != null) {
                         PreAssemble preAssemble = new PreAssemble();
-                        BeanUtils.copyProperties(preAssembleVO, preAssemble);
+                        BeanUtils.copyProperties(preAssembleVO, preAssemble, "createTime");
                         preAssemble.setYsScheduleAssembleId(scheduleAssemble.getId());
-                        preAssemble.setCreateTime(preAssembleVO.getCreateTime());
                         preAssemble.setUpdateTime(new Date());
-                        preAssembleMapper.updateByPrimaryKey(preAssemble);
+                        preAssembleMapper.updateByPrimaryKeySelective(preAssemble);
                     }
                 });
                 return Callback.success("修改成功");
@@ -128,41 +139,66 @@ public class ScheduleAssembleService{
     // 查询预排产列表
     public Callback<BaseVO<ScheduleAssembleListVO>> selectPreAssembleList(Integer page, Integer pageSize, String deliveryDate, String searchKey) {
         Page<ScheduleAssembleListVO> startPage = PageMethod.startPage(page, pageSize);
+        // 根据deliverDate、searchKey查询预排产列表
         List<ScheduleAssembleListVO> list = scheduleAssembleMapper.selectPreAssembleList(deliveryDate, searchKey, null);
         list.forEach(scheduleAssembleListVO -> {
-            List<Integer> assembleIdList = Arrays.asList(scheduleAssembleListVO.getAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
-            List<AssembleUserVO> assembleUserVOS = scheduleAssembleMapper.selectUserByIds(assembleIdList);
-            // 装配人员
-            scheduleAssembleListVO.setUserList(assembleUserVOS);
-            scheduleAssembleListVO.getPreAssembleList().forEach(preAssembleVO -> {
-                List<Integer> preAssembleIdList = Arrays.asList(preAssembleVO.getPreAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
-                List<AssembleUserVO> preUserList = scheduleAssembleMapper.selectUserByIds(preAssembleIdList);
-                // 预装人员
-                preAssembleVO.setUserList(preUserList);
-            });
+            // scheduleAssembleListVO.getAssembleId() 不为空时，说明是预排人员表数据
+            List<PreAssembleListVO> preAssembleListVOS = new ArrayList<>();
+            if(StringUtils.isNotEmpty(scheduleAssembleListVO.getAssembleId())){
+                List<Integer> assembleIdList = Arrays.asList(scheduleAssembleListVO.getAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
+                List<AssembleUserVO> assembleUserVOS = scheduleAssembleMapper.selectUserByIds(assembleIdList);
+                // 装配人员
+                scheduleAssembleListVO.setUserList(assembleUserVOS);
+                // 根据id查询预装人员
+                preAssembleMapper.selectByYsScheduleAssembleId(scheduleAssembleListVO.getId()).forEach(preAssemble -> {
+                    if(StringUtils.isNotEmpty(preAssemble.getPreAssembleId())){
+                        PreAssembleListVO preAssembleListVO = new PreAssembleListVO();
+                        List<Integer> preAssembleIdList = Arrays.asList(preAssemble.getPreAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
+                        List<AssembleUserVO> preUserList = scheduleAssembleMapper.selectUserByIds(preAssembleIdList);
+                        preAssembleListVO.setCreateTime(preAssemble.getCreateTime());
+                        BeanUtils.copyProperties(preAssemble, preAssembleListVO);
+                        preAssembleListVO.setUserList(preUserList);
+                        preAssembleListVOS.add(preAssembleListVO);
+                    }
+                });
+            }
+            scheduleAssembleListVO.setPreAssembleList(preAssembleListVOS);
         });
         BaseVO<ScheduleAssembleListVO> baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
 
     public void exportData(HttpServletResponse response, String deliveryDate, String searchKey) {
+
+        // 根据deliverDate、searchKey查询预排产列表
         List<ScheduleAssembleListVO> list = scheduleAssembleMapper.selectPreAssembleList(deliveryDate, searchKey, null);
         list.forEach(scheduleAssembleListVO -> {
-            List<Integer> assembleIdList = Arrays.asList(scheduleAssembleListVO.getAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
-            List<AssembleUserVO> assembleUserVOS = scheduleAssembleMapper.selectUserByIds(assembleIdList);
-            // 装配人员
-            scheduleAssembleListVO.setUserList(assembleUserVOS);
-            scheduleAssembleListVO.getPreAssembleList().forEach(preAssembleVO -> {
-                List<Integer> preAssembleIdList = Arrays.asList(preAssembleVO.getPreAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
-                List<AssembleUserVO> preUserList = scheduleAssembleMapper.selectUserByIds(preAssembleIdList);
-                // 预装人员
-                preAssembleVO.setUserList(preUserList);
-            });
+            // scheduleAssembleListVO.getAssembleId() 不为空时，说明是预排人员表数据
+            List<PreAssembleListVO> preAssembleListVOS = new ArrayList<>();
+            if(StringUtils.isNotEmpty(scheduleAssembleListVO.getAssembleId())){
+                List<Integer> assembleIdList = Arrays.asList(scheduleAssembleListVO.getAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
+                List<AssembleUserVO> assembleUserVOS = scheduleAssembleMapper.selectUserByIds(assembleIdList);
+                // 装配人员
+                scheduleAssembleListVO.setUserList(assembleUserVOS);
+                // 根据id查询预装人员
+                preAssembleMapper.selectByYsScheduleAssembleId(scheduleAssembleListVO.getId()).forEach(preAssemble -> {
+                    if(StringUtils.isNotEmpty(preAssemble.getPreAssembleId())){
+                        PreAssembleListVO preAssembleListVO = new PreAssembleListVO();
+                        List<Integer> preAssembleIdList = Arrays.asList(preAssemble.getPreAssembleId().split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
+                        List<AssembleUserVO> preUserList = scheduleAssembleMapper.selectUserByIds(preAssembleIdList);
+                        preAssembleListVO.setCreateTime(preAssemble.getCreateTime());
+                        BeanUtils.copyProperties(preAssemble, preAssembleListVO);
+                        preAssembleListVO.setUserList(preUserList);
+                        preAssembleListVOS.add(preAssembleListVO);
+                    }
+                });
+            }
+            scheduleAssembleListVO.setPreAssembleList(preAssembleListVOS);
         });
 
         // 导出数据
         StringBuffer sb = new StringBuffer();
-        log.info(sb + "总记录条数 size:{}",list.size());
+        log.info(sb + "总记录条数 size:{}", list.size());
         List<String> titleList = new ArrayList<>();
         titleList.add("排产日期");
         titleList.add("产品品号");
@@ -178,7 +214,7 @@ public class ScheduleAssembleService{
 
         String dateToString = FileNameUtils.dateToString(new Date(), "yyyyMMddHHmmss");
         List<List<String>> exportlist = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(list)){
+        if (CollectionUtils.isNotEmpty(list)) {
             for (ScheduleAssembleListVO scheduleAssembleListVO : list) {
                 List<String> rowList = new ArrayList<>();
                 rowList.add(sdf.format(scheduleAssembleListVO.getDeliveryDate())); // 排产日期
@@ -204,8 +240,9 @@ public class ScheduleAssembleService{
         ExcelWriteUtil.createHeader(response, "排产信息" + dateToString, titleList, exportlist);
     }
 
-
 }
+
+
 
 
 

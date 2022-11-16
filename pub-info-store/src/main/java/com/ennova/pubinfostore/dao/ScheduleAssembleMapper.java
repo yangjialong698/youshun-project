@@ -1,21 +1,19 @@
 package com.ennova.pubinfostore.dao;
 
 import com.ennova.pubinfostore.entity.ScheduleAssemble;
-import com.ennova.pubinfostore.vo.AssembleUserVO;
-import com.ennova.pubinfostore.vo.ScheduleAssembleListVO;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import com.ennova.pubinfostore.vo.AssembleUserVO;import com.ennova.pubinfostore.vo.ScheduleAssembleListVO;import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 @Mapper
 public interface ScheduleAssembleMapper {
-
     int deleteByPrimaryKey(Integer id);
 
     int insert(ScheduleAssemble record);
 
+    int insertSelective(ScheduleAssemble record);
+
     ScheduleAssemble selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(ScheduleAssemble record);
 
     int updateByPrimaryKey(ScheduleAssemble record);
 

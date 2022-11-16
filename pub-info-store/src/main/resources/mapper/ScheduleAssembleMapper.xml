@@ -41,14 +41,146 @@
     insert into ys_schedule_assemble (delivery_date, product_id, product_name, 
       work_order, total_order, total_production, 
       remark, need_date, `status`, 
-      assemble_id, flag,
-      create_time, update_time)
+      assemble_id, flag, create_time, 
+      update_time)
     values (#{deliveryDate,jdbcType=TIMESTAMP}, #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
       #{workOrder,jdbcType=VARCHAR}, #{totalOrder,jdbcType=INTEGER}, #{totalProduction,jdbcType=INTEGER}, 
       #{remark,jdbcType=VARCHAR}, #{needDate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{assembleId,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{assembleId,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfostore.entity.ScheduleAssemble" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_schedule_assemble
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deliveryDate != null">
+        delivery_date,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="workOrder != null">
+        work_order,
+      </if>
+      <if test="totalOrder != null">
+        total_order,
+      </if>
+      <if test="totalProduction != null">
+        total_production,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="needDate != null">
+        need_date,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="assembleId != null">
+        assemble_id,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deliveryDate != null">
+        #{deliveryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrder != null">
+        #{workOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="totalOrder != null">
+        #{totalOrder,jdbcType=INTEGER},
+      </if>
+      <if test="totalProduction != null">
+        #{totalProduction,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="needDate != null">
+        #{needDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="assembleId != null">
+        #{assembleId,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfostore.entity.ScheduleAssemble">
+    <!--@mbg.generated-->
+    update ys_schedule_assemble
+    <set>
+      <if test="deliveryDate != null">
+        delivery_date = #{deliveryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrder != null">
+        work_order = #{workOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="totalOrder != null">
+        total_order = #{totalOrder,jdbcType=INTEGER},
+      </if>
+      <if test="totalProduction != null">
+        total_production = #{totalProduction,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="needDate != null">
+        need_date = #{needDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="assembleId != null">
+        assemble_id = #{assembleId,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
   <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfostore.entity.ScheduleAssemble">
     <!--@mbg.generated-->
     update ys_schedule_assemble
@@ -93,82 +225,45 @@
       t1.dept_id = t2.department
       and t1.dept_name = '装配'
       and t2.id in
-      <foreach collection="ids" item="id" open="(" separator="," close=")">
+      <foreach close=")" collection="ids" item="id" open="(" separator=",">
         #{id}
       </foreach>
     </select>
 
-
-  <resultMap id="PreAssembleMap" type="com.ennova.pubinfostore.vo.ScheduleAssembleListVO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="delivery_date" jdbcType="TIMESTAMP" property="deliveryDate" />
-    <result column="product_id" jdbcType="VARCHAR" property="productId" />
-    <result column="product_name" jdbcType="VARCHAR" property="productName" />
-    <result column="work_order" jdbcType="VARCHAR" property="workOrder" />
-    <result column="total_order" jdbcType="INTEGER" property="totalOrder" />
-    <result column="total_production" jdbcType="INTEGER" property="totalProduction" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="need_date" jdbcType="TIMESTAMP" property="needDate" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="assemble_id" jdbcType="VARCHAR" property="assembleId" />
-    <result column="flag" jdbcType="INTEGER" property="flag" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <!-- 一对多 -->
-    <collection property="preAssembleList" ofType="com.ennova.pubinfostore.vo.PreAssembleListVO">
-      <result column="preAssembleId" jdbcType="INTEGER" property="id" />
-      <result column="assemble_item" jdbcType="VARCHAR" property="assembleItem" />
-      <result column="pre_assemble_id" jdbcType="VARCHAR" property="preAssembleId" />
-      <result column="ys_schedule_assemble_id" jdbcType="INTEGER" property="ysScheduleAssembleId" />
-      <result column="flag" jdbcType="INTEGER" property="flag" />
-      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    </collection>
-  </resultMap>
-
-
-  <select id="selectPreAssembleList" resultMap="PreAssembleMap">
+  <select id="selectPreAssembleList" resultType="com.ennova.pubinfostore.vo.ScheduleAssembleListVO">
     select
         t1.id,
-        t1.delivery_date,
-        t1.product_id,
-        t1.product_name,
-        t1.work_order,
-        t1.total_order,
-        t1.total_production,
+        t1.delivery_date as deliveryDate,
+        t1.product_id as productId,
+        t1.product_name as productName,
+        t1.work_order as workOrder,
+        t1.total_order as totalOrder,
+        t1.total_production as totalProduction,
         t1.remark,
-        t1.need_date,
+        t1.need_date as needDate,
         t1.status,
-        t1.assemble_id,
+        t1.assemble_id as assembleId,
         t1.flag,
-        t1.create_time,
-        t1.update_time,
-        t2.id as preAssembleId,
-        t2.assemble_item,
-        t2.pre_assemble_id,
-        t2.ys_schedule_assemble_id,
-        t2.flag,
-        t2.create_time,
-        t2.update_time
+        t1.create_time as createTime,
+        t1.update_time as updateTime
     from
-        ys_schedule_assemble t1 right join ys_pre_assemble t2 on t1.id = t2.ys_schedule_assemble_id
+        ys_schedule_assemble t1
     <where>
-      t2.ys_schedule_assemble_id is not null
       <if test="deliveryDate != null and deliveryDate != ''">
-        and date_format(t1.delivery_date, '%Y-%m-%d') = date_format(#{deliveryDate}, '%Y-%m-%d')
+         date_format(t1.delivery_date, '%Y-%m-%d') = date_format(#{deliveryDate}, '%Y-%m-%d')
       </if>
       <if test="searchKey != null and searchKey != ''">
         and (t1.assemble_id in (
                   select
-                      t2.id
+                      a2.id
                   from
-                      t_dept t1,
-                      t_user_ding t2
+                      t_dept a1,
+                      t_user_ding a2
                   where
-                      t1.dept_id = t2.department
-                  and t1.dept_name = '装配'
-                  and t2.username like concat('%',#{searchKey},'%')
-          ) or work_order like concat('%',#{searchKey},'%'))
+                      a1.dept_id = a2.department
+                  and a1.dept_name = '装配'
+                  and a2.username like concat('%',#{searchKey},'%')
+          ) or t1.work_order like concat('%',#{searchKey},'%'))
       </if>
       <if test="id != null">
           and t1.id = #{id}

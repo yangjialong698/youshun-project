@@ -7,7 +7,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="assemble_item" jdbcType="VARCHAR" property="assembleItem" />
     <result column="pre_assemble_id" jdbcType="VARCHAR" property="preAssembleId" />
-    <result column="ys_schedule_assemble_id" jdbcType="INTEGER" property="ysScheduleAssembleId" />
+    <result column="ys_schedule_assemble_id" jdbcType="VARCHAR" property="ysScheduleAssembleId" />
     <result column="flag" jdbcType="INTEGER" property="flag" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -33,16 +33,85 @@
     insert into ys_pre_assemble (assemble_item, pre_assemble_id, ys_schedule_assemble_id, 
       flag, create_time, update_time
       )
-    values (#{assembleItem,jdbcType=VARCHAR}, #{preAssembleId,jdbcType=VARCHAR}, #{ysScheduleAssembleId,jdbcType=INTEGER},
+    values (#{assembleItem,jdbcType=VARCHAR}, #{preAssembleId,jdbcType=VARCHAR}, #{ysScheduleAssembleId,jdbcType=VARCHAR}, 
       #{flag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfostore.entity.PreAssemble" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ys_pre_assemble
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="assembleItem != null">
+        assemble_item,
+      </if>
+      <if test="preAssembleId != null">
+        pre_assemble_id,
+      </if>
+      <if test="ysScheduleAssembleId != null">
+        ys_schedule_assemble_id,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="assembleItem != null">
+        #{assembleItem,jdbcType=VARCHAR},
+      </if>
+      <if test="preAssembleId != null">
+        #{preAssembleId,jdbcType=VARCHAR},
+      </if>
+      <if test="ysScheduleAssembleId != null">
+        #{ysScheduleAssembleId,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfostore.entity.PreAssemble">
+    <!--@mbg.generated-->
+    update ys_pre_assemble
+    <set>
+      <if test="assembleItem != null">
+        assemble_item = #{assembleItem,jdbcType=VARCHAR},
+      </if>
+      <if test="preAssembleId != null">
+        pre_assemble_id = #{preAssembleId,jdbcType=VARCHAR},
+      </if>
+      <if test="ysScheduleAssembleId != null">
+        ys_schedule_assemble_id = #{ysScheduleAssembleId,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
   <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfostore.entity.PreAssemble">
     <!--@mbg.generated-->
     update ys_pre_assemble
     set assemble_item = #{assembleItem,jdbcType=VARCHAR},
       pre_assemble_id = #{preAssembleId,jdbcType=VARCHAR},
-      ys_schedule_assemble_id = #{ysScheduleAssembleId,jdbcType=INTEGER},
+      ys_schedule_assemble_id = #{ysScheduleAssembleId,jdbcType=VARCHAR},
       flag = #{flag,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
@@ -56,4 +125,13 @@
         </if>
       </where>
   </delete>
+  <select id="selectByYsScheduleAssembleId" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List" />
+    from ys_pre_assemble
+    <where>
+      <if test="ysScheduleAssembleId != null">
+        and ys_schedule_assemble_id=#{ysScheduleAssembleId,jdbcType=INTEGER}
+      </if>
+    </where>
+</select>
 </mapper>
