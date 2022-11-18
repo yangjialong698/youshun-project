@@ -78,13 +78,14 @@ public class ScAssembleQualityIssueVO {
      * 创建日期
      */
     @ApiModelProperty(value="创建日期")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date createTime;
 
     /**
      * 修改日期
      */
     @ApiModelProperty(value="修改日期")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date updateTime;
 
     /**

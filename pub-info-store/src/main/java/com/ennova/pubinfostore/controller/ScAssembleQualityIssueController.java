@@ -2,6 +2,7 @@ package com.ennova.pubinfostore.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfostore.entity.ScAssembleQualityIssue;
 import com.ennova.pubinfostore.service.ScAssembleQualityIssueService;
 import com.ennova.pubinfostore.vo.ScAssembleQualityIssueVO;
 import io.swagger.annotations.*;
@@ -54,6 +55,16 @@ public class ScAssembleQualityIssueController {
     public void assembleInfoExportData(String startTime, String endTime, String productName) {
         scAssembleQualityIssueService.assembleInfoExportData(startTime, endTime, productName);
     }
+
+    @ApiOperation(value = "查看装配每日现场质量异常登记信息详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "详情ID", required = true)
+    })
+    @GetMapping("/getDetail")
+    public Callback<ScAssembleQualityIssue> getDetail(Integer id) {
+        return scAssembleQualityIssueService.getDetail(id);
+    }
+
 
     @ApiOperation(value = "装配每日现场质量异常信息 - 删除")
     @GetMapping("/delete")

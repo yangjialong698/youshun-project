@@ -101,6 +101,14 @@ public class ScAssembleQualityIssueService {
         AssembleExcelWriteUtil.createHeader(response, titleStr, titleList, list);
     }
 
+    public Callback<ScAssembleQualityIssue> getDetail(Integer id) {
+        if (id != null) {
+            ScAssembleQualityIssue scAssembleQualityIssue = scAssembleQualityIssueMapper.selectByPrimaryKey(id);
+            return Callback.success(scAssembleQualityIssue);
+        }
+        return Callback.error("暂无数据");
+    }
+
     public Callback delete(Integer id) {
         ScAssembleQualityIssue scAssembleQualityIssue = scAssembleQualityIssueMapper.selectByPrimaryKey(id);
         if (scAssembleQualityIssue != null) {

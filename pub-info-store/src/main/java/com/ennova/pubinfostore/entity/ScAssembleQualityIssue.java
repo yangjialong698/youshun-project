@@ -1,5 +1,6 @@
 package com.ennova.pubinfostore.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -80,12 +81,14 @@ public class ScAssembleQualityIssue {
     * 创建日期
     */
     @ApiModelProperty(value="创建日期")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date createTime;
 
     /**
     * 修改日期
     */
     @ApiModelProperty(value="修改日期")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date updateTime;
 
     /**
