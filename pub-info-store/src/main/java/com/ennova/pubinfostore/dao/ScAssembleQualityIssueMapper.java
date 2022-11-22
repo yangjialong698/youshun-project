@@ -1,6 +1,7 @@
 package com.ennova.pubinfostore.dao;
 
 import com.ennova.pubinfostore.entity.ScAssembleQualityIssue;
+import com.ennova.pubinfostore.vo.AssembleUserVO;
 import com.ennova.pubinfostore.vo.ScAssembleQualityIssueVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -28,4 +29,6 @@ public interface ScAssembleQualityIssueMapper {
     List<ScAssembleQualityIssueVO> selectByProductNumberLike(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("productName") String productName);
 
     List<ScAssembleQualityIssueVO> assembleInfoListData(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("productName") String productName);
+
+    AssembleUserVO selectAssembleUserById(Integer id);
 }

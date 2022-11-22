@@ -356,4 +356,10 @@
         </where>
         order by saqi.create_time asc
     </select>
+
+    <select id="selectAssembleUserById" resultType="com.ennova.pubinfostore.vo.AssembleUserVO">
+        select id,username
+        from t_user_ding
+        where id = #{id,jdbcType=INTEGER}
+    </select>
 </mapper>

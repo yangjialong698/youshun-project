@@ -48,7 +48,6 @@ public class ScAssembleQualityIssueService {
                 return Callback.success("修改装配每日现场质量异常信息成功!");
             }
         } else {
-            scAssembleQualityIssue.setCreateTime(new Date());
             scAssembleQualityIssue.setDelFlag(0);
             int count = scAssembleQualityIssueMapper.insertSelective(scAssembleQualityIssue);
             if (count > 0) {
@@ -61,6 +60,9 @@ public class ScAssembleQualityIssueService {
     public Callback<BaseVO<ScAssembleQualityIssueVO>> selectAssembleInfoList(Integer page, Integer pageSize, String startTime, String endTime, String productName) {
         Page<ScAssembleQualityIssueVO> startPage = PageHelper.startPage(page, pageSize);
         List<ScAssembleQualityIssueVO> scAssembleQualityIssueVOS = scAssembleQualityIssueMapper.selectByProductNumberLike(startTime, endTime, productName);
+        for (ScAssembleQualityIssueVO scAssembleQualityIssueVO : scAssembleQualityIssueVOS) {
+            scAssembleQualityIssueVO.setAssembleInspector(scAssembleQualityIssueMapper.selectAssembleUserById(Integer.valueOf(scAssembleQualityIssueVO.getAssembleInspector())).getUserName());
+        }
         BaseVO<ScAssembleQualityIssueVO> baseVO = new BaseVO<>(scAssembleQualityIssueVOS, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
