@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@ApiModel(value = "用户表")
+@ApiModel(value = "App用户表")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity {
+public class AppUserEntity {
     /**
      * id
      */
@@ -107,9 +107,15 @@ public class UserEntity {
     private String userId;
 
     /**
-     * 是否修改（0-；1-已修改）
+     * 是否删除（0-；1-已删除）
      */
     @ApiModelProperty(value = "登录后默认密码是否修改")
     private Integer isUpdate;
+
+    /**
+     * clientId
+     */
+    @ApiModelProperty(value = "clientId")
+    private String cid;
 }
 

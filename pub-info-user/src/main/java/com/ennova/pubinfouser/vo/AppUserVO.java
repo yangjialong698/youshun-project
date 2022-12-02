@@ -1,4 +1,4 @@
-package com.ennova.pubinfouser.entity;
+package com.ennova.pubinfouser.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -8,12 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @ApiModel(value = "用户表")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity {
+public class AppUserVO {
+
     /**
      * id
      */
@@ -57,10 +59,10 @@ public class UserEntity {
     private Integer company;
 
     /**
-     * 单位
+     * 部门
      */
     @ApiModelProperty(value = "部门")
-    private String department;
+    private Integer department;
 
     /**
      * 单位
@@ -96,20 +98,50 @@ public class UserEntity {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
-    /**
-     * 首页是否展示（0-不展示）
-     */
-    private Integer isShow;
+    private String deptName;
 
-    /**
-     * 用户ID
-     */
+    private String roleName;
+
+    private String roleCode;
+
+    private Integer roleId;
+
     private String userId;
 
     /**
-     * 是否修改（0-；1-已修改）
+     * 是否是部门领导（0-不是；1-是）
      */
-    @ApiModelProperty(value = "登录后默认密码是否修改")
+    @ApiModelProperty(value = "是否是部门领导 0-不是；1-是")
+    private Integer isBold;
+
+    @ApiModelProperty(value = "token验证是否登录")
+    private String token;
+
+    @ApiModelProperty(value = "refreshToken过期刷新token")
+    private String refreshToken;
+
+//    @ApiModelProperty(value = "一级菜单")
+//    private List<TUserSystem> tUserSystems;
+
+    @ApiModelProperty(notes = "菜单")
+    private List<MenuVO> menu;
+
+    @ApiModelProperty(notes = "新菜单")
+    private List<NewMenuVO> newMenu;
+
+    @ApiModelProperty(notes = "权限模块")
+    private List<MenuVO> permissionsModule;
+
+    /**
+     * 是否修改默认密码（0-未修改；1-已修改）
+     */
+    @ApiModelProperty(value = "是否修改（0-未修改；1-已修改）")
     private Integer isUpdate;
+
+    /**
+     * clientId
+     */
+    @ApiModelProperty(value = "clientId")
+    private String cid;
 }
 

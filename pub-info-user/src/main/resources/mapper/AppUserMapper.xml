@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ennova.pubinfouser.dao.AppUserDao">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfouser.entity.AppUserEntity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="wechat_no" jdbcType="VARCHAR" property="wechatNo"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="job_num" jdbcType="VARCHAR" property="jobNum"/>
+        <result column="company" jdbcType="VARCHAR" property="company"/>
+        <result column="department" jdbcType="VARCHAR" property="department"/>
+        <result column="position" jdbcType="VARCHAR" property="position"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="is_delete" jdbcType="INTEGER" property="isDelete"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_show" jdbcType="INTEGER" property="isShow"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="is_update" jdbcType="INTEGER" property="isUpdate"/>
+        <result column="cid" jdbcType="VARCHAR" property="cid"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        username,
+        `password`,
+        wechat_no,
+        mobile,
+        job_num,
+        company,
+        department,
+        `position`,
+        `status`,
+        is_delete,
+        create_time,
+        update_time,
+        is_show,
+        user_id,
+        is_update,
+        cid
+    </sql>
+
+    <select id="getUserInfoByMobile" resultType="com.ennova.pubinfouser.vo.AppUserVO">
+        select u.id,
+               u.username,
+               u.mobile,
+               u.job_num     as jobNum,
+               u.password,
+               t.role_id     as roleId,
+               u.company,
+               u.department,
+               td.dept_name  as deptName,
+               u.position,
+               u.status,
+               u.create_time as createTime,
+               u.update_time as updateTime,
+               u.is_delete   as isDelete,
+               r.role_name   as roleName,
+               r.role_code   as roleCode,
+               u.is_update   as isUpdate,
+               u.cid         as cid
+        from t_user u
+                 left join t_user_role t on u.id = t.user_id
+                 left join t_role r on t.role_id = r.id
+                 left join t_user_dept tud on u.id = tud.user_id
+                 left join t_dept td on u.department = td.dept_id
+        <!--                 left join t_dept td on tud.dept_id = td.id-->
+        where u.is_delete = 0
+          and u.mobile = #{mobile}
+        limit 1
+    </select>
+
+    <select id="getUserInfoByJobNum" resultType="com.ennova.pubinfouser.vo.AppUserVO">
+        select u.id,
+               u.username,
+               u.mobile,
+               u.job_num     as jobNum,
+               u.password,
+               t.role_id     as roleId,
+               u.company,
+               u.department,
+               td.dept_name  as deptName,
+               u.position,
+               u.status,
+               u.create_time as createTime,
+               u.update_time as updateTime,
+               u.is_delete   as isDelete,
+               r.role_name   as roleName,
+               r.role_code   as roleCode,
+               u.is_update   as isUpdate,
+               u.cid         as cid
+        from t_user u
+                 left join t_user_role t on u.id = t.user_id
+                 left join t_role r on t.role_id = r.id
+                 left join t_user_dept tud on u.id = tud.user_id
+                 left join t_dept td on tud.dept_id = td.id
+        where u.is_delete = 0
+          and u.job_num = #{jobNum}
+        limit 1
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfouser.entity.AppUserEntity">
+        <!--@mbg.generated-->
+        update t_user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                `password` = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="wechatNo != null">
+                wechat_no = #{wechatNo,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="jobNum != null">
+                job_num = #{jobNum,jdbcType=VARCHAR},
+            </if>
+            <if test="company != null">
+                company = #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                department = #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                `position` = #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isShow != null">
+                is_show = #{isShow,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="isUpdate != null">
+                is_update = #{isUpdate,jdbcType=INTEGER},
+            </if>
+            <if test="cid != null">
+                cid = #{cid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="listAppUsers" resultType="com.ennova.pubinfouser.vo.AppUserVO">
+        SELECT u.id,
+               u.mobile,
+               u.job_num     AS jobNum,
+               u.username,
+               u.department,
+               u.wechat_no   AS wechatNo,
+               d.dept_name      deptName,
+               u.position,
+               r.role_name   AS roleName,
+               u.STATUS,
+               u.create_time AS createTime,
+               u.user_id     AS userId,
+               u.cid         AS cid
+        FROM
+        t_user u
+        <!--        LEFT JOIN t_dept d ON u.department = d.id-->
+        LEFT JOIN t_dept d ON u.department = d.dept_id
+        LEFT JOIN t_user_role ur ON ur.user_id = u.id
+        LEFT JOIN t_role r ON ur.role_id = r.id
+        WHERE u.is_delete = 0
+        <!--        AND r.role_code != "ADMIN"-->
+        AND u.is_show != 0
+        order by CONVERT(u.username USING gbk) COLLATE gbk_chinese_ci ASC
+    </select>
+
+    <select id="selectNotAppUser" resultType="com.ennova.pubinfouser.vo.AppUserVO">
+        select id,
+               username,
+               `password`,
+               wechat_no,
+               mobile,
+               job_num,
+               company,
+               department,
+               `position`,
+               `status`,
+               is_delete,
+               create_time,
+               update_time,
+               is_show,
+               user_id,
+               is_update
+        from t_user tu
+        where tu.job_num
+            not in (select job_num from t_app_user)
+          and tu.is_show = 1
+    </select>
+
+    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into t_app_user
+        (username, `password`, wechat_no, mobile, job_num, company, department, `position`,
+        `status`, is_delete, create_time, update_time, is_show, user_id, is_update, cid
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.username,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR}, #{item.wechatNo,jdbcType=VARCHAR},
+            #{item.mobile,jdbcType=VARCHAR}, #{item.jobNum,jdbcType=VARCHAR}, #{item.company,jdbcType=VARCHAR},
+            #{item.department,jdbcType=VARCHAR}, #{item.position,jdbcType=VARCHAR}, #{item.status,jdbcType=VARCHAR},
+            #{item.isDelete,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP},
+            #{item.isShow,jdbcType=INTEGER}, #{item.userId,jdbcType=VARCHAR}, #{item.isUpdate,jdbcType=INTEGER},
+            #{item.cid,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfouser.entity.AppUserEntity" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into t_app_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                `password`,
+            </if>
+            <if test="wechatNo != null">
+                wechat_no,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="jobNum != null">
+                job_num,
+            </if>
+            <if test="company != null">
+                company,
+            </if>
+            <if test="department != null">
+                department,
+            </if>
+            <if test="position != null">
+                `position`,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isShow != null">
+                is_show,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="isUpdate != null">
+                is_update,
+            </if>
+            <if test="cid != null">
+                cid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="wechatNo != null">
+                #{wechatNo,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="jobNum != null">
+                #{jobNum,jdbcType=VARCHAR},
+            </if>
+            <if test="company != null">
+                #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isShow != null">
+                #{isShow,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="isUpdate != null">
+                #{isUpdate,jdbcType=INTEGER},
+            </if>
+            <if test="cid != null">
+                #{cid,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>
