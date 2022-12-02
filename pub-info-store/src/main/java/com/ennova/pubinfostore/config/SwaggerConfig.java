@@ -32,7 +32,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("pub-info-purchase--仓库管理模块API文档")
+                .title("pub-info-store--仓库管理模块API文档")
                 .version("1.0")
                 .build();
     }
