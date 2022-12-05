@@ -1,5 +1,7 @@
 package com.ennova.pubinfostore.vo;
 
+import com.ennova.pubinfostore.entity.ScProblemFile;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,12 @@ public class ScProblemFeedbackVO {
     private Integer backUserId;
 
     /**
+     * 反馈人
+     */
+    @ApiModelProperty(value = "反馈人")
+    private String backUserName;
+
+    /**
      * 问题来源
      */
     @ApiModelProperty(value="问题来源")
@@ -39,12 +47,14 @@ public class ScProblemFeedbackVO {
      * 反馈时间
      */
     @ApiModelProperty(value = "反馈时间")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
 
     /**
      * 修改时间
      */
     @ApiModelProperty(value = "修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date updateTime;
 
     /**
@@ -91,4 +101,10 @@ public class ScProblemFeedbackVO {
 
     @ApiModelProperty(value = "附件ID")
     private List<Integer> scProblemFileId;
+
+    /**
+     * 问题反馈附件
+     */
+    @ApiModelProperty(value = "上传的附件：仅用于列表展示")
+    private List<ScProblemFile> fileVOList;
 }

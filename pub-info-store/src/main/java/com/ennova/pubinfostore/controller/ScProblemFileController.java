@@ -1,6 +1,7 @@
 package com.ennova.pubinfostore.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfostore.dto.FileDelDTO;
 import com.ennova.pubinfostore.service.ScProblemFileService;
 import com.ennova.pubinfostore.vo.FileVO;
 import io.swagger.annotations.Api;
@@ -8,10 +9,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiOperationSort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Api(tags = "公共信息平台App-问题反馈文件")
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
@@ -38,5 +39,15 @@ public class ScProblemFileController {
         return scProblemFileService.selectVideoFile(file);
     }
 
+    @ApiOperation(value = "问题反馈文件 - 附件下载")
+    @GetMapping("/netDownLoadFile")
+    public void netDownLoadFile(String netAddress, String filename, HttpServletResponse response) throws Exception {
+        scProblemFileService.netDownLoadFile(netAddress, filename, response);
+    }
 
+    @ApiOperation(value = "问题反馈文件 - 文件删除")
+    @PostMapping("/deleteFile")
+    public Callback deleteFile(@RequestBody FileDelDTO fileDelDTO){
+        return scProblemFileService.deleteFile(fileDelDTO);
+    }
 }

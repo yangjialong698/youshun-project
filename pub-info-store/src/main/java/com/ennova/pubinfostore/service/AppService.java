@@ -2,6 +2,7 @@ package com.ennova.pubinfostore.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
@@ -16,6 +17,8 @@ import com.ennova.pubinfostore.utils.ApiContext;
 import com.ennova.pubinfostore.utils.BeanConvertUtils;
 import com.ennova.pubinfostore.vo.AppUserVO;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getui.push.v2.sdk.ApiHelper;
 import com.getui.push.v2.sdk.api.PushApi;
 import com.getui.push.v2.sdk.common.ApiResult;
@@ -71,7 +74,7 @@ public class AppService {
         pushApi = apiHelper2.creatApi(PushApi.class);
         PushDTO<Audience> pushDTO = pushDTO(appNotice);
         int num = 0;
-        fullCid(pushDTO,appNotice.getCid());
+        fullCid(pushDTO, appNotice.getCid());
         ApiResult<Map<String, Map<String, String>>> apiResult;
         while (true) {
             pushDTO.setRequestId(System.currentTimeMillis() + "");
@@ -123,22 +126,22 @@ public class AppService {
 
 
         //设置options 方式一
-        ups.addOption("HW","badgeAddNum",3);
-        ups.addOption("HW","badgeClass","com.getui.demo.GetuiSdkDemoActivity");
-        ups.addOption("OP","app_message_id",11);
-        ups.addOption("VV","message_sort",1);
-        ups.addOptionAll("channel","default");
+        ups.addOption("HW", "badgeAddNum", 3);
+        ups.addOption("HW", "badgeClass", "com.getui.demo.GetuiSdkDemoActivity");
+        ups.addOption("OP", "app_message_id", 11);
+        ups.addOption("VV", "message_sort", 1);
+        ups.addOptionAll("channel", "default");
 
 
         //设置options 方式二
-        Map<String, Map<String,Object>> options = new HashMap<String, Map<String, Object>>();
-        Map<String,Object> all = new HashMap<String, Object>();
-        all.put("channel","default");
-        options.put("ALL",all);
-        Map<String,Object> hw = new HashMap<String, Object>();
-        all.put("badgeAddNum",3);
-        all.put("badgeClass","com.getui.demo.GetuiSdkDemoActivity");
-        options.put("HW",hw);
+        Map<String, Map<String, Object>> options = new HashMap<String, Map<String, Object>>();
+        Map<String, Object> all = new HashMap<String, Object>();
+        all.put("channel", "default");
+        options.put("ALL", all);
+        Map<String, Object> hw = new HashMap<String, Object>();
+        all.put("badgeAddNum", 3);
+        all.put("badgeClass", "com.getui.demo.GetuiSdkDemoActivity");
+        options.put("HW", hw);
         ups.setOptions(options);
 
 
@@ -158,14 +161,14 @@ public class AppService {
         return pushDTO;
     }
 
-    private void fullCid(PushDTO<Audience> pushDTO,String cidstr) {
+    private void fullCid(PushDTO<Audience> pushDTO, String cidstr) {
         Audience audience = new Audience();
         audience.addCid(cidstr);
         pushDTO.setAudience(audience);
     }
 
 
-    public Callback pushAll(AppNotice appNotice){
+    public Callback pushAll(AppNotice appNotice) {
         apiContext = ApiContext.build();
         apiContext.configuration.setAnalyseStableDomainInterval(500);
         apiContext.configuration.setCheckHealthInterval(500);
@@ -192,14 +195,14 @@ public class AppService {
         pushDTO.setRequestId(String.valueOf(startTimeStamp));
         pushDTO.setGroupName("groupname");
         pushDTO.setPushMessage(pushMessage);
-        ApiResult<TaskIdDTO> apiResult= pushApi.pushAll(pushDTO);
-        if (apiResult.getCode() == 0){
+        ApiResult<TaskIdDTO> apiResult = pushApi.pushAll(pushDTO);
+        if (apiResult.getCode() == 0) {
             String id = IdUtil.randomUUID().replace("-", "");
             appNotice.setId(id);
             appNotice.setCreateTime(new Date());
             /*appNoticeMapper.insertSelective(appNotice);*/
             return Callback.success(apiResult);
-        }else {
+        } else {
             return Callback.error(apiResult.getMsg());
         }
 
@@ -237,7 +240,7 @@ public class AppService {
         pushApi = apiHelper2.creatApi(PushApi.class);
         PushDTO<Audience> pushDTO = pushDTO(appNotice);
         int num = 0;
-        fullCid(pushDTO,appNotice.getCid());
+        fullCid(pushDTO, appNotice.getCid());
         ApiResult<Map<String, Map<String, String>>> apiResult;
         while (true) {
             pushDTO.setRequestId(System.currentTimeMillis() + "");
@@ -259,7 +262,7 @@ public class AppService {
         }
     }
 
-    public Callback<ApiResult> alarmNotification(String title , String content, Integer userId) {
+    public Callback<ApiResult> alarmNotification(String title, String content, Integer userId) {
 
         List<AppUserVO> appUserVOList = pubInfoUserClient.listAppUsers().getData();
         Set<String> cids = appUserVOList.stream().filter(appUserVO -> StringUtils.isNotEmpty(appUserVO.getCid())).map(appUserVO -> appUserVO.getCid()).collect(Collectors.toSet());
@@ -285,7 +288,7 @@ public class AppService {
             audienceDTO.setTaskid(taskId);
             //推送目标用户
             Audience audience = new Audience();
-            for (String cidtemp: cids){
+            for (String cidtemp : cids) {
                 audience.addCid(cidtemp);
             }
             audienceDTO.setAudience(audience);
@@ -303,7 +306,7 @@ public class AppService {
         }
     }
 
-    private PushDTO<Audience> pushDTO(String title,String content) {
+    private PushDTO<Audience> pushDTO(String title, String content) {
         PushDTO<Audience> pushDTO = new PushDTO<Audience>();
         pushDTO.setRequestId(System.currentTimeMillis() + "");
         pushDTO.setGroupName("g-name1");
@@ -353,22 +356,22 @@ public class AppService {
 
 
         //设置options 方式一
-        ups.addOption("HW","badgeAddNum",3);
-        ups.addOption("HW","badgeClass","com.getui.demo.GetuiSdkDemoActivity");
-        ups.addOption("OP","app_message_id",11);
-        ups.addOption("VV","message_sort",1);
-        ups.addOptionAll("channel","default");
+        ups.addOption("HW", "badgeAddNum", 3);
+        ups.addOption("HW", "badgeClass", "com.getui.demo.GetuiSdkDemoActivity");
+        ups.addOption("OP", "app_message_id", 11);
+        ups.addOption("VV", "message_sort", 1);
+        ups.addOptionAll("channel", "default");
 
 
         //设置options 方式二
-        Map<String, Map<String,Object>> options = new HashMap<String, Map<String, Object>>();
-        Map<String,Object> all = new HashMap<String, Object>();
-        all.put("channel","default");
-        options.put("ALL",all);
-        Map<String,Object> hw = new HashMap<String, Object>();
-        all.put("badgeAddNum",3);
-        all.put("badgeClass","com.getui.demo.GetuiSdkDemoActivity");
-        options.put("HW",hw);
+        Map<String, Map<String, Object>> options = new HashMap<String, Map<String, Object>>();
+        Map<String, Object> all = new HashMap<String, Object>();
+        all.put("channel", "default");
+        options.put("ALL", all);
+        Map<String, Object> hw = new HashMap<String, Object>();
+        all.put("badgeAddNum", 3);
+        all.put("badgeClass", "com.getui.demo.GetuiSdkDemoActivity");
+        options.put("HW", hw);
         ups.setOptions(options);
 
 
@@ -390,7 +393,7 @@ public class AppService {
         return pushDTO;
     }
 
-    public Callback pushFeedback(@NonNull ScProblemFeedbackVO scProblemFeedbackVO) throws InterruptedException {
+    public Callback pushFeedback(@NonNull ScProblemFeedbackVO scProblemFeedbackVO) throws InterruptedException, JsonProcessingException {
 
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
@@ -405,7 +408,7 @@ public class AppService {
         scProblemFeedback.setBackStatus(0);
         scProblemFeedbackMapper.insertSelective(scProblemFeedback);
         Integer id = scProblemFeedback.getId();
-        if (CollectionUtil.isNotEmpty(scProblemFeedbackVO.getScProblemFileId())){
+        if (CollectionUtil.isNotEmpty(scProblemFeedbackVO.getScProblemFileId())) {
             for (Integer scProblemFileId : scProblemFeedbackVO.getScProblemFileId()) {
                 ScProblemFile scProblemFile = scProblemFileMapper.selectByPrimaryKey(scProblemFileId);
                 scProblemFile.setProblemFeedbackId(id);
@@ -414,7 +417,8 @@ public class AppService {
         }
         AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
                 .userid(userVo.getId().toString()).createTime(new Date()).cid(userDTO.getCid()).build();
-        this.pushToSingleByCid(appNotice);
+        log.info(new ObjectMapper().writeValueAsString(appNotice));
+//        this.pushToSingleByCid(appNotice);
         return Callback.success(true);
     }
 
@@ -426,4 +430,24 @@ public class AppService {
         return Callback.success(scProblemFeedbackMapper.selectDutyPersonList(departmentId));
     }
 
+    public Callback<ScProblemFeedbackVO> getDetail(Integer id) {
+        if (id != null) {
+            ScProblemFeedback scProblemFeedback = scProblemFeedbackMapper.selectByPrimaryKey(id);
+            UserDTO userDTO = scProblemFeedbackMapper.selectById(scProblemFeedback.getBackUserId());
+            ScProblemFeedbackVO scProblemFeedbackVO = BeanConvertUtils.convertTo(scProblemFeedback, ScProblemFeedbackVO::new);
+            scProblemFeedbackVO.setBackUserName(userDTO.getUserName());
+            if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
+                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemId(scProblemFeedbackVO.getId());
+                scProblemFeedbackVO.setFileVOList(scProblemFiles);
+            }
+            return Callback.success(scProblemFeedbackVO);
+        }
+        return Callback.error("暂无数据");
+    }
+
+    public Callback deleteById(Integer id) {
+        ScProblemFeedback build = ScProblemFeedback.builder().delFlag(1).id(id).build();
+        int i = scProblemFeedbackMapper.updateByPrimaryKeySelective(build);
+        return i > 0 ? Callback.success() : Callback.error("删除失败");
+    }
 }

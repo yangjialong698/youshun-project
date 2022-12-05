@@ -5,6 +5,7 @@ import com.ennova.pubinfocommon.utils.FileUtils;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfostore.dao.ScProblemFileMapper;
+import com.ennova.pubinfostore.dto.FileDelDTO;
 import com.ennova.pubinfostore.entity.ScProblemFile;
 import com.ennova.pubinfostore.vo.FileVO;
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -30,15 +31,17 @@ import ws.schild.jave.info.VideoSize;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -151,13 +154,13 @@ public class ScProblemFileService {
 
         try {
             IOUtils.copy(new FileInputStream(oldPath), new FileOutputStream(newPath));
-            doWithViedo(oldPath, newPath);
+            doWithVideo(oldPath, newPath);
         } catch (IOException e) {
             log.info("压缩视频失败");
             e.printStackTrace();
         }
 
-        ScProblemFile scProblemFile = ScProblemFile.builder().fileMd5(subname).fileUrl(localUrl + "/file/" + subname).name(map.get("fileName"))
+        ScProblemFile scProblemFile = ScProblemFile.builder().fileMd5(subname).fileUrl(localUrl + "/file/" + subname).ysFileUrl(localUrl + "/file/" + newName).name(map.get("fileName"))
                 .fileSize(map.get("fileSize")).openFile(0).delFlag(0).userId(userVo.getId()).createTime(new Date()).build();
         int count = scProblemFileMapper.insertSelective(scProblemFile);
         if (count > 0) {
@@ -167,7 +170,7 @@ public class ScProblemFileService {
         return Callback.error(2, "选择文件失败!");
     }
 
-    private static void doWithViedo(String oldPath, String newPath) {
+    private static void doWithVideo(String oldPath, String newPath) {
 
         File newfile = new File(newPath);
         File oldfile = new File(oldPath);
@@ -249,4 +252,57 @@ public class ScProblemFileService {
         }
     }
 
+    public void netDownLoadFile(String netAddress, String filename, HttpServletResponse response) throws Exception {
+        URL url;
+        URLConnection conn;
+        InputStream inputStream = null;
+        try {
+            // 这里填文件的url地址
+            url = new URL(netAddress);
+            conn = url.openConnection();
+            inputStream = conn.getInputStream();
+            response.setContentType(conn.getContentType());
+            response.setHeader("Content-Disposition", "attachment; filename="
+                    + URLEncoder.encode(filename, "UTF-8"));
+            byte[] buffer = new byte[1024];
+            int len;
+            OutputStream outputStream = response.getOutputStream();
+            while ((len = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, len);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public Callback deleteFile(FileDelDTO fileDelDTO) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        fileDelDTO.getFileVos().forEach(fileVo -> {
+            String path = localPath + "/" + fileVo.getNewfileName();
+            // 如果是本人上传的，才能执行删除操作
+            assert userVo != null;
+            List<ScProblemFile> files = scProblemFileMapper.selectAllByFileMd5AndUserId(fileVo.getNewfileName(), userVo.getId());
+            if (files != null && !files.isEmpty()) {
+                File file = new File(path);
+                if (file.exists()) {
+                    //查看是否唯一
+                    int count = scProblemFileMapper.selectByFileMd5(fileVo.getNewfileName());
+                    if (count == 1) {
+                        file.delete();
+                    }
+                    scProblemFileMapper.deleteByPrimaryKey(fileVo.getId());
+                }
+            }
+        });
+        return Callback.success("附件删除成功");
+    }
 }
