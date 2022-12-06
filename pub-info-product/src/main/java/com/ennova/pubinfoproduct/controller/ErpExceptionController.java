@@ -71,11 +71,9 @@ public class ErpExceptionController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "muduleType", value = "模块类型：1-机加摇臂 2-摇臂轴 3-摇臂后处理 4-装配", required = true, dataType = "Int")
     })
-    @GetMapping("/selectExceptionCounList")
-    public Callback<BaseVO<ErpExceptionCountVO>> selectExceptionCounList(@RequestParam(defaultValue = "1") Integer page,
-                                                                         @RequestParam(defaultValue = "10") Integer size,
-                                                                         @RequestParam("muduleType") Integer muduleType) {
-        return erpExceptionService.selectExceptionCounList(page, size, muduleType);
+    @GetMapping("/selectExceptionCountList")
+    public Callback<List<ErpExceptionCountVO>> selectExceptionCountList(@RequestParam("muduleType") Integer muduleType) {
+        return erpExceptionService.selectExceptionCountList(muduleType);
     }
 
 }

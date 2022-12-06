@@ -92,8 +92,7 @@ public class ErpExceptionService {
         return Callback.success(stringListMap);
     }
 
-    public Callback<BaseVO<ErpExceptionCountVO>> selectExceptionCounList(Integer page, Integer pageSize, Integer muduleType) {
-        Page<ErpExceptionVO> startPage = PageHelper.startPage(page, pageSize);
+    public Callback<List<ErpExceptionCountVO>> selectExceptionCountList(Integer muduleType) {
         List<ErpExceptionVO> erpExceptionVOS = erpExceptionMapper.selectBymuduleTypeLike(muduleType);
         Map<String, List<String>> dateListMap = erpExceptionVOS.parallelStream().collect(Collectors.groupingBy(erpExceptionVO -> DateFormatUtils.format(erpExceptionVO.getCreateTime(), "yyyy-MM-dd"), Collectors.mapping(ErpExceptionVO::getModuleExceptionMessage, Collectors.toList())));
         List<ErpExceptionCountVO> erpExceptionCountVOList = new ArrayList<>();
@@ -111,7 +110,6 @@ public class ErpExceptionService {
         }
         List<ErpExceptionCountVO> erpExceptionCountVOLists = erpExceptionCountVOList.stream().sorted(Comparator.comparing(erpExceptionCountVO -> erpExceptionCountVO.getCreateTime())).collect(Collectors.toList());
         Collections.reverse(erpExceptionCountVOLists);
-        BaseVO<ErpExceptionCountVO> erpExceptionCountVOBaseVO = new BaseVO<>(erpExceptionCountVOLists, new PageUtil(pageSize, (int) startPage.getTotal(), page));
-        return Callback.success(erpExceptionCountVOBaseVO);
+        return Callback.success(erpExceptionCountVOLists);
     }
 }
