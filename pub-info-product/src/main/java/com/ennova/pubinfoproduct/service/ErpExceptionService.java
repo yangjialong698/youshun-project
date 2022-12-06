@@ -56,7 +56,7 @@ public class ErpExceptionService {
 
     public Callback<BaseVO<ErpExceptionVO>> exceptionList(Integer page, Integer pageSize, Integer muduleType) {
         Page<ErpExceptionVO> startPage = PageHelper.startPage(page, pageSize);
-        List<ErpExceptionVO> erpExceptionVOS = erpExceptionMapper.selectBymuduleTypeLike(muduleType);
+        List<ErpExceptionVO> erpExceptionVOS = erpExceptionMapper.selectBymuduleTypeLikes(muduleType);
         BaseVO<ErpExceptionVO> baseVO = new BaseVO<>(erpExceptionVOS, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }

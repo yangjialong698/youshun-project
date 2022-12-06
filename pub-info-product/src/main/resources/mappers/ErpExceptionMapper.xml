@@ -180,6 +180,24 @@
         order by erp.create_time asc
     </select>
 
+    <select id="selectBymuduleTypeLikes" parameterType="java.lang.Integer"
+            resultType="com.ennova.pubinfoproduct.vo.ErpExceptionVO">
+        select erp.id,
+        erp.mudule_type              as muduleType,
+        erp.module_exception_message as moduleExceptionMessage,
+        erp.del_flag                 as delFlag,
+        erp.create_time              as createTime,
+        erp.update_time              as updateTime
+        from erp_exception erp
+        <where>
+            erp.del_flag = 0
+            <if test="muduleType != null">
+                and erp.mudule_type = #{muduleType,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by erp.create_time desc
+    </select>
+
     <select id="selectExceptionCountList" parameterType="java.lang.Integer"
             resultType="com.ennova.pubinfoproduct.vo.ErpExceptionVO">
         SELECT e.mudule_type as muduleType, e.module_exception_message as moduleExceptionMessage

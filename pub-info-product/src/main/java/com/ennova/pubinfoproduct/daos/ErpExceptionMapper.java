@@ -25,6 +25,8 @@ public interface ErpExceptionMapper {
 
     List<ErpExceptionVO> selectBymuduleTypeLike(@Param("muduleType")Integer muduleType);
 
+    List<ErpExceptionVO> selectBymuduleTypeLikes(@Param("muduleType")Integer muduleType);
+
     List<ErpExceptionVO> selectExceptionCountList(@Param("dayNum") String dayNum);
 
 }
