@@ -1,235 +1,242 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ennova.pubinfostore.dao.ScProblemFeedbackMapper">
-    <resultMap id="BaseResultMap" type="com.ennova.pubinfostore.entity.ScProblemFeedback">
-        <!--@mbg.generated-->
-        <!--@Table sc_problem_feedback-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="back_user_id" jdbcType="INTEGER" property="backUserId"/>
-        <result column="back_department" jdbcType="VARCHAR" property="backDepartment"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
-        <result column="duty_department" jdbcType="VARCHAR" property="dutyDepartment"/>
-        <result column="duty_person" jdbcType="VARCHAR" property="dutyPerson"/>
-        <result column="problem_description" jdbcType="VARCHAR" property="problemDescription"/>
-        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
-        <result column="back_status" jdbcType="INTEGER" property="backStatus"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id,
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfostore.entity.ScProblemFeedback">
+    <!--@mbg.generated-->
+    <!--@Table sc_problem_feedback-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="back_user_id" jdbcType="INTEGER" property="backUserId" />
+    <result column="back_person" jdbcType="VARCHAR" property="backPerson" />
+    <result column="back_department" jdbcType="VARCHAR" property="backDepartment" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="duty_department" jdbcType="VARCHAR" property="dutyDepartment" />
+    <result column="duty_person" jdbcType="VARCHAR" property="dutyPerson" />
+    <result column="problem_description" jdbcType="VARCHAR" property="problemDescription" />
+    <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
+    <result column="back_status" jdbcType="INTEGER" property="backStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, back_user_id, back_person, back_department, create_time, update_time, duty_department, 
+    duty_person, problem_description, del_flag, back_status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from sc_problem_feedback
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from sc_problem_feedback
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfostore.entity.ScProblemFeedback" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into sc_problem_feedback (back_user_id, back_person, back_department, 
+      create_time, update_time, duty_department, 
+      duty_person, problem_description, del_flag, 
+      back_status)
+    values (#{backUserId,jdbcType=INTEGER}, #{backPerson,jdbcType=VARCHAR}, #{backDepartment,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dutyDepartment,jdbcType=VARCHAR}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{problemDescription,jdbcType=VARCHAR}, #{delFlag,jdbcType=INTEGER}, 
+      #{backStatus,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfostore.entity.ScProblemFeedback" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into sc_problem_feedback
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="backUserId != null">
         back_user_id,
+      </if>
+      <if test="backPerson != null">
+        back_person,
+      </if>
+      <if test="backDepartment != null">
         back_department,
+      </if>
+      <if test="createTime != null">
         create_time,
+      </if>
+      <if test="updateTime != null">
         update_time,
+      </if>
+      <if test="dutyDepartment != null">
         duty_department,
+      </if>
+      <if test="dutyPerson != null">
         duty_person,
+      </if>
+      <if test="problemDescription != null">
         problem_description,
+      </if>
+      <if test="delFlag != null">
         del_flag,
-        back_status
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from sc_problem_feedback
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete
-        from sc_problem_feedback
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" parameterType="com.ennova.pubinfostore.entity.ScProblemFeedback">
-        <!--@mbg.generated-->
-        insert into sc_problem_feedback (id, back_user_id, back_department,
-                                         create_time, update_time, duty_department,
-                                         duty_person, problem_description, del_flag)
-        values (#{id,jdbcType=INTEGER}, #{backUserId,jdbcType=INTEGER}, #{backDepartment,jdbcType=VARCHAR},
-                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dutyDepartment,jdbcType=VARCHAR},
-                #{dutyPerson,jdbcType=VARCHAR}, #{problemDescription,jdbcType=VARCHAR}, #{delFlag,jdbcType=INTEGER})
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.ennova.pubinfostore.entity.ScProblemFeedback" useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into sc_problem_feedback
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="backUserId != null">
-                back_user_id,
-            </if>
-            <if test="backDepartment != null">
-                back_department,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="dutyDepartment != null">
-                duty_department,
-            </if>
-            <if test="dutyPerson != null">
-                duty_person,
-            </if>
-            <if test="problemDescription != null">
-                problem_description,
-            </if>
-            <if test="delFlag != null">
-                del_flag,
-            </if>
-            <if test="backStatus != null">
-                back_status,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="backUserId != null">
-                #{backUserId,jdbcType=INTEGER},
-            </if>
-            <if test="backDepartment != null">
-                #{backDepartment,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="dutyDepartment != null">
-                #{dutyDepartment,jdbcType=VARCHAR},
-            </if>
-            <if test="dutyPerson != null">
-                #{dutyPerson,jdbcType=VARCHAR},
-            </if>
-            <if test="problemDescription != null">
-                #{problemDescription,jdbcType=VARCHAR},
-            </if>
-            <if test="delFlag != null">
-                #{delFlag,jdbcType=INTEGER},
-            </if>
-            <if test="backStatus != null">
-                #{backStatus,jdbcType=INTEGER},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfostore.entity.ScProblemFeedback">
-        <!--@mbg.generated-->
-        update sc_problem_feedback
-        <set>
-            <if test="backUserId != null">
-                back_user_id = #{backUserId,jdbcType=INTEGER},
-            </if>
-            <if test="backDepartment != null">
-                back_department = #{backDepartment,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="dutyDepartment != null">
-                duty_department = #{dutyDepartment,jdbcType=VARCHAR},
-            </if>
-            <if test="dutyPerson != null">
-                duty_person = #{dutyPerson,jdbcType=VARCHAR},
-            </if>
-            <if test="problemDescription != null">
-                problem_description = #{problemDescription,jdbcType=VARCHAR},
-            </if>
-            <if test="delFlag != null">
-                del_flag = #{delFlag,jdbcType=INTEGER},
-            </if>
-            <if test="backStatus != null">
-                back_status = #{backStatus,jdbcType=INTEGER},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfostore.entity.ScProblemFeedback">
-        <!--@mbg.generated-->
-        update sc_problem_feedback
-        set back_user_id        = #{backUserId,jdbcType=INTEGER},
-            back_department     = #{backDepartment,jdbcType=VARCHAR},
-            create_time         = #{createTime,jdbcType=TIMESTAMP},
-            update_time         = #{updateTime,jdbcType=TIMESTAMP},
-            duty_department     = #{dutyDepartment,jdbcType=VARCHAR},
-            duty_person         = #{dutyPerson,jdbcType=VARCHAR},
-            problem_description = #{problemDescription,jdbcType=VARCHAR},
-            del_flag            = #{delFlag,jdbcType=INTEGER}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateBatch" parameterType="java.util.List">
-        <!--@mbg.generated-->
-        update sc_problem_feedback
-        <trim prefix="set" suffixOverrides=",">
-            <trim prefix="back_user_id = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.backUserId,jdbcType=INTEGER}
-                </foreach>
-            </trim>
-            <trim prefix="back_department = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.backDepartment,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="create_time = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
-                </foreach>
-            </trim>
-            <trim prefix="update_time = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
-                </foreach>
-            </trim>
-            <trim prefix="duty_department = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.dutyDepartment,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="duty_person = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.dutyPerson,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="problem_description = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.problemDescription,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="del_flag = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.delFlag,jdbcType=INTEGER}
-                </foreach>
-            </trim>
-        </trim>
-        where id in
-        <foreach close=")" collection="list" item="item" open="(" separator=", ">
-            #{item.id,jdbcType=INTEGER}
+      </if>
+      <if test="backStatus != null">
+        back_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="backUserId != null">
+        #{backUserId,jdbcType=INTEGER},
+      </if>
+      <if test="backPerson != null">
+        #{backPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="backDepartment != null">
+        #{backDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dutyDepartment != null">
+        #{dutyDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyPerson != null">
+        #{dutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="problemDescription != null">
+        #{problemDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="backStatus != null">
+        #{backStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfostore.entity.ScProblemFeedback">
+    <!--@mbg.generated-->
+    update sc_problem_feedback
+    <set>
+      <if test="backUserId != null">
+        back_user_id = #{backUserId,jdbcType=INTEGER},
+      </if>
+      <if test="backPerson != null">
+        back_person = #{backPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="backDepartment != null">
+        back_department = #{backDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dutyDepartment != null">
+        duty_department = #{dutyDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyPerson != null">
+        duty_person = #{dutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="problemDescription != null">
+        problem_description = #{problemDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="backStatus != null">
+        back_status = #{backStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfostore.entity.ScProblemFeedback">
+    <!--@mbg.generated-->
+    update sc_problem_feedback
+    set back_user_id = #{backUserId,jdbcType=INTEGER},
+      back_person = #{backPerson,jdbcType=VARCHAR},
+      back_department = #{backDepartment,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      duty_department = #{dutyDepartment,jdbcType=VARCHAR},
+      duty_person = #{dutyPerson,jdbcType=VARCHAR},
+      problem_description = #{problemDescription,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=INTEGER},
+      back_status = #{backStatus,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update sc_problem_feedback
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="back_user_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.backUserId,jdbcType=INTEGER}
         </foreach>
-    </update>
-    <insert id="batchInsert" parameterType="map">
-        <!--@mbg.generated-->
-        insert into sc_problem_feedback
-        (id, back_user_id, back_department, create_time, update_time, duty_department, duty_person,
-         problem_description, del_flag)
-        values
-        <foreach collection="list" item="item" separator=",">
-            (#{item.id,jdbcType=INTEGER}, #{item.backUserId,jdbcType=INTEGER}, #{item.backDepartment,jdbcType=VARCHAR},
-             #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP},
-             #{item.dutyDepartment,jdbcType=VARCHAR},
-             #{item.dutyPerson,jdbcType=VARCHAR}, #{item.problemDescription,jdbcType=VARCHAR},
-             #{item.delFlag,jdbcType=INTEGER})
+      </trim>
+      <trim prefix="back_person = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.backPerson,jdbcType=VARCHAR}
         </foreach>
-    </insert>
+      </trim>
+      <trim prefix="back_department = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.backDepartment,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="duty_department = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.dutyDepartment,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="duty_person = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.dutyPerson,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="problem_description = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.problemDescription,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="del_flag = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.delFlag,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="back_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.backStatus,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into sc_problem_feedback
+    (back_user_id, back_person, back_department, create_time, update_time, duty_department, 
+      duty_person, problem_description, del_flag, back_status)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.backUserId,jdbcType=INTEGER}, #{item.backPerson,jdbcType=VARCHAR}, #{item.backDepartment,jdbcType=VARCHAR}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.dutyDepartment,jdbcType=VARCHAR}, 
+        #{item.dutyPerson,jdbcType=VARCHAR}, #{item.problemDescription,jdbcType=VARCHAR}, 
+        #{item.delFlag,jdbcType=INTEGER}, #{item.backStatus,jdbcType=INTEGER})
+    </foreach>
+  </insert>
 
     <select id="selectDutyDepartmentList" resultType="com.ennova.pubinfostore.vo.DutyDepartmentVO">
         select t1.dept_id   as id,
@@ -264,4 +271,18 @@
             </if>
         </where>
     </select>
+
+  <select id="selectAllByBackStatusOrDutyPerson" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sc_problem_feedback
+    where 1=1
+      <if test="backStatus != null and backStatus != ''">
+        and back_status = #{backStatus,jdbcType=NUMERIC}
+      </if>
+      <if test="dutyPerson != null and dutyPerson != ''">
+        and duty_person = #{dutyPerson,jdbcType=VARCHAR}
+      </if>
+    order by  create_time desc
+  </select>
 </mapper>

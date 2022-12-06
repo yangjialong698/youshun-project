@@ -1,6 +1,11 @@
 package com.ennova.pubinfostore.service;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfostore.dao.ScProblemFeedbackMapper;
 import com.ennova.pubinfostore.dao.ScProblemFileMapper;
 import com.ennova.pubinfostore.dto.UserDTO;
@@ -8,14 +13,20 @@ import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.service.feign.PubInfoUserClient;
 import com.ennova.pubinfostore.utils.ApiContext;
 import com.ennova.pubinfostore.utils.BeanConvertUtils;
+import com.ennova.pubinfostore.vo.ScProblemFeedbackDetailVO;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
 import com.getui.push.v2.sdk.api.PushApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -402,7 +413,7 @@ public class AppService {
             ScProblemFeedback scProblemFeedback = scProblemFeedbackMapper.selectByPrimaryKey(id);
             UserDTO userDTO = scProblemFeedbackMapper.selectById(scProblemFeedback.getBackUserId());
             ScProblemFeedbackVO scProblemFeedbackVO = BeanConvertUtils.convertTo(scProblemFeedback, ScProblemFeedbackVO::new);
-            scProblemFeedbackVO.setBackUserName(userDTO.getUserName());
+            scProblemFeedbackVO.setBackPerson(userDTO.getUserName());
             /*if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
                 List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemId(scProblemFeedbackVO.getId());
                 scProblemFeedbackVO.setFileVOList(scProblemFiles);
@@ -416,5 +427,52 @@ public class AppService {
         ScProblemFeedback build = ScProblemFeedback.builder().delFlag(1).id(id).build();
         int i = scProblemFeedbackMapper.updateByPrimaryKeySelective(build);
         return i > 0 ? Callback.success() : Callback.error("删除失败");
+    }
+
+    public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize, Integer backStatus, String dutyPerson) {
+        if(page==null || page<1){
+            page = 1;
+        }
+        if(pageSize==null || pageSize<1){
+            pageSize = 10;
+        }
+        int index = (page - 1) * pageSize;
+        ArrayList<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
+        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectAllByBackStatusOrDutyPerson(backStatus, dutyPerson);
+        if (CollectionUtil.isNotEmpty(scProblemFeedbacks)){
+        long totalProblem = scProblemFeedbacks.size();
+        long toDoProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus()==3).count();
+        long doneProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus()==1).count();
+        long doingProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus()==2).count();
+        long unDoneProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus()==0).count();
+        scProblemFeedbacks.forEach(e->{
+                ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
+                long betweenHour = DateUtil.between(e.getCreateTime(), new Date(), DateUnit.HOUR);
+                BeanUtils.copyProperties(e,scProblemFeedbackVO);
+                scProblemFeedbackVO.setTotalProblem(totalProblem);
+                scProblemFeedbackVO.setToDoProblem(toDoProblem);
+                scProblemFeedbackVO.setDoneProblem(doneProblem);
+                scProblemFeedbackVO.setDoingProblem(doingProblem);
+                scProblemFeedbackVO.setUnDoneProblem(unDoneProblem);
+                scProblemFeedbackVO.setGqTime(betweenHour);
+                scProblemFeedbackVOS.add(scProblemFeedbackVO);
+            });
+            BaseVO<ScProblemFeedbackVO> baseVO = new BaseVO<>(pageing(index,pageSize,scProblemFeedbackVOS), new PageUtil(pageSize, scProblemFeedbackVOS.size(), page));
+            return Callback.success(baseVO);
+        } else {
+            return null;
+        }
+    }
+
+    public List<ScProblemFeedbackVO> pageing(int index, int pageSize, List<ScProblemFeedbackVO> list){
+        if (index < 0 || index >= list.size() || pageSize <= 0) {
+            return null;
+        }
+        int lastIndex = index + pageSize;
+        if (lastIndex > list.size()) {
+            lastIndex = list.size();
+        }
+        list = list.subList(index, lastIndex);
+        return list;
     }
 }

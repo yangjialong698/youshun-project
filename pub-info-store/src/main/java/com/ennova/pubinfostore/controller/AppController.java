@@ -1,7 +1,9 @@
 package com.ennova.pubinfostore.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfostore.service.AppService;
+import com.ennova.pubinfostore.vo.ScProblemFeedbackDetailVO;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -82,5 +84,19 @@ public class AppController {
     @GetMapping("/deleteById")
     public Callback deleteById(Integer id){
         return appService.deleteById(id);
+    }
+
+
+
+
+
+    @ApiOperation(value = "APP移动端接口 - 问题反馈app主页列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "backStatus", value = "反馈状态", required = false),
+            @ApiImplicitParam(name = "dutyPerson", value = "责任人", required = false)
+    })
+    @GetMapping("/getSfbDetailList")
+    public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize, Integer backStatus, String dutyPerson) {
+        return appService.getSfbDetailList(page,pageSize,backStatus,dutyPerson);
     }
 }

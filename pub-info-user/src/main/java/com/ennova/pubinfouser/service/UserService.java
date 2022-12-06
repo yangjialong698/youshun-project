@@ -59,6 +59,8 @@ public class UserService extends BaseService<UserEntity> {
     private String OPINIONBOX = "1008";
     //生产
     private String PRODUCT = "1009";
+    //大屏
+    private String BIGSCREEN = "1010";
 
     @Resource
     private UserDao userDao;
@@ -273,6 +275,13 @@ public class UserService extends BaseService<UserEntity> {
                 }
                 if (sysNum.equals(PRODUCT)){
                     List<MenuVO> menuList = roleService.getMenuBySysNum("1009");
+                    newMenuVO.setSysNum(sysNum);
+                    newMenuVO.setSysName(tUserSystem.getSysName());
+                    newMenuVO.setMenu(menuList);
+                    newMenuVOS.add(newMenuVO);
+                }
+                if (sysNum.equals(BIGSCREEN)){
+                    List<MenuVO> menuList = roleService.getMenuBySysNum("1010");
                     newMenuVO.setSysNum(sysNum);
                     newMenuVO.setSysName(tUserSystem.getSysName());
                     newMenuVO.setMenu(menuList);

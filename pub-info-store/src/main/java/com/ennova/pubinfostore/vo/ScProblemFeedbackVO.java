@@ -22,6 +22,17 @@ import java.util.List;
 @NoArgsConstructor
 public class ScProblemFeedbackVO {
 
+    @ApiModelProperty(value = "全部问题")
+    private Long totalProblem;
+    @ApiModelProperty(value = "待解决")
+    private Long toDoProblem;
+    @ApiModelProperty(value = "解决中")
+    private Long doingProblem;
+    @ApiModelProperty(value = "已解决")
+    private Long doneProblem;
+    @ApiModelProperty(value = "未解决")
+    private Long unDoneProblem;
+
     @ApiModelProperty(value = "")
     private Integer id;
 
@@ -35,7 +46,13 @@ public class ScProblemFeedbackVO {
      * 反馈人
      */
     @ApiModelProperty(value = "反馈人")
-    private String backUserName;
+    private String backPerson;
+
+    /**
+     * 挂起时间
+     */
+    @ApiModelProperty(value = "挂起时间")
+    private Long gqTime;
 
     /**
      * 问题来源

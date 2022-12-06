@@ -28,6 +28,6 @@
     <foreach item="item" index="index" collection="gxList" open="(" separator="," close=")">
       #{item}
     </foreach>
-    AND DATE_SUB(CURDATE(),INTERVAL 30 DAY) &lt;= DATE(order_date)
+    AND DATE_SUB(CURDATE(),INTERVAL 60 DAY) &lt;= DATE(order_date)
   </select>
 </mapper>
