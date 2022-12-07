@@ -27,7 +27,5 @@ public interface ScProblemFeedbackMapper {
 
     UserDTO selectById(@Param("id") Integer id);
 
-    List<ScProblemFeedback> selectAllByBackStatusOrDutyPerson(@Param("backStatus") Integer backStatus, @Param("dutyPerson") String dutyPerson);
-
-
+    List<ScProblemFeedback> selectAllByBackStatusOrDutyPerson(@Param("searchKey") String searchKey);
 }

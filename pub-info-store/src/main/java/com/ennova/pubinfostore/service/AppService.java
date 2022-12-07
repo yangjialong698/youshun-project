@@ -429,7 +429,7 @@ public class AppService {
         return i > 0 ? Callback.success() : Callback.error("删除失败");
     }
 
-    public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize, Integer backStatus, String dutyPerson) {
+    public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize,  String searchKey) {
         if(page==null || page<1){
             page = 1;
         }
@@ -438,13 +438,13 @@ public class AppService {
         }
         int index = (page - 1) * pageSize;
         ArrayList<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
-        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectAllByBackStatusOrDutyPerson(backStatus, dutyPerson);
+        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectAllByBackStatusOrDutyPerson(searchKey);
         if (CollectionUtil.isNotEmpty(scProblemFeedbacks)){
         long totalProblem = scProblemFeedbacks.size();
-        long toDoProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus()==3).count();
-        long doneProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus()==1).count();
-        long doingProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus()==2).count();
-        long unDoneProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus()==0).count();
+        long toDoProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("3")).count();
+        long doneProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("1")).count();
+        long doingProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("2")).count();
+        long unDoneProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("0")).count();
         scProblemFeedbacks.forEach(e->{
                 ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
                 long betweenHour = DateUtil.between(e.getCreateTime(), new Date(), DateUnit.HOUR);

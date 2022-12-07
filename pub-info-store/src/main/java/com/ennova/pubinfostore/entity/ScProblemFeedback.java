@@ -75,8 +75,8 @@ public class ScProblemFeedback {
     private Integer delFlag;
 
     /**
-     * 反馈状态（0-未解决 1-已解决）
+     * 反馈状态（0-未解决 1-已解决 解决中-2 代解决-3）
      */
-    @ApiModelProperty(value = "反馈状态（0-未解决 1-已解决）")
-    private Integer backStatus;
+    @ApiModelProperty(value = "反馈状态(0-未解决 1-已解决 解决中-2 代解决-3)")
+    private String backStatus;
 }

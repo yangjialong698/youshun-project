@@ -92,11 +92,10 @@ public class AppController {
 
     @ApiOperation(value = "APP移动端接口 - 问题反馈app主页列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "backStatus", value = "反馈状态", required = false),
-            @ApiImplicitParam(name = "dutyPerson", value = "责任人", required = false)
+            @ApiImplicitParam(name = "searchKey", value = "反馈状态/责任人", required = false),
     })
     @GetMapping("/getSfbDetailList")
-    public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize, Integer backStatus, String dutyPerson) {
-        return appService.getSfbDetailList(page,pageSize,backStatus,dutyPerson);
+    public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize, String searchKey) {
+        return appService.getSfbDetailList(page,pageSize,searchKey);
     }
 }

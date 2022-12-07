@@ -14,7 +14,7 @@
     <result column="duty_person" jdbcType="VARCHAR" property="dutyPerson" />
     <result column="problem_description" jdbcType="VARCHAR" property="problemDescription" />
     <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
-    <result column="back_status" jdbcType="INTEGER" property="backStatus" />
+    <result column="back_status" jdbcType="VARCHAR" property="backStatus" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
@@ -42,7 +42,7 @@
     values (#{backUserId,jdbcType=INTEGER}, #{backPerson,jdbcType=VARCHAR}, #{backDepartment,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dutyDepartment,jdbcType=VARCHAR}, 
       #{dutyPerson,jdbcType=VARCHAR}, #{problemDescription,jdbcType=VARCHAR}, #{delFlag,jdbcType=INTEGER}, 
-      #{backStatus,jdbcType=INTEGER})
+      #{backStatus,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfostore.entity.ScProblemFeedback" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -108,7 +108,7 @@
         #{delFlag,jdbcType=INTEGER},
       </if>
       <if test="backStatus != null">
-        #{backStatus,jdbcType=INTEGER},
+        #{backStatus,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -144,7 +144,7 @@
         del_flag = #{delFlag,jdbcType=INTEGER},
       </if>
       <if test="backStatus != null">
-        back_status = #{backStatus,jdbcType=INTEGER},
+        back_status = #{backStatus,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -161,7 +161,7 @@
       duty_person = #{dutyPerson,jdbcType=VARCHAR},
       problem_description = #{problemDescription,jdbcType=VARCHAR},
       del_flag = #{delFlag,jdbcType=INTEGER},
-      back_status = #{backStatus,jdbcType=INTEGER}
+      back_status = #{backStatus,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateBatch" parameterType="java.util.List">
@@ -215,7 +215,7 @@
       </trim>
       <trim prefix="back_status = case" suffix="end,">
         <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.backStatus,jdbcType=INTEGER}
+          when id = #{item.id,jdbcType=INTEGER} then #{item.backStatus,jdbcType=VARCHAR}
         </foreach>
       </trim>
     </trim>
@@ -234,7 +234,7 @@
       (#{item.backUserId,jdbcType=INTEGER}, #{item.backPerson,jdbcType=VARCHAR}, #{item.backDepartment,jdbcType=VARCHAR}, 
         #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.dutyDepartment,jdbcType=VARCHAR}, 
         #{item.dutyPerson,jdbcType=VARCHAR}, #{item.problemDescription,jdbcType=VARCHAR}, 
-        #{item.delFlag,jdbcType=INTEGER}, #{item.backStatus,jdbcType=INTEGER})
+        #{item.delFlag,jdbcType=INTEGER}, #{item.backStatus,jdbcType=VARCHAR})
     </foreach>
   </insert>
 
@@ -274,15 +274,12 @@
 
   <select id="selectAllByBackStatusOrDutyPerson" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from sc_problem_feedback
     where 1=1
-      <if test="backStatus != null and backStatus != ''">
-        and back_status = #{backStatus,jdbcType=NUMERIC}
-      </if>
-      <if test="dutyPerson != null and dutyPerson != ''">
-        and duty_person = #{dutyPerson,jdbcType=VARCHAR}
-      </if>
+    <if test="searchKey != null and searchKey != ''">
+      and  back_status like CONCAT('%',#{searchKey},'%')  or duty_person like CONCAT('%',#{searchKey},'%')
+    </if>
     order by  create_time desc
   </select>
 </mapper>
