@@ -448,14 +448,20 @@ public class AppService {
         long unDoneProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("0")).count();
         scProblemFeedbacks.forEach(e->{
                 ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
-                long betweenHour = DateUtil.between(e.getCreateTime(), new Date(), DateUnit.HOUR);
                 BeanUtils.copyProperties(e,scProblemFeedbackVO);
                 scProblemFeedbackVO.setTotalProblem(totalProblem);
                 scProblemFeedbackVO.setToDoProblem(toDoProblem);
                 scProblemFeedbackVO.setDoneProblem(doneProblem);
                 scProblemFeedbackVO.setDoingProblem(doingProblem);
                 scProblemFeedbackVO.setUnDoneProblem(unDoneProblem);
+                long betweenHour = DateUtil.between(e.getCreateTime(), new Date(), DateUnit.HOUR);
                 scProblemFeedbackVO.setGqTime(betweenHour);
+//                if(!e.getBackStatus().equals("1")){
+//
+//                }else {
+//
+//                }
+
                 scProblemFeedbackVOS.add(scProblemFeedbackVO);
             });
             baseVO = new BaseVO<>(pageing(index,pageSize,scProblemFeedbackVOS), new PageUtil(pageSize, scProblemFeedbackVOS.size(), page));
