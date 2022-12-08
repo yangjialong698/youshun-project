@@ -437,6 +437,7 @@ public class AppService {
             pageSize = 10;
         }
         int index = (page - 1) * pageSize;
+        BaseVO<ScProblemFeedbackVO> baseVO;
         ArrayList<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
         List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectAllByBackStatusOrDutyPerson(searchKey);
         if (CollectionUtil.isNotEmpty(scProblemFeedbacks)){
@@ -457,11 +458,11 @@ public class AppService {
                 scProblemFeedbackVO.setGqTime(betweenHour);
                 scProblemFeedbackVOS.add(scProblemFeedbackVO);
             });
-            BaseVO<ScProblemFeedbackVO> baseVO = new BaseVO<>(pageing(index,pageSize,scProblemFeedbackVOS), new PageUtil(pageSize, scProblemFeedbackVOS.size(), page));
-            return Callback.success(baseVO);
+            baseVO = new BaseVO<>(pageing(index,pageSize,scProblemFeedbackVOS), new PageUtil(pageSize, scProblemFeedbackVOS.size(), page));
         } else {
-            return null;
+            baseVO = new BaseVO<>(scProblemFeedbackVOS, new PageUtil(pageSize, 0, page));
         }
+        return Callback.success(baseVO);
     }
 
     public List<ScProblemFeedbackVO> pageing(int index, int pageSize, List<ScProblemFeedbackVO> list){
