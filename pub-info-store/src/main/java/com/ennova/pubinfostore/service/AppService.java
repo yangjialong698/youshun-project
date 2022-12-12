@@ -559,18 +559,13 @@ public class AppService {
                 scProblemFeedbackVO.setDoneProblem(doneProblem);
                 scProblemFeedbackVO.setDoingProblem(doingProblem);
                 scProblemFeedbackVO.setUnDoneProblem(unDoneProblem);
-
-                long betweenHour = DateUtil.between(e.getCreateTime(), new Date(), DateUnit.HOUR);
-                scProblemFeedbackVO.setGqTime(betweenHour);
-
-//                    if(!e.getBackStatus().equals("1")){
-//                        long betweenHour = DateUtil.between(e.getCreateTime(), new Date(), DateUnit.HOUR);
-//                        scProblemFeedbackVO.setGqTime(betweenHour);
-//                    }else {
-//                        long betweenHour = DateUtil.between(e.getCreateTime(), e.getGq(), DateUnit.HOUR);
-//                        scProblemFeedbackVO.setGqTime(betweenHour);
-//                    }
-
+                if(!e.getBackStatus().equals("1")){
+                    long betweenHour = DateUtil.between(e.getCreateTime(), new Date(), DateUnit.HOUR);
+                    scProblemFeedbackVO.setGqTime(betweenHour);
+                }else {
+                    long betweenHour = DateUtil.between(e.getCreateTime(), e.getSolveTime(), DateUnit.HOUR);
+                    scProblemFeedbackVO.setGqTime(betweenHour);
+                }
                 scProblemFeedbackVOS.add(scProblemFeedbackVO);
             });
             baseVO = new BaseVO<>(pageing(index,pageSize,scProblemFeedbackVOS), new PageUtil(pageSize, scProblemFeedbackVOS.size(), page));
