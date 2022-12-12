@@ -3,19 +3,25 @@ package com.ennova.pubinfostore.service;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
+import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfostore.dao.ScProblemFeedbackMapper;
 import com.ennova.pubinfostore.dao.ScProblemFileMapper;
 import com.ennova.pubinfostore.dto.UserDTO;
 import com.ennova.pubinfostore.entity.ScProblemFeedback;
+import com.ennova.pubinfostore.entity.ScProblemFile;
 import com.ennova.pubinfostore.service.feign.PubInfoUserClient;
 import com.ennova.pubinfostore.utils.ApiContext;
 import com.ennova.pubinfostore.utils.BeanConvertUtils;
-import com.ennova.pubinfostore.vo.ScProblemFeedbackDetailVO;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
 import com.getui.push.v2.sdk.api.PushApi;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Slf4j
@@ -42,7 +47,7 @@ public class AppService {
     private final ScProblemFileMapper scProblemFileMapper;
 
 
-   /* public void pushToSingleByCid(AppNotice appNotice) throws InterruptedException {
+    /*public void pushToSingleByCid(AppNotice appNotice) throws InterruptedException {
 
         apiContext = ApiContext.build();
         apiContext.configuration.setAnalyseStableDomainInterval(500);
@@ -178,7 +183,7 @@ public class AppService {
             String id = IdUtil.randomUUID().replace("-", "");
             appNotice.setId(id);
             appNotice.setCreateTime(new Date());
-            *//*appNoticeMapper.insertSelective(appNotice);*//*
+            appNoticeMapper.insertSelective(appNotice);
             return Callback.success(apiResult);
         } else {
             return Callback.error(apiResult.getMsg());
@@ -369,9 +374,9 @@ public class AppService {
         pushDTO.setPushChannel(pushChannel);
 
         return pushDTO;
-    }
+    }*/
 
-    public Callback pushFeedback(@NonNull ScProblemFeedbackVO scProblemFeedbackVO) throws InterruptedException, JsonProcessingException {
+    public Callback pushFeedback(@NonNull ScProblemFeedbackVO scProblemFeedbackVO){
 
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
@@ -380,25 +385,27 @@ public class AppService {
         ScProblemFeedback scProblemFeedback = BeanConvertUtils.convertTo(scProblemFeedbackVO, ScProblemFeedback::new);
         scProblemFeedback.setBackUserId(userVo.getId());
         UserDTO userDTO = scProblemFeedbackMapper.selectById(userVo.getId());
+        scProblemFeedback.setBackPerson(userDTO.getUserName());
         scProblemFeedback.setBackDepartment(userDTO.getDepartment());
         scProblemFeedback.setCreateTime(new Date());
         scProblemFeedback.setDelFlag(0);
-        scProblemFeedback.setBackStatus(0);
+        scProblemFeedback.setBackStatus("3");
         scProblemFeedbackMapper.insertSelective(scProblemFeedback);
         Integer id = scProblemFeedback.getId();
         if (CollectionUtil.isNotEmpty(scProblemFeedbackVO.getScProblemFileId())) {
             for (Integer scProblemFileId : scProblemFeedbackVO.getScProblemFileId()) {
                 ScProblemFile scProblemFile = scProblemFileMapper.selectByPrimaryKey(scProblemFileId);
                 scProblemFile.setProblemFeedbackId(id);
+                scProblemFile.setFileType(0);
                 scProblemFileMapper.updateByPrimaryKeySelective(scProblemFile);
             }
         }
-        AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
+/*        AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
                 .userid(userVo.getId().toString()).createTime(new Date()).cid(userDTO.getCid()).build();
         log.info(new ObjectMapper().writeValueAsString(appNotice));
-//        this.pushToSingleByCid(appNotice);
+        this.pushToSingleByCid(appNotice);*/
         return Callback.success(true);
-    }*/
+    }
 
     public Callback selectDutyDepartmentList() {
         return Callback.success(scProblemFeedbackMapper.selectDutyDepartmentList());
@@ -414,10 +421,10 @@ public class AppService {
             UserDTO userDTO = scProblemFeedbackMapper.selectById(scProblemFeedback.getBackUserId());
             ScProblemFeedbackVO scProblemFeedbackVO = BeanConvertUtils.convertTo(scProblemFeedback, ScProblemFeedbackVO::new);
             scProblemFeedbackVO.setBackPerson(userDTO.getUserName());
-            /*if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
-                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemId(scProblemFeedbackVO.getId());
+            if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
+                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemId(scProblemFeedbackVO.getId(), 0);
                 scProblemFeedbackVO.setFileVOList(scProblemFiles);
-            }*/
+            }
             return Callback.success(scProblemFeedbackVO);
         }
         return Callback.error("暂无数据");
@@ -428,6 +435,104 @@ public class AppService {
         int i = scProblemFeedbackMapper.updateByPrimaryKeySelective(build);
         return i > 0 ? Callback.success() : Callback.error("删除失败");
     }
+
+    public Callback<BaseVO<ScProblemFeedback>> getMyProblemFeedbackList(Integer page, Integer pageSize, String searchKey) {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        Page<ScProblemFeedbackVO> startPage = PageHelper.startPage(page, pageSize);
+        List<ScProblemFeedback> myProblemFeedbackList = scProblemFeedbackMapper.getMyProblemFeedbackList(searchKey, userVo.getId());
+        BaseVO<ScProblemFeedback> baseVO = new BaseVO<>(myProblemFeedbackList, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        return Callback.success(baseVO);
+    }
+
+    public Callback<BaseVO<ScProblemFeedback>> getMyHandleProblemList(Integer page, Integer pageSize, String searchKey) {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        Page<ScProblemFeedbackVO> startPage = PageHelper.startPage(page, pageSize);
+        List<ScProblemFeedback> myProblemFeedbackList = scProblemFeedbackMapper.getMyHandleProblemList(searchKey, userVo.getId());
+        BaseVO<ScProblemFeedback> baseVO = new BaseVO<>(myProblemFeedbackList, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        return Callback.success(baseVO);
+    }
+
+    public Callback<ScProblemFeedbackVO> getMyHandleDetail(Integer id) {
+        if (id != null) {
+            ScProblemFeedback scProblemFeedback = scProblemFeedbackMapper.selectByPrimaryKey(id);
+            UserDTO userDTO = scProblemFeedbackMapper.selectById(scProblemFeedback.getBackUserId());
+            ScProblemFeedbackVO scProblemFeedbackVO = BeanConvertUtils.convertTo(scProblemFeedback, ScProblemFeedbackVO::new);
+            scProblemFeedbackVO.setBackPerson(userDTO.getUserName());
+            if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
+                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemId(scProblemFeedbackVO.getId(), 1);
+                scProblemFeedbackVO.setFileVOList(scProblemFiles);
+            }
+            return Callback.success(scProblemFeedbackVO);
+        }
+        return Callback.error("暂无数据");
+    }
+
+    public Callback solveProblem(@NonNull ScProblemFeedbackVO scProblemFeedbackVO) {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        ScProblemFeedback scProblemFeedback = BeanConvertUtils.convertTo(scProblemFeedbackVO, ScProblemFeedback::new);
+        if (scProblemFeedback.getId() == null) {
+            return Callback.error("id不能为空");
+        }
+        scProblemFeedback.setProblemReason(scProblemFeedback.getProblemReason());
+        scProblemFeedback.setProblemDescription(scProblemFeedback.getProblemDescription());
+        scProblemFeedback.setUpdateTime(new Date());
+        scProblemFeedback.setBackStatus("2");
+        scProblemFeedbackMapper.updateByPrimaryKeySelective(scProblemFeedback);
+        Integer id = scProblemFeedback.getId();
+        if (CollectionUtil.isNotEmpty(scProblemFeedbackVO.getScProblemFileId())) {
+            for (Integer scProblemFileId : scProblemFeedbackVO.getScProblemFileId()) {
+                ScProblemFile scProblemFile = scProblemFileMapper.selectByPrimaryKey(scProblemFileId);
+                scProblemFile.setProblemFeedbackId(id);
+                scProblemFile.setFileType(1);
+                scProblemFileMapper.updateByPrimaryKeySelective(scProblemFile);
+            }
+        }
+        return Callback.success(true);
+    }
+
+    public Callback solveProblemFeedback(@NonNull ScProblemFeedbackVO scProblemFeedbackVO) {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        ScProblemFeedback scProblemFeedback = BeanConvertUtils.convertTo(scProblemFeedbackVO, ScProblemFeedback::new);
+        scProblemFeedback.setSolveTime(new Date());
+        scProblemFeedback.setBackStatus("1");
+        int i = scProblemFeedbackMapper.updateByPrimaryKeySelective(scProblemFeedback);
+        if (i > 0) {
+            return Callback.success(true);
+        }
+        return Callback.error("确认失败");
+    }
+
+    public Callback NoSolveProblemFeedback(@NonNull ScProblemFeedbackVO scProblemFeedbackVO) {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        ScProblemFeedback scProblemFeedback = BeanConvertUtils.convertTo(scProblemFeedbackVO, ScProblemFeedback::new);
+        scProblemFeedback.setBackStatus("0");
+        int i = scProblemFeedbackMapper.updateByPrimaryKeySelective(scProblemFeedback);
+        if (i > 0) {
+            return Callback.success(true);
+        }
+        return Callback.error("未确认失败");
+    }
+
 
     public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize,  String searchKey) {
         if(page==null || page<1){
@@ -486,4 +591,5 @@ public class AppService {
         list = list.subList(index, lastIndex);
         return list;
     }
+
 }

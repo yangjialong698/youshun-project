@@ -89,4 +89,10 @@ public class ScProblemFile {
      */
     @ApiModelProperty(value = "上传人ID")
     private Integer userId;
+
+    /**
+     * 文件类型（0-反馈问题类型 1-解决问题类型）
+     */
+    @ApiModelProperty(value = "文件类型（0-反馈问题类型 1-解决问题类型）")
+    private Integer fileType;
 }

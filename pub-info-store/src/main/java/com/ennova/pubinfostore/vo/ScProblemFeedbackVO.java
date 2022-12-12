@@ -57,7 +57,7 @@ public class ScProblemFeedbackVO {
     /**
      * 问题来源
      */
-    @ApiModelProperty(value="问题来源")
+    @ApiModelProperty(value="问题来源(反馈人部门)")
     private String backDepartment;
 
     /**
@@ -90,7 +90,7 @@ public class ScProblemFeedbackVO {
      * 责任人id
      */
     @ApiModelProperty(value = "责任人id")
-    private String dutyPersonId;
+    private Integer dutyPersonId;
 
     /**
      * 责任人
@@ -105,15 +105,34 @@ public class ScProblemFeedbackVO {
     private String problemDescription;
 
     /**
+     * 问题原因
+     */
+    @ApiModelProperty(value = "问题原因")
+    private String problemReason;
+
+    /**
+     * 解决措施
+     */
+    @ApiModelProperty(value = "解决措施")
+    private String problemSolution;
+
+    /**
+     * 解决时间
+     */
+    @ApiModelProperty(value = "解决时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date solveTime;
+
+    /**
      * 是否删除
      */
     @ApiModelProperty(value = "是否删除")
     private Integer delFlag;
 
     /**
-     * 反馈状态（0-未解决 1-已解决 解决中-2 代解决-3）
+     * 反馈状态（0-未解决 1-已解决 2-解决中 3-待解决）
      */
-    @ApiModelProperty(value = "反馈状态(0-未解决 1-已解决 解决中-2 代解决-3)")
+    @ApiModelProperty(value = "反馈状态(0-未解决 1-已解决 2-解决中 3-待解决)")
     private String backStatus;
 
     @ApiModelProperty(value = "附件ID")

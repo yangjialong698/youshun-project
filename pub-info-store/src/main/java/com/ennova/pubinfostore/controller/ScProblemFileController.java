@@ -30,14 +30,13 @@ public class ScProblemFileController {
         return scProblemFileService.selectImageFile(file);
     }
 
-
     // 文件上传
-    @ApiOperation(value = "问题反馈选择文件-视频")
+    /*@ApiOperation(value = "问题反馈选择文件-视频")
     @ApiOperationSort(value = 2)
     @PostMapping("/selectVideoFile")
     public Callback<FileVO> selectVideoFile(MultipartFile file){
         return scProblemFileService.selectVideoFile(file);
-    }
+    }*/
 
     @ApiOperation(value = "问题反馈文件 - 附件下载")
     @GetMapping("/netDownLoadFile")

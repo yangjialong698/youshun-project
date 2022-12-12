@@ -20,14 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ws.schild.jave.Encoder;
-import ws.schild.jave.MultimediaObject;
-import ws.schild.jave.encode.AudioAttributes;
-import ws.schild.jave.encode.EncodingAttributes;
-import ws.schild.jave.encode.VideoAttributes;
-import ws.schild.jave.info.AudioInfo;
-import ws.schild.jave.info.VideoInfo;
-import ws.schild.jave.info.VideoSize;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -135,7 +126,7 @@ public class ScProblemFileService {
         }
     }
 
-    public Callback<FileVO> selectVideoFile(MultipartFile file) {
+    /*public Callback<FileVO> selectVideoFile(MultipartFile file) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
@@ -251,7 +242,7 @@ public class ScProblemFileService {
             e.printStackTrace();
         }
     }
-
+*/
     public void netDownLoadFile(String netAddress, String filename, HttpServletResponse response) throws Exception {
         URL url;
         URLConnection conn;

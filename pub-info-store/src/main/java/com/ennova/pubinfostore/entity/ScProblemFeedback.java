@@ -1,12 +1,14 @@
 package com.ennova.pubinfostore.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * 问题反馈表
@@ -42,12 +44,14 @@ public class ScProblemFeedback {
      * 反馈时间
      */
     @ApiModelProperty(value = "反馈时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 修改时间
      */
     @ApiModelProperty(value = "修改时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     /**
@@ -55,6 +59,12 @@ public class ScProblemFeedback {
      */
     @ApiModelProperty(value = "责任部门")
     private String dutyDepartment;
+
+    /**
+     * 责任人id
+     */
+    @ApiModelProperty(value = "责任人id")
+    private Integer dutyPersonId;
 
     /**
      * 责任人
@@ -75,8 +85,27 @@ public class ScProblemFeedback {
     private Integer delFlag;
 
     /**
-     * 反馈状态（0-未解决 1-已解决 解决中-2 代解决-3）
+     * 反馈状态（0-未解决 1-已解决 2-解决中 3-待解决）
      */
-    @ApiModelProperty(value = "反馈状态(0-未解决 1-已解决 解决中-2 代解决-3)")
+    @ApiModelProperty(value = "反馈状态(0-未解决 1-已解决 2-解决中 3-待解决)")
     private String backStatus;
+
+    /**
+     * 问题原因
+     */
+    @ApiModelProperty(value = "问题原因")
+    private String problemReason;
+
+    /**
+     * 解决措施
+     */
+    @ApiModelProperty(value = "解决措施")
+    private String problemSolution;
+
+    /**
+     * 解决时间
+     */
+    @ApiModelProperty(value = "解决时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date solveTime;
 }
