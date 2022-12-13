@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import java.util.List;
 
 @Service
 @Slf4j
+@Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class AppService {
 
@@ -422,7 +424,7 @@ public class AppService {
             ScProblemFeedbackVO scProblemFeedbackVO = BeanConvertUtils.convertTo(scProblemFeedback, ScProblemFeedbackVO::new);
             scProblemFeedbackVO.setBackPerson(userDTO.getUserName());
             if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
-                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemId(scProblemFeedbackVO.getId(), 0);
+                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemId(scProblemFeedbackVO.getId(), 1);
                 scProblemFeedbackVO.setFileVOList(scProblemFiles);
             }
             return Callback.success(scProblemFeedbackVO);
@@ -442,10 +444,20 @@ public class AppService {
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
-        Page<ScProblemFeedbackVO> startPage = PageHelper.startPage(page, pageSize);
+        Page<ScProblemFeedback> startPage = PageHelper.startPage(page, pageSize);
         List<ScProblemFeedback> myProblemFeedbackList = scProblemFeedbackMapper.getMyProblemFeedbackList(searchKey, userVo.getId());
         BaseVO<ScProblemFeedback> baseVO = new BaseVO<>(myProblemFeedbackList, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
+    }
+
+    public Callback<ScProblemFeedbackVO> getMyProblemsStatus() {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        ScProblemFeedbackVO myProblemsStatus = scProblemFeedbackMapper.getMyProblemsStatus(userVo.getId());
+        return Callback.success(myProblemsStatus);
     }
 
     public Callback<BaseVO<ScProblemFeedback>> getMyHandleProblemList(Integer page, Integer pageSize, String searchKey) {
@@ -454,10 +466,20 @@ public class AppService {
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
-        Page<ScProblemFeedbackVO> startPage = PageHelper.startPage(page, pageSize);
+        Page<ScProblemFeedback> startPage = PageHelper.startPage(page, pageSize);
         List<ScProblemFeedback> myProblemFeedbackList = scProblemFeedbackMapper.getMyHandleProblemList(searchKey, userVo.getId());
         BaseVO<ScProblemFeedback> baseVO = new BaseVO<>(myProblemFeedbackList, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
+    }
+
+    public Callback<ScProblemFeedbackVO> getMyHandleProblemsStatus() {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        ScProblemFeedbackVO myProblemsStatus = scProblemFeedbackMapper.getMyHandleProblemsStatus(userVo.getId());
+        return Callback.success(myProblemsStatus);
     }
 
     public Callback<ScProblemFeedbackVO> getMyHandleDetail(Integer id) {
@@ -467,7 +489,7 @@ public class AppService {
             ScProblemFeedbackVO scProblemFeedbackVO = BeanConvertUtils.convertTo(scProblemFeedback, ScProblemFeedbackVO::new);
             scProblemFeedbackVO.setBackPerson(userDTO.getUserName());
             if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
-                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemId(scProblemFeedbackVO.getId(), 1);
+                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemId(scProblemFeedbackVO.getId(), 0);
                 scProblemFeedbackVO.setFileVOList(scProblemFiles);
             }
             return Callback.success(scProblemFeedbackVO);

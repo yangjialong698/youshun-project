@@ -93,6 +93,12 @@ public class AppController {
         return appService.getMyProblemFeedbackList(page,pageSize,searchKey);
     }
 
+    @ApiOperation(value = "APP移动端接口 - 我反馈的问题状态")
+    @GetMapping("/getMyProblemsStatus")
+    public Callback<ScProblemFeedbackVO> getMyProblemsStatus() {
+        return appService.getMyProblemsStatus();
+    }
+
     @ApiOperation(value = "APP移动端接口 - 我经办的")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "searchKey", value = "问题描述/反馈人", required = false),
@@ -102,6 +108,12 @@ public class AppController {
                                                                       @RequestParam(defaultValue = "10") Integer pageSize,
                                                                       String searchKey) {
         return appService.getMyHandleProblemList(page,pageSize,searchKey);
+    }
+
+    @ApiOperation(value = "APP移动端接口 - 我经办的问题状态")
+    @GetMapping("/getMyHandleProblemsStatus")
+    public Callback<ScProblemFeedbackVO> getMyHandleProblemsStatus() {
+        return appService.getMyHandleProblemsStatus();
     }
 
     @ApiOperation(value = "APP移动端接口 - 我经办的查看详情")

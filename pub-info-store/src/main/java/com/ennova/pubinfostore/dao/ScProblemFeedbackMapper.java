@@ -4,6 +4,7 @@ import com.ennova.pubinfostore.dto.UserDTO;
 import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.vo.DutyDepartmentVO;
 import com.ennova.pubinfostore.vo.DutyPersonVO;
+import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -36,4 +37,8 @@ public interface ScProblemFeedbackMapper {
     List<ScProblemFeedback> getMyProblemFeedbackList(@Param("searchKey") String searchKey, @Param("userId") Integer userId);
 
     List<ScProblemFeedback> getMyHandleProblemList(@Param("searchKey") String searchKey, @Param("userId") Integer userId);
+
+    ScProblemFeedbackVO getMyProblemsStatus(@Param("userId") Integer userId);
+
+    ScProblemFeedbackVO getMyHandleProblemsStatus(@Param("userId") Integer userId);
 }
