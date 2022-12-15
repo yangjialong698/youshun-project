@@ -176,6 +176,10 @@
             <if test="muduleType != null">
                 and erp.mudule_type = #{muduleType,jdbcType=INTEGER}
             </if>
+            <!--
+            <![CDATA[
+            and date_format(erp.create_time, '%Y-%m-%d') >= date_sub(now(), interval 3 day)
+            ]]>-->
         </where>
         order by erp.create_time asc
     </select>
@@ -183,11 +187,11 @@
     <select id="selectBymuduleTypeLikes" parameterType="java.lang.Integer"
             resultType="com.ennova.pubinfoproduct.vo.ErpExceptionVO">
         select erp.id,
-        erp.mudule_type              as muduleType,
-        erp.module_exception_message as moduleExceptionMessage,
-        erp.del_flag                 as delFlag,
-        erp.create_time              as createTime,
-        erp.update_time              as updateTime
+               erp.mudule_type              as muduleType,
+               erp.module_exception_message as moduleExceptionMessage,
+               erp.del_flag                 as delFlag,
+               erp.create_time              as createTime,
+               erp.update_time              as updateTime
         from erp_exception erp
         <where>
             erp.del_flag = 0
@@ -211,5 +215,4 @@
             </if>
         </where>
     </select>
-
 </mapper>

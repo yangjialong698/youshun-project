@@ -53,7 +53,7 @@ public class AppController {
         return appService.pushFeedback(scProblemFeedbackVO);
     }
 
-    @ApiOperation(value = "APP移动端接口 - 责任部门")
+    /*@ApiOperation(value = "APP移动端接口 - 责任部门")
     @GetMapping("/selectDutyDepartmentList")
     public Callback selectDutyDepartmentList() {
         return appService.selectDutyDepartmentList();
@@ -63,7 +63,7 @@ public class AppController {
     @GetMapping("/selectDutyPersonList")
     public Callback selectDutyPersonList(String departmentId) {
         return appService.selectDutyPersonList(departmentId);
-    }
+    }*/
 
     @ApiOperation(value = "APP移动端接口 - 我反馈的查看详情")
     @ApiImplicitParams({

@@ -300,14 +300,29 @@
         select t1.dept_id   as id,
                t1.dept_name as department
         from t_dept t1
-        where t1.parent_id = 720560694
+        where t1.parent_id = 533915348
           and is_delete != 1
+    </select>
+
+    <select id="selectDutyDepartmentLists" resultType="com.ennova.pubinfostore.vo.DutyDepartmentVO">
+        select t1.dept_id   as id,
+               t1.dept_name as department
+        from t_dept t1
+        <where>
+            <if test="departmentId != null and departmentId != ''">
+                and t1.parent_id like concat('%', #{departmentId}, '%')
+            </if>
+        </where>
+        and is_delete != 1
     </select>
 
     <select id="selectDutyPersonList" resultType="com.ennova.pubinfostore.vo.DutyPersonVO">
         select t1.id,
                t1.username
         from t_user t1
+                 join
+             t_dept t2
+             on t1.department = t2.dept_id
         where is_delete != 1
         <if test="departmentId != null and departmentId != ''">
             and t1.department like concat('%', #{departmentId}, '%')
@@ -371,9 +386,9 @@
 
     <select id="getMyHandleProblemsStatus" resultType="com.ennova.pubinfostore.vo.ScProblemFeedbackVO">
         select sum(spf.back_status = 0) as unDoneProblem,
-        sum(spf.back_status = 1) as doneProblem,
-        sum(spf.back_status = 2) as doingProblem,
-        sum(spf.back_status = 3) as toDoProblem
+               sum(spf.back_status = 1) as doneProblem,
+               sum(spf.back_status = 2) as doingProblem,
+               sum(spf.back_status = 3) as toDoProblem
         from sc_problem_feedback spf
         where 1 = 1
         <if test="userId != null">

@@ -130,9 +130,9 @@ public class ScProblemFeedbackVO {
     private Integer delFlag;
 
     /**
-     * 反馈状态（0-未解决 1-已解决 2-解决中 3-待解决）
+     * 反馈状态（0-未解决 1-已解决 2-待确认 3-待解决）
      */
-    @ApiModelProperty(value = "反馈状态(0-未解决 1-已解决 2-解决中 3-待解决)")
+    @ApiModelProperty(value = "反馈状态(0-未解决 1-已解决 2-待确认 3-待解决)")
     private String backStatus;
 
     @ApiModelProperty(value = "附件ID")

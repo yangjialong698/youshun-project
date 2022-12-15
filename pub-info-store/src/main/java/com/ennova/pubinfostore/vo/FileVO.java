@@ -17,5 +17,7 @@ public class FileVO {
     @ApiModelProperty(value = "真实文件名")
     private String newfileName;
 
+    @ApiModelProperty(value = "压缩文档访问路径")
+    private String ysFileUrl;
 
 }

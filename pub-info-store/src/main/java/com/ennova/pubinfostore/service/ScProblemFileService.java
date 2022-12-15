@@ -90,7 +90,7 @@ public class ScProblemFileService {
                 .fileSize(map.get("fileSize")).openFile(0).delFlag(0).userId(userVo.getId()).createTime(new Date()).build();
         int count = scProblemFileMapper.insertSelective(scProblemFile);
         if (count > 0) {
-            FileVO fileVo = FileVO.builder().id(scProblemFile.getId()).fileName(map.get("fileName")).newfileName(subname).build();
+            FileVO fileVo = FileVO.builder().id(scProblemFile.getId()).fileName(map.get("fileName")).newfileName(subname).ysFileUrl(localUrl + "/file/" + newName).build();
             return Callback.success(fileVo);
         }
         return Callback.error(2, "选择文件失败!");
