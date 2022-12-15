@@ -53,11 +53,11 @@ public class PrdUserManageService {
         return tDeptDingArrayList;
     }
 
-    public Callback<String> queryNameByManageId(String manageId) {
-        String username = tUserDingMapper.selectByUserId(manageId);
-        if (StringUtils.isNotEmpty(username)){
-            return Callback.success(username);
+    public Callback<TUserDing> queryNameByManageId(String manageId) {
+        TUserDing tUserDing = tUserDingMapper.selectByUserId(manageId);
+        if (null != tUserDing){
+            return Callback.success(tUserDing);
         }
-        return Callback.error("无该用户名称!");
+        return Callback.success(new TUserDing());
     }
 }

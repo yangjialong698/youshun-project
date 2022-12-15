@@ -32,7 +32,7 @@ public class PrdUserManageController {
 
     @ApiOperation(value = "APP移动端接口 - 根据manageId查询用户姓名")
     @GetMapping("/queryNameByManageId")
-    public Callback<String> queryNameByManageId(String manageId) {
+    public Callback<TUserDing> queryNameByManageId(String manageId) {
         return prdUserManageService.queryNameByManageId(manageId);
     }
 }

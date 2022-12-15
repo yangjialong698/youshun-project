@@ -324,9 +324,9 @@
     </foreach>
   </insert>
 
-  <select id="selectByUserId" resultType="java.lang.String">
+  <select id="selectByUserId" resultMap="BaseResultMap">
     select
-    username
+    <include refid="Base_Column_List" />
     from t_user_ding
     where
     user_id = #{userId,jdbcType=VARCHAR}
