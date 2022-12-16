@@ -26,6 +26,8 @@ public interface ScProblemFileMapper {
 
     List<ScProblemFile> selectFilesByProblemId(@Param("ProblemId") Integer ProblemId, @Param("fileType") Integer fileType);
 
+    List<ScProblemFile> selectFilesByProblemIds(@Param("ProblemId") Integer ProblemId, @Param("userId")Integer userId);
+
     List<ScProblemFile> selectAllByFileMd5AndUserId(@Param("fileMd5")String fileMd5, @Param("userId")Integer userId);
 
     int selectByFileMd5(@Param("fileMd5") String fileMd5);
