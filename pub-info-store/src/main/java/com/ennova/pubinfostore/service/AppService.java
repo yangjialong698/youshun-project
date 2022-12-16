@@ -417,6 +417,26 @@ public class AppService {
         return Callback.success(scProblemFeedbackMapper.selectDutyPersonList(departmentId));
     }
 
+    public Callback<ScProblemFeedbackVO> getDetails(Integer id) {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        if (id != null) {
+            ScProblemFeedback scProblemFeedback = scProblemFeedbackMapper.selectByPrimaryKey(id);
+            UserDTO userDTO = scProblemFeedbackMapper.selectById(scProblemFeedback.getBackUserId());
+            ScProblemFeedbackVO scProblemFeedbackVO = BeanConvertUtils.convertTo(scProblemFeedback, ScProblemFeedbackVO::new);
+            scProblemFeedbackVO.setBackPerson(userDTO.getUserName());
+            if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
+                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemIds(scProblemFeedbackVO.getId(), userVo.getId());
+                scProblemFeedbackVO.setFileVOList(scProblemFiles);
+            }
+            return Callback.success(scProblemFeedbackVO);
+        }
+        return Callback.error("暂无数据");
+    }
+
     public Callback<ScProblemFeedbackVO> getDetail(Integer id) {
         if (id != null) {
             ScProblemFeedback scProblemFeedback = scProblemFeedbackMapper.selectByPrimaryKey(id);

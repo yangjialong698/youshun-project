@@ -65,6 +65,15 @@ public class AppController {
         return appService.selectDutyPersonList(departmentId);
     }*/
 
+    @ApiOperation(value = "APP移动端接口 - 首页查看详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "详情ID", required = true)
+    })
+    @GetMapping("/getDetails")
+    public Callback<ScProblemFeedbackVO> getDetails(Integer id) {
+        return appService.getDetails(id);
+    }
+
     @ApiOperation(value = "APP移动端接口 - 我反馈的查看详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "详情ID", required = true)
