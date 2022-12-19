@@ -21,7 +21,7 @@ public class AppController {
 
     private final AppService appService;
 
-    /*@ApiOperation(value = "APP移动端接口-单个用户消息推送")
+  /*  @ApiOperation(value = "APP移动端接口-单个用户消息推送")
     @PostMapping("/pushToSingleByCid")
     public Callback<ApiResult> pushToSingleByCid(@RequestBody AppNotice appNotice) throws InterruptedException{
         return appService.pushToSingleByCid(appNotice);
@@ -49,7 +49,7 @@ public class AppController {
     @ApiOperation(value = "APP移动端接口 - 问题反馈")
     @PostMapping("/pushFeedback")
     public Callback pushFeedback(@RequestBody @Validated @ApiParam(value = "新增问题反馈请求参数", required = true)
-                                         ScProblemFeedbackVO scProblemFeedbackVO){
+                                         ScProblemFeedbackVO scProblemFeedbackVO) throws InterruptedException {
         return appService.pushFeedback(scProblemFeedbackVO);
     }
 

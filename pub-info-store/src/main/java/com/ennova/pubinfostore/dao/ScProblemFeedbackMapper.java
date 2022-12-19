@@ -1,5 +1,6 @@
 package com.ennova.pubinfostore.dao;
 
+import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfostore.dto.UserDTO;
 import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.vo.DutyDepartmentVO;
@@ -41,4 +42,6 @@ public interface ScProblemFeedbackMapper {
     ScProblemFeedbackVO getMyProblemsStatus(@Param("userId") Integer userId);
 
     ScProblemFeedbackVO getMyHandleProblemsStatus(@Param("userId") Integer userId);
+
+    UserVO selectByUserId(@Param("userId") String userId);
 }

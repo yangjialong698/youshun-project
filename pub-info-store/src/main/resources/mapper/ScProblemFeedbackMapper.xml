@@ -403,11 +403,20 @@
         where 1 = 1
         <if test="searchKey != null and searchKey != ''">
             and problem_description like CONCAT('%', #{searchKey}, '%')
-               or back_person like CONCAT('%', #{searchKey}, '%')
+            or back_person like CONCAT('%', #{searchKey}, '%')
         </if>
         <if test="userId != null">
             and duty_person_id = #{userId,jdbcType=INTEGER}
         </if>
         order by create_time desc
+    </select>
+
+    <select id="selectByUserId" resultType="com.ennova.pubinfocommon.vo.UserVO">
+        select id
+        from t_user
+        where 1 = 1
+        <if test="userId != null">
+            and user_id = #{userId,jdbcType=INTEGER}
+        </if>
     </select>
 </mapper>

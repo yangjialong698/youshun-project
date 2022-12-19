@@ -3,6 +3,7 @@ package com.ennova.pubinfostore.service;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
@@ -12,27 +13,48 @@ import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfostore.dao.ScProblemFeedbackMapper;
 import com.ennova.pubinfostore.dao.ScProblemFileMapper;
 import com.ennova.pubinfostore.dto.UserDTO;
+import com.ennova.pubinfostore.entity.AppNotice;
 import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.entity.ScProblemFile;
 import com.ennova.pubinfostore.service.feign.PubInfoUserClient;
 import com.ennova.pubinfostore.utils.ApiContext;
 import com.ennova.pubinfostore.utils.BeanConvertUtils;
+import com.ennova.pubinfostore.vo.AppUserVO;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
+import com.getui.push.v2.sdk.ApiHelper;
 import com.getui.push.v2.sdk.api.PushApi;
+import com.getui.push.v2.sdk.common.ApiResult;
+import com.getui.push.v2.sdk.dto.CommonEnum;
+import com.getui.push.v2.sdk.dto.req.Audience;
+import com.getui.push.v2.sdk.dto.req.AudienceDTO;
+import com.getui.push.v2.sdk.dto.req.Settings;
+import com.getui.push.v2.sdk.dto.req.Strategy;
+import com.getui.push.v2.sdk.dto.req.message.PushChannel;
+import com.getui.push.v2.sdk.dto.req.message.PushDTO;
+import com.getui.push.v2.sdk.dto.req.message.PushMessage;
+import com.getui.push.v2.sdk.dto.req.message.android.AndroidDTO;
+import com.getui.push.v2.sdk.dto.req.message.android.GTNotification;
+import com.getui.push.v2.sdk.dto.req.message.android.ThirdNotification;
+import com.getui.push.v2.sdk.dto.req.message.android.Ups;
+import com.getui.push.v2.sdk.dto.req.message.ios.Alert;
+import com.getui.push.v2.sdk.dto.req.message.ios.Aps;
+import com.getui.push.v2.sdk.dto.req.message.ios.IosDTO;
+import com.getui.push.v2.sdk.dto.res.TaskIdDTO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -49,7 +71,7 @@ public class AppService {
     private final ScProblemFileMapper scProblemFileMapper;
 
 
-    /*public void pushToSingleByCid(AppNotice appNotice) throws InterruptedException {
+    public void pushToSingleByCid(AppNotice appNotice) throws InterruptedException {
 
         apiContext = ApiContext.build();
         apiContext.configuration.setAnalyseStableDomainInterval(500);
@@ -185,7 +207,7 @@ public class AppService {
             String id = IdUtil.randomUUID().replace("-", "");
             appNotice.setId(id);
             appNotice.setCreateTime(new Date());
-            appNoticeMapper.insertSelective(appNotice);
+//            appNoticeMapper.insertSelective(appNotice);
             return Callback.success(apiResult);
         } else {
             return Callback.error(apiResult.getMsg());
@@ -376,9 +398,9 @@ public class AppService {
         pushDTO.setPushChannel(pushChannel);
 
         return pushDTO;
-    }*/
+    }
 
-    public Callback pushFeedback(@NonNull ScProblemFeedbackVO scProblemFeedbackVO){
+    public Callback pushFeedback(@NonNull ScProblemFeedbackVO scProblemFeedbackVO) throws InterruptedException {
 
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
@@ -387,8 +409,10 @@ public class AppService {
         ScProblemFeedback scProblemFeedback = BeanConvertUtils.convertTo(scProblemFeedbackVO, ScProblemFeedback::new);
         scProblemFeedback.setBackUserId(userVo.getId());
         UserDTO userDTO = scProblemFeedbackMapper.selectById(userVo.getId());
+        Integer dutyPersonId = scProblemFeedbackMapper.selectByUserId(scProblemFeedbackVO.getDutyPersonId().toString()).getId();
         scProblemFeedback.setBackPerson(userDTO.getUserName());
         scProblemFeedback.setBackDepartment(userDTO.getDepartment());
+        scProblemFeedback.setDutyPersonId(dutyPersonId);
         scProblemFeedback.setCreateTime(new Date());
         scProblemFeedback.setDelFlag(0);
         scProblemFeedback.setBackStatus("3");
@@ -402,10 +426,9 @@ public class AppService {
                 scProblemFileMapper.updateByPrimaryKeySelective(scProblemFile);
             }
         }
-/*        AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
+        AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
                 .userid(userVo.getId().toString()).createTime(new Date()).cid(userDTO.getCid()).build();
-        log.info(new ObjectMapper().writeValueAsString(appNotice));
-        this.pushToSingleByCid(appNotice);*/
+        this.pushToSingleByCid(appNotice);
         return Callback.success(true);
     }
 
@@ -429,7 +452,7 @@ public class AppService {
             ScProblemFeedbackVO scProblemFeedbackVO = BeanConvertUtils.convertTo(scProblemFeedback, ScProblemFeedbackVO::new);
             scProblemFeedbackVO.setBackPerson(userDTO.getUserName());
             if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
-                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemIds(scProblemFeedbackVO.getId(), userVo.getId());
+                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemIds(scProblemFeedbackVO.getId());
                 scProblemFeedbackVO.setFileVOList(scProblemFiles);
             }
             return Callback.success(scProblemFeedbackVO);
