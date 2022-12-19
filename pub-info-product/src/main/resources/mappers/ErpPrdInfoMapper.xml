@@ -133,4 +133,11 @@
         #{item.prdUnit,jdbcType=VARCHAR})
     </foreach>
   </insert>
+
+  <select id="selectByPrdNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from erp_prd_info
+        where prd_no=#{prdNo,jdbcType=VARCHAR}
+  </select>
 </mapper>

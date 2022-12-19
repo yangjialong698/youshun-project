@@ -173,6 +173,7 @@
       #{item.id,jdbcType=INTEGER}
     </foreach>
   </update>
+
   <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into erp_rework_repair
@@ -185,4 +186,10 @@
         #{item.reworkTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from erp_rework_repair
+  </select>
 </mapper>
