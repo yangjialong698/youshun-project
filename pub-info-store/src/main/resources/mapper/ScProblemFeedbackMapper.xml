@@ -11,7 +11,7 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="duty_department" jdbcType="VARCHAR" property="dutyDepartment"/>
-        <result column="duty_person_id" jdbcType="INTEGER" property="dutyPersonId"/>
+        <result column="duty_person_id" jdbcType="VARCHAR" property="dutyPersonId"/>
         <result column="duty_person" jdbcType="VARCHAR" property="dutyPerson"/>
         <result column="problem_description" jdbcType="VARCHAR" property="problemDescription"/>
         <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
@@ -131,7 +131,7 @@
                 #{dutyDepartment,jdbcType=VARCHAR},
             </if>
             <if test="dutyPersonId != null">
-                #{dutyPersonId,jdbcType=INTEGER},
+                #{dutyPersonId,jdbcType=VARCHAR},
             </if>
             <if test="dutyPerson != null">
                 #{dutyPerson,jdbcType=VARCHAR},
@@ -179,7 +179,7 @@
                 duty_department = #{dutyDepartment,jdbcType=VARCHAR},
             </if>
             <if test="dutyPersonId != null">
-                duty_person_id = #{dutyPersonId,jdbcType=INTEGER},
+                duty_person_id = #{dutyPersonId,jdbcType=VARCHAR},
             </if>
             <if test="dutyPerson != null">
                 duty_person = #{dutyPerson,jdbcType=VARCHAR},
@@ -304,17 +304,6 @@
           and is_delete != 1
     </select>
 
-    <select id="selectDutyDepartmentLists" resultType="com.ennova.pubinfostore.vo.DutyDepartmentVO">
-        select t1.dept_id   as id,
-               t1.dept_name as department
-        from t_dept t1
-        <where>
-            <if test="departmentId != null and departmentId != ''">
-                and t1.parent_id like concat('%', #{departmentId}, '%')
-            </if>
-        </where>
-        and is_delete != 1
-    </select>
 
     <select id="selectDutyPersonList" resultType="com.ennova.pubinfostore.vo.DutyPersonVO">
         select t1.id,
@@ -392,7 +381,7 @@
         from sc_problem_feedback spf
         where 1 = 1
         <if test="userId != null">
-            and duty_person_id = #{userId,jdbcType=INTEGER}
+            and duty_person_id like CONCAT(#{userId,jdbcType=VARCHAR})
         </if>
     </select>
 
@@ -406,7 +395,7 @@
             or back_person like CONCAT('%', #{searchKey}, '%')
         </if>
         <if test="userId != null">
-            and duty_person_id = #{userId,jdbcType=INTEGER}
+            and duty_person_id like CONCAT(#{userId,jdbcType=VARCHAR})
         </if>
         order by create_time desc
     </select>
@@ -415,8 +404,8 @@
         select id
         from t_user
         where 1 = 1
-        <if test="userId != null">
-            and user_id = #{userId,jdbcType=INTEGER}
+        <if test="userId != null and userId != ''">
+            and user_id like CONCAT(#{userId,jdbcType=VARCHAR})
         </if>
     </select>
 </mapper>

@@ -409,7 +409,8 @@ public class AppService {
         ScProblemFeedback scProblemFeedback = BeanConvertUtils.convertTo(scProblemFeedbackVO, ScProblemFeedback::new);
         scProblemFeedback.setBackUserId(userVo.getId());
         UserDTO userDTO = scProblemFeedbackMapper.selectById(userVo.getId());
-        Integer dutyPersonId = scProblemFeedbackMapper.selectByUserId(scProblemFeedbackVO.getDutyPersonId().toString()).getId();
+        String dutyPersonId = scProblemFeedbackMapper.selectByUserId(scProblemFeedbackVO.getDutyPersonId()).getId().toString();
+        log.debug("dutyPersonId: " + dutyPersonId);
         scProblemFeedback.setBackPerson(userDTO.getUserName());
         scProblemFeedback.setBackDepartment(userDTO.getDepartment());
         scProblemFeedback.setDutyPersonId(dutyPersonId);
@@ -426,9 +427,9 @@ public class AppService {
                 scProblemFileMapper.updateByPrimaryKeySelective(scProblemFile);
             }
         }
-        AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
+        /*AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
                 .userid(userVo.getId().toString()).createTime(new Date()).cid(userDTO.getCid()).build();
-        this.pushToSingleByCid(appNotice);
+        this.pushToSingleByCid(appNotice);*/
         return Callback.success(true);
     }
 

@@ -90,7 +90,7 @@ public class ScProblemFeedbackVO {
      * 责任人id
      */
     @ApiModelProperty(value = "责任人id")
-    private Integer dutyPersonId;
+    private String dutyPersonId;
 
     /**
      * 责任人
