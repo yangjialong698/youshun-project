@@ -44,7 +44,6 @@ public class ErpReworkRepairController {
         return erpReworkRepairService.getDeatil(id);
     }
 
-
     @ApiOperation(value = "查看返工返修列表")
     @GetMapping("/getReworkRepairList")
     public Callback<BaseVO<ErpReworkRepair>> getReworkRepairList(Integer page, Integer pageSize) {
