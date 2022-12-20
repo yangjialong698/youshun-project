@@ -40,7 +40,7 @@ import static org.springframework.util.DigestUtils.md5DigestAsHex;
 @Service
 @Slf4j
 public class UserService extends BaseService<UserEntity> {
-    
+
     //任务系统
     private String taskSystem = "1001";
     // 采购
@@ -101,6 +101,11 @@ public class UserService extends BaseService<UserEntity> {
     @Autowired
     private DeptService deptService;
 
+    @Autowired
+    private HttpServletRequest req;
+
+    @Autowired
+    private AppUserDao appUserDao;
 
     public Callback<UserVO> login(String account, String password) {
         System.out.println("*****************路由测试***************"+account+" -- "+password);
@@ -527,5 +532,25 @@ public class UserService extends BaseService<UserEntity> {
         BaseVO<LoginLogVO> baseVO = new BaseVO<>(loginLogVOList, new PageUtil(pageSize, (int)startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
+
+    public Callback updatecid(String cid){
+
+        String token = req.getHeader("Authorization");
+        com.ennova.pubinfocommon.vo.UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        //更新app用户cid
+        AppUserEntity appUserEntity = appUserDao.selectByPrimaryKey(userVo.getId());
+        appUserEntity.setCid(cid);
+        int result = appUserDao.updateByPrimaryKeySelective(appUserEntity);
+        System.out.println(result);
+        if(result == 1){
+            return Callback.success();
+        }else {
+            return Callback.error("更新失败");
+        }
+    }
+
+
 
 }

@@ -81,6 +81,9 @@ public class AppService {
         pushApi = apiHelper2.creatApi(PushApi.class);
         PushDTO<Audience> pushDTO = pushDTO(appNotice);
         int num = 0;
+        if (appNotice.getCid() == null) {
+            return;
+        }
         fullCid(pushDTO, appNotice.getCid());
         ApiResult<Map<String, Map<String, String>>> apiResult;
         while (true) {
@@ -410,6 +413,8 @@ public class AppService {
         scProblemFeedback.setBackUserId(userVo.getId());
         UserDTO userDTO = scProblemFeedbackMapper.selectById(userVo.getId());
         String dutyPersonId = scProblemFeedbackMapper.selectByUserId(scProblemFeedbackVO.getDutyPersonId()).getId().toString();
+        UserDTO dto = scProblemFeedbackMapper.selectById(Integer.valueOf(dutyPersonId));
+
         log.debug("dutyPersonId: " + dutyPersonId);
         scProblemFeedback.setBackPerson(userDTO.getUserName());
         scProblemFeedback.setBackDepartment(userDTO.getDepartment());
@@ -427,9 +432,9 @@ public class AppService {
                 scProblemFileMapper.updateByPrimaryKeySelective(scProblemFile);
             }
         }
-        /*AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
-                .userid(userVo.getId().toString()).createTime(new Date()).cid(userDTO.getCid()).build();
-        this.pushToSingleByCid(appNotice);*/
+        AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
+                .userid(userVo.getId().toString()).createTime(new Date()).cid(dto.getCid()).build();
+        this.pushToSingleByCid(appNotice);
         return Callback.success(true);
     }
 

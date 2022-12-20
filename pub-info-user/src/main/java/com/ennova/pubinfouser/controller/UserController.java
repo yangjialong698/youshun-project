@@ -133,4 +133,12 @@ public class UserController {
 
     }
 
+    @ApiOperation(value = "更新CID", tags = "APP移动端接口")
+    @GetMapping("/updatecid")
+    public Callback updatecid(String cid){
+        return userService.updatecid(cid);
+    }
+
+
+
 }
