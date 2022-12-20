@@ -414,6 +414,7 @@ public class AppService {
         UserDTO userDTO = scProblemFeedbackMapper.selectById(userVo.getId());
         String dutyPersonId = scProblemFeedbackMapper.selectByUserId(scProblemFeedbackVO.getDutyPersonId()).getId().toString();
         UserDTO dto = scProblemFeedbackMapper.selectById(Integer.valueOf(dutyPersonId));
+        log.info("dto: " + dto.toString());
 
         log.debug("dutyPersonId: " + dutyPersonId);
         scProblemFeedback.setBackPerson(userDTO.getUserName());
