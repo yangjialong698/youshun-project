@@ -31,8 +31,10 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from sc_problem_file
+    update sc_problem_file
+    <set>
+      del_flag = 1
+    </set>
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfostore.entity.ScProblemFile" useGeneratedKeys="true">
@@ -281,7 +283,7 @@
     </where>
   </select>
 
-  <select id="selectAllByFileMd5AndUserId" resultMap="BaseResultMap">
+  <select id="selectAllByFileMd5" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from sc_problem_file
@@ -289,9 +291,6 @@
       del_flag = 0
       <if test="fileMd5 != null">
         and file_md5 = #{fileMd5,jdbcType=VARCHAR}
-      </if>
-      <if test="userId != null">
-        and user_id = #{userId,jdbcType=INTEGER}
       </if>
     </where>
   </select>

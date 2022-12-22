@@ -1,7 +1,6 @@
 package com.ennova.pubinfostore.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfostore.dto.FileDelDTO;
 import com.ennova.pubinfostore.service.ScProblemFileService;
 import com.ennova.pubinfostore.vo.FileVO;
 import io.swagger.annotations.Api;
@@ -46,7 +45,7 @@ public class ScProblemFileController {
 
     @ApiOperation(value = "问题反馈文件 - 文件删除")
     @PostMapping("/deleteFile")
-    public Callback deleteFile(@RequestBody FileDelDTO fileDelDTO){
+    public Callback deleteFile(@RequestBody FileVO fileDelDTO){
         return scProblemFileService.deleteFile(fileDelDTO);
     }
 }

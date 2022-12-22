@@ -5,7 +5,6 @@ import com.ennova.pubinfocommon.utils.FileUtils;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfostore.dao.ScProblemFileMapper;
-import com.ennova.pubinfostore.dto.FileDelDTO;
 import com.ennova.pubinfostore.entity.ScProblemFile;
 import com.ennova.pubinfostore.vo.FileVO;
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -274,26 +273,23 @@ public class ScProblemFileService {
         }
     }
 
-    public Callback deleteFile(FileDelDTO fileDelDTO) {
+    public Callback deleteFile(FileVO fileDelDTO) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
-        fileDelDTO.getFileVos().forEach(fileVo -> {
-            String path = localPath + "/" + fileVo.getNewfileName();
-            // 如果是本人上传的，才能执行删除操作
-            assert userVo != null;
-            List<ScProblemFile> files = scProblemFileMapper.selectAllByFileMd5AndUserId(fileVo.getNewfileName(), userVo.getId());
-            if (files != null && !files.isEmpty()) {
-                File file = new File(path);
-                if (file.exists()) {
-                    //查看是否唯一
-                    int count = scProblemFileMapper.selectByFileMd5(fileVo.getNewfileName());
+        String path = localPath + "/" + fileDelDTO.getNewfileName();
+        assert userVo != null;
+        List<ScProblemFile> files = scProblemFileMapper.selectAllByFileMd5(fileDelDTO.getNewfileName());
+        if (files != null && !files.isEmpty()) {
+            File file = new File(path);
+            if (file.exists()) {
+                //查看是否唯一
+                int count = scProblemFileMapper.selectByFileMd5(fileDelDTO.getNewfileName());
                     if (count == 1) {
                         file.delete();
                     }
-                    scProblemFileMapper.deleteByPrimaryKey(fileVo.getId());
+                scProblemFileMapper.deleteByPrimaryKey(fileDelDTO.getId());
                 }
             }
-        });
         return Callback.success("附件删除成功");
     }
 }
