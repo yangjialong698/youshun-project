@@ -20,6 +20,7 @@ import com.ennova.pubinfostore.service.feign.PubInfoUserClient;
 import com.ennova.pubinfostore.utils.ApiContext;
 import com.ennova.pubinfostore.utils.BeanConvertUtils;
 import com.ennova.pubinfostore.vo.AppUserVO;
+import com.ennova.pubinfostore.vo.SaveCountVO;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
 import com.getui.push.v2.sdk.ApiHelper;
 import com.getui.push.v2.sdk.api.PushApi;
@@ -659,4 +660,47 @@ public class AppService {
         return list;
     }
 
+    public Callback<SaveCountVO> countMyBack(HttpServletRequest req) {
+        String token = req.getHeader("Authorization");
+        if (org.apache.commons.lang.StringUtils.isEmpty(token)) {
+            return Callback.error("无权限token");
+        }
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        Integer userId = userVo.getId();
+        List<ScProblemFeedback> scProblemFeedbackFk = scProblemFeedbackMapper.selectAllByBackUserId(userId);
+        SaveCountVO saveCountVOFk = new SaveCountVO();
+        if (CollectionUtil.isNotEmpty(scProblemFeedbackFk)){
+            long toDoProblemFk = scProblemFeedbackFk.stream().filter(s -> s.getBackStatus().equals("3")).count();
+            long doneProblemFk = scProblemFeedbackFk.stream().filter(s -> s.getBackStatus().equals("1")).count();
+            long doingProblemFk = scProblemFeedbackFk.stream().filter(s -> s.getBackStatus().equals("2")).count();
+            long unDoneProblemFk = scProblemFeedbackFk.stream().filter(s -> s.getBackStatus().equals("0")).count();
+            saveCountVOFk.setDoingProblem(doingProblemFk);
+            saveCountVOFk.setToDoProblem(toDoProblemFk);
+            saveCountVOFk.setDoneProblem(doneProblemFk);
+            saveCountVOFk.setUnDoneProblem(unDoneProblemFk);
+        }
+        return Callback.success(saveCountVOFk) ;
+    }
+
+    public Callback<SaveCountVO> countMyJb(HttpServletRequest req) {
+        String token = req.getHeader("Authorization");
+        if (org.apache.commons.lang.StringUtils.isEmpty(token)) {
+            return Callback.error("无权限token");
+        }
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        Integer userId = userVo.getId();
+        List<ScProblemFeedback> scProblemFeedbackJb = scProblemFeedbackMapper.selectAllByDutyPersonId(userId.toString());
+        SaveCountVO saveCountVOJb = new SaveCountVO();
+        if (CollectionUtil.isNotEmpty(scProblemFeedbackJb)){
+            long toDoProblemJb = scProblemFeedbackJb.stream().filter(s -> s.getBackStatus().equals("3")).count();
+            long doneProblemJb = scProblemFeedbackJb.stream().filter(s -> s.getBackStatus().equals("1")).count();
+            long doingProblemJb = scProblemFeedbackJb.stream().filter(s -> s.getBackStatus().equals("2")).count();
+            long unDoneProblemJb = scProblemFeedbackJb.stream().filter(s -> s.getBackStatus().equals("0")).count();
+            saveCountVOJb.setDoingProblem(doingProblemJb);
+            saveCountVOJb.setToDoProblem(toDoProblemJb);
+            saveCountVOJb.setDoneProblem(doneProblemJb);
+            saveCountVOJb.setUnDoneProblem(unDoneProblemJb);
+        }
+        return Callback.success(saveCountVOJb) ;
+    }
 }

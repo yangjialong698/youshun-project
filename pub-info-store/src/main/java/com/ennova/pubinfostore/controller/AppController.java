@@ -4,6 +4,7 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.service.AppService;
+import com.ennova.pubinfostore.vo.SaveCountVO;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Api(tags = "公共信息平台App-问题反馈")
 @Slf4j
@@ -162,5 +168,19 @@ public class AppController {
     @GetMapping("/getSfbDetailList")
     public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize, String searchKey) {
         return appService.getSfbDetailList(page,pageSize,searchKey);
+    }
+
+    @ApiOperation(value = "APP移动端接口 - 我的统计我反馈的问题数量")
+    @GetMapping("/countMyBack")
+    public Callback<SaveCountVO> countMyBack() {
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return appService.countMyBack(req);
+    }
+
+    @ApiOperation(value = "APP移动端接口 - 我的统计我经办的问题数量")
+    @GetMapping("/countMyJb")
+    public Callback<SaveCountVO> countMyJb() {
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return appService.countMyJb(req);
     }
 }

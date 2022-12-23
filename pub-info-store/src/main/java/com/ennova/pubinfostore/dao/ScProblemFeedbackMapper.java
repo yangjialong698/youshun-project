@@ -44,4 +44,12 @@ public interface ScProblemFeedbackMapper {
     ScProblemFeedbackVO getMyHandleProblemsStatus(@Param("userId") Integer userId);
 
     UserVO selectByUserId(@Param("userId") String userId);
+
+    List<ScProblemFeedback> selectAllByBackUserId(@Param("backUserId")Integer backUserId);
+
+    List<ScProblemFeedback> selectAllByDutyPersonId(@Param("dutyPersonId")String dutyPersonId);
+
+
+
+
 }

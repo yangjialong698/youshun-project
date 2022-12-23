@@ -408,4 +408,26 @@
             and user_id like CONCAT(#{userId,jdbcType=VARCHAR})
         </if>
     </select>
+
+    <select id="selectAllByBackUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sc_problem_feedback
+        <where>
+            <if test="backUserId != null">
+                and back_user_id=#{backUserId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllByDutyPersonId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sc_problem_feedback
+        <where>
+            <if test="dutyPersonId != null">
+                and duty_person_id=#{dutyPersonId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
 </mapper>
