@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class SaveCountVO {
     @ApiModelProperty(value = "待解决")
     private Long toDoProblem;
-    @ApiModelProperty(value = "解决中")
+    @ApiModelProperty(value = "待确认")
     private Long doingProblem;
     @ApiModelProperty(value = "已解决")
     private Long doneProblem;
