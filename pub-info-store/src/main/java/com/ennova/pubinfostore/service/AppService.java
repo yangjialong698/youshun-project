@@ -678,8 +678,10 @@ public class AppService {
             saveCountVOFk.setToDoProblem(toDoProblemFk);
             saveCountVOFk.setDoneProblem(doneProblemFk);
             saveCountVOFk.setUnDoneProblem(unDoneProblemFk);
+            return Callback.success(saveCountVOFk) ;
+        }else {
+            return Callback.error(1,"无数据统计") ;
         }
-        return Callback.success(saveCountVOFk) ;
     }
 
     public Callback<SaveCountVO> countMyJb(HttpServletRequest req) {
@@ -700,7 +702,9 @@ public class AppService {
             saveCountVOJb.setToDoProblem(toDoProblemJb);
             saveCountVOJb.setDoneProblem(doneProblemJb);
             saveCountVOJb.setUnDoneProblem(unDoneProblemJb);
+            return Callback.success(saveCountVOJb) ;
+        }else {
+            return Callback.error(1,"无数据统计") ;
         }
-        return Callback.success(saveCountVOJb) ;
     }
 }
