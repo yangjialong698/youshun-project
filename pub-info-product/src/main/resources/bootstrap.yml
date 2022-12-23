@@ -5,8 +5,8 @@ spring:
     nacos:
       config:
         file-extension: yaml
-        server-addr: 172.16.2.16:8848
-        #server-addr: 192.168.11.39:8848
+        server-addr: 172.168.3.68:8848
+        #server-addr: 139.196.150.88:8848
         #server-addr: 123.60.73.204:8848
 
   datasource:
@@ -27,9 +27,11 @@ spring:
     two:
       druid:
         url: jdbc:mysql://rm-uf640oz6p8hqoc21b1o.mysql.rds.aliyuncs.com:3306/project?useUnicode=true&characterEncoding=UTF-8
+        #url: jdbc:mysql://192.168.0.35:3306/project?useUnicode=true&characterEncoding=UTF-8
         driver-class-name: com.mysql.jdbc.Driver
         username: root
         password: ennova8168#
+        #password: Ennova*^!%
         type: com.alibaba.druid.pool.DruidDataSource
         #druid连接池配置
         initial-size: 5
