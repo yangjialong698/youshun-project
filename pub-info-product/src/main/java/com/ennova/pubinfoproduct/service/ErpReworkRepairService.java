@@ -63,7 +63,7 @@ public class ErpReworkRepairService {
         return Callback.success(erpReworkRepairMapper.selectByPrimaryKey(id)) ;
     }
 
-    public Callback<BaseVO<ErpReworkRepair>> getReworkRepairList(Integer page, Integer pageSize) {
+    public Callback<BaseVO<ErpReworkRepair>> getReworkRepairList(Integer page, Integer pageSize,String key) {
         if (page == null || page < 1) {
             page = 1;
         }
@@ -72,7 +72,7 @@ public class ErpReworkRepairService {
         }
         BaseVO<ErpReworkRepair> baseVO = null ;
         Page<LinkedHashMap> startPage = PageHelper.startPage(page, pageSize);
-        List<ErpReworkRepair> list = erpReworkRepairMapper.selectAll();
+        List<ErpReworkRepair> list = erpReworkRepairMapper.selectAll(key);
         baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }

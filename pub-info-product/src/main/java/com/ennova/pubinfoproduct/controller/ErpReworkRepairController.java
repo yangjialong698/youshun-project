@@ -46,7 +46,7 @@ public class ErpReworkRepairController {
 
     @ApiOperation(value = "查看返工返修列表")
     @GetMapping("/getReworkRepairList")
-    public Callback<BaseVO<ErpReworkRepair>> getReworkRepairList(Integer page, Integer pageSize) {
-        return erpReworkRepairService.getReworkRepairList(page,pageSize);
+    public Callback<BaseVO<ErpReworkRepair>> getReworkRepairList(Integer page, Integer pageSize,String key) {
+        return erpReworkRepairService.getReworkRepairList(page,pageSize,key);
     }
 }

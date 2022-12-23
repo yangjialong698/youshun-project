@@ -5,6 +5,7 @@
     <!--@mbg.generated-->
     <!--@Table erp_rework_repair-->
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="back_user_id" jdbcType="INTEGER" property="backUserId" />
     <result column="supplier" jdbcType="VARCHAR" property="supplier" />
     <result column="product_no" jdbcType="VARCHAR" property="productNo" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
@@ -15,7 +16,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, supplier, product_no, product_name, num, rework_reason, rework_hour, rework_time
+    id, back_user_id, supplier, product_no, product_name, num, rework_reason, rework_hour, 
+    rework_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -31,17 +33,20 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpReworkRepair" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into erp_rework_repair (supplier, product_no, product_name, 
-      num, rework_reason, rework_hour, 
-      rework_time)
-    values (#{supplier,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
-      #{num,jdbcType=INTEGER}, #{reworkReason,jdbcType=VARCHAR}, #{reworkHour,jdbcType=INTEGER}, 
-      #{reworkTime,jdbcType=TIMESTAMP})
+    insert into erp_rework_repair (back_user_id, supplier, product_no, 
+      product_name, num, rework_reason, 
+      rework_hour, rework_time)
+    values (#{backUserId,jdbcType=INTEGER}, #{supplier,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, 
+      #{productName,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, #{reworkReason,jdbcType=VARCHAR}, 
+      #{reworkHour,jdbcType=INTEGER}, #{reworkTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpReworkRepair" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into erp_rework_repair
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="backUserId != null">
+        back_user_id,
+      </if>
       <if test="supplier != null">
         supplier,
       </if>
@@ -65,6 +70,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="backUserId != null">
+        #{backUserId,jdbcType=INTEGER},
+      </if>
       <if test="supplier != null">
         #{supplier,jdbcType=VARCHAR},
       </if>
@@ -92,6 +100,9 @@
     <!--@mbg.generated-->
     update erp_rework_repair
     <set>
+      <if test="backUserId != null">
+        back_user_id = #{backUserId,jdbcType=INTEGER},
+      </if>
       <if test="supplier != null">
         supplier = #{supplier,jdbcType=VARCHAR},
       </if>
@@ -119,7 +130,8 @@
   <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.ErpReworkRepair">
     <!--@mbg.generated-->
     update erp_rework_repair
-    set supplier = #{supplier,jdbcType=VARCHAR},
+    set back_user_id = #{backUserId,jdbcType=INTEGER},
+      supplier = #{supplier,jdbcType=VARCHAR},
       product_no = #{productNo,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
       num = #{num,jdbcType=INTEGER},
@@ -128,62 +140,156 @@
       rework_time = #{reworkTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateBatch" parameterType="java.util.List">
+
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpReworkRepair" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    update erp_rework_repair
-    <trim prefix="set" suffixOverrides=",">
-      <trim prefix="supplier = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.supplier,jdbcType=VARCHAR}
-        </foreach>
-      </trim>
-      <trim prefix="product_no = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.productNo,jdbcType=VARCHAR}
-        </foreach>
-      </trim>
-      <trim prefix="product_name = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.productName,jdbcType=VARCHAR}
-        </foreach>
-      </trim>
-      <trim prefix="num = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.num,jdbcType=INTEGER}
-        </foreach>
-      </trim>
-      <trim prefix="rework_reason = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.reworkReason,jdbcType=VARCHAR}
-        </foreach>
-      </trim>
-      <trim prefix="rework_hour = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.reworkHour,jdbcType=INTEGER}
-        </foreach>
-      </trim>
-      <trim prefix="rework_time = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=INTEGER} then #{item.reworkTime,jdbcType=TIMESTAMP}
-        </foreach>
-      </trim>
+    insert into erp_rework_repair
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      back_user_id,
+      supplier,
+      product_no,
+      product_name,
+      num,
+      rework_reason,
+      rework_hour,
+      rework_time,
     </trim>
-    where id in
-    <foreach close=")" collection="list" item="item" open="(" separator=", ">
-      #{item.id,jdbcType=INTEGER}
-    </foreach>
-  </update>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      #{backUserId,jdbcType=INTEGER},
+      #{supplier,jdbcType=VARCHAR},
+      #{productNo,jdbcType=VARCHAR},
+      #{productName,jdbcType=VARCHAR},
+      #{num,jdbcType=INTEGER},
+      #{reworkReason,jdbcType=VARCHAR},
+      #{reworkHour,jdbcType=INTEGER},
+      #{reworkTime,jdbcType=TIMESTAMP},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      back_user_id = #{backUserId,jdbcType=INTEGER},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      product_no = #{productNo,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      num = #{num,jdbcType=INTEGER},
+      rework_reason = #{reworkReason,jdbcType=VARCHAR},
+      rework_hour = #{reworkHour,jdbcType=INTEGER},
+      rework_time = #{reworkTime,jdbcType=TIMESTAMP},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpReworkRepair" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_rework_repair
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="backUserId != null">
+        back_user_id,
+      </if>
+      <if test="supplier != null">
+        supplier,
+      </if>
+      <if test="productNo != null">
+        product_no,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="num != null">
+        num,
+      </if>
+      <if test="reworkReason != null">
+        rework_reason,
+      </if>
+      <if test="reworkHour != null">
+        rework_hour,
+      </if>
+      <if test="reworkTime != null">
+        rework_time,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="backUserId != null">
+        #{backUserId,jdbcType=INTEGER},
+      </if>
+      <if test="supplier != null">
+        #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="reworkReason != null">
+        #{reworkReason,jdbcType=VARCHAR},
+      </if>
+      <if test="reworkHour != null">
+        #{reworkHour,jdbcType=INTEGER},
+      </if>
+      <if test="reworkTime != null">
+        #{reworkTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="backUserId != null">
+        back_user_id = #{backUserId,jdbcType=INTEGER},
+      </if>
+      <if test="supplier != null">
+        supplier = #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        product_no = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="reworkReason != null">
+        rework_reason = #{reworkReason,jdbcType=VARCHAR},
+      </if>
+      <if test="reworkHour != null">
+        rework_hour = #{reworkHour,jdbcType=INTEGER},
+      </if>
+      <if test="reworkTime != null">
+        rework_time = #{reworkTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
 
   <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into erp_rework_repair
     (supplier, product_no, product_name, num, rework_reason, rework_hour, rework_time
-      )
+    )
     values
     <foreach collection="list" item="item" separator=",">
-      (#{item.supplier,jdbcType=VARCHAR}, #{item.productNo,jdbcType=VARCHAR}, #{item.productName,jdbcType=VARCHAR}, 
-        #{item.num,jdbcType=INTEGER}, #{item.reworkReason,jdbcType=VARCHAR}, #{item.reworkHour,jdbcType=INTEGER}, 
-        #{item.reworkTime,jdbcType=TIMESTAMP})
+      (#{item.supplier,jdbcType=VARCHAR}, #{item.productNo,jdbcType=VARCHAR}, #{item.productName,jdbcType=VARCHAR},
+      #{item.num,jdbcType=INTEGER}, #{item.reworkReason,jdbcType=VARCHAR}, #{item.reworkHour,jdbcType=INTEGER},
+      #{item.reworkTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
 
@@ -191,5 +297,9 @@
     select
     <include refid="Base_Column_List"/>
     from erp_rework_repair
+    where 1=1
+    <if test="key != null and key != ''">
+      and concat(supplier,product_no,product_name) like concat('%',trim(#{key}),'%')
+    </if>
   </select>
 </mapper>
