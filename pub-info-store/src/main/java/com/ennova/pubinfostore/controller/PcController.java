@@ -29,10 +29,16 @@ public class PcController {
 
     private final PcService pcService;
 
-    @ApiOperation(value = "Pc端接口 - 呼叫系统数据看板列表")
+    @ApiOperation(value = "Pc端接口 - 呼叫系统数据看板列表 - 当日未解决问题")
     @GetMapping("/getDateBoardList")
     public Callback<BaseVO<ScProblemFeedbackVO>> getDateBoardList(Integer page, Integer pageSize) {
         return pcService.getDateBoardList(page,pageSize);
+    }
+
+    @ApiOperation(value = "Pc端接口 - 呼叫系统数据看板列表 - 历史未解决问题")
+    @GetMapping("/getDateBoardLists")
+    public Callback<BaseVO<ScProblemFeedbackVO>> getDateBoardLists(Integer page, Integer pageSize) {
+        return pcService.getDateBoardLists(page,pageSize);
     }
 
     @ApiOperation(value = "Pc端接口 - 呼叫历史记录列表")

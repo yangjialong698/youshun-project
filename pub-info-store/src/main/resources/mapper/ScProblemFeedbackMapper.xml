@@ -352,7 +352,17 @@
         from sc_problem_feedback
         where 1 = 1
         and back_status = 0
+        <![CDATA[ and date_format(create_time, '%Y-%m-%d') >= date_sub(now(), interval 1 day) ]]>
         order by create_time desc
+    </select>
+
+    <select id="selectDateBoardLists" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sc_problem_feedback
+        where 1 = 1
+        and back_status = 0
+        order by create_time asc
     </select>
 
     <select id="getMyProblemFeedbackList" resultMap="BaseResultMap">

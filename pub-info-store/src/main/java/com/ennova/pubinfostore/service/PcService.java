@@ -74,6 +74,42 @@ public class PcService {
         return Callback.success(baseVO);
     }
 
+    public Callback<BaseVO<ScProblemFeedbackVO>> getDateBoardLists(Integer page, Integer pageSize) {
+
+        String token = req.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        if(page==null || page<1){
+            page = 1;
+        }
+        if(pageSize==null || pageSize<1){
+            pageSize = 10;
+        }
+        int index = (page - 1) * pageSize;
+        BaseVO<ScProblemFeedbackVO> baseVO;
+        ArrayList<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
+        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectDateBoardLists();
+        if (CollectionUtil.isNotEmpty(scProblemFeedbacks)){
+            scProblemFeedbacks.forEach(e->{
+                ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
+                BeanUtils.copyProperties(e,scProblemFeedbackVO);
+                if(!e.getBackStatus().equals("1")){
+                    long betweenHour = DateUtil.between(e.getCreateTime(), new Date(), DateUnit.HOUR);
+                    scProblemFeedbackVO.setGqTime(betweenHour);
+                }else {
+                    long betweenHour = DateUtil.between(e.getCreateTime(), e.getSolveTime(), DateUnit.HOUR);
+                    scProblemFeedbackVO.setGqTime(betweenHour);
+                }
+                scProblemFeedbackVOS.add(scProblemFeedbackVO);
+            });
+            baseVO = new BaseVO<>(pageing(index,pageSize,scProblemFeedbackVOS), new PageUtil(pageSize, scProblemFeedbackVOS.size(), page));
+        } else {
+            baseVO = new BaseVO<>(scProblemFeedbackVOS, new PageUtil(pageSize, 0, page));
+        }
+        return Callback.success(baseVO);
+    }
+
     public List<ScProblemFeedbackVO> pageing(int index, int pageSize, List<ScProblemFeedbackVO> list){
         if (index < 0 || index >= list.size() || pageSize <= 0) {
             return null;
