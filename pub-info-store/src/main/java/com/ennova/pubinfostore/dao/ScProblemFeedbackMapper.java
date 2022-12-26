@@ -35,6 +35,8 @@ public interface ScProblemFeedbackMapper {
 
     List<ScProblemFeedback> selectAllByBackStatusOrDutyPerson(@Param("searchKey") String searchKey);
 
+    List<ScProblemFeedback> selectDateBoardList();
+
     List<ScProblemFeedback> getMyProblemFeedbackList(@Param("searchKey") String searchKey, @Param("userId") Integer userId);
 
     List<ScProblemFeedback> getMyHandleProblemList(@Param("searchKey") String searchKey, @Param("userId") Integer userId);
@@ -43,13 +45,14 @@ public interface ScProblemFeedbackMapper {
 
     ScProblemFeedbackVO getMyHandleProblemsStatus(@Param("userId") Integer userId);
 
+    ScProblemFeedbackVO getProblemsStatus();
+
     UserVO selectByUserId(@Param("userId") String userId);
 
     List<ScProblemFeedback> selectAllByBackUserId(@Param("backUserId")Integer backUserId);
 
     List<ScProblemFeedback> selectAllByDutyPersonId(@Param("dutyPersonId")String dutyPersonId);
 
-
-
+    List<ScProblemFeedback> selectHistoryDateBoardList();
 
 }

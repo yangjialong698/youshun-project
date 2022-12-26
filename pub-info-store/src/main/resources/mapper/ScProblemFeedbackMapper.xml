@@ -341,8 +341,17 @@
         where 1 = 1
         <if test="searchKey != null and searchKey != ''">
             and back_person like CONCAT('%', #{searchKey}, '%')
-               or duty_person like CONCAT('%', #{searchKey}, '%')
+            or duty_person like CONCAT('%', #{searchKey}, '%')
         </if>
+        order by create_time desc
+    </select>
+
+    <select id="selectDateBoardList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sc_problem_feedback
+        where 1 = 1
+        and back_status = 0
         order by create_time desc
     </select>
 
@@ -353,7 +362,7 @@
         where 1 = 1
         <if test="searchKey != null and searchKey != ''">
             and problem_description like CONCAT('%', #{searchKey}, '%')
-               or duty_person like CONCAT('%', #{searchKey}, '%')
+            or duty_person like CONCAT('%', #{searchKey}, '%')
         </if>
         <if test="userId != null">
             and back_user_id = #{userId,jdbcType=INTEGER}
@@ -383,6 +392,17 @@
         <if test="userId != null">
             and duty_person_id like CONCAT(#{userId,jdbcType=VARCHAR})
         </if>
+    </select>
+
+    <select id="getProblemsStatus" resultType="com.ennova.pubinfostore.vo.ScProblemFeedbackVO">
+        select
+        count(spf.id) as totalProblem,
+        sum(spf.back_status = 0) as unDoneProblem,
+        sum(spf.back_status = 1) as doneProblem,
+        sum(spf.back_status = 2) as doingProblem,
+        sum(spf.back_status = 3) as toDoProblem
+        from sc_problem_feedback spf
+        where 1 = 1
     </select>
 
     <select id="getMyHandleProblemList" resultMap="BaseResultMap">
@@ -429,5 +449,13 @@
                 and duty_person_id=#{dutyPersonId,jdbcType=VARCHAR}
             </if>
         </where>
+    </select>
+
+    <select id="selectHistoryDateBoardList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sc_problem_feedback
+        where 1 = 1
+        order by create_time desc
     </select>
 </mapper>

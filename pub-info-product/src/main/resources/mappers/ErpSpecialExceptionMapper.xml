@@ -162,5 +162,6 @@
         <!--where
         <![CDATA[date_format(erp.create_time, '%Y-%m-%d') >= date_sub(now(), interval 3 day)]]>-->
         order by erp.create_time desc
+        limit 3
     </select>
 </mapper>
