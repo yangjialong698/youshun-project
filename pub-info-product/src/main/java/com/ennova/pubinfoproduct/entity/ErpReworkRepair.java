@@ -2,6 +2,7 @@ package com.ennova.pubinfoproduct.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -68,5 +69,6 @@ public class ErpReworkRepair {
      * 返工日期
      */
     @ApiModelProperty(value = "返工日期")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date reworkTime;
 }
