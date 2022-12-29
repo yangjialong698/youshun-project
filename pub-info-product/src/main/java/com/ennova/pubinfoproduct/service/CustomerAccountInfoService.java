@@ -171,8 +171,10 @@ public class CustomerAccountInfoService {
         List<CustomerAccountFile> customerAccountFiles = customerAccountFileMapper.selectAllByCustomerAccountId(id);
         CustomerAccountInfo customerAccountInfo = customerAccountInfoMapper.selectByPrimaryKey(id);
         CustomerAccountInfoVO customerAccountInfoVOFin = new CustomerAccountInfoVO();
-        BeanUtils.copyProperties(customerAccountInfo, customerAccountInfoVOFin);
-        customerAccountInfoVOFin.setFileList(customerAccountFiles);
+        if (null != customerAccountInfo){
+            BeanUtils.copyProperties(customerAccountInfo, customerAccountInfoVOFin);
+            customerAccountInfoVOFin.setFileList(customerAccountFiles);
+        }
         return Callback.success(customerAccountInfoVOFin);
     }
 
