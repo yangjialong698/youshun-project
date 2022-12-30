@@ -485,6 +485,7 @@
         <include refid="Base_Column_List"/>
         from customer_account_file
         <where>
+            del_flag = 0
             <if test="fileMd5 != null">
                 and file_md5=#{fileMd5,jdbcType=VARCHAR}
             </if>
