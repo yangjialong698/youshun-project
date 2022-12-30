@@ -25,15 +25,6 @@ public class ErpReworkRepairService {
     private ErpPrdInfoMapper erpPrdInfoMapper;
 
     public Callback insertOrUpdate(ErpReworkRepair erpReworkRepair) {
-        String prdName = "";
-        String productNo = erpReworkRepair.getProductNo();
-        if (StringUtils.isNotEmpty(productNo)){
-            List<ErpPrdInfo> erpPrdInfos = erpPrdInfoMapper.selectByPrdNo(productNo);
-            if (CollectionUtil.isNotEmpty(erpPrdInfos)){
-                prdName = erpPrdInfos.get(0).getPrdName();
-                erpReworkRepair.setProductName(prdName);
-            }
-        }
         if (null != erpReworkRepair.getId()){
             //更新
             erpReworkRepairMapper.updateByPrimaryKeySelective(erpReworkRepair);
@@ -75,5 +66,17 @@ public class ErpReworkRepairService {
         List<ErpReworkRepair> list = erpReworkRepairMapper.selectAll(key);
         baseVO = new BaseVO<>(list, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
+    }
+
+    public Callback<String> getPrdName(String productNo) {
+        if (StringUtils.isEmpty(productNo)) {
+            return Callback.error("请输入品号");
+        }
+        String prdName = "";
+        List<ErpPrdInfo> erpPrdInfos = erpPrdInfoMapper.selectByPrdNo(productNo);
+        if (CollectionUtil.isNotEmpty(erpPrdInfos)){
+            prdName = erpPrdInfos.get(0).getPrdName();
+        }
+        return Callback.success(prdName);
     }
 }

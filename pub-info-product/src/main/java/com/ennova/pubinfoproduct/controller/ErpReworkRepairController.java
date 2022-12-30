@@ -49,4 +49,10 @@ public class ErpReworkRepairController {
     public Callback<BaseVO<ErpReworkRepair>> getReworkRepairList(Integer page, Integer pageSize,String key) {
         return erpReworkRepairService.getReworkRepairList(page,pageSize,key);
     }
+
+    @ApiOperation(value = "根据品号查品名")
+    @GetMapping("/getPrdName")
+    public Callback<String>  getPrdName(@RequestParam String productNo){
+        return erpReworkRepairService.getPrdName(productNo);
+    }
 }
