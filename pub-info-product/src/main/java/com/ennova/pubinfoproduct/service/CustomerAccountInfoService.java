@@ -1,6 +1,7 @@
 package com.ennova.pubinfoproduct.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.FileUtils;
 import com.ennova.pubinfocommon.utils.JWTUtil;
@@ -129,6 +130,10 @@ public class CustomerAccountInfoService {
         }else {
             //新增
             customerAccountInfo.setCreateTime(new Date());
+            Date complainTime = customerAccountInfo.getComplainTime();
+            if (null != complainTime){
+                customerAccountInfo.setMonthNum(DateUtil.month(complainTime)+1);
+            }
             customerAccountInfoMapper.insertSelective(customerAccountInfo);
             if (CollectionUtil.isNotEmpty(customerAccountInfoVO.getFileVOList())){
                 for (FileVO fileVO : customerAccountInfoVO.getFileVOList()) {
