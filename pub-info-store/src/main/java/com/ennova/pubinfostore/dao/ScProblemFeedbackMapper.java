@@ -55,6 +55,6 @@ public interface ScProblemFeedbackMapper {
 
     List<ScProblemFeedback> selectAllByDutyPersonId(@Param("dutyPersonId")String dutyPersonId);
 
-    List<ScProblemFeedback> selectHistoryDateBoardList();
+    List<ScProblemFeedback> selectHistoryDateBoardList(@Param("status")Integer status);
 
 }

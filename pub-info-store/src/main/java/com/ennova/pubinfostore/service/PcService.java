@@ -122,12 +122,12 @@ public class PcService {
         return list;
     }
 
-    public Callback<List<ScProblemFeedbackVO>> getHistoryDateBoardList() {
+    public Callback<List<ScProblemFeedbackVO>> getHistoryDateBoardList(Integer status) {
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
-        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectHistoryDateBoardList();
+        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectHistoryDateBoardList(status);
         List<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(scProblemFeedbacks)){
             for (ScProblemFeedback scProblemFeedback : scProblemFeedbacks) {

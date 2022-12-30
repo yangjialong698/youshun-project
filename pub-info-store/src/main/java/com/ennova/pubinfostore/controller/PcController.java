@@ -43,8 +43,8 @@ public class PcController {
 
     @ApiOperation(value = "Pc端接口 - 呼叫历史记录列表")
     @GetMapping("/getHistoryDateBoardList")
-    public Callback<List<ScProblemFeedbackVO>> getHistoryDateBoardList() {
-        return pcService.getHistoryDateBoardList();
+    public Callback<List<ScProblemFeedbackVO>> getHistoryDateBoardList(Integer status) {
+        return pcService.getHistoryDateBoardList(status);
     }
 
     @ApiOperation(value = "Pc端接口 - 呼叫系统数据看板问题状态")
