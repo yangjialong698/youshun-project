@@ -26,4 +26,6 @@ public interface ErpSpecialExceptionMapper {
     int batchInsert(@Param("list") List<ErpSpecialException> list);
 
     List<ErpSpecialExceptionVO> selectSpecialExceptionLists();
+
+    List<ErpSpecialExceptionVO> selectSpecialExceptionList();
 }

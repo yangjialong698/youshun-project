@@ -24,9 +24,11 @@ public interface ScProblemFileMapper {
 
     int batchInsert(@Param("list") List<ScProblemFile> list);
 
-    List<ScProblemFile> selectFilesByProblemId(@Param("ProblemId") Integer ProblemId);
+    List<ScProblemFile> selectFilesByProblemId(@Param("ProblemId") Integer ProblemId, @Param("fileType") Integer fileType);
 
-    List<ScProblemFile> selectAllByFileMd5AndUserId(@Param("fileMd5")String fileMd5, @Param("userId")Integer userId);
+    List<ScProblemFile> selectFilesByProblemIds(@Param("ProblemId") Integer ProblemId);
+
+    List<ScProblemFile> selectAllByFileMd5(@Param("fileMd5")String fileMd5);
 
     int selectByFileMd5(@Param("fileMd5") String fileMd5);
 }

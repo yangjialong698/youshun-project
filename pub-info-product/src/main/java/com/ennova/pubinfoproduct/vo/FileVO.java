@@ -1,9 +1,14 @@
-package com.ennova.pubinfostore.vo;
+package com.ennova.pubinfoproduct.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * @author WangWei
+ * @version 1.0
+ * @CreateTime: 2022-12-28
+ */
 @Data
 @Builder
 public class FileVO {
@@ -16,8 +21,5 @@ public class FileVO {
 
     @ApiModelProperty(value = "真实文件名")
     private String newfileName;
-
-    @ApiModelProperty(value = "压缩文档访问路径")
-    private String ysFileUrl;
 
 }

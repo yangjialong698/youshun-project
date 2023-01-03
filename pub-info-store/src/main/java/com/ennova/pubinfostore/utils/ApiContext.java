@@ -12,12 +12,11 @@ public class ApiContext {
         GtApiConfiguration apiConfiguration = new GtApiConfiguration();
         context.configuration = apiConfiguration;
 
-        apiConfiguration.setAppId("0ZLLyVuNNt6PK5dVI2Jh25");
-        apiConfiguration.setAppKey("FDkpgz6eODAfpon9sPsfR8");
-        apiConfiguration.setMasterSecret("1jyhZ1TZ9h75mKDHmkBLO");
+        apiConfiguration.setAppId("m7IwMVPJ129ZG1uEjGyzs4");
+        apiConfiguration.setAppKey("PxkdXE9VOhATUdj4wblu08");
+        apiConfiguration.setMasterSecret("ei2nNz22ec6gaMYLgEF112");
         // 接口调用前缀，请查看文档: 接口调用规范 -> 接口前缀, 可不填写appId
         apiConfiguration.setDomain("https://restapi.getui.com/v2/");
-        context.cid = "580286687075119744";
 
         return context;
     }

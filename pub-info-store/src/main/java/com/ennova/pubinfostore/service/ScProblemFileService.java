@@ -5,7 +5,6 @@ import com.ennova.pubinfocommon.utils.FileUtils;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfostore.dao.ScProblemFileMapper;
-import com.ennova.pubinfostore.dto.FileDelDTO;
 import com.ennova.pubinfostore.entity.ScProblemFile;
 import com.ennova.pubinfostore.vo.FileVO;
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -20,14 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ws.schild.jave.Encoder;
-import ws.schild.jave.MultimediaObject;
-import ws.schild.jave.encode.AudioAttributes;
-import ws.schild.jave.encode.EncodingAttributes;
-import ws.schild.jave.encode.VideoAttributes;
-import ws.schild.jave.info.AudioInfo;
-import ws.schild.jave.info.VideoInfo;
-import ws.schild.jave.info.VideoSize;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -99,7 +89,7 @@ public class ScProblemFileService {
                 .fileSize(map.get("fileSize")).openFile(0).delFlag(0).userId(userVo.getId()).createTime(new Date()).build();
         int count = scProblemFileMapper.insertSelective(scProblemFile);
         if (count > 0) {
-            FileVO fileVo = FileVO.builder().id(scProblemFile.getId()).fileName(map.get("fileName")).newfileName(subname).build();
+            FileVO fileVo = FileVO.builder().id(scProblemFile.getId()).fileName(map.get("fileName")).newfileName(subname).ysFileUrl(localUrl + "/file/" + newName).build();
             return Callback.success(fileVo);
         }
         return Callback.error(2, "选择文件失败!");
@@ -135,7 +125,7 @@ public class ScProblemFileService {
         }
     }
 
-    public Callback<FileVO> selectVideoFile(MultipartFile file) {
+    /*public Callback<FileVO> selectVideoFile(MultipartFile file) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
@@ -251,7 +241,7 @@ public class ScProblemFileService {
             e.printStackTrace();
         }
     }
-
+*/
     public void netDownLoadFile(String netAddress, String filename, HttpServletResponse response) throws Exception {
         URL url;
         URLConnection conn;
@@ -283,26 +273,23 @@ public class ScProblemFileService {
         }
     }
 
-    public Callback deleteFile(FileDelDTO fileDelDTO) {
+    public Callback deleteFile(FileVO fileDelDTO) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
-        fileDelDTO.getFileVos().forEach(fileVo -> {
-            String path = localPath + "/" + fileVo.getNewfileName();
-            // 如果是本人上传的，才能执行删除操作
-            assert userVo != null;
-            List<ScProblemFile> files = scProblemFileMapper.selectAllByFileMd5AndUserId(fileVo.getNewfileName(), userVo.getId());
-            if (files != null && !files.isEmpty()) {
-                File file = new File(path);
-                if (file.exists()) {
-                    //查看是否唯一
-                    int count = scProblemFileMapper.selectByFileMd5(fileVo.getNewfileName());
+        String path = localPath + "/" + fileDelDTO.getNewfileName();
+        assert userVo != null;
+        List<ScProblemFile> files = scProblemFileMapper.selectAllByFileMd5(fileDelDTO.getNewfileName());
+        if (files != null && !files.isEmpty()) {
+            File file = new File(path);
+            if (file.exists()) {
+                //查看是否唯一
+                int count = scProblemFileMapper.selectByFileMd5(fileDelDTO.getNewfileName());
                     if (count == 1) {
                         file.delete();
                     }
-                    scProblemFileMapper.deleteByPrimaryKey(fileVo.getId());
+                scProblemFileMapper.deleteByPrimaryKey(fileDelDTO.getId());
                 }
             }
-        });
         return Callback.success("附件删除成功");
     }
 }

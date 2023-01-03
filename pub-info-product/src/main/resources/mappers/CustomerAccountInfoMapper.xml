@@ -1,0 +1,1160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.daos.CustomerAccountInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.CustomerAccountInfo">
+    <!--@mbg.generated-->
+    <!--@Table customer_account_info-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="month_num" jdbcType="INTEGER" property="monthNum" />
+    <result column="complain_time" jdbcType="TIMESTAMP" property="complainTime" />
+    <result column="business_person" jdbcType="VARCHAR" property="businessPerson" />
+    <result column="prd_item" jdbcType="VARCHAR" property="prdItem" />
+    <result column="prd_name" jdbcType="VARCHAR" property="prdName" />
+    <result column="back_person_id" jdbcType="VARCHAR" property="backPersonId" />
+    <result column="back_person_name" jdbcType="VARCHAR" property="backPersonName" />
+    <result column="defect_type" jdbcType="VARCHAR" property="defectType" />
+    <result column="non_name" jdbcType="VARCHAR" property="nonName" />
+    <result column="nature_complaint" jdbcType="VARCHAR" property="natureComplaint" />
+    <result column="ponderance" jdbcType="VARCHAR" property="ponderance" />
+    <result column="problem_dis" jdbcType="VARCHAR" property="problemDis" />
+    <result column="respons_party" jdbcType="VARCHAR" property="responsParty" />
+    <result column="respons_unit" jdbcType="VARCHAR" property="responsUnit" />
+    <result column="respons_person_id" jdbcType="VARCHAR" property="responsPersonId" />
+    <result column="respons_person" jdbcType="VARCHAR" property="responsPerson" />
+    <result column="bad_num" jdbcType="INTEGER" property="badNum" />
+    <result column="problem_in" jdbcType="VARCHAR" property="problemIn" />
+    <result column="measures" jdbcType="VARCHAR" property="measures" />
+    <result column="charge_name_id" jdbcType="VARCHAR" property="chargeNameId" />
+    <result column="charge_name" jdbcType="VARCHAR" property="chargeName" />
+    <result column="plan_fin_time" jdbcType="TIMESTAMP" property="planFinTime" />
+    <result column="act_fin_time" jdbcType="TIMESTAMP" property="actFinTime" />
+    <result column="result_confirm" jdbcType="VARCHAR" property="resultConfirm" />
+    <result column="close_info" jdbcType="VARCHAR" property="closeInfo" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, month_num, complain_time, business_person, prd_item, prd_name, back_person_id, 
+    back_person_name, defect_type, non_name, nature_complaint, ponderance, problem_dis, 
+    respons_party, respons_unit, respons_person_id, respons_person, bad_num, problem_in, 
+    measures, charge_name_id, charge_name, plan_fin_time, act_fin_time, result_confirm, 
+    close_info, remarks, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from customer_account_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from customer_account_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.CustomerAccountInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_account_info (month_num, complain_time, business_person, 
+      prd_item, prd_name, back_person_id, 
+      back_person_name, defect_type, non_name, 
+      nature_complaint, ponderance, problem_dis, 
+      respons_party, respons_unit, respons_person_id, 
+      respons_person, bad_num, problem_in, 
+      measures, charge_name_id, charge_name, 
+      plan_fin_time, act_fin_time, result_confirm, 
+      close_info, remarks, create_time, 
+      update_time)
+    values (#{monthNum,jdbcType=INTEGER}, #{complainTime,jdbcType=TIMESTAMP}, #{businessPerson,jdbcType=VARCHAR}, 
+      #{prdItem,jdbcType=VARCHAR}, #{prdName,jdbcType=VARCHAR}, #{backPersonId,jdbcType=VARCHAR}, 
+      #{backPersonName,jdbcType=VARCHAR}, #{defectType,jdbcType=VARCHAR}, #{nonName,jdbcType=VARCHAR}, 
+      #{natureComplaint,jdbcType=VARCHAR}, #{ponderance,jdbcType=VARCHAR}, #{problemDis,jdbcType=VARCHAR}, 
+      #{responsParty,jdbcType=VARCHAR}, #{responsUnit,jdbcType=VARCHAR}, #{responsPersonId,jdbcType=VARCHAR}, 
+      #{responsPerson,jdbcType=VARCHAR}, #{badNum,jdbcType=INTEGER}, #{problemIn,jdbcType=VARCHAR}, 
+      #{measures,jdbcType=VARCHAR}, #{chargeNameId,jdbcType=VARCHAR}, #{chargeName,jdbcType=VARCHAR}, 
+      #{planFinTime,jdbcType=TIMESTAMP}, #{actFinTime,jdbcType=TIMESTAMP}, #{resultConfirm,jdbcType=VARCHAR}, 
+      #{closeInfo,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.CustomerAccountInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_account_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="monthNum != null">
+        month_num,
+      </if>
+      <if test="complainTime != null">
+        complain_time,
+      </if>
+      <if test="businessPerson != null">
+        business_person,
+      </if>
+      <if test="prdItem != null">
+        prd_item,
+      </if>
+      <if test="prdName != null">
+        prd_name,
+      </if>
+      <if test="backPersonId != null">
+        back_person_id,
+      </if>
+      <if test="backPersonName != null">
+        back_person_name,
+      </if>
+      <if test="defectType != null">
+        defect_type,
+      </if>
+      <if test="nonName != null">
+        non_name,
+      </if>
+      <if test="natureComplaint != null">
+        nature_complaint,
+      </if>
+      <if test="ponderance != null">
+        ponderance,
+      </if>
+      <if test="problemDis != null">
+        problem_dis,
+      </if>
+      <if test="responsParty != null">
+        respons_party,
+      </if>
+      <if test="responsUnit != null">
+        respons_unit,
+      </if>
+      <if test="responsPersonId != null">
+        respons_person_id,
+      </if>
+      <if test="responsPerson != null">
+        respons_person,
+      </if>
+      <if test="badNum != null">
+        bad_num,
+      </if>
+      <if test="problemIn != null">
+        problem_in,
+      </if>
+      <if test="measures != null">
+        measures,
+      </if>
+      <if test="chargeNameId != null">
+        charge_name_id,
+      </if>
+      <if test="chargeName != null">
+        charge_name,
+      </if>
+      <if test="planFinTime != null">
+        plan_fin_time,
+      </if>
+      <if test="actFinTime != null">
+        act_fin_time,
+      </if>
+      <if test="resultConfirm != null">
+        result_confirm,
+      </if>
+      <if test="closeInfo != null">
+        close_info,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="monthNum != null">
+        #{monthNum,jdbcType=INTEGER},
+      </if>
+      <if test="complainTime != null">
+        #{complainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessPerson != null">
+        #{businessPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="prdItem != null">
+        #{prdItem,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="backPersonId != null">
+        #{backPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="backPersonName != null">
+        #{backPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="defectType != null">
+        #{defectType,jdbcType=VARCHAR},
+      </if>
+      <if test="nonName != null">
+        #{nonName,jdbcType=VARCHAR},
+      </if>
+      <if test="natureComplaint != null">
+        #{natureComplaint,jdbcType=VARCHAR},
+      </if>
+      <if test="ponderance != null">
+        #{ponderance,jdbcType=VARCHAR},
+      </if>
+      <if test="problemDis != null">
+        #{problemDis,jdbcType=VARCHAR},
+      </if>
+      <if test="responsParty != null">
+        #{responsParty,jdbcType=VARCHAR},
+      </if>
+      <if test="responsUnit != null">
+        #{responsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="responsPersonId != null">
+        #{responsPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="responsPerson != null">
+        #{responsPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="badNum != null">
+        #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="problemIn != null">
+        #{problemIn,jdbcType=VARCHAR},
+      </if>
+      <if test="measures != null">
+        #{measures,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeNameId != null">
+        #{chargeNameId,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeName != null">
+        #{chargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="planFinTime != null">
+        #{planFinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actFinTime != null">
+        #{actFinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resultConfirm != null">
+        #{resultConfirm,jdbcType=VARCHAR},
+      </if>
+      <if test="closeInfo != null">
+        #{closeInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.CustomerAccountInfo">
+    <!--@mbg.generated-->
+    update customer_account_info
+    <set>
+      <if test="monthNum != null">
+        month_num = #{monthNum,jdbcType=INTEGER},
+      </if>
+      <if test="complainTime != null">
+        complain_time = #{complainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessPerson != null">
+        business_person = #{businessPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="prdItem != null">
+        prd_item = #{prdItem,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        prd_name = #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="backPersonId != null">
+        back_person_id = #{backPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="backPersonName != null">
+        back_person_name = #{backPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="defectType != null">
+        defect_type = #{defectType,jdbcType=VARCHAR},
+      </if>
+      <if test="nonName != null">
+        non_name = #{nonName,jdbcType=VARCHAR},
+      </if>
+      <if test="natureComplaint != null">
+        nature_complaint = #{natureComplaint,jdbcType=VARCHAR},
+      </if>
+      <if test="ponderance != null">
+        ponderance = #{ponderance,jdbcType=VARCHAR},
+      </if>
+      <if test="problemDis != null">
+        problem_dis = #{problemDis,jdbcType=VARCHAR},
+      </if>
+      <if test="responsParty != null">
+        respons_party = #{responsParty,jdbcType=VARCHAR},
+      </if>
+      <if test="responsUnit != null">
+        respons_unit = #{responsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="responsPersonId != null">
+        respons_person_id = #{responsPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="responsPerson != null">
+        respons_person = #{responsPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="badNum != null">
+        bad_num = #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="problemIn != null">
+        problem_in = #{problemIn,jdbcType=VARCHAR},
+      </if>
+      <if test="measures != null">
+        measures = #{measures,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeNameId != null">
+        charge_name_id = #{chargeNameId,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeName != null">
+        charge_name = #{chargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="planFinTime != null">
+        plan_fin_time = #{planFinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actFinTime != null">
+        act_fin_time = #{actFinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resultConfirm != null">
+        result_confirm = #{resultConfirm,jdbcType=VARCHAR},
+      </if>
+      <if test="closeInfo != null">
+        close_info = #{closeInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.CustomerAccountInfo">
+    <!--@mbg.generated-->
+    update customer_account_info
+    set month_num = #{monthNum,jdbcType=INTEGER},
+      complain_time = #{complainTime,jdbcType=TIMESTAMP},
+      business_person = #{businessPerson,jdbcType=VARCHAR},
+      prd_item = #{prdItem,jdbcType=VARCHAR},
+      prd_name = #{prdName,jdbcType=VARCHAR},
+      back_person_id = #{backPersonId,jdbcType=VARCHAR},
+      back_person_name = #{backPersonName,jdbcType=VARCHAR},
+      defect_type = #{defectType,jdbcType=VARCHAR},
+      non_name = #{nonName,jdbcType=VARCHAR},
+      nature_complaint = #{natureComplaint,jdbcType=VARCHAR},
+      ponderance = #{ponderance,jdbcType=VARCHAR},
+      problem_dis = #{problemDis,jdbcType=VARCHAR},
+      respons_party = #{responsParty,jdbcType=VARCHAR},
+      respons_unit = #{responsUnit,jdbcType=VARCHAR},
+      respons_person_id = #{responsPersonId,jdbcType=VARCHAR},
+      respons_person = #{responsPerson,jdbcType=VARCHAR},
+      bad_num = #{badNum,jdbcType=INTEGER},
+      problem_in = #{problemIn,jdbcType=VARCHAR},
+      measures = #{measures,jdbcType=VARCHAR},
+      charge_name_id = #{chargeNameId,jdbcType=VARCHAR},
+      charge_name = #{chargeName,jdbcType=VARCHAR},
+      plan_fin_time = #{planFinTime,jdbcType=TIMESTAMP},
+      act_fin_time = #{actFinTime,jdbcType=TIMESTAMP},
+      result_confirm = #{resultConfirm,jdbcType=VARCHAR},
+      close_info = #{closeInfo,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update customer_account_info
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="month_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.monthNum,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="complain_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.complainTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="business_person = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.businessPerson,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="prd_item = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.prdItem,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="prd_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.prdName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="back_person_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.backPersonId,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="back_person_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.backPersonName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="defect_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.defectType,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="non_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.nonName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="nature_complaint = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.natureComplaint,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="ponderance = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.ponderance,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="problem_dis = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.problemDis,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="respons_party = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.responsParty,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="respons_unit = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.responsUnit,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="respons_person_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.responsPersonId,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="respons_person = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.responsPerson,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="bad_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.badNum,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="problem_in = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.problemIn,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="measures = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.measures,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="charge_name_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.chargeNameId,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="charge_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.chargeName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="plan_fin_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.planFinTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="act_fin_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.actFinTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="result_confirm = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.resultConfirm,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="close_info = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.closeInfo,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="remarks = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.remarks,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update customer_account_info
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="month_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.monthNum != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.monthNum,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="complain_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.complainTime != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.complainTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="business_person = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.businessPerson != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.businessPerson,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="prd_item = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.prdItem != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.prdItem,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="prd_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.prdName != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.prdName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="back_person_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.backPersonId != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.backPersonId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="back_person_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.backPersonName != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.backPersonName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="defect_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.defectType != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.defectType,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="non_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.nonName != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.nonName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="nature_complaint = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.natureComplaint != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.natureComplaint,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="ponderance = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.ponderance != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.ponderance,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="problem_dis = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.problemDis != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.problemDis,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="respons_party = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.responsParty != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.responsParty,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="respons_unit = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.responsUnit != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.responsUnit,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="respons_person_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.responsPersonId != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.responsPersonId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="respons_person = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.responsPerson != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.responsPerson,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="bad_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.badNum != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.badNum,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="problem_in = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.problemIn != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.problemIn,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="measures = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.measures != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.measures,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="charge_name_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.chargeNameId != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.chargeNameId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="charge_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.chargeName != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.chargeName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="plan_fin_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.planFinTime != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.planFinTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="act_fin_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.actFinTime != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.actFinTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="result_confirm = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.resultConfirm != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.resultConfirm,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="close_info = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.closeInfo != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.closeInfo,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="remarks = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.remarks != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.remarks,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createTime != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updateTime != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_account_info
+    (month_num, complain_time, business_person, prd_item, prd_name, back_person_id, back_person_name, 
+      defect_type, non_name, nature_complaint, ponderance, problem_dis, respons_party, 
+      respons_unit, respons_person_id, respons_person, bad_num, problem_in, measures, 
+      charge_name_id, charge_name, plan_fin_time, act_fin_time, result_confirm, close_info, 
+      remarks, create_time, update_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.monthNum,jdbcType=INTEGER}, #{item.complainTime,jdbcType=TIMESTAMP}, #{item.businessPerson,jdbcType=VARCHAR}, 
+        #{item.prdItem,jdbcType=VARCHAR}, #{item.prdName,jdbcType=VARCHAR}, #{item.backPersonId,jdbcType=VARCHAR}, 
+        #{item.backPersonName,jdbcType=VARCHAR}, #{item.defectType,jdbcType=VARCHAR}, #{item.nonName,jdbcType=VARCHAR}, 
+        #{item.natureComplaint,jdbcType=VARCHAR}, #{item.ponderance,jdbcType=VARCHAR}, 
+        #{item.problemDis,jdbcType=VARCHAR}, #{item.responsParty,jdbcType=VARCHAR}, #{item.responsUnit,jdbcType=VARCHAR}, 
+        #{item.responsPersonId,jdbcType=VARCHAR}, #{item.responsPerson,jdbcType=VARCHAR}, 
+        #{item.badNum,jdbcType=INTEGER}, #{item.problemIn,jdbcType=VARCHAR}, #{item.measures,jdbcType=VARCHAR}, 
+        #{item.chargeNameId,jdbcType=VARCHAR}, #{item.chargeName,jdbcType=VARCHAR}, #{item.planFinTime,jdbcType=TIMESTAMP}, 
+        #{item.actFinTime,jdbcType=TIMESTAMP}, #{item.resultConfirm,jdbcType=VARCHAR}, 
+        #{item.closeInfo,jdbcType=VARCHAR}, #{item.remarks,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.CustomerAccountInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_account_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      month_num,
+      complain_time,
+      business_person,
+      prd_item,
+      prd_name,
+      back_person_id,
+      back_person_name,
+      defect_type,
+      non_name,
+      nature_complaint,
+      ponderance,
+      problem_dis,
+      respons_party,
+      respons_unit,
+      respons_person_id,
+      respons_person,
+      bad_num,
+      problem_in,
+      measures,
+      charge_name_id,
+      charge_name,
+      plan_fin_time,
+      act_fin_time,
+      result_confirm,
+      close_info,
+      remarks,
+      create_time,
+      update_time,
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      #{monthNum,jdbcType=INTEGER},
+      #{complainTime,jdbcType=TIMESTAMP},
+      #{businessPerson,jdbcType=VARCHAR},
+      #{prdItem,jdbcType=VARCHAR},
+      #{prdName,jdbcType=VARCHAR},
+      #{backPersonId,jdbcType=VARCHAR},
+      #{backPersonName,jdbcType=VARCHAR},
+      #{defectType,jdbcType=VARCHAR},
+      #{nonName,jdbcType=VARCHAR},
+      #{natureComplaint,jdbcType=VARCHAR},
+      #{ponderance,jdbcType=VARCHAR},
+      #{problemDis,jdbcType=VARCHAR},
+      #{responsParty,jdbcType=VARCHAR},
+      #{responsUnit,jdbcType=VARCHAR},
+      #{responsPersonId,jdbcType=VARCHAR},
+      #{responsPerson,jdbcType=VARCHAR},
+      #{badNum,jdbcType=INTEGER},
+      #{problemIn,jdbcType=VARCHAR},
+      #{measures,jdbcType=VARCHAR},
+      #{chargeNameId,jdbcType=VARCHAR},
+      #{chargeName,jdbcType=VARCHAR},
+      #{planFinTime,jdbcType=TIMESTAMP},
+      #{actFinTime,jdbcType=TIMESTAMP},
+      #{resultConfirm,jdbcType=VARCHAR},
+      #{closeInfo,jdbcType=VARCHAR},
+      #{remarks,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      month_num = #{monthNum,jdbcType=INTEGER},
+      complain_time = #{complainTime,jdbcType=TIMESTAMP},
+      business_person = #{businessPerson,jdbcType=VARCHAR},
+      prd_item = #{prdItem,jdbcType=VARCHAR},
+      prd_name = #{prdName,jdbcType=VARCHAR},
+      back_person_id = #{backPersonId,jdbcType=VARCHAR},
+      back_person_name = #{backPersonName,jdbcType=VARCHAR},
+      defect_type = #{defectType,jdbcType=VARCHAR},
+      non_name = #{nonName,jdbcType=VARCHAR},
+      nature_complaint = #{natureComplaint,jdbcType=VARCHAR},
+      ponderance = #{ponderance,jdbcType=VARCHAR},
+      problem_dis = #{problemDis,jdbcType=VARCHAR},
+      respons_party = #{responsParty,jdbcType=VARCHAR},
+      respons_unit = #{responsUnit,jdbcType=VARCHAR},
+      respons_person_id = #{responsPersonId,jdbcType=VARCHAR},
+      respons_person = #{responsPerson,jdbcType=VARCHAR},
+      bad_num = #{badNum,jdbcType=INTEGER},
+      problem_in = #{problemIn,jdbcType=VARCHAR},
+      measures = #{measures,jdbcType=VARCHAR},
+      charge_name_id = #{chargeNameId,jdbcType=VARCHAR},
+      charge_name = #{chargeName,jdbcType=VARCHAR},
+      plan_fin_time = #{planFinTime,jdbcType=TIMESTAMP},
+      act_fin_time = #{actFinTime,jdbcType=TIMESTAMP},
+      result_confirm = #{resultConfirm,jdbcType=VARCHAR},
+      close_info = #{closeInfo,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.CustomerAccountInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_account_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="monthNum != null">
+        month_num,
+      </if>
+      <if test="complainTime != null">
+        complain_time,
+      </if>
+      <if test="businessPerson != null">
+        business_person,
+      </if>
+      <if test="prdItem != null">
+        prd_item,
+      </if>
+      <if test="prdName != null">
+        prd_name,
+      </if>
+      <if test="backPersonId != null">
+        back_person_id,
+      </if>
+      <if test="backPersonName != null">
+        back_person_name,
+      </if>
+      <if test="defectType != null">
+        defect_type,
+      </if>
+      <if test="nonName != null">
+        non_name,
+      </if>
+      <if test="natureComplaint != null">
+        nature_complaint,
+      </if>
+      <if test="ponderance != null">
+        ponderance,
+      </if>
+      <if test="problemDis != null">
+        problem_dis,
+      </if>
+      <if test="responsParty != null">
+        respons_party,
+      </if>
+      <if test="responsUnit != null">
+        respons_unit,
+      </if>
+      <if test="responsPersonId != null">
+        respons_person_id,
+      </if>
+      <if test="responsPerson != null">
+        respons_person,
+      </if>
+      <if test="badNum != null">
+        bad_num,
+      </if>
+      <if test="problemIn != null">
+        problem_in,
+      </if>
+      <if test="measures != null">
+        measures,
+      </if>
+      <if test="chargeNameId != null">
+        charge_name_id,
+      </if>
+      <if test="chargeName != null">
+        charge_name,
+      </if>
+      <if test="planFinTime != null">
+        plan_fin_time,
+      </if>
+      <if test="actFinTime != null">
+        act_fin_time,
+      </if>
+      <if test="resultConfirm != null">
+        result_confirm,
+      </if>
+      <if test="closeInfo != null">
+        close_info,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="monthNum != null">
+        #{monthNum,jdbcType=INTEGER},
+      </if>
+      <if test="complainTime != null">
+        #{complainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessPerson != null">
+        #{businessPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="prdItem != null">
+        #{prdItem,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="backPersonId != null">
+        #{backPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="backPersonName != null">
+        #{backPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="defectType != null">
+        #{defectType,jdbcType=VARCHAR},
+      </if>
+      <if test="nonName != null">
+        #{nonName,jdbcType=VARCHAR},
+      </if>
+      <if test="natureComplaint != null">
+        #{natureComplaint,jdbcType=VARCHAR},
+      </if>
+      <if test="ponderance != null">
+        #{ponderance,jdbcType=VARCHAR},
+      </if>
+      <if test="problemDis != null">
+        #{problemDis,jdbcType=VARCHAR},
+      </if>
+      <if test="responsParty != null">
+        #{responsParty,jdbcType=VARCHAR},
+      </if>
+      <if test="responsUnit != null">
+        #{responsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="responsPersonId != null">
+        #{responsPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="responsPerson != null">
+        #{responsPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="badNum != null">
+        #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="problemIn != null">
+        #{problemIn,jdbcType=VARCHAR},
+      </if>
+      <if test="measures != null">
+        #{measures,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeNameId != null">
+        #{chargeNameId,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeName != null">
+        #{chargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="planFinTime != null">
+        #{planFinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actFinTime != null">
+        #{actFinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resultConfirm != null">
+        #{resultConfirm,jdbcType=VARCHAR},
+      </if>
+      <if test="closeInfo != null">
+        #{closeInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="monthNum != null">
+        month_num = #{monthNum,jdbcType=INTEGER},
+      </if>
+      <if test="complainTime != null">
+        complain_time = #{complainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessPerson != null">
+        business_person = #{businessPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="prdItem != null">
+        prd_item = #{prdItem,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        prd_name = #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="backPersonId != null">
+        back_person_id = #{backPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="backPersonName != null">
+        back_person_name = #{backPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="defectType != null">
+        defect_type = #{defectType,jdbcType=VARCHAR},
+      </if>
+      <if test="nonName != null">
+        non_name = #{nonName,jdbcType=VARCHAR},
+      </if>
+      <if test="natureComplaint != null">
+        nature_complaint = #{natureComplaint,jdbcType=VARCHAR},
+      </if>
+      <if test="ponderance != null">
+        ponderance = #{ponderance,jdbcType=VARCHAR},
+      </if>
+      <if test="problemDis != null">
+        problem_dis = #{problemDis,jdbcType=VARCHAR},
+      </if>
+      <if test="responsParty != null">
+        respons_party = #{responsParty,jdbcType=VARCHAR},
+      </if>
+      <if test="responsUnit != null">
+        respons_unit = #{responsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="responsPersonId != null">
+        respons_person_id = #{responsPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="responsPerson != null">
+        respons_person = #{responsPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="badNum != null">
+        bad_num = #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="problemIn != null">
+        problem_in = #{problemIn,jdbcType=VARCHAR},
+      </if>
+      <if test="measures != null">
+        measures = #{measures,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeNameId != null">
+        charge_name_id = #{chargeNameId,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeName != null">
+        charge_name = #{chargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="planFinTime != null">
+        plan_fin_time = #{planFinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actFinTime != null">
+        act_fin_time = #{actFinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resultConfirm != null">
+        result_confirm = #{resultConfirm,jdbcType=VARCHAR},
+      </if>
+      <if test="closeInfo != null">
+        close_info = #{closeInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selectByMonthNumAndKey" resultType="com.ennova.pubinfoproduct.vo.CustomerAccountInfoVO">
+    SELECT
+      id,
+      complain_time as complainTime,
+      business_person as businessPerson,
+      prd_item as prdItem,
+      prd_name as prdName,
+      back_person_name as backPersonName,
+      defect_type as defectType,
+      bad_num as badNum,
+      respons_unit as responsUnit,
+      respons_person as responsPerson,
+      ponderance
+    FROM customer_account_info
+    WHERE 1=1
+    <if test="monthNum != null">
+      AND month_num = #{monthNum}
+    </if>
+    <if test="key != null and key != ''">
+      and concat(prd_name,back_person_name) like concat('%',trim(#{key}),'%')
+    </if>
+  </select>
+</mapper>

@@ -16,11 +16,12 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="file_type" jdbcType="INTEGER" property="fileType" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, problem_feedback_id, `name`, file_md5, file_size, file_url, ys_file_url, del_flag, open_file,
-    create_time, update_time, user_id
+    create_time, update_time, user_id, file_type
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -30,8 +31,10 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from sc_problem_file
+    update sc_problem_file
+    <set>
+      del_flag = 1
+    </set>
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfostore.entity.ScProblemFile" useGeneratedKeys="true">
@@ -156,6 +159,9 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
+      <if test="fileType != null">
+        file_type = #{fileType,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -258,10 +264,26 @@
     <if test="ProblemId != null">
       and problem_feedback_id = #{ProblemId,jdbcType=INTEGER}
     </if>
+      <if test="fileType != null">
+        and file_type = #{fileType,jdbcType=INTEGER}
+      </if>
     </where>
   </select>
 
-  <select id="selectAllByFileMd5AndUserId" resultMap="BaseResultMap">
+  <select id="selectFilesByProblemIds" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from sc_problem_file
+    <where>
+      del_flag != 1
+      <if test="ProblemId != null">
+        and problem_feedback_id = #{ProblemId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectAllByFileMd5" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from sc_problem_file
@@ -269,9 +291,6 @@
       del_flag = 0
       <if test="fileMd5 != null">
         and file_md5 = #{fileMd5,jdbcType=VARCHAR}
-      </if>
-      <if test="userId != null">
-        and user_id = #{userId,jdbcType=INTEGER}
       </if>
     </where>
   </select>

@@ -2,19 +2,21 @@ package com.ennova.pubinfostore.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.service.AppService;
-import com.ennova.pubinfostore.vo.ScProblemFeedbackDetailVO;
+import com.ennova.pubinfostore.vo.SaveCountVO;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Api(tags = "公共信息平台App-问题反馈")
 @Slf4j
@@ -25,7 +27,7 @@ public class AppController {
 
     private final AppService appService;
 
-    /*@ApiOperation(value = "APP移动端接口-单个用户消息推送")
+  /*  @ApiOperation(value = "APP移动端接口-单个用户消息推送")
     @PostMapping("/pushToSingleByCid")
     public Callback<ApiResult> pushToSingleByCid(@RequestBody AppNotice appNotice) throws InterruptedException{
         return appService.pushToSingleByCid(appNotice);
@@ -48,16 +50,16 @@ public class AppController {
     @PostMapping("/alarmNotification")
     public Callback<ApiResult> alarmNotification(String title, String content, Integer userId) {
         return appService.alarmNotification(title, content, userId);
-    }
+    }*/
 
     @ApiOperation(value = "APP移动端接口 - 问题反馈")
     @PostMapping("/pushFeedback")
     public Callback pushFeedback(@RequestBody @Validated @ApiParam(value = "新增问题反馈请求参数", required = true)
-                                         ScProblemFeedbackVO scProblemFeedbackVO) throws InterruptedException, JsonProcessingException {
+                                         ScProblemFeedbackVO scProblemFeedbackVO) throws InterruptedException {
         return appService.pushFeedback(scProblemFeedbackVO);
-    }*/
+    }
 
-    @ApiOperation(value = "APP移动端接口 - 责任部门")
+    /*@ApiOperation(value = "APP移动端接口 - 责任部门")
     @GetMapping("/selectDutyDepartmentList")
     public Callback selectDutyDepartmentList() {
         return appService.selectDutyDepartmentList();
@@ -67,9 +69,18 @@ public class AppController {
     @GetMapping("/selectDutyPersonList")
     public Callback selectDutyPersonList(String departmentId) {
         return appService.selectDutyPersonList(departmentId);
+    }*/
+
+    @ApiOperation(value = "APP移动端接口 - 首页查看详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "详情ID", required = true)
+    })
+    @GetMapping("/getDetails")
+    public Callback<ScProblemFeedbackVO> getDetails(Integer id) {
+        return appService.getDetails(id);
     }
 
-    @ApiOperation(value = "APP移动端接口 - 问题反馈查看详情")
+    @ApiOperation(value = "APP移动端接口 - 我反馈的查看详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "详情ID", required = true)
     })
@@ -86,9 +97,69 @@ public class AppController {
         return appService.deleteById(id);
     }
 
+    @ApiOperation(value = "APP移动端接口 - 我反馈的")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "searchKey", value = "问题描述/责任人", required = false),
+    })
+    @GetMapping("/getMyProblemFeedbackList")
+    public Callback<BaseVO<ScProblemFeedback>> getMyProblemFeedbackList(@RequestParam(defaultValue = "1") Integer page,
+                                                                        @RequestParam(defaultValue = "10") Integer pageSize,
+                                                                        String searchKey) {
+        return appService.getMyProblemFeedbackList(page,pageSize,searchKey);
+    }
 
+    @ApiOperation(value = "APP移动端接口 - 我反馈的问题状态")
+    @GetMapping("/getMyProblemsStatus")
+    public Callback<ScProblemFeedbackVO> getMyProblemsStatus() {
+        return appService.getMyProblemsStatus();
+    }
 
+    @ApiOperation(value = "APP移动端接口 - 我经办的")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "searchKey", value = "问题描述/反馈人", required = false),
+    })
+    @GetMapping("/getMyHandleProblemList")
+    public Callback<BaseVO<ScProblemFeedback>> getMyHandleProblemList(@RequestParam(defaultValue = "1") Integer page,
+                                                                      @RequestParam(defaultValue = "10") Integer pageSize,
+                                                                      String searchKey) {
+        return appService.getMyHandleProblemList(page,pageSize,searchKey);
+    }
 
+    @ApiOperation(value = "APP移动端接口 - 我经办的问题状态")
+    @GetMapping("/getMyHandleProblemsStatus")
+    public Callback<ScProblemFeedbackVO> getMyHandleProblemsStatus() {
+        return appService.getMyHandleProblemsStatus();
+    }
+
+    @ApiOperation(value = "APP移动端接口 - 我经办的查看详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "详情ID", required = true)
+    })
+    @GetMapping("/getMyHandleDetail")
+    public Callback<ScProblemFeedbackVO> getMyHandleDetail(Integer id) {
+        return appService.getMyHandleDetail(id);
+    }
+
+    @ApiOperation(value = "APP移动端接口 - 解决问题")
+    @PostMapping("/solveProblem")
+    public Callback solveProblem(@RequestBody @Validated @ApiParam(value = "解决问题请求参数", required = true)
+                                         ScProblemFeedbackVO scProblemFeedbackVO) {
+        return appService.solveProblem(scProblemFeedbackVO);
+    }
+
+    @ApiOperation(value = "APP移动端接口 - 反馈处理 - 确认解决")
+    @PostMapping("/solveProblemFeedback")
+    public Callback solveProblemFeedback(@RequestBody @Validated @ApiParam(value = "解决问题请求参数", required = true)
+                                         ScProblemFeedbackVO scProblemFeedbackVO) {
+        return appService.solveProblemFeedback(scProblemFeedbackVO);
+    }
+
+    @ApiOperation(value = "APP移动端接口 - 反馈处理 - 未解决")
+    @PostMapping("/NoSolveProblemFeedback")
+    public Callback NoSolveProblemFeedback(@RequestBody @Validated @ApiParam(value = "解决问题请求参数", required = true)
+                                                 ScProblemFeedbackVO scProblemFeedbackVO) {
+        return appService.NoSolveProblemFeedback(scProblemFeedbackVO);
+    }
 
     @ApiOperation(value = "APP移动端接口 - 问题反馈app主页列表")
     @ApiImplicitParams({
@@ -97,5 +168,19 @@ public class AppController {
     @GetMapping("/getSfbDetailList")
     public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize, String searchKey) {
         return appService.getSfbDetailList(page,pageSize,searchKey);
+    }
+
+    @ApiOperation(value = "APP移动端接口 - 我的统计我反馈的问题数量")
+    @GetMapping("/countMyBack")
+    public Callback<SaveCountVO> countMyBack() {
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return appService.countMyBack(req);
+    }
+
+    @ApiOperation(value = "APP移动端接口 - 我的统计我经办的问题数量")
+    @GetMapping("/countMyJb")
+    public Callback<SaveCountVO> countMyJb() {
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return appService.countMyJb(req);
     }
 }

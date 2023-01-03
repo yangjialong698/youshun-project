@@ -6,7 +6,6 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfouser.dao.AppUserDao;
 import com.ennova.pubinfouser.dao.UserRoleMapper;
-import com.ennova.pubinfouser.entity.AppUserEntity;
 import com.ennova.pubinfouser.entity.UserRole;
 import com.ennova.pubinfouser.vo.AppUserVO;
 import lombok.RequiredArgsConstructor;
@@ -73,13 +72,6 @@ public class AppUserService {
         userVO.setToken(token);
         userVO.setRefreshToken(refreshToken);
         userVO.setPassword("");
-        //更新app用户cid
-        AppUserEntity appUserEntity = appUserDao.selectByPrimaryKey(userVO.getId());
-        if (StringUtils.isNotEmpty(cid)) {
-            appUserEntity.setCid(cid);
-            userVO.setCid(cid);
-        }
-        appUserDao.updateByPrimaryKeySelective(appUserEntity);
         return Callback.success(userVO);
     }
 

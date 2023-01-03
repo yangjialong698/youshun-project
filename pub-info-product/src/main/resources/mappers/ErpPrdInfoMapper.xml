@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.daos.ErpPrdInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ErpPrdInfo">
+    <!--@mbg.generated-->
+    <!--@Table erp_prd_info-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="prd_no" jdbcType="VARCHAR" property="prdNo" />
+    <result column="prd_name" jdbcType="VARCHAR" property="prdName" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+    <result column="prd_unit" jdbcType="VARCHAR" property="prdUnit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, prd_no, prd_name, spec, prd_unit
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from erp_prd_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from erp_prd_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_prd_info (prd_no, prd_name, spec, 
+      prd_unit)
+    values (#{prdNo,jdbcType=VARCHAR}, #{prdName,jdbcType=VARCHAR}, #{spec,jdbcType=VARCHAR}, 
+      #{prdUnit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_prd_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="prdNo != null">
+        prd_no,
+      </if>
+      <if test="prdName != null">
+        prd_name,
+      </if>
+      <if test="spec != null">
+        spec,
+      </if>
+      <if test="prdUnit != null">
+        prd_unit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="prdNo != null">
+        #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null">
+        #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="prdUnit != null">
+        #{prdUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdInfo">
+    <!--@mbg.generated-->
+    update erp_prd_info
+    <set>
+      <if test="prdNo != null">
+        prd_no = #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        prd_name = #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null">
+        spec = #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="prdUnit != null">
+        prd_unit = #{prdUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdInfo">
+    <!--@mbg.generated-->
+    update erp_prd_info
+    set prd_no = #{prdNo,jdbcType=VARCHAR},
+      prd_name = #{prdName,jdbcType=VARCHAR},
+      spec = #{spec,jdbcType=VARCHAR},
+      prd_unit = #{prdUnit,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update erp_prd_info
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="prd_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.prdNo,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="prd_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.prdName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="spec = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.spec,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="prd_unit = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.prdUnit,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_prd_info
+    (prd_no, prd_name, spec, prd_unit)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.prdNo,jdbcType=VARCHAR}, #{item.prdName,jdbcType=VARCHAR}, #{item.spec,jdbcType=VARCHAR}, 
+        #{item.prdUnit,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+  <select id="selectByPrdNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from erp_prd_info
+        where prd_no=#{prdNo,jdbcType=VARCHAR}
+  </select>
+</mapper>

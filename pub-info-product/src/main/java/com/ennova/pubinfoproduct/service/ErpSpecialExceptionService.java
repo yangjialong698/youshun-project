@@ -54,7 +54,7 @@ public class ErpSpecialExceptionService {
 
     public Callback<BaseVO<ErpSpecialExceptionVO>> exceptionList(Integer page, Integer pageSize) {
         Page<ErpSpecialExceptionVO> startPage = PageHelper.startPage(page, pageSize);
-        List<ErpSpecialExceptionVO> erpExceptionVOS = erpSpecialExceptionMapper.selectSpecialExceptionLists();
+        List<ErpSpecialExceptionVO> erpExceptionVOS = erpSpecialExceptionMapper.selectSpecialExceptionList();
         BaseVO<ErpSpecialExceptionVO> baseVO = new BaseVO<>(erpExceptionVOS, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }

@@ -26,9 +26,10 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete
-        from erp_special_exception
+        update erp_special_exception
+        <set>
+            del_flag = 1
+        </set>
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id"
@@ -141,7 +142,7 @@
         </foreach>
     </insert>
 
-    <select id="selectSpecialExceptionLists" resultType="com.ennova.pubinfoproduct.vo.ErpSpecialExceptionVO">
+    <select id="selectSpecialExceptionList" resultType="com.ennova.pubinfoproduct.vo.ErpSpecialExceptionVO">
         select erp.id,
                erp.exception_message as exceptionMessage,
                erp.del_flag          as delFlag,
@@ -149,5 +150,18 @@
                erp.update_time       as updateTime
         from erp_special_exception erp
         order by erp.create_time desc
+    </select>
+
+    <select id="selectSpecialExceptionLists" resultType="com.ennova.pubinfoproduct.vo.ErpSpecialExceptionVO">
+        select erp.id,
+               erp.exception_message as exceptionMessage,
+               erp.del_flag          as delFlag,
+               erp.create_time       as createTime,
+               erp.update_time       as updateTime
+        from erp_special_exception erp
+        <!--where
+        <![CDATA[date_format(erp.create_time, '%Y-%m-%d') >= date_sub(now(), interval 3 day)]]>-->
+        order by erp.create_time desc
+        limit 3
     </select>
 </mapper>
