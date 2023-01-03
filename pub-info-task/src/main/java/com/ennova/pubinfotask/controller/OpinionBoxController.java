@@ -84,4 +84,18 @@ public class OpinionBoxController {
     }
 
 
+    @ApiOperation(value = "apk下载")
+    @GetMapping("/getApkDownloadUrl")
+    public Callback getApkDownloadUrl() {
+        return opinionBoxService.getApkDownloadUrl();
+    }
+
+    @ApiOperation(value = "IOS跳转")
+    @GetMapping("/getIOSDownloadUrl")
+    public Callback getIOSDownloadUrl() {
+         return opinionBoxService.getIOSDownloadUrl();
+    }
+
+
+
 }

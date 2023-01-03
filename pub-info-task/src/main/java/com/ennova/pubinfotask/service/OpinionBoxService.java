@@ -14,18 +14,22 @@ import com.ennova.pubinfotask.entity.GwMessage;
 import com.ennova.pubinfotask.entity.OpinionBox;
 import com.ennova.pubinfotask.entity.OpinionBoxFile;
 import com.ennova.pubinfotask.utils.BeanConvertUtils;
+import com.ennova.pubinfotask.utils.DateFormatUtil;
+import com.ennova.pubinfotask.utils.QRCodeUtil;
 import com.ennova.pubinfotask.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,6 +74,11 @@ public class OpinionBoxService{
      */
     @Value("${file.suffix}")
     private String[] fileSuffix;
+    private final RedisTemplate<String,String> redisTemplate;
+    @Value("${domain-url}")
+    private String domainUrl;
+    @Value("${ios.url}")
+    private String iosUrl;
 
     //上传附件
     public Callback<FileVO> uploadFile(MultipartFile file) {
@@ -305,6 +314,165 @@ public class OpinionBoxService{
                 }
             }
         }
+    }
+
+
+
+
+
+    @SneakyThrows
+    public Callback getApkDownloadUrl() {
+//        String path = "/mnt/ennova/callPhone/";
+        String path = "/mnt/ennova/callPhone/";
+        File file = new File(path);
+        File[] files = file.listFiles();
+        String fileName = null;
+
+        // 获取文件夹下最新的文件，并且后缀为apk
+        if (Objects.nonNull(files)) {
+            for (File file1 : files) {
+                if (file1.getName().endsWith(".apk")) {
+                    // 获取修改时间最新的文件
+                    if (Objects.isNull(fileName)) {
+                        fileName = file1.getName();
+                    } else {
+                        if (file1.lastModified() > new File(path + fileName).lastModified()) {
+                            fileName = file1.getName();
+                        }
+                    }
+                }
+            }
+        }
+
+        // 获取指定路径下的图片
+        File imgFile = new File(path);
+        File[] imgFiles = imgFile.listFiles();
+        String imgName = null;
+        if (Objects.nonNull(imgFiles)) {
+            for (File file1 : imgFiles) {
+                if (file1.getName().endsWith(".jpg")) {
+                    // 获取修改时间最新的文件
+                    if (Objects.isNull(imgName)) {
+                        imgName = file1.getName();
+                    } else {
+                        if (file1.lastModified() > new File(path + imgName).lastModified()) {
+                            imgName = file1.getName();
+                        }
+                    }
+                }
+            }
+        }
+
+
+//            downloadUrl = redisTemplate.opsForValue().get("apk:download:url");
+//            if (StringUtils.isBlank(downloadUrl)) {
+
+        // 如果imgName不为空，则不用生成二维码图片
+        StringBuilder name = new StringBuilder();
+        if (StringUtils.isBlank(imgName)) {
+            name = new StringBuilder(Objects.requireNonNull(DateFormatUtil.dateToString(new Date(), DateFormatUtil.format_long)));
+            Random random = new Random();
+            for (int i = 0; i < 4; i++) {
+                int num = random.nextInt(10);
+                name.append(num);
+            }
+            name.append(".jpg");
+        }
+
+        // 如果imgName不为空，则不用生成二维码图片
+        String newName = StringUtils.isNotBlank(imgName) ? imgName : String.valueOf(name);
+
+        String downloadUrl = domainUrl + "/callPhone/" + fileName;
+        String qrCodeUrl = domainUrl + "/callPhone/" + newName;
+
+
+        QRCodeUtil.encode(downloadUrl, path + "logo.png", path + String.valueOf(newName), true);
+//                redisTemplate.opsForValue().set("apk:download:url", downloadUrl);
+//            }
+
+        UrlVO urlVO = new UrlVO();
+        urlVO.setDownloadUrl(downloadUrl);
+        urlVO.setQrCodeUrl(qrCodeUrl);
+        return Callback.success(urlVO);
+    }
+
+
+
+
+    @SneakyThrows
+    public Callback getIOSDownloadUrl() {
+//        String path = "/mnt/ennova/callPhone/";
+        String path = "/mnt/ennova/callPhoneIos/";
+//        File file = new File(path);
+//        File[] files = file.listFiles();
+//        String fileName = null;
+
+        // 获取文件夹下最新的文件，并且后缀为apk
+//        if (Objects.nonNull(files)) {
+//            for (File file1 : files) {
+//                if (file1.getName().endsWith(".apk")) {
+//                    // 获取修改时间最新的文件
+//                    if (Objects.isNull(fileName)) {
+//                        fileName = file1.getName();
+//                    } else {
+//                        if (file1.lastModified() > new File(path + fileName).lastModified()) {
+//                            fileName = file1.getName();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
+        // 获取指定路径下的图片
+        File imgFile = new File(path);
+        File[] imgFiles = imgFile.listFiles();
+        String imgName = null;
+        if (Objects.nonNull(imgFiles)) {
+            for (File file1 : imgFiles) {
+                if (file1.getName().endsWith(".jpg")) {
+                    // 获取修改时间最新的文件
+                    if (Objects.isNull(imgName)) {
+                        imgName = file1.getName();
+                    } else {
+                        if (file1.lastModified() > new File(path + imgName).lastModified()) {
+                            imgName = file1.getName();
+                        }
+                    }
+                }
+            }
+        }
+
+
+//            downloadUrl = redisTemplate.opsForValue().get("apk:download:url");
+//            if (StringUtils.isBlank(downloadUrl)) {
+
+        // 如果imgName不为空，则不用生成二维码图片
+        StringBuilder name = new StringBuilder();
+        if (StringUtils.isBlank(imgName)) {
+            name = new StringBuilder(Objects.requireNonNull(DateFormatUtil.dateToString(new Date(), DateFormatUtil.format_long)));
+            Random random = new Random();
+            for (int i = 0; i < 4; i++) {
+                int num = random.nextInt(10);
+                name.append(num);
+            }
+            name.append(".jpg");
+        }
+
+        // 如果imgName不为空，则不用生成二维码图片
+        String newName = StringUtils.isNotBlank(imgName) ? imgName : String.valueOf(name);
+
+//        String downloadUrl = domainUrl + "/callPhoneIos/" + fileName;
+        String qrCodeUrl = domainUrl + "/callPhoneIos/" + newName;
+
+
+        QRCodeUtil.encode(iosUrl, path + "logo.png", path + String.valueOf(newName), true);
+//                redisTemplate.opsForValue().set("apk:download:url", downloadUrl);
+//            }
+
+        UrlVO urlVO = new UrlVO();
+        urlVO.setDownloadUrl(iosUrl);
+        urlVO.setQrCodeUrl(qrCodeUrl);
+        return Callback.success(urlVO);
     }
 
 
