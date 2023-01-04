@@ -125,22 +125,35 @@ public class OpinionBoxService{
     //删除附件
     public Callback deleteFile(Integer id, String filePath) {
         if (ObjectUtils.isEmpty(filePath)) {
-            log.info("路径不能为空!");
             return Callback.error("上传路径不能为空!");
         }
-        String md5 = filePath.substring(filePath.indexOf("/file"));
+        if (ObjectUtils.isEmpty(id)) {
+            return Callback.error("附件id不能为空!");
+        }
+        String md5 = filePath.substring(filePath.indexOf("/file")+6);
         int md5Count = boxFileMapper.selectCountByFileMd5(md5);
         boxFileMapper.deleteByPrimaryKey(id);
-        if (md5Count <= 1) {
-            String path = localPath + md5;
+        if (md5Count == 1) {
+            String path = localPath + "/" + md5;
             File file = new File(path);
             if (file.exists()) {
                 file.delete();
+                try {
+                    String lastUrl = md5.substring(md5.lastIndexOf("/")+1);
+                    String subUrl = md5.substring(0, md5.lastIndexOf("/"));
+                    String idxPath = localPath + "/" + subUrl + "/" + "idx_" + lastUrl;
+                    File idxFile = new File(idxPath);
+                    if (idxFile.exists()) {
+                        idxFile.delete();
+                    }
+                }catch (Exception e) {
+                    log.info("解析压缩路径失败");
+                    e.printStackTrace();
+                }
             }
         }
         return Callback.success();
     }
-
 
 
     // 新增意见箱
