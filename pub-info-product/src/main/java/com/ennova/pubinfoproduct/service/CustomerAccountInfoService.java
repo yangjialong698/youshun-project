@@ -13,11 +13,17 @@ import com.ennova.pubinfoproduct.daos.CustomerAccountInfoMapper;
 import com.ennova.pubinfoproduct.dto.FileDelDTO;
 import com.ennova.pubinfoproduct.entity.CustomerAccountFile;
 import com.ennova.pubinfoproduct.entity.CustomerAccountInfo;
+import com.ennova.pubinfoproduct.utils.BeanConvertUtils;
+import com.ennova.pubinfoproduct.vo.CustomerAccountFileVO;
+import com.ennova.pubinfoproduct.vo.CustomerAccountInfoDetailVO;
 import com.ennova.pubinfoproduct.vo.CustomerAccountInfoVO;
 import com.ennova.pubinfoproduct.vo.FileVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -25,9 +31,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 /**
  * @author WangWei
@@ -68,6 +82,16 @@ public class CustomerAccountInfoService {
             return Callback.error(2, map.get("error"));
         }
         String subname = map.get("year") + "/" + map.get("month") + "/" + map.get("newfileName");
+        String newName =  map.get("year") + "/" + map.get("month") + "/" + "idx_" + map.get("newfileName") ;
+        String oldPath = localPath + "/" + subname;
+        String newPath = localPath + "/" + newName;
+        try {
+            IOUtils.copy(new FileInputStream(oldPath), new FileOutputStream(newPath));
+            doWithPhoto(newPath);
+        } catch (IOException e) {
+            log.info("生成缩略图失败");
+            e.printStackTrace();
+        }
         CustomerAccountFile customerAccountFile = CustomerAccountFile.builder().fileMd5(subname).fileUrl(localUrl + "/file/" + subname).name(map.get("fileName"))
                 .fileSize(map.get("fileSize")).openFile(0).delFlag(0).userId(userVo.getId()).createTime(new Date()).build();
         int count = customerAccountFileMapper.insertSelective(customerAccountFile);
@@ -77,12 +101,45 @@ public class CustomerAccountInfoService {
         }
         return Callback.error(2, "上传失败!");
     }
+    private static void doWithPhoto(String path) {
+
+        File file = new File(path);
+        if (!file.exists()) {
+            return;
+        }
+        BufferedImage image = null;
+        FileOutputStream os = null;
+        try {
+            image = ImageIO.read(file);
+            int width = image.getWidth();
+            int height = image.getHeight();
+            BufferedImage bfImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            bfImage.getGraphics().drawImage(image.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
+            os = new FileOutputStream(path);
+            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);
+            encoder.encode(bfImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     public Callback deleteFile(FileDelDTO fileDelDTO) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         fileDelDTO.getFileVos().forEach(fileVo -> {
             String path = localPath + "/" + fileVo.getNewfileName();
+            String fileName = fileVo.getNewfileName().substring(fileVo.getNewfileName().lastIndexOf("/") + 1);
+            String prefixUrl = fileVo.getNewfileName().substring(0, fileVo.getNewfileName().lastIndexOf("/") + 1);
+            String ysPath = localPath + "/" + prefixUrl + "idx_" + fileName;
             // 如果是本人上传的，才能执行删除操作
             assert userVo != null;
             List<CustomerAccountFile> files = customerAccountFileMapper.selectAllByFileMd5AndUserId(fileVo.getNewfileName(), userVo.getId());
@@ -93,8 +150,13 @@ public class CustomerAccountInfoService {
                     int count = customerAccountFileMapper.selectByFileMd5(fileVo.getNewfileName());
                     if (count == 1) {
                         file.delete();
+                        File fileYs = new File(ysPath);
+                        if (fileYs.exists()){
+                            fileYs.delete();
+                        }
                     }
                     customerAccountFileMapper.deleteByPrimaryKey(fileVo.getId());
+
                 }
             }
         });
@@ -169,18 +231,30 @@ public class CustomerAccountInfoService {
         return Callback.error(2, "删除失败");
     }
 
-    public Callback<CustomerAccountInfoVO> getDetail(Integer id) {
+    public Callback<CustomerAccountInfoDetailVO> getDetail(Integer id) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
         List<CustomerAccountFile> customerAccountFiles = customerAccountFileMapper.selectAllByCustomerAccountId(id);
         CustomerAccountInfo customerAccountInfo = customerAccountInfoMapper.selectByPrimaryKey(id);
-        CustomerAccountInfoVO customerAccountInfoVOFin = new CustomerAccountInfoVO();
+        CustomerAccountInfoDetailVO customerAccountInfoDetailVO = new CustomerAccountInfoDetailVO();
         if (null != customerAccountInfo){
-            BeanUtils.copyProperties(customerAccountInfo, customerAccountInfoVOFin);
-            customerAccountInfoVOFin.setFileList(customerAccountFiles);
+            BeanUtils.copyProperties(customerAccountInfo, customerAccountInfoDetailVO);
+            ArrayList<CustomerAccountFileVO> customerAccountFileVOS = new ArrayList<CustomerAccountFileVO>();
+            customerAccountFiles.forEach(customerAccountFile -> {
+                CustomerAccountFileVO customerAccountFileVO = BeanConvertUtils.convertTo(customerAccountFile, CustomerAccountFileVO::new);
+                String fileUrl = customerAccountFile.getFileUrl();
+                if (StringUtils.isNotEmpty(fileUrl)) {
+                    String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+                    String prefixUrl = fileUrl.substring(0, fileUrl.lastIndexOf("/") + 1);
+                    String idxFileUrl = prefixUrl + "idx_" + fileName;
+                    customerAccountFileVO.setIdxFileUrl(idxFileUrl);
+                }
+                customerAccountFileVOS.add(customerAccountFileVO);
+            });
+            customerAccountInfoDetailVO.setFileList(customerAccountFileVOS);
         }
-        return Callback.success(customerAccountInfoVOFin);
+        return Callback.success(customerAccountInfoDetailVO);
     }
 
     public Callback<BaseVO<CustomerAccountInfoVO>> selectCustomerAccountInfoList(Integer page, Integer pageSize, Integer monthNum, String key) {

@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerAccountInfoVO {
+public class CustomerAccountInfoDetailVO {
 
     @ApiModelProperty(value = "id")
     private Integer id;
@@ -206,6 +206,6 @@ public class CustomerAccountInfoVO {
         * 上传的附件
      */
     @ApiModelProperty(value = "上传的附件：仅用于列表展示")
-    private List<CustomerAccountFile> fileList;
+    private List<CustomerAccountFileVO> fileList;
 
 }

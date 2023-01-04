@@ -4,6 +4,7 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfoproduct.dto.FileDelDTO;
 import com.ennova.pubinfoproduct.service.CustomerAccountInfoService;
+import com.ennova.pubinfoproduct.vo.CustomerAccountInfoDetailVO;
 import com.ennova.pubinfoproduct.vo.CustomerAccountInfoVO;
 import com.ennova.pubinfoproduct.vo.FileVO;
 import io.swagger.annotations.Api;
@@ -51,7 +52,7 @@ public class CustomerAccountInfoController {
             @ApiImplicitParam(name = "id", value = "客述台账id", required = true)
     })
     @GetMapping("/getDetail")
-    public Callback<CustomerAccountInfoVO> getDetail(Integer id){
+    public Callback<CustomerAccountInfoDetailVO> getDetail(Integer id){
         return customerAccountInfoService.getDetail(id);
     }
 
