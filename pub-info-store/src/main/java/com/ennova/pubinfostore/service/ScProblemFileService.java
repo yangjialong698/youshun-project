@@ -277,15 +277,18 @@ public class ScProblemFileService {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         String path = localPath + "/" + fileDelDTO.getNewfileName();
+        String ysPath = localPath + "/" + fileDelDTO.getYsFileUrl().substring(fileDelDTO.getYsFileUrl().indexOf("/file") + 6);
         assert userVo != null;
         List<ScProblemFile> files = scProblemFileMapper.selectAllByFileMd5(fileDelDTO.getNewfileName());
         if (files != null && !files.isEmpty()) {
             File file = new File(path);
+            File ysFile = new File(ysPath);
             if (file.exists()) {
                 //查看是否唯一
                 int count = scProblemFileMapper.selectByFileMd5(fileDelDTO.getNewfileName());
                     if (count == 1) {
                         file.delete();
+                        ysFile.delete();
                     }
                 scProblemFileMapper.deleteByPrimaryKey(fileDelDTO.getId());
                 }

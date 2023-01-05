@@ -90,6 +90,7 @@ public class AppService {
         while (true) {
             pushDTO.setRequestId(System.currentTimeMillis() + "");
             apiResult = pushApi.pushToSingleByCid(pushDTO);
+            log.info("apiResult: " + apiResult.toString());
             System.err.println(apiResult);
             try {
                 Thread.sleep(1000);
@@ -436,6 +437,7 @@ public class AppService {
         }
         AppNotice appNotice = AppNotice.builder().title("问题反馈消息通知").content(scProblemFeedback.getBackDepartment() + userDTO.getUserName() + "给你反馈一条异常信息请及时处理")
                 .userid(userVo.getId().toString()).createTime(new Date()).cid(dto.getCid()).build();
+        log.info("appNotice: " + appNotice.toString());
         this.pushToSingleByCid(appNotice);
         return Callback.success(true);
     }
