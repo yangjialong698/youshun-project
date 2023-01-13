@@ -13,7 +13,6 @@ import java.util.List;
 
 /**
  * @className: YsBulletinVO
- * @Description: TODO
  * @author: shibingyang1990@gmail.com
  * @date: 2022/6/17 15:01:36
  */

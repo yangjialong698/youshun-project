@@ -4,7 +4,6 @@ import lombok.Data;
 
 /**
  * @className: UserDTO
- * @Description: TODO
  * @author: shibingyang1990@gmail.com
  * @date: 2022/6/17 15:13:42
  */

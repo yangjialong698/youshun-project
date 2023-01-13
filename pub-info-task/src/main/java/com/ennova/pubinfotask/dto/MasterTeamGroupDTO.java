@@ -4,7 +4,6 @@ import lombok.Data;
 
 /**
  * @className: MasterTeamGroup
- * @Description: TODO
  * @author: shibingyang1990@gmail.com
  * @date: 2022/6/9 15:01:51
  */

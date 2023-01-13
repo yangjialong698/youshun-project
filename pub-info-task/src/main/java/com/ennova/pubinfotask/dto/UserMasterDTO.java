@@ -10,7 +10,6 @@ import java.util.Set;
  * @BelongsPackage: com.ennova.pubinfotask.dto
  * @Author: shibingyang1990@gmail.com
  * @CreateTime: 2022-05-25  13:59
- * @Description: TODO
  * @Version: 1.0
  */
 @Data

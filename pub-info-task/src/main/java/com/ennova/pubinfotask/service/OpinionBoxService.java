@@ -1,5 +1,6 @@
 package com.ennova.pubinfotask.service;
 
+import cn.hutool.core.date.DateUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.FileUtils;
 import com.ennova.pubinfocommon.utils.JWTUtil;
@@ -32,6 +33,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -88,7 +90,7 @@ public class OpinionBoxService{
             log.info("上传文件大小为空!");
             return Callback.error("上传文件不能为空!");
         }
-
+        // TODO: 2023-01-09 md5预查有，不用重复写入
         HashMap<String, String> map = FileUtils.uploadFile(file, localPath, fileSuffix);
         if (StringUtils.isNotBlank(map.get("error"))){
             return Callback.error( map.get("error"));
