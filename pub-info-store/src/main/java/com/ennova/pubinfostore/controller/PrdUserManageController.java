@@ -4,6 +4,7 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfostore.entity.TDeptDing;
 import com.ennova.pubinfostore.entity.TUserDing;
 import com.ennova.pubinfostore.service.PrdUserManageService;
+import com.ennova.pubinfostore.vo.TDeptDingVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,12 @@ public class PrdUserManageController {
     @GetMapping("/queryNameByManageId")
     public Callback<TUserDing> queryNameByManageId(String manageId) {
         return prdUserManageService.queryNameByManageId(manageId);
+    }
+
+
+    @ApiOperation(value = "APP移动端接口 - 查询树状子部门管理者")
+    @GetMapping("/queryPrdDeptChildList")
+    public Callback<TDeptDingVO> queryPrdDeptChildList() {
+        return prdUserManageService.queryPrdDeptChildList();
     }
 }

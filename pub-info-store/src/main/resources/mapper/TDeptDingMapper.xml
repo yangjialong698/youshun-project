@@ -255,4 +255,16 @@
       #{item,jdbcType=NUMERIC}
     </foreach>
   </select>
+
+  <select id="findListByParentId" resultType="com.ennova.pubinfostore.vo.TDeptDingVO">
+    select
+    id ,
+    dept_name AS deptName,
+    parent_id AS parentId,
+    dept_id AS deptId,
+    manage_id AS manageId
+    from t_dept_ding
+    where
+    parent_id = #{parentId,jdbcType=NUMERIC}
+  </select>
 </mapper>

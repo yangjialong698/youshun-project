@@ -6,6 +6,7 @@ import com.ennova.pubinfostore.dao.TDeptDingMapper;
 import com.ennova.pubinfostore.dao.TUserDingMapper;
 import com.ennova.pubinfostore.entity.TDeptDing;
 import com.ennova.pubinfostore.entity.TUserDing;
+import com.ennova.pubinfostore.vo.TDeptDingVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class PrdUserManageService {
     private TUserDingMapper tUserDingMapper;
 
     private static final Long PRDNUM =  533915348l; // 生产部deptId
-
+    private static final Long PARENTID =  1L;
     public Callback<List<TDeptDing>> queryPrdDeptIds() {
         ArrayList<TDeptDing> tDeptDingArrayList = new ArrayList<>();
         List<TDeptDing> tDeptDings = tDeptDingMapper.selectAllByParentId(PRDNUM);
@@ -59,5 +60,33 @@ public class PrdUserManageService {
             return Callback.success(tUserDing);
         }
         return Callback.success(new TUserDing());
+    }
+
+    public Callback<TDeptDingVO> queryPrdDeptChildList() {
+        TDeptDingVO tDeptDingVOFinal = new TDeptDingVO();
+        List<TDeptDingVO> tDeptDingVOs = tDeptDingMapper.findListByParentId(PARENTID);
+        tDeptDingVOFinal.setChildren(tDeptDingVOs);
+          if (CollectionUtil.isNotEmpty(tDeptDingVOs)){
+              for (TDeptDingVO tDeptDingVO : tDeptDingVOs) {
+                  findLastDeptDingVoList(tDeptDingVO);
+              }
+          }
+        return Callback.success(tDeptDingVOFinal);
+    }
+
+    private TDeptDingVO findLastDeptDingVoList(TDeptDingVO tDeptDingVO) {
+        List<TDeptDingVO> tDeptDingList = tDeptDingMapper.findListByParentId(tDeptDingVO.getDeptId());
+        if (CollectionUtil.isNotEmpty(tDeptDingList)){
+            tDeptDingVO.setChildren(tDeptDingList);
+            for (TDeptDingVO deptVO : tDeptDingList) {
+                List<TDeptDingVO> tDeptDingChilds = tDeptDingMapper.findListByParentId(deptVO.getDeptId());
+                if (CollectionUtil.isEmpty(tDeptDingChilds)){
+                    deptVO.setChildren(tDeptDingChilds);
+                }else {
+                    findLastDeptDingVoList(deptVO);
+                }
+            }
+        }
+        return tDeptDingVO;
     }
 }

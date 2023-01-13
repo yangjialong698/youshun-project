@@ -2,6 +2,8 @@ package com.ennova.pubinfostore.dao;
 
 import com.ennova.pubinfostore.entity.TDeptDing;
 import java.util.List;
+
+import com.ennova.pubinfostore.vo.TDeptDingVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface TDeptDingMapper {
@@ -24,4 +26,6 @@ public interface TDeptDingMapper {
     List<TDeptDing> selectAllByParentId(@Param("parentId") Long parentId);
 
     List<TDeptDing> selectAllByParentIdAll(@Param("list") List<Long> parentIds);
+
+    List<TDeptDingVO> findListByParentId(@Param("parentId")Long parentId);
 }
