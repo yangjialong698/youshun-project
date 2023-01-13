@@ -4,10 +4,8 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
-import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfostore.dao.ScProblemFeedbackMapper;
 import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
@@ -40,10 +38,6 @@ public class PcService {
 
     public Callback<BaseVO<ScProblemFeedbackVO>> getDateBoardList(Integer page, Integer pageSize) {
 
-        String token = req.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
-
         if(page==null || page<1){
             page = 1;
         }
@@ -75,10 +69,6 @@ public class PcService {
     }
 
     public Callback<BaseVO<ScProblemFeedbackVO>> getDateBoardLists(Integer page, Integer pageSize) {
-
-        String token = req.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
 
         if(page==null || page<1){
             page = 1;
@@ -123,9 +113,6 @@ public class PcService {
     }
 
     public Callback<List<ScProblemFeedbackVO>> getHistoryDateBoardList(Integer status) {
-        String token = req.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
 
         List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectHistoryDateBoardList(status);
         List<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
@@ -133,7 +120,7 @@ public class PcService {
             for (ScProblemFeedback scProblemFeedback : scProblemFeedbacks) {
                 ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
                 BeanUtils.copyProperties(scProblemFeedback,scProblemFeedbackVO);
-                if(!scProblemFeedback.getBackStatus().equals("1")){
+                if(!scProblemFeedback.getBackStatus().equals("1") || scProblemFeedback.getBackStatus().equals("0")){
                     long betweenHour = DateUtil.between(scProblemFeedback.getCreateTime(), new Date(), DateUnit.HOUR);
                     scProblemFeedbackVO.setGqTime(betweenHour);
                 }else {
@@ -147,10 +134,6 @@ public class PcService {
     }
 
     public Callback<ScProblemFeedbackVO> getProblemsStatus() {
-
-        String token = req.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
 
         ScProblemFeedbackVO myProblemsStatus = scProblemFeedbackMapper.getProblemsStatus();
         return Callback.success(myProblemsStatus);
