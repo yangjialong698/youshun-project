@@ -4,8 +4,9 @@ import com.ennova.pubinfostore.entity.TDeptDing;
 import java.util.List;
 
 import com.ennova.pubinfostore.vo.TDeptDingVO;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
+@Mapper
 public interface TDeptDingMapper {
     int deleteByPrimaryKey(Integer id);
 
