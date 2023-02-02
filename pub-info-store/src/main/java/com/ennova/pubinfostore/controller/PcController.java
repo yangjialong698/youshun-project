@@ -5,6 +5,8 @@ import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfostore.service.PcService;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +47,15 @@ public class PcController {
     @GetMapping("/getHistoryDateBoardList")
     public Callback<List<ScProblemFeedbackVO>> getHistoryDateBoardList(Integer status) {
         return pcService.getHistoryDateBoardList(status);
+    }
+
+    @ApiOperation(value = "Pc端接口 - 呼叫系统数据看板和历史记录查看详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "详情ID", required = true)
+    })
+    @GetMapping("/getHistoryDateBoardDetail")
+    public Callback<ScProblemFeedbackVO> getHistoryDateBoardDetail(Integer id) {
+        return pcService.getHistoryDateBoardDetail(id);
     }
 
     @ApiOperation(value = "Pc端接口 - 呼叫系统数据看板问题状态")

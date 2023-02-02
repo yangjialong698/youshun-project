@@ -3,11 +3,14 @@ package com.ennova.pubinfostore.service;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfostore.dao.ScProblemFeedbackMapper;
+import com.ennova.pubinfostore.dao.ScProblemFileMapper;
 import com.ennova.pubinfostore.entity.ScProblemFeedback;
+import com.ennova.pubinfostore.entity.ScProblemFile;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +36,7 @@ import java.util.List;
 public class PcService {
 
     private final ScProblemFeedbackMapper scProblemFeedbackMapper;
-    private final HttpServletRequest req;
+    private final ScProblemFileMapper scProblemFileMapper;
 
     public Callback<BaseVO<ScProblemFeedbackVO>> getDateBoardList(Integer page, Integer pageSize) {
 
@@ -120,7 +122,7 @@ public class PcService {
             for (ScProblemFeedback scProblemFeedback : scProblemFeedbacks) {
                 ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
                 BeanUtils.copyProperties(scProblemFeedback,scProblemFeedbackVO);
-                if(!scProblemFeedback.getBackStatus().equals("1") || scProblemFeedback.getBackStatus().equals("0")){
+                if(!scProblemFeedback.getBackStatus().equals("1")){
                     long betweenHour = DateUtil.between(scProblemFeedback.getCreateTime(), new Date(), DateUnit.HOUR);
                     scProblemFeedbackVO.setGqTime(betweenHour);
                 }else {
@@ -131,6 +133,27 @@ public class PcService {
             }
         }
         return Callback.success(scProblemFeedbackVOS);
+    }
+
+    public Callback<ScProblemFeedbackVO> getHistoryDateBoardDetail(Integer id) {
+        if (id != null) {
+            ScProblemFeedback scProblemFeedback = scProblemFeedbackMapper.selectByPrimaryKey(id);
+            ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
+            BeanUtils.copyProperties(scProblemFeedback, scProblemFeedbackVO);
+            if (ObjectUtil.isNotEmpty(scProblemFeedbackVO)) {
+                List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemIds(scProblemFeedbackVO.getId());
+                scProblemFeedbackVO.setFileVOList(scProblemFiles);
+            }
+            if(!scProblemFeedback.getBackStatus().equals("1")){
+                long betweenHour = DateUtil.between(scProblemFeedback.getCreateTime(), new Date(), DateUnit.HOUR);
+                scProblemFeedbackVO.setGqTime(betweenHour);
+            }else {
+                long betweenHour = DateUtil.between(scProblemFeedback.getCreateTime(), scProblemFeedback.getSolveTime(), DateUnit.HOUR);
+                scProblemFeedbackVO.setGqTime(betweenHour);
+            }
+            return Callback.success(scProblemFeedbackVO);
+        }
+        return Callback.error("暂无数据");
     }
 
     public Callback<ScProblemFeedbackVO> getProblemsStatus() {

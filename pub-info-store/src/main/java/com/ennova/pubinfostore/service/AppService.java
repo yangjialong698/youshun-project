@@ -601,6 +601,7 @@ public class AppService {
 
         ScProblemFeedback scProblemFeedback = BeanConvertUtils.convertTo(scProblemFeedbackVO, ScProblemFeedback::new);
         scProblemFeedback.setBackStatus("0");
+        scProblemFeedback.setSolveTime(new Date());
         int i = scProblemFeedbackMapper.updateByPrimaryKeySelective(scProblemFeedback);
         if (i > 0) {
             return Callback.success(true);
