@@ -6,18 +6,20 @@
     <!--@Table erp_rework_repair-->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="back_user_id" jdbcType="INTEGER" property="backUserId" />
+    <result column="supplier_no" jdbcType="INTEGER" property="supplierNo" />
     <result column="supplier" jdbcType="VARCHAR" property="supplier" />
     <result column="product_no" jdbcType="VARCHAR" property="productNo" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="total_num" jdbcType="INTEGER" property="totalNum" />
     <result column="rework_reason" jdbcType="VARCHAR" property="reworkReason" />
     <result column="rework_hour" jdbcType="INTEGER" property="reworkHour" />
     <result column="rework_time" jdbcType="TIMESTAMP" property="reworkTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, back_user_id, supplier, product_no, product_name, num, rework_reason, rework_hour, 
-    rework_time
+    id, back_user_id, supplier_no, supplier, product_no, product_name, num, total_num, 
+    rework_reason, rework_hour, rework_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -33,12 +35,14 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpReworkRepair" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into erp_rework_repair (back_user_id, supplier, product_no, 
-      product_name, num, rework_reason, 
-      rework_hour, rework_time)
-    values (#{backUserId,jdbcType=INTEGER}, #{supplier,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, 
-      #{productName,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, #{reworkReason,jdbcType=VARCHAR}, 
-      #{reworkHour,jdbcType=INTEGER}, #{reworkTime,jdbcType=TIMESTAMP})
+    insert into erp_rework_repair (back_user_id, supplier_no, supplier, 
+      product_no, product_name, num, 
+      total_num, rework_reason, rework_hour, 
+      rework_time)
+    values (#{backUserId,jdbcType=INTEGER}, #{supplierNo,jdbcType=INTEGER}, #{supplier,jdbcType=VARCHAR}, 
+      #{productNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, 
+      #{totalNum,jdbcType=INTEGER}, #{reworkReason,jdbcType=VARCHAR}, #{reworkHour,jdbcType=INTEGER}, 
+      #{reworkTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpReworkRepair" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -46,6 +50,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="backUserId != null">
         back_user_id,
+      </if>
+      <if test="supplierNo != null">
+        supplier_no,
       </if>
       <if test="supplier != null">
         supplier,
@@ -58,6 +65,9 @@
       </if>
       <if test="num != null">
         num,
+      </if>
+      <if test="totalNum != null">
+        total_num,
       </if>
       <if test="reworkReason != null">
         rework_reason,
@@ -73,6 +83,9 @@
       <if test="backUserId != null">
         #{backUserId,jdbcType=INTEGER},
       </if>
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=INTEGER},
+      </if>
       <if test="supplier != null">
         #{supplier,jdbcType=VARCHAR},
       </if>
@@ -84,6 +97,9 @@
       </if>
       <if test="num != null">
         #{num,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        #{totalNum,jdbcType=INTEGER},
       </if>
       <if test="reworkReason != null">
         #{reworkReason,jdbcType=VARCHAR},
@@ -103,6 +119,9 @@
       <if test="backUserId != null">
         back_user_id = #{backUserId,jdbcType=INTEGER},
       </if>
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=INTEGER},
+      </if>
       <if test="supplier != null">
         supplier = #{supplier,jdbcType=VARCHAR},
       </if>
@@ -114,6 +133,9 @@
       </if>
       <if test="num != null">
         num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        total_num = #{totalNum,jdbcType=INTEGER},
       </if>
       <if test="reworkReason != null">
         rework_reason = #{reworkReason,jdbcType=VARCHAR},
@@ -131,16 +153,30 @@
     <!--@mbg.generated-->
     update erp_rework_repair
     set back_user_id = #{backUserId,jdbcType=INTEGER},
+      supplier_no = #{supplierNo,jdbcType=INTEGER},
       supplier = #{supplier,jdbcType=VARCHAR},
       product_no = #{productNo,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
       num = #{num,jdbcType=INTEGER},
+      total_num = #{totalNum,jdbcType=INTEGER},
       rework_reason = #{reworkReason,jdbcType=VARCHAR},
       rework_hour = #{reworkHour,jdbcType=INTEGER},
       rework_time = #{reworkTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_rework_repair
+    (back_user_id, supplier_no, supplier, product_no, product_name, num, total_num, rework_reason, 
+      rework_hour, rework_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.backUserId,jdbcType=INTEGER}, #{item.supplierNo,jdbcType=INTEGER}, #{item.supplier,jdbcType=VARCHAR}, 
+        #{item.productNo,jdbcType=VARCHAR}, #{item.productName,jdbcType=VARCHAR}, #{item.num,jdbcType=INTEGER}, 
+        #{item.totalNum,jdbcType=INTEGER}, #{item.reworkReason,jdbcType=VARCHAR}, #{item.reworkHour,jdbcType=INTEGER}, 
+        #{item.reworkTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
   <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpReworkRepair" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into erp_rework_repair
@@ -149,10 +185,12 @@
         id,
       </if>
       back_user_id,
+      supplier_no,
       supplier,
       product_no,
       product_name,
       num,
+      total_num,
       rework_reason,
       rework_hour,
       rework_time,
@@ -163,10 +201,12 @@
         #{id,jdbcType=INTEGER},
       </if>
       #{backUserId,jdbcType=INTEGER},
+      #{supplierNo,jdbcType=INTEGER},
       #{supplier,jdbcType=VARCHAR},
       #{productNo,jdbcType=VARCHAR},
       #{productName,jdbcType=VARCHAR},
       #{num,jdbcType=INTEGER},
+      #{totalNum,jdbcType=INTEGER},
       #{reworkReason,jdbcType=VARCHAR},
       #{reworkHour,jdbcType=INTEGER},
       #{reworkTime,jdbcType=TIMESTAMP},
@@ -177,10 +217,12 @@
         id = #{id,jdbcType=INTEGER},
       </if>
       back_user_id = #{backUserId,jdbcType=INTEGER},
+      supplier_no = #{supplierNo,jdbcType=INTEGER},
       supplier = #{supplier,jdbcType=VARCHAR},
       product_no = #{productNo,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
       num = #{num,jdbcType=INTEGER},
+      total_num = #{totalNum,jdbcType=INTEGER},
       rework_reason = #{reworkReason,jdbcType=VARCHAR},
       rework_hour = #{reworkHour,jdbcType=INTEGER},
       rework_time = #{reworkTime,jdbcType=TIMESTAMP},
@@ -196,6 +238,9 @@
       <if test="backUserId != null">
         back_user_id,
       </if>
+      <if test="supplierNo != null">
+        supplier_no,
+      </if>
       <if test="supplier != null">
         supplier,
       </if>
@@ -207,6 +252,9 @@
       </if>
       <if test="num != null">
         num,
+      </if>
+      <if test="totalNum != null">
+        total_num,
       </if>
       <if test="reworkReason != null">
         rework_reason,
@@ -226,6 +274,9 @@
       <if test="backUserId != null">
         #{backUserId,jdbcType=INTEGER},
       </if>
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=INTEGER},
+      </if>
       <if test="supplier != null">
         #{supplier,jdbcType=VARCHAR},
       </if>
@@ -237,6 +288,9 @@
       </if>
       <if test="num != null">
         #{num,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        #{totalNum,jdbcType=INTEGER},
       </if>
       <if test="reworkReason != null">
         #{reworkReason,jdbcType=VARCHAR},
@@ -256,6 +310,9 @@
       <if test="backUserId != null">
         back_user_id = #{backUserId,jdbcType=INTEGER},
       </if>
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=INTEGER},
+      </if>
       <if test="supplier != null">
         supplier = #{supplier,jdbcType=VARCHAR},
       </if>
@@ -267,6 +324,9 @@
       </if>
       <if test="num != null">
         num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        total_num = #{totalNum,jdbcType=INTEGER},
       </if>
       <if test="reworkReason != null">
         rework_reason = #{reworkReason,jdbcType=VARCHAR},
@@ -280,22 +340,9 @@
     </trim>
   </insert>
 
-  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into erp_rework_repair
-    (supplier, product_no, product_name, num, rework_reason, rework_hour, rework_time
-    )
-    values
-    <foreach collection="list" item="item" separator=",">
-      (#{item.supplier,jdbcType=VARCHAR}, #{item.productNo,jdbcType=VARCHAR}, #{item.productName,jdbcType=VARCHAR},
-      #{item.num,jdbcType=INTEGER}, #{item.reworkReason,jdbcType=VARCHAR}, #{item.reworkHour,jdbcType=INTEGER},
-      #{item.reworkTime,jdbcType=TIMESTAMP})
-    </foreach>
-  </insert>
-
   <select id="selectAll" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from erp_rework_repair
     where 1=1
     <if test="key != null and key != ''">

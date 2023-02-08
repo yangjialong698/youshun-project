@@ -6,8 +6,11 @@ import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfoproduct.daos.ErpPrdInfoMapper;
 import com.ennova.pubinfoproduct.daos.ErpReworkRepairMapper;
+import com.ennova.pubinfoproduct.daos.SupplierInfoMapper;
 import com.ennova.pubinfoproduct.entity.ErpPrdInfo;
 import com.ennova.pubinfoproduct.entity.ErpReworkRepair;
+import com.ennova.pubinfoproduct.entity.SupplierInfo;
+import com.ennova.pubinfoproduct.vo.SupplierInfoVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +26,8 @@ public class ErpReworkRepairService {
     private ErpReworkRepairMapper erpReworkRepairMapper;
     @Autowired
     private ErpPrdInfoMapper erpPrdInfoMapper;
+    @Autowired
+    private SupplierInfoMapper supplierInfoMapper;
 
     public Callback insertOrUpdate(ErpReworkRepair erpReworkRepair) {
         if (null != erpReworkRepair.getId()){
@@ -78,5 +83,10 @@ public class ErpReworkRepairService {
             prdName = erpPrdInfos.get(0).getPrdName();
         }
         return Callback.success(prdName);
+    }
+
+    public Callback<List<SupplierInfoVO>> getSupplierInfo(String supplier) {
+        List<SupplierInfoVO> supplierInfoVOS = supplierInfoMapper.selectBySupplier(supplier);
+        return Callback.success(supplierInfoVOS);
     }
 }

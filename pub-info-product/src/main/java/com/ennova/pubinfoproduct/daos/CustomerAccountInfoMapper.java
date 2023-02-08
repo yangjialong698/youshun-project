@@ -2,13 +2,11 @@ package com.ennova.pubinfoproduct.daos;
 
 import com.ennova.pubinfoproduct.entity.CustomerAccountInfo;
 import java.util.List;
-
-import com.ennova.pubinfoproduct.vo.CustomerAccountInfoVO;
-import org.apache.ibatis.annotations.Mapper;
+import com.ennova.pubinfoproduct.vo.CustomerAccountInfoVO;import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
 @Mapper
 public interface CustomerAccountInfoMapper {
-
     int deleteByPrimaryKey(Integer id);
 
     int insert(CustomerAccountInfo record);
@@ -25,11 +23,7 @@ public interface CustomerAccountInfoMapper {
 
     int updateByPrimaryKey(CustomerAccountInfo record);
 
-    int updateBatch(List<CustomerAccountInfo> list);
-
-    int updateBatchSelective(List<CustomerAccountInfo> list);
-
     int batchInsert(@Param("list") List<CustomerAccountInfo> list);
 
-    List<CustomerAccountInfoVO> selectByMonthNumAndKey(@Param("monthNum") Integer monthNum, @Param("key")String key);
+    List<CustomerAccountInfoVO> selectByMonthNumAndKey(@Param("monthNum") Integer monthNum, @Param("key") String key);
 }

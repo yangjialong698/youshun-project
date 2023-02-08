@@ -10,14 +10,12 @@ import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfoproduct.daos.CustomerAccountFileMapper;
 import com.ennova.pubinfoproduct.daos.CustomerAccountInfoMapper;
+import com.ennova.pubinfoproduct.daos.SupplierInfoMapper;
 import com.ennova.pubinfoproduct.dto.FileDelDTO;
 import com.ennova.pubinfoproduct.entity.CustomerAccountFile;
 import com.ennova.pubinfoproduct.entity.CustomerAccountInfo;
 import com.ennova.pubinfoproduct.utils.BeanConvertUtils;
-import com.ennova.pubinfoproduct.vo.CustomerAccountFileVO;
-import com.ennova.pubinfoproduct.vo.CustomerAccountInfoDetailVO;
-import com.ennova.pubinfoproduct.vo.CustomerAccountInfoVO;
-import com.ennova.pubinfoproduct.vo.FileVO;
+import com.ennova.pubinfoproduct.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -57,6 +55,8 @@ public class CustomerAccountInfoService {
     private CustomerAccountFileMapper customerAccountFileMapper;
     @Autowired
     private CustomerAccountInfoMapper customerAccountInfoMapper;
+    @Autowired
+    private SupplierInfoMapper supplierInfoMapper;
 
     /** 本地路径 */
     @Value("${spring.upload.local.path}")
@@ -272,5 +272,10 @@ public class CustomerAccountInfoService {
         }
         BaseVO<CustomerAccountInfoVO> baseVO = new BaseVO<>(customerAccountInfoVOList, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
+    }
+
+    public Callback<List<CusAccSupplierVO>> getCusAccSupplierInfo(String responsParty) {
+        List<CusAccSupplierVO> cusAccSupplierVOS = supplierInfoMapper.selectBySupplierParty(responsParty);
+        return Callback.success(cusAccSupplierVOS);
     }
 }

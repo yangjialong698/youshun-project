@@ -4,9 +4,7 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfoproduct.dto.FileDelDTO;
 import com.ennova.pubinfoproduct.service.CustomerAccountInfoService;
-import com.ennova.pubinfoproduct.vo.CustomerAccountInfoDetailVO;
-import com.ennova.pubinfoproduct.vo.CustomerAccountInfoVO;
-import com.ennova.pubinfoproduct.vo.FileVO;
+import com.ennova.pubinfoproduct.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -15,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author WangWei
@@ -28,6 +28,15 @@ public class CustomerAccountInfoController {
 
     @Autowired
     private CustomerAccountInfoService customerAccountInfoService;
+
+    @ApiOperation(value = "根据根据供应商名称模糊查询供应商详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "responsParty", value = "供应商名称", required = true)
+    })
+    @GetMapping("/getCusAccSupplierInfo")
+    public Callback<List<CusAccSupplierVO>> getCusAccSupplierInfo(String responsParty) {
+        return customerAccountInfoService.getCusAccSupplierInfo(responsParty);
+    }
 
     @ApiOperation(value = "客述台账附件 - 文件上传")
     @PostMapping("/upload")

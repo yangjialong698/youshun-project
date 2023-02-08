@@ -103,6 +103,12 @@ public class CustomerAccountInfoVO {
     private String responsParty;
 
     /**
+     * 供应商代号
+     */
+    @ApiModelProperty(value = "供应商代号")
+    private Integer supplierNo;
+
+    /**
     * 责任单位
     */
     @ApiModelProperty(value = "责任单位")

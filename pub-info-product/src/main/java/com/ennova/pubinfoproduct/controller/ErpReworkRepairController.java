@@ -4,8 +4,10 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfoproduct.entity.ErpException;
 import com.ennova.pubinfoproduct.entity.ErpReworkRepair;
+import com.ennova.pubinfoproduct.entity.SupplierInfo;
 import com.ennova.pubinfoproduct.service.ErpReworkRepairService;
 import com.ennova.pubinfoproduct.vo.ErpExceptionVO;
+import com.ennova.pubinfoproduct.vo.SupplierInfoVO;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,15 @@ public class ErpReworkRepairController {
 
     @Autowired
     private ErpReworkRepairService erpReworkRepairService;
+
+    @ApiOperation(value = "根据根据供应商名称模糊查询供应商详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "supplier", value = "供应商名称", required = true)
+    })
+    @GetMapping("/getSupplierInfo")
+    public Callback<List<SupplierInfoVO>> getSupplierInfo(String supplier) {
+        return erpReworkRepairService.getSupplierInfo(supplier);
+    }
 
     @ApiOperation(value = "新增和修改返工返修信息")
     @PostMapping("/insertOrUpdate")

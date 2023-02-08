@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.daos.SupplierInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.SupplierInfo">
+    <!--@mbg.generated-->
+    <!--@Table supplier_info-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="supplier_no" jdbcType="INTEGER" property="supplierNo" />
+    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, create_time, update_time, `password`, supplier_no, supplier, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from supplier_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from supplier_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into supplier_info (create_time, update_time, `password`, 
+      supplier_no, supplier, is_delete
+      )
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{password,jdbcType=VARCHAR}, 
+      #{supplierNo,jdbcType=INTEGER}, #{supplier,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into supplier_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="supplierNo != null">
+        supplier_no,
+      </if>
+      <if test="supplier != null">
+        supplier,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=INTEGER},
+      </if>
+      <if test="supplier != null">
+        #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.SupplierInfo">
+    <!--@mbg.generated-->
+    update supplier_info
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=INTEGER},
+      </if>
+      <if test="supplier != null">
+        supplier = #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.SupplierInfo">
+    <!--@mbg.generated-->
+    update supplier_info
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      `password` = #{password,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=INTEGER},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into supplier_info
+    (create_time, update_time, `password`, supplier_no, supplier, is_delete)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.password,jdbcType=VARCHAR}, 
+        #{item.supplierNo,jdbcType=INTEGER}, #{item.supplier,jdbcType=VARCHAR}, #{item.isDelete,jdbcType=INTEGER}
+        )
+    </foreach>
+  </insert>
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into supplier_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      create_time,
+      update_time,
+      `password`,
+      supplier_no,
+      supplier,
+      is_delete,
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP},
+      #{password,jdbcType=VARCHAR},
+      #{supplierNo,jdbcType=INTEGER},
+      #{supplier,jdbcType=VARCHAR},
+      #{isDelete,jdbcType=INTEGER},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      `password` = #{password,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=INTEGER},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into supplier_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="supplierNo != null">
+        supplier_no,
+      </if>
+      <if test="supplier != null">
+        supplier,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=INTEGER},
+      </if>
+      <if test="supplier != null">
+        #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=INTEGER},
+      </if>
+      <if test="supplier != null">
+        supplier = #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+
+  <select id="selectBySupplier" resultType="com.ennova.pubinfoproduct.vo.SupplierInfoVO">
+        select
+         supplier_no AS supplierNo,
+         supplier AS supplier
+        from supplier_info
+        <where>
+            <if test="supplier != null">
+                and supplier like concat('%',#{supplier},'%')
+                and is_delete = 0
+            </if>
+        </where>
+    </select>
+
+  <select id="selectBySupplierParty" resultType="com.ennova.pubinfoproduct.vo.CusAccSupplierVO">
+    select
+    supplier_no AS supplierNo,
+    supplier AS responsParty
+    from supplier_info
+    <where>
+      <if test="responsParty != null">
+        and supplier like concat('%',#{responsParty},'%')
+        and is_delete = 0
+      </if>
+    </where>
+  </select>
+</mapper>

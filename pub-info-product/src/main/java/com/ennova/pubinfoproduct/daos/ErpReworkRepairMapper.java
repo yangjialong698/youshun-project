@@ -25,5 +25,5 @@ public interface ErpReworkRepairMapper {
 
     int batchInsert(@Param("list") List<ErpReworkRepair> list);
 
-    List<ErpReworkRepair> selectAll(@Param("key")String key);
+    List<ErpReworkRepair> selectAll(@Param("key") String key);
 }
