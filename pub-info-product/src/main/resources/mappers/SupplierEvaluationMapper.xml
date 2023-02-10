@@ -5,22 +5,24 @@
     <!--@mbg.generated-->
     <!--@Table ys_supplier_evaluation-->
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="supplier_no" jdbcType="INTEGER" property="supplierNo" />
     <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
     <result column="incoming_defective_rate" jdbcType="INTEGER" property="incomingDefectiveRate" />
     <result column="timely_delivery" jdbcType="INTEGER" property="timelyDelivery" />
-    <result column="rework_rate" jdbcType="INTEGER" property="reworkRate" />
+    <result column="rework_rate" jdbcType="DOUBLE" property="reworkRate" />
     <result column="cooperation" jdbcType="INTEGER" property="cooperation" />
     <result column="incoming_shortage" jdbcType="INTEGER" property="incomingShortage" />
     <result column="customer_complaints" jdbcType="INTEGER" property="customerComplaints" />
-    <result column="summary" jdbcType="INTEGER" property="summary" />
+    <result column="summary" jdbcType="DOUBLE" property="summary" />
     <result column="evaluation_time" jdbcType="TIMESTAMP" property="evaluationTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, supplier_name, incoming_defective_rate, timely_delivery, rework_rate, cooperation, 
-    incoming_shortage, customer_complaints, summary, evaluation_time, create_time, update_time
+    id, supplier_no, supplier_name, incoming_defective_rate, timely_delivery, rework_rate, 
+    cooperation, incoming_shortage, customer_complaints, summary, evaluation_time, create_time, 
+    update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -36,14 +38,14 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into ys_supplier_evaluation (supplier_name, incoming_defective_rate, 
+    insert into ys_supplier_evaluation (supplier_no, supplier_name, incoming_defective_rate, 
       timely_delivery, rework_rate, cooperation, 
       incoming_shortage, customer_complaints, summary, 
       evaluation_time, create_time, update_time
       )
-    values (#{supplierName,jdbcType=VARCHAR}, #{incomingDefectiveRate,jdbcType=INTEGER}, 
-      #{timelyDelivery,jdbcType=INTEGER}, #{reworkRate,jdbcType=INTEGER}, #{cooperation,jdbcType=INTEGER}, 
-      #{incomingShortage,jdbcType=INTEGER}, #{customerComplaints,jdbcType=INTEGER}, #{summary,jdbcType=INTEGER}, 
+    values (#{supplierNo,jdbcType=INTEGER}, #{supplierName,jdbcType=VARCHAR}, #{incomingDefectiveRate,jdbcType=INTEGER}, 
+      #{timelyDelivery,jdbcType=INTEGER}, #{reworkRate,jdbcType=DOUBLE}, #{cooperation,jdbcType=INTEGER}, 
+      #{incomingShortage,jdbcType=INTEGER}, #{customerComplaints,jdbcType=INTEGER}, #{summary,jdbcType=DOUBLE}, 
       #{evaluationTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -51,6 +53,9 @@
     <!--@mbg.generated-->
     insert into ys_supplier_evaluation
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="supplierNo != null">
+        supplier_no,
+      </if>
       <if test="supplierName != null">
         supplier_name,
       </if>
@@ -86,6 +91,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=INTEGER},
+      </if>
       <if test="supplierName != null">
         #{supplierName,jdbcType=VARCHAR},
       </if>
@@ -96,7 +104,7 @@
         #{timelyDelivery,jdbcType=INTEGER},
       </if>
       <if test="reworkRate != null">
-        #{reworkRate,jdbcType=INTEGER},
+        #{reworkRate,jdbcType=DOUBLE},
       </if>
       <if test="cooperation != null">
         #{cooperation,jdbcType=INTEGER},
@@ -108,7 +116,7 @@
         #{customerComplaints,jdbcType=INTEGER},
       </if>
       <if test="summary != null">
-        #{summary,jdbcType=INTEGER},
+        #{summary,jdbcType=DOUBLE},
       </if>
       <if test="evaluationTime != null">
         #{evaluationTime,jdbcType=TIMESTAMP},
@@ -125,6 +133,9 @@
     <!--@mbg.generated-->
     update ys_supplier_evaluation
     <set>
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=INTEGER},
+      </if>
       <if test="supplierName != null">
         supplier_name = #{supplierName,jdbcType=VARCHAR},
       </if>
@@ -135,7 +146,7 @@
         timely_delivery = #{timelyDelivery,jdbcType=INTEGER},
       </if>
       <if test="reworkRate != null">
-        rework_rate = #{reworkRate,jdbcType=INTEGER},
+        rework_rate = #{reworkRate,jdbcType=DOUBLE},
       </if>
       <if test="cooperation != null">
         cooperation = #{cooperation,jdbcType=INTEGER},
@@ -147,7 +158,7 @@
         customer_complaints = #{customerComplaints,jdbcType=INTEGER},
       </if>
       <if test="summary != null">
-        summary = #{summary,jdbcType=INTEGER},
+        summary = #{summary,jdbcType=DOUBLE},
       </if>
       <if test="evaluationTime != null">
         evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
@@ -164,20 +175,33 @@
   <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation">
     <!--@mbg.generated-->
     update ys_supplier_evaluation
-    set supplier_name = #{supplierName,jdbcType=VARCHAR},
+    set supplier_no = #{supplierNo,jdbcType=INTEGER},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
       incoming_defective_rate = #{incomingDefectiveRate,jdbcType=INTEGER},
       timely_delivery = #{timelyDelivery,jdbcType=INTEGER},
-      rework_rate = #{reworkRate,jdbcType=INTEGER},
+      rework_rate = #{reworkRate,jdbcType=DOUBLE},
       cooperation = #{cooperation,jdbcType=INTEGER},
       incoming_shortage = #{incomingShortage,jdbcType=INTEGER},
       customer_complaints = #{customerComplaints,jdbcType=INTEGER},
-      summary = #{summary,jdbcType=INTEGER},
+      summary = #{summary,jdbcType=DOUBLE},
       evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-<!--auto generated by MybatisCodeHelper on 2023-01-09-->
+   <select id="selectBySort" resultMap="BaseResultMap">
+     select <include refid="Base_Column_List"/>
+    from ys_supplier_evaluation
+    <where>
+      <if test="year != null and year !=''">
+        YEAR (evaluation_time) = #{year,jdbcType=VARCHAR}
+      </if>
+      <if test="month != null and month !=''">
+        and MONTH (evaluation_time) = #{month,jdbcType=VARCHAR}
+      </if>
+    </where>
+   </select>
+  <!--auto generated by MybatisCodeHelper on 2023-01-09-->
   <insert id="insertList">
     INSERT INTO ys_supplier_evaluation(
             id,
@@ -194,7 +218,7 @@
             update_time
         )VALUES
         <foreach collection="list" item="element" index="index" separator=",">
-            (
+          (
             #{element.id,jdbcType=INTEGER},
             #{element.supplierName,jdbcType=VARCHAR},
             #{element.incomingDefectiveRate,jdbcType=INTEGER},
@@ -209,36 +233,62 @@
             #{element.updateTime,jdbcType=TIMESTAMP}
         )
         </foreach>
-</insert>
-<select id="selectByEvaluationTime" resultType="java.lang.Integer">
-  select id
+  </insert>
+<!--  <select id="selectByEvaluationTime" resultType="java.lang.Integer">-->
+<!--    select id-->
+<!--      from ys_supplier_evaluation-->
+<!--      <where>-->
+<!--        <if test="evaluationTime != null">-->
+<!--          and evaluation_time=#{evaluationTime,jdbcType=TIMESTAMP}-->
+<!--        </if>-->
+<!--      </where>-->
+<!--    limit 1-->
+<!--  </select>-->
+<!--  <delete id="deleteByEvaluationTime">-->
+<!--    delete from  ys_supplier_evaluation-->
+<!--      <where>-->
+<!--        <if test="evaluationTime != null">-->
+<!--          and evaluation_time=#{evaluationTime,jdbcType=TIMESTAMP}-->
+<!--        </if>-->
+<!--      </where>-->
+<!--  </delete>-->
+<!--  <select id="selectBySupplierNo" resultMap="BaseResultMap">-->
+<!--    select <include refid="Base_Column_List"/>-->
+<!--    from ys_supplier_evaluation-->
+<!--    <where>-->
+<!--      <if test="supplierNo != null">-->
+<!--        and supplier_no=#{supplierNo,jdbcType=INTEGER}-->
+<!--      </if>-->
+<!--    </where>-->
+<!--  </select>-->
+  <select id="selectBySupplierNoAndTime" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
     from ys_supplier_evaluation
     <where>
-      <if test="evaluationTime != null">
-        and evaluation_time=#{evaluationTime,jdbcType=TIMESTAMP}
+      <if test="supplierNo != null">
+        and supplier_no=#{supplierNo,jdbcType=INTEGER}
       </if>
+       <if test="year != null">
+         and YEAR (evaluation_time) = #{year}
+       </if>
+        <if test="month != null">
+          and MONTH (evaluation_time) = #{month}
+        </if>
     </where>
-  limit 1
-</select>
-<delete id="deleteByEvaluationTime">
-  delete from  ys_supplier_evaluation
-    <where>
-      <if test="evaluationTime != null">
-        and evaluation_time=#{evaluationTime,jdbcType=TIMESTAMP}
-      </if>
-    </where>
-</delete>
-
-<select id="selectBySort" resultMap="BaseResultMap">
-  select <include refid="Base_Column_List"/>
+  </select>
+  <select id="selectBySupplierNoAndEvaluationTime" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
     from ys_supplier_evaluation
     <where>
-      <if test="year != null and year !=''">
-         YEAR (evaluation_time) = #{year,jdbcType=VARCHAR}
+      <if test="supplierNo != null">
+         and supplier_no=#{supplierNo,jdbcType=INTEGER}
       </if>
-      <if test="month != null and month !=''">
-        and MONTH (evaluation_time) = #{month,jdbcType=VARCHAR}
+      <if test="year != null">
+         and YEAR (evaluation_time) = #{year}
+      </if>
+      <if test="month != null">
+        and MONTH (evaluation_time) = #{month}
       </if>
     </where>
-</select>
+  </select>
 </mapper>

@@ -2,6 +2,8 @@ package com.ennova.pubinfoproduct.daos;
 
 import com.ennova.pubinfoproduct.entity.ErpReworkRepair;
 import java.util.List;
+
+import com.ennova.pubinfoproduct.vo.DefectRateVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,4 +28,6 @@ public interface ErpReworkRepairMapper {
     int batchInsert(@Param("list") List<ErpReworkRepair> list);
 
     List<ErpReworkRepair> selectAll(@Param("key") String key);
+
+    List<DefectRateVO> selectByReworkTime(@Param("year") int year, @Param("month") int month);
 }

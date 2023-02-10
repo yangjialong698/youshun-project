@@ -31,4 +31,9 @@ public interface SupplierInfoMapper {
     List<SupplierInfoVO> selectBySupplier(@Param("supplier")String supplier);
 
     List<CusAccSupplierVO> selectBySupplierParty(@Param("responsParty")String responsParty);
+
+    SupplierInfo selectBySupplierNo(@Param("supplierNo")Integer supplierNo);
+
+    List<SupplierInfo> selectAll();
+
 }

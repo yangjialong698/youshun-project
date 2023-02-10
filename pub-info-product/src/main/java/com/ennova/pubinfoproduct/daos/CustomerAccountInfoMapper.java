@@ -2,6 +2,8 @@ package com.ennova.pubinfoproduct.daos;
 
 import com.ennova.pubinfoproduct.entity.CustomerAccountInfo;
 import java.util.List;
+
+import com.ennova.pubinfoproduct.vo.ComplaintVO;
 import com.ennova.pubinfoproduct.vo.CustomerAccountInfoVO;import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,4 +28,6 @@ public interface CustomerAccountInfoMapper {
     int batchInsert(@Param("list") List<CustomerAccountInfo> list);
 
     List<CustomerAccountInfoVO> selectByMonthNumAndKey(@Param("monthNum") Integer monthNum, @Param("key") String key);
+
+    List<ComplaintVO> selectByComplainTime(@Param("year") int year , @Param("month") int month);
 }

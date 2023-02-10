@@ -349,4 +349,17 @@
       and concat(supplier,product_no,product_name) like concat('%',trim(#{key}),'%')
     </if>
   </select>
+
+<!--  根据年、月份，查询不良率和供应商编码-->
+    <select id="selectByReworkTime" resultType="com.ennova.pubinfoproduct.vo.DefectRateVO">
+      SELECT
+        supplier_no as supplierNo,
+        round(avg(num/total_num),2) as defectRate
+      FROM
+        `erp_rework_repair`
+      WHERE
+        YEAR ( rework_time )= #{year}
+        AND MONTH ( rework_time )=  #{month}
+      group by supplier_no
+    </select>
 </mapper>

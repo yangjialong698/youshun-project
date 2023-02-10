@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 /**
  * 供应商评价表
  */
-@ApiModel(value = "供应商评价表")
+@ApiModel(description = "供应商评价表")
 @Data
 @Builder
 @AllArgsConstructor
@@ -23,6 +23,12 @@ public class SupplierEvaluation {
      */
     @ApiModelProperty(value = "主键")
     private Integer id;
+
+    /**
+     * 供应商编号
+     */
+    @ApiModelProperty(value = "供应商编号")
+    private Integer supplierNo;
 
     /**
      * 供应商名称
@@ -46,7 +52,7 @@ public class SupplierEvaluation {
      * 返工返修率
      */
     @ApiModelProperty(value = "返工返修率")
-    private Integer reworkRate;
+    private Double reworkRate;
 
     /**
      * 配合度
@@ -70,7 +76,7 @@ public class SupplierEvaluation {
      * 汇总
      */
     @ApiModelProperty(value = "汇总")
-    private Integer summary;
+    private Double summary;
 
     /**
      * 评价时间
@@ -92,5 +98,4 @@ public class SupplierEvaluation {
     @ApiModelProperty(value = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
-
 }

@@ -1,10 +1,10 @@
 package com.ennova.pubinfoproduct.daos;
-import java.util.Date;
-import org.apache.ibatis.annotations.Param;
-import java.util.List;
 
 import com.ennova.pubinfoproduct.entity.SupplierEvaluation;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface SupplierEvaluationMapper {
@@ -22,13 +22,14 @@ public interface SupplierEvaluationMapper {
 
     int insertList(@Param("list")List<SupplierEvaluation> list);
 
-    int selectByEvaluationTime(@Param("evaluationTime")Date evaluationTime);
+//    int selectByEvaluationTime(@Param("evaluationTime")Date evaluationTime);
 
-    int deleteByEvaluationTime(@Param("evaluationTime")Date evaluationTime);
+//    int deleteByEvaluationTime(@Param("evaluationTime")Date evaluationTime);
 
     List<SupplierEvaluation> selectBySort(@Param("year")String year,@Param("month")String month);
 
+    SupplierEvaluation selectBySupplierNoAndTime(@Param("supplierNo") Integer supplierNo, @Param("year") int year, @Param("month") int month);
 
-
+    SupplierEvaluation selectBySupplierNoAndEvaluationTime(@Param("supplierNo") Integer supplierNo, @Param("year") int year, @Param("month") int month);
 
 }

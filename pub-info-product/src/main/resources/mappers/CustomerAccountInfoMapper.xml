@@ -824,4 +824,17 @@
       and concat(prd_name,back_person_name) like concat('%',trim(#{key}),'%')
     </if>
   </select>
+
+  <select id="selectByComplainTime" resultType="com.ennova.pubinfoproduct.vo.ComplaintVO">
+    SELECT
+      supplier_no as supplierNo,
+      count(bad_num) countNum
+    FROM
+      `customer_account_info`
+    WHERE
+      supplier_no IN ( SELECT supplier_no FROM `supplier_info` )
+      and YEAR(complain_time)=#{year}
+      and MONTH(complain_time)=#{month}
+    GROUP BY supplier_no
+  </select>
 </mapper>

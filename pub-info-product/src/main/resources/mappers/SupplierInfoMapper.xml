@@ -269,4 +269,17 @@
       </if>
     </where>
   </select>
+  <select id="selectBySupplierNo" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from supplier_info
+    <where>
+        <if test="supplierNo != null">
+            and supplier_no=#{supplierNo,jdbcType=INTEGER}
+        </if>
+    </where>
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"/>
+     from supplier_info
+  </select>
 </mapper>
