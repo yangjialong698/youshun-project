@@ -1,4 +1,5 @@
 package com.ennova.pubinfouser.dao;
+import com.ennova.pubinfouser.vo.TUserSysVO;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
@@ -20,5 +21,9 @@ public interface TUserSystemMapper {
     int updateByPrimaryKey(TUserSystem record);
 
     List<TUserSystem> queryByUserId(@Param("userId")Integer userId);
+
+    List<TUserSysVO> selectAll();
+
+
 
 }

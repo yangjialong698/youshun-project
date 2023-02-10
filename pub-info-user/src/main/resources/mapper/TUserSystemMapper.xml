@@ -94,4 +94,13 @@
       </if>
     </where>
   </select>
+
+
+  <select id="selectAll" resultType="com.ennova.pubinfouser.vo.TUserSysVO">
+    SELECT DISTINCT
+      sys_num AS sysNum,
+      sys_name AS sysName
+    FROM
+      t_user_system
+  </select>
 </mapper>

@@ -4,10 +4,7 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfouser.dto.UserDTO;
 import com.ennova.pubinfouser.service.UserService;
-import com.ennova.pubinfouser.vo.CheckCodeVO;
-import com.ennova.pubinfouser.vo.DeptNumVO;
-import com.ennova.pubinfouser.vo.LoginLogVO;
-import com.ennova.pubinfouser.vo.UserVO;
+import com.ennova.pubinfouser.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -16,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Api(tags = "用户API")
 @RequestMapping("/user")
@@ -139,6 +137,11 @@ public class UserController {
         return userService.updatecid(cid);
     }
 
-
+    @ApiOperation(value = "跳过登入直接获取全量3级菜单", tags = "用户API")
+    @GetMapping("/getThreeLevMenus")
+    public Callback<List<NewMenuVO>>  getThreeLevMenus(){
+        Callback<List<NewMenuVO>>  callback = userService.getThreeLevMenus();
+        return callback;
+    }
 
 }

@@ -561,5 +561,17 @@ public class UserService extends BaseService<UserEntity> {
     }
 
 
-
+    public Callback<List<NewMenuVO>> getThreeLevMenus() {
+        ArrayList<NewMenuVO> newMenuVOS = new ArrayList<>();
+        List<TUserSysVO> tUserSystems = tUserSystemMapper.selectAll();
+        for (TUserSysVO tUserSysVO : tUserSystems) {
+            NewMenuVO newMenuVO = new NewMenuVO();
+            List<MenuVO> menuList = roleService.getMenuBySysNum(tUserSysVO.getSysNum());
+            newMenuVO.setSysNum(tUserSysVO.getSysNum());
+            newMenuVO.setSysName(tUserSysVO.getSysName());
+            newMenuVO.setMenu(menuList);
+            newMenuVOS.add(newMenuVO);
+        }
+        return Callback.success(newMenuVOS);
+    }
 }
