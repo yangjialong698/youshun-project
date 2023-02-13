@@ -2,10 +2,7 @@ package com.ennova.pubinfoproduct.daos;
 
 import com.ennova.pubinfoproduct.entity.SupplierInfo;
 import java.util.List;
-
-import com.ennova.pubinfoproduct.vo.CusAccSupplierVO;
-import com.ennova.pubinfoproduct.vo.SupplierInfoVO;
-import org.apache.ibatis.annotations.Mapper;
+import com.ennova.pubinfoproduct.vo.CusAccSupplierVO;import com.ennova.pubinfoproduct.vo.SupplierInfoVO;import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
@@ -28,12 +25,11 @@ public interface SupplierInfoMapper {
 
     int batchInsert(@Param("list") List<SupplierInfo> list);
 
-    List<SupplierInfoVO> selectBySupplier(@Param("supplier")String supplier);
+    List<SupplierInfoVO> selectBySupplier(@Param("supplier") String supplier);
 
-    List<CusAccSupplierVO> selectBySupplierParty(@Param("responsParty")String responsParty);
+    List<CusAccSupplierVO> selectBySupplierParty(@Param("responsParty") String responsParty);
 
-    SupplierInfo selectBySupplierNo(@Param("supplierNo")Integer supplierNo);
+    SupplierInfo selectBySupplierNo(@Param("supplierNo") String supplierNo);
 
     List<SupplierInfo> selectAll();
-
 }

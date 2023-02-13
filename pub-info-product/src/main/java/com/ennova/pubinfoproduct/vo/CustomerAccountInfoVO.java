@@ -106,7 +106,7 @@ public class CustomerAccountInfoVO {
      * 供应商代号
      */
     @ApiModelProperty(value = "供应商代号")
-    private Integer supplierNo;
+    private String supplierNo;
 
     /**
     * 责任单位

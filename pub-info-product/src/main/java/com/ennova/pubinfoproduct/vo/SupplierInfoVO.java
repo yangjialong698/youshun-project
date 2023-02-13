@@ -8,7 +8,7 @@ public class SupplierInfoVO {
     /**
      * 供应商编号
      */
-    private Integer supplierNo;
+    private String supplierNo;
 
     /**
      * 供应商名称

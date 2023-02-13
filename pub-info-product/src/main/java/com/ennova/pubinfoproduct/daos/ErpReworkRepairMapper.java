@@ -2,9 +2,7 @@ package com.ennova.pubinfoproduct.daos;
 
 import com.ennova.pubinfoproduct.entity.ErpReworkRepair;
 import java.util.List;
-
-import com.ennova.pubinfoproduct.vo.DefectRateVO;
-import org.apache.ibatis.annotations.Mapper;
+import com.ennova.pubinfoproduct.vo.DefectRateVO;import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper

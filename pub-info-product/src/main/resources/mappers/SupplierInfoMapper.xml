@@ -8,7 +8,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="supplier_no" jdbcType="INTEGER" property="supplierNo" />
+    <result column="supplier_no" jdbcType="VARCHAR" property="supplierNo" />
     <result column="supplier" jdbcType="VARCHAR" property="supplier" />
     <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
   </resultMap>
@@ -34,7 +34,7 @@
       supplier_no, supplier, is_delete
       )
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{password,jdbcType=VARCHAR}, 
-      #{supplierNo,jdbcType=INTEGER}, #{supplier,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}
+      #{supplierNo,jdbcType=VARCHAR}, #{supplier,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierInfo" useGeneratedKeys="true">
@@ -71,7 +71,7 @@
         #{password,jdbcType=VARCHAR},
       </if>
       <if test="supplierNo != null">
-        #{supplierNo,jdbcType=INTEGER},
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="supplier != null">
         #{supplier,jdbcType=VARCHAR},
@@ -95,7 +95,7 @@
         `password` = #{password,jdbcType=VARCHAR},
       </if>
       <if test="supplierNo != null">
-        supplier_no = #{supplierNo,jdbcType=INTEGER},
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="supplier != null">
         supplier = #{supplier,jdbcType=VARCHAR},
@@ -112,7 +112,7 @@
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       `password` = #{password,jdbcType=VARCHAR},
-      supplier_no = #{supplierNo,jdbcType=INTEGER},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
       supplier = #{supplier,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
@@ -124,7 +124,7 @@
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.password,jdbcType=VARCHAR}, 
-        #{item.supplierNo,jdbcType=INTEGER}, #{item.supplier,jdbcType=VARCHAR}, #{item.isDelete,jdbcType=INTEGER}
+        #{item.supplierNo,jdbcType=VARCHAR}, #{item.supplier,jdbcType=VARCHAR}, #{item.isDelete,jdbcType=INTEGER}
         )
     </foreach>
   </insert>
@@ -150,7 +150,7 @@
       #{createTime,jdbcType=TIMESTAMP},
       #{updateTime,jdbcType=TIMESTAMP},
       #{password,jdbcType=VARCHAR},
-      #{supplierNo,jdbcType=INTEGER},
+      #{supplierNo,jdbcType=VARCHAR},
       #{supplier,jdbcType=VARCHAR},
       #{isDelete,jdbcType=INTEGER},
     </trim>
@@ -162,7 +162,7 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       `password` = #{password,jdbcType=VARCHAR},
-      supplier_no = #{supplierNo,jdbcType=INTEGER},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
       supplier = #{supplier,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=INTEGER},
     </trim>
@@ -208,7 +208,7 @@
         #{password,jdbcType=VARCHAR},
       </if>
       <if test="supplierNo != null">
-        #{supplierNo,jdbcType=INTEGER},
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="supplier != null">
         #{supplier,jdbcType=VARCHAR},
@@ -232,7 +232,7 @@
         `password` = #{password,jdbcType=VARCHAR},
       </if>
       <if test="supplierNo != null">
-        supplier_no = #{supplierNo,jdbcType=INTEGER},
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="supplier != null">
         supplier = #{supplier,jdbcType=VARCHAR},
@@ -270,16 +270,16 @@
     </where>
   </select>
   <select id="selectBySupplierNo" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List"/>
+    select <include refid="Base_Column_List" />
     from supplier_info
     <where>
         <if test="supplierNo != null">
-            and supplier_no=#{supplierNo,jdbcType=INTEGER}
+            and supplier_no=#{supplierNo,jdbcType=VARCHAR}
         </if>
     </where>
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-  select <include refid="Base_Column_List"/>
+  select <include refid="Base_Column_List" />
      from supplier_info
   </select>
 </mapper>

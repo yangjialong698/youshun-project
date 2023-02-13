@@ -6,7 +6,7 @@
     <!--@Table erp_rework_repair-->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="back_user_id" jdbcType="INTEGER" property="backUserId" />
-    <result column="supplier_no" jdbcType="INTEGER" property="supplierNo" />
+    <result column="supplier_no" jdbcType="VARCHAR" property="supplierNo" />
     <result column="supplier" jdbcType="VARCHAR" property="supplier" />
     <result column="product_no" jdbcType="VARCHAR" property="productNo" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
@@ -39,7 +39,7 @@
       product_no, product_name, num, 
       total_num, rework_reason, rework_hour, 
       rework_time)
-    values (#{backUserId,jdbcType=INTEGER}, #{supplierNo,jdbcType=INTEGER}, #{supplier,jdbcType=VARCHAR}, 
+    values (#{backUserId,jdbcType=INTEGER}, #{supplierNo,jdbcType=VARCHAR}, #{supplier,jdbcType=VARCHAR}, 
       #{productNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, 
       #{totalNum,jdbcType=INTEGER}, #{reworkReason,jdbcType=VARCHAR}, #{reworkHour,jdbcType=INTEGER}, 
       #{reworkTime,jdbcType=TIMESTAMP})
@@ -84,7 +84,7 @@
         #{backUserId,jdbcType=INTEGER},
       </if>
       <if test="supplierNo != null">
-        #{supplierNo,jdbcType=INTEGER},
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="supplier != null">
         #{supplier,jdbcType=VARCHAR},
@@ -120,7 +120,7 @@
         back_user_id = #{backUserId,jdbcType=INTEGER},
       </if>
       <if test="supplierNo != null">
-        supplier_no = #{supplierNo,jdbcType=INTEGER},
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="supplier != null">
         supplier = #{supplier,jdbcType=VARCHAR},
@@ -153,7 +153,7 @@
     <!--@mbg.generated-->
     update erp_rework_repair
     set back_user_id = #{backUserId,jdbcType=INTEGER},
-      supplier_no = #{supplierNo,jdbcType=INTEGER},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
       supplier = #{supplier,jdbcType=VARCHAR},
       product_no = #{productNo,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
@@ -171,7 +171,7 @@
       rework_hour, rework_time)
     values
     <foreach collection="list" item="item" separator=",">
-      (#{item.backUserId,jdbcType=INTEGER}, #{item.supplierNo,jdbcType=INTEGER}, #{item.supplier,jdbcType=VARCHAR}, 
+      (#{item.backUserId,jdbcType=INTEGER}, #{item.supplierNo,jdbcType=VARCHAR}, #{item.supplier,jdbcType=VARCHAR}, 
         #{item.productNo,jdbcType=VARCHAR}, #{item.productName,jdbcType=VARCHAR}, #{item.num,jdbcType=INTEGER}, 
         #{item.totalNum,jdbcType=INTEGER}, #{item.reworkReason,jdbcType=VARCHAR}, #{item.reworkHour,jdbcType=INTEGER}, 
         #{item.reworkTime,jdbcType=TIMESTAMP})
@@ -201,7 +201,7 @@
         #{id,jdbcType=INTEGER},
       </if>
       #{backUserId,jdbcType=INTEGER},
-      #{supplierNo,jdbcType=INTEGER},
+      #{supplierNo,jdbcType=VARCHAR},
       #{supplier,jdbcType=VARCHAR},
       #{productNo,jdbcType=VARCHAR},
       #{productName,jdbcType=VARCHAR},
@@ -217,7 +217,7 @@
         id = #{id,jdbcType=INTEGER},
       </if>
       back_user_id = #{backUserId,jdbcType=INTEGER},
-      supplier_no = #{supplierNo,jdbcType=INTEGER},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
       supplier = #{supplier,jdbcType=VARCHAR},
       product_no = #{productNo,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
@@ -275,7 +275,7 @@
         #{backUserId,jdbcType=INTEGER},
       </if>
       <if test="supplierNo != null">
-        #{supplierNo,jdbcType=INTEGER},
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="supplier != null">
         #{supplier,jdbcType=VARCHAR},
@@ -311,7 +311,7 @@
         back_user_id = #{backUserId,jdbcType=INTEGER},
       </if>
       <if test="supplierNo != null">
-        supplier_no = #{supplierNo,jdbcType=INTEGER},
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="supplier != null">
         supplier = #{supplier,jdbcType=VARCHAR},
