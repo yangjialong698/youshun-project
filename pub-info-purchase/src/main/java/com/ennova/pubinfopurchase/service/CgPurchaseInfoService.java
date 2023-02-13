@@ -264,9 +264,6 @@ public class CgPurchaseInfoService {
     }
 
     public Callback<BaseVO<CgPurchaseInfoVO>> selectPurchaseInfo(Integer page, Integer pageSize, String name, Integer type) {
-       /* String token = request.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;*/
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
         List<CgPurchaseInfoVO> cgPurchaseInfos = cgPurchaseInfoMapper.selectPurchaseInfo(name,type);
         cgPurchaseInfos.forEach(cgPurchaseInfoVO -> {
@@ -290,22 +287,23 @@ public class CgPurchaseInfoService {
     }
 
     public Callback<CgPurchaseInfoVO> getDetail(Integer id) {
-        String token = request.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
         List<FileVO> cgPurchaseFiles = cgPurchaseFileMapper.selectByPurchaseInfoId(id);
         CgPurchaseInfo cgPurchaseInfo = cgPurchaseInfoMapper.selectByPrimaryKey(id);
-        CgPurchaseInfoVO cgPurchaseInfoVO = CgPurchaseInfoVO.builder()
-                .id(cgPurchaseInfo.getId())
-                .name(cgPurchaseInfo.getName())
-                .applyName(cgPurchaseInfo.getApplyName())
-                .taskNumber(cgPurchaseInfo.getTaskNumber())
-                .createTime(cgPurchaseInfo.getCreateTime())
-                .purchaseRequirements(cgPurchaseInfo.getPurchaseRequirements())
-                .issuerId(cgPurchaseInfo.getIssuerId())
-                .deliveryTime(cgPurchaseInfo.getDeliveryTime())
-                .fileVOList(cgPurchaseFiles).build();
-        return Callback.success(cgPurchaseInfoVO);
+        if (cgPurchaseInfo != null){
+            CgPurchaseInfoVO cgPurchaseInfoVO = CgPurchaseInfoVO.builder()
+                    .id(cgPurchaseInfo.getId())
+                    .name(cgPurchaseInfo.getName())
+                    .applyName(cgPurchaseInfo.getApplyName())
+                    .taskNumber(cgPurchaseInfo.getTaskNumber())
+                    .createTime(cgPurchaseInfo.getCreateTime())
+                    .purchaseRequirements(cgPurchaseInfo.getPurchaseRequirements())
+                    .issuerId(cgPurchaseInfo.getIssuerId())
+                    .deliveryTime(cgPurchaseInfo.getDeliveryTime())
+                    .fileVOList(cgPurchaseFiles).build();
+            return Callback.success(cgPurchaseInfoVO);
+        }else {
+            return Callback.error("未找到采购信息");
+        }
     }
 
     public Callback<CgContactInformation> contactInformation() {
