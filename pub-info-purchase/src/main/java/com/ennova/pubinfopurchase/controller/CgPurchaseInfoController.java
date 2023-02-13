@@ -13,19 +13,14 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -126,7 +121,7 @@ public class CgPurchaseInfoController {
         return cgPurchaseInfoService.contactInformation();
     }
 
-    @ApiOperation(value = "采购供应商回复")
+   /* @ApiOperation(value = "采购供应商回复")
     @PostMapping("/contact")
     public Callback contact() {
         //发件人
@@ -161,6 +156,6 @@ public class CgPurchaseInfoController {
             log.info("发送邮件失败", e);
         }
         return Callback.success();
-    }
+    }*/
 
 }
