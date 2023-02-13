@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DefectRateVO {
-    private int supplierNo;
+    private String supplierNo;
     private Double defectRate;
 }

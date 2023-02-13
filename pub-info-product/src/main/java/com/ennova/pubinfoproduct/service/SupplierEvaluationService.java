@@ -87,7 +87,7 @@ public class SupplierEvaluationService{
                 String cooperation = ExcelReaderUtil.convertCellValueToString(row.getCell(4)); // 配合度
                 String incomingShortage = ExcelReaderUtil.convertCellValueToString(row.getCell(5)); // 来料短缺量
                 String evaluationTime = ExcelReaderUtil.convertCellValueToString(row.getCell(6)); // 评价时间
-                SupplierEvaluation supplierEvaluation = SupplierEvaluation.builder().supplierNo(Integer.valueOf(supplierNo)).supplierName(supplierName).incomingDefectiveRate(Integer.valueOf(incomingDefectiveRate))
+                SupplierEvaluation supplierEvaluation = SupplierEvaluation.builder().supplierNo(supplierNo).supplierName(supplierName).incomingDefectiveRate(Integer.valueOf(incomingDefectiveRate))
                         .timelyDelivery(Integer.valueOf(timelyDelivery)).cooperation(Integer.valueOf(cooperation)).incomingShortage(Integer.valueOf(incomingShortage)).build();
 
                 if (StringUtils.isNotBlank(evaluationTime) && DateUtil.parse(evaluationTime, "yyyy-MM-dd") != null) {
@@ -216,25 +216,56 @@ public class SupplierEvaluationService{
         int year = DateUtil.thisYear();
         int month = DateUtil.thisMonth() + 1;
 
-        List<DefectRateVO> defectList = erpReworkRepairMapper.selectByReworkTime(year, month);  // 月度不良率
-        List<ComplaintVO> complaintList = customerAccountInfoMapper.selectByComplainTime(year, month); // 月度投诉
+        List<DefectRateVO> defectRateVOList = erpReworkRepairMapper.selectByReworkTime(year, month);  // 月度不良率
+        List<ComplaintVO> complaintVOList = customerAccountInfoMapper.selectByComplainTime(year, month); // 月度投诉
 
-        for (DefectRateVO defectRateVO : defectList) {
-            boolean flag = true;
-            for (ComplaintVO complaintVO : complaintList) {
-                if (defectRateVO.getSupplierNo() == complaintVO.getSupplierNo()) {
-                    complaintVO.setDefectRate(defectRateVO.getDefectRate());
-                    flag = false;
+        // 不良率和投诉合并
+        List<ComplaintVO> newList = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(defectRateVOList)) {
+            for (int i = 0; i < defectRateVOList.size(); i++) {
+                if (CollectionUtil.isNotEmpty(complaintVOList)) {
+                    for (int j = 0; j < complaintVOList.size(); j++) {
+                        DefectRateVO defectRateVO = defectRateVOList.get(i);
+                        ComplaintVO complaintVO = complaintVOList.get(j);
+                        if (defectRateVO.getSupplierNo() == complaintVO.getSupplierNo()) {
+                            ComplaintVO temp = new ComplaintVO();
+                            BeanUtil.copyProperties(complaintVO, temp);
+                            temp.setDefectRate(defectRateVO.getDefectRate());
+                            SupplierInfo supplierInfo = supplierInfoMapper.selectBySupplierNo(complaintVO.getSupplierNo());
+                            temp.setSupplierName(supplierInfo.getSupplier());
+                            newList.add(temp);
+                            complaintVOList.remove(complaintVO);
+                            defectRateVOList.remove(defectRateVO);
+                            j--;
+                        }
+                    }
                 }
             }
-            if (flag) {
-                ComplaintVO complaintVO = new ComplaintVO();
-                complaintVO.setSupplierNo(defectRateVO.getSupplierNo());
-                complaintVO.setDefectRate(defectRateVO.getDefectRate());
-                complaintList.add(complaintVO);
-            }
-        };
-        List<ComplaintVO> newList = complaintList;
+        }
+
+        if (CollectionUtil.isNotEmpty(defectRateVOList)) {
+            defectRateVOList.forEach(defectRateVO -> {
+                ComplaintVO temp = new ComplaintVO();
+                temp.setDefectRate(defectRateVO.getDefectRate());
+                SupplierInfo supplierInfo = supplierInfoMapper.selectBySupplierNo(defectRateVO.getSupplierNo());
+                BeanUtil.copyProperties(defectRateVO, temp);
+                if (supplierInfo != null) {
+                    temp.setSupplierName(supplierInfo.getSupplier());
+                }
+                newList.add(temp);
+            });
+        }
+        if (CollectionUtil.isNotEmpty(complaintVOList)) {
+            complaintVOList.forEach(complaintVO -> {
+                ComplaintVO temp = new ComplaintVO();
+                SupplierInfo supplierInfo = supplierInfoMapper.selectBySupplierNo(complaintVO.getSupplierNo());
+                BeanUtil.copyProperties(complaintVO, temp);
+                if (supplierInfo != null) {
+                    temp.setSupplierName(supplierInfo.getSupplier());
+                }
+                newList.add(temp);
+            });
+        }
 
         // 查询所有供应商，判断是否存在评价表中，不存在则新增，存在则更新
         List<SupplierInfo> supplierInfoList = supplierInfoMapper.selectAll();
@@ -246,7 +277,7 @@ public class SupplierEvaluationService{
                 if (supplierEvaluation == null) {
                     for (int i = 0; i < newList.size(); i++) {
                         ComplaintVO vo = newList.get(i);
-                        if (vo.getSupplierNo() == supplierInfo.getSupplierNo()) {
+                        if (vo.getSupplierNo().equalsIgnoreCase(supplierInfo.getSupplierNo())) {
                             SupplierEvaluation temp = new SupplierEvaluation();
                             temp.setSupplierNo(vo.getSupplierNo());
                             temp.setSupplierName(supplierInfo.getSupplier());
@@ -260,7 +291,7 @@ public class SupplierEvaluationService{
                 }else{
                     for (int i = 0; i < newList.size(); i++) {
                         ComplaintVO vo = newList.get(i);
-                        if (vo.getSupplierNo() == supplierEvaluation.getSupplierNo()) {
+                        if (vo.getSupplierNo().equalsIgnoreCase(supplierEvaluation.getSupplierNo())) {
                             SupplierEvaluation temp = new SupplierEvaluation();
                             temp.setId(supplierEvaluation.getId());
                             // 返工返修、汇总需保留两位小数；汇总6条记录的平均值

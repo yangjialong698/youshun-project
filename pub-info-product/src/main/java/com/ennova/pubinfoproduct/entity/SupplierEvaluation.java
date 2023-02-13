@@ -28,7 +28,7 @@ public class SupplierEvaluation {
      * 供应商编号
      */
     @ApiModelProperty(value = "供应商编号")
-    private Integer supplierNo;
+    private String supplierNo;
 
     /**
      * 供应商名称

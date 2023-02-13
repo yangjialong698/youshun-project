@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ComplaintVO {
-    private int supplierNo;
+    private String supplierNo;
     private Double countNum;
 
     private Double defectRate;

@@ -251,10 +251,10 @@ public class OpinionBoxService{
 
     // 意见箱列表: 暂无查询条件
     public Callback<BaseVO<OpinionBoxVO>> opinionBoxList(Integer page, Integer pageSize) {
-        String token = req.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
-        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
+//        String token = req.getHeader("Authorization");
+//        UserVO userVo = JWTUtil.getUserVOByToken(token);
+//        assert userVo != null;
+//        CurrentUserVO currentUserVO = userMapper.selectCurrentUser(userVo.getId());
         // 高层才能查询
 //        if (currentUserVO.getRoleCode().equals("check_person")) {
             Page<OpinionBox> startPage = PageHelper.startPage(page, pageSize);

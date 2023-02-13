@@ -1,194 +1,194 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ennova.pubinfoproduct.daos.SupplierEvaluationMapper">
-  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.SupplierEvaluation">
-    <!--@mbg.generated-->
-    <!--@Table ys_supplier_evaluation-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="supplier_no" jdbcType="INTEGER" property="supplierNo" />
-    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
-    <result column="incoming_defective_rate" jdbcType="INTEGER" property="incomingDefectiveRate" />
-    <result column="timely_delivery" jdbcType="INTEGER" property="timelyDelivery" />
-    <result column="rework_rate" jdbcType="DOUBLE" property="reworkRate" />
-    <result column="cooperation" jdbcType="INTEGER" property="cooperation" />
-    <result column="incoming_shortage" jdbcType="INTEGER" property="incomingShortage" />
-    <result column="customer_complaints" jdbcType="INTEGER" property="customerComplaints" />
-    <result column="summary" jdbcType="DOUBLE" property="summary" />
-    <result column="evaluation_time" jdbcType="TIMESTAMP" property="evaluationTime" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, supplier_no, supplier_name, incoming_defective_rate, timely_delivery, rework_rate, 
-    cooperation, incoming_shortage, customer_complaints, summary, evaluation_time, create_time, 
-    update_time
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from ys_supplier_evaluation
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from ys_supplier_evaluation
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into ys_supplier_evaluation (supplier_no, supplier_name, incoming_defective_rate, 
-      timely_delivery, rework_rate, cooperation, 
-      incoming_shortage, customer_complaints, summary, 
-      evaluation_time, create_time, update_time
-      )
-    values (#{supplierNo,jdbcType=INTEGER}, #{supplierName,jdbcType=VARCHAR}, #{incomingDefectiveRate,jdbcType=INTEGER}, 
-      #{timelyDelivery,jdbcType=INTEGER}, #{reworkRate,jdbcType=DOUBLE}, #{cooperation,jdbcType=INTEGER}, 
-      #{incomingShortage,jdbcType=INTEGER}, #{customerComplaints,jdbcType=INTEGER}, #{summary,jdbcType=DOUBLE}, 
-      #{evaluationTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into ys_supplier_evaluation
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="supplierNo != null">
-        supplier_no,
-      </if>
-      <if test="supplierName != null">
-        supplier_name,
-      </if>
-      <if test="incomingDefectiveRate != null">
-        incoming_defective_rate,
-      </if>
-      <if test="timelyDelivery != null">
-        timely_delivery,
-      </if>
-      <if test="reworkRate != null">
-        rework_rate,
-      </if>
-      <if test="cooperation != null">
-        cooperation,
-      </if>
-      <if test="incomingShortage != null">
-        incoming_shortage,
-      </if>
-      <if test="customerComplaints != null">
-        customer_complaints,
-      </if>
-      <if test="summary != null">
-        summary,
-      </if>
-      <if test="evaluationTime != null">
-        evaluation_time,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="supplierNo != null">
-        #{supplierNo,jdbcType=INTEGER},
-      </if>
-      <if test="supplierName != null">
-        #{supplierName,jdbcType=VARCHAR},
-      </if>
-      <if test="incomingDefectiveRate != null">
-        #{incomingDefectiveRate,jdbcType=INTEGER},
-      </if>
-      <if test="timelyDelivery != null">
-        #{timelyDelivery,jdbcType=INTEGER},
-      </if>
-      <if test="reworkRate != null">
-        #{reworkRate,jdbcType=DOUBLE},
-      </if>
-      <if test="cooperation != null">
-        #{cooperation,jdbcType=INTEGER},
-      </if>
-      <if test="incomingShortage != null">
-        #{incomingShortage,jdbcType=INTEGER},
-      </if>
-      <if test="customerComplaints != null">
-        #{customerComplaints,jdbcType=INTEGER},
-      </if>
-      <if test="summary != null">
-        #{summary,jdbcType=DOUBLE},
-      </if>
-      <if test="evaluationTime != null">
-        #{evaluationTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation">
-    <!--@mbg.generated-->
-    update ys_supplier_evaluation
-    <set>
-      <if test="supplierNo != null">
-        supplier_no = #{supplierNo,jdbcType=INTEGER},
-      </if>
-      <if test="supplierName != null">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.SupplierEvaluation">
+      <!--@mbg.generated-->
+      <!--@Table ys_supplier_evaluation-->
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="supplier_no" jdbcType="VARCHAR" property="supplierNo" />
+      <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+      <result column="incoming_defective_rate" jdbcType="INTEGER" property="incomingDefectiveRate" />
+      <result column="timely_delivery" jdbcType="INTEGER" property="timelyDelivery" />
+      <result column="rework_rate" jdbcType="DOUBLE" property="reworkRate" />
+      <result column="cooperation" jdbcType="INTEGER" property="cooperation" />
+      <result column="incoming_shortage" jdbcType="INTEGER" property="incomingShortage" />
+      <result column="customer_complaints" jdbcType="INTEGER" property="customerComplaints" />
+      <result column="summary" jdbcType="DOUBLE" property="summary" />
+      <result column="evaluation_time" jdbcType="TIMESTAMP" property="evaluationTime" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+      <!--@mbg.generated-->
+      id, supplier_no, supplier_name, incoming_defective_rate, timely_delivery, rework_rate,
+      cooperation, incoming_shortage, customer_complaints, summary, evaluation_time, create_time,
+      update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      <!--@mbg.generated-->
+      select
+      <include refid="Base_Column_List" />
+      from ys_supplier_evaluation
+      where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+      <!--@mbg.generated-->
+      delete from ys_supplier_evaluation
+      where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation" useGeneratedKeys="true">
+      <!--@mbg.generated-->
+      insert into ys_supplier_evaluation (supplier_no, supplier_name, incoming_defective_rate,
+        timely_delivery, rework_rate, cooperation,
+        incoming_shortage, customer_complaints, summary,
+        evaluation_time, create_time, update_time
+        )
+      values (#{supplierNo,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR}, #{incomingDefectiveRate,jdbcType=INTEGER},
+        #{timelyDelivery,jdbcType=INTEGER}, #{reworkRate,jdbcType=DOUBLE}, #{cooperation,jdbcType=INTEGER},
+        #{incomingShortage,jdbcType=INTEGER}, #{customerComplaints,jdbcType=INTEGER}, #{summary,jdbcType=DOUBLE},
+        #{evaluationTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation" useGeneratedKeys="true">
+      <!--@mbg.generated-->
+      insert into ys_supplier_evaluation
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="supplierNo != null">
+          supplier_no,
+        </if>
+        <if test="supplierName != null">
+          supplier_name,
+        </if>
+        <if test="incomingDefectiveRate != null">
+          incoming_defective_rate,
+        </if>
+        <if test="timelyDelivery != null">
+          timely_delivery,
+        </if>
+        <if test="reworkRate != null">
+          rework_rate,
+        </if>
+        <if test="cooperation != null">
+          cooperation,
+        </if>
+        <if test="incomingShortage != null">
+          incoming_shortage,
+        </if>
+        <if test="customerComplaints != null">
+          customer_complaints,
+        </if>
+        <if test="summary != null">
+          summary,
+        </if>
+        <if test="evaluationTime != null">
+          evaluation_time,
+        </if>
+        <if test="createTime != null">
+          create_time,
+        </if>
+        <if test="updateTime != null">
+          update_time,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="supplierNo != null">
+          #{supplierNo,jdbcType=VARCHAR},
+        </if>
+        <if test="supplierName != null">
+          #{supplierName,jdbcType=VARCHAR},
+        </if>
+        <if test="incomingDefectiveRate != null">
+          #{incomingDefectiveRate,jdbcType=INTEGER},
+        </if>
+        <if test="timelyDelivery != null">
+          #{timelyDelivery,jdbcType=INTEGER},
+        </if>
+        <if test="reworkRate != null">
+          #{reworkRate,jdbcType=DOUBLE},
+        </if>
+        <if test="cooperation != null">
+          #{cooperation,jdbcType=INTEGER},
+        </if>
+        <if test="incomingShortage != null">
+          #{incomingShortage,jdbcType=INTEGER},
+        </if>
+        <if test="customerComplaints != null">
+          #{customerComplaints,jdbcType=INTEGER},
+        </if>
+        <if test="summary != null">
+          #{summary,jdbcType=DOUBLE},
+        </if>
+        <if test="evaluationTime != null">
+          #{evaluationTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="createTime != null">
+          #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="updateTime != null">
+          #{updateTime,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation">
+      <!--@mbg.generated-->
+      update ys_supplier_evaluation
+      <set>
+        <if test="supplierNo != null">
+          supplier_no = #{supplierNo,jdbcType=VARCHAR},
+        </if>
+        <if test="supplierName != null">
+          supplier_name = #{supplierName,jdbcType=VARCHAR},
+        </if>
+        <if test="incomingDefectiveRate != null">
+          incoming_defective_rate = #{incomingDefectiveRate,jdbcType=INTEGER},
+        </if>
+        <if test="timelyDelivery != null">
+          timely_delivery = #{timelyDelivery,jdbcType=INTEGER},
+        </if>
+        <if test="reworkRate != null">
+          rework_rate = #{reworkRate,jdbcType=DOUBLE},
+        </if>
+        <if test="cooperation != null">
+          cooperation = #{cooperation,jdbcType=INTEGER},
+        </if>
+        <if test="incomingShortage != null">
+          incoming_shortage = #{incomingShortage,jdbcType=INTEGER},
+        </if>
+        <if test="customerComplaints != null">
+          customer_complaints = #{customerComplaints,jdbcType=INTEGER},
+        </if>
+        <if test="summary != null">
+          summary = #{summary,jdbcType=DOUBLE},
+        </if>
+        <if test="evaluationTime != null">
+          evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="createTime != null">
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="updateTime != null">
+          update_time = #{updateTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation">
+      <!--@mbg.generated-->
+      update ys_supplier_evaluation
+      set supplier_no = #{supplierNo,jdbcType=VARCHAR},
         supplier_name = #{supplierName,jdbcType=VARCHAR},
-      </if>
-      <if test="incomingDefectiveRate != null">
         incoming_defective_rate = #{incomingDefectiveRate,jdbcType=INTEGER},
-      </if>
-      <if test="timelyDelivery != null">
         timely_delivery = #{timelyDelivery,jdbcType=INTEGER},
-      </if>
-      <if test="reworkRate != null">
         rework_rate = #{reworkRate,jdbcType=DOUBLE},
-      </if>
-      <if test="cooperation != null">
         cooperation = #{cooperation,jdbcType=INTEGER},
-      </if>
-      <if test="incomingShortage != null">
         incoming_shortage = #{incomingShortage,jdbcType=INTEGER},
-      </if>
-      <if test="customerComplaints != null">
         customer_complaints = #{customerComplaints,jdbcType=INTEGER},
-      </if>
-      <if test="summary != null">
         summary = #{summary,jdbcType=DOUBLE},
-      </if>
-      <if test="evaluationTime != null">
         evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.SupplierEvaluation">
-    <!--@mbg.generated-->
-    update ys_supplier_evaluation
-    set supplier_no = #{supplierNo,jdbcType=INTEGER},
-      supplier_name = #{supplierName,jdbcType=VARCHAR},
-      incoming_defective_rate = #{incomingDefectiveRate,jdbcType=INTEGER},
-      timely_delivery = #{timelyDelivery,jdbcType=INTEGER},
-      rework_rate = #{reworkRate,jdbcType=DOUBLE},
-      cooperation = #{cooperation,jdbcType=INTEGER},
-      incoming_shortage = #{incomingShortage,jdbcType=INTEGER},
-      customer_complaints = #{customerComplaints,jdbcType=INTEGER},
-      summary = #{summary,jdbcType=DOUBLE},
-      evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+      where id = #{id,jdbcType=INTEGER}
+    </update>
    <select id="selectBySort" resultMap="BaseResultMap">
      select <include refid="Base_Column_List"/>
     from ys_supplier_evaluation
@@ -265,7 +265,7 @@
     select <include refid="Base_Column_List"/>
     from ys_supplier_evaluation
     <where>
-      <if test="supplierNo != null">
+      <if test="supplierNo != null and supplierNo !=''">
         and supplier_no=#{supplierNo,jdbcType=INTEGER}
       </if>
        <if test="year != null">
@@ -280,7 +280,7 @@
     select <include refid="Base_Column_List"/>
     from ys_supplier_evaluation
     <where>
-      <if test="supplierNo != null">
+      <if test="supplierNo != null and supplierNo !=''">
          and supplier_no=#{supplierNo,jdbcType=INTEGER}
       </if>
       <if test="year != null">

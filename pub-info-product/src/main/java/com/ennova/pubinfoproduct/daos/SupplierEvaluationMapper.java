@@ -28,8 +28,8 @@ public interface SupplierEvaluationMapper {
 
     List<SupplierEvaluation> selectBySort(@Param("year")String year,@Param("month")String month);
 
-    SupplierEvaluation selectBySupplierNoAndTime(@Param("supplierNo") Integer supplierNo, @Param("year") int year, @Param("month") int month);
+    SupplierEvaluation selectBySupplierNoAndTime(@Param("supplierNo") String supplierNo, @Param("year") int year, @Param("month") int month);
 
-    SupplierEvaluation selectBySupplierNoAndEvaluationTime(@Param("supplierNo") Integer supplierNo, @Param("year") int year, @Param("month") int month);
+    SupplierEvaluation selectBySupplierNoAndEvaluationTime(@Param("supplierNo") String supplierNo, @Param("year") int year, @Param("month") int month);
 
 }
