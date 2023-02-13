@@ -84,7 +84,7 @@ public class CustomerAccountInfo {
     /**
      * 供应商编号
      */
-    private Integer supplierNo;
+    private String supplierNo;
 
     /**
      * 责任单位

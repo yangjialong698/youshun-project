@@ -18,7 +18,7 @@
     <result column="ponderance" jdbcType="VARCHAR" property="ponderance" />
     <result column="problem_dis" jdbcType="VARCHAR" property="problemDis" />
     <result column="respons_party" jdbcType="VARCHAR" property="responsParty" />
-    <result column="supplier_no" jdbcType="INTEGER" property="supplierNo" />
+    <result column="supplier_no" jdbcType="VARCHAR" property="supplierNo" />
     <result column="respons_unit" jdbcType="VARCHAR" property="responsUnit" />
     <result column="respons_person_id" jdbcType="VARCHAR" property="responsPersonId" />
     <result column="respons_person" jdbcType="VARCHAR" property="responsPerson" />
@@ -71,7 +71,7 @@
       #{prdItem,jdbcType=VARCHAR}, #{prdName,jdbcType=VARCHAR}, #{backPersonId,jdbcType=VARCHAR}, 
       #{backPersonName,jdbcType=VARCHAR}, #{defectType,jdbcType=VARCHAR}, #{nonName,jdbcType=VARCHAR}, 
       #{natureComplaint,jdbcType=VARCHAR}, #{ponderance,jdbcType=VARCHAR}, #{problemDis,jdbcType=VARCHAR}, 
-      #{responsParty,jdbcType=VARCHAR}, #{supplierNo,jdbcType=INTEGER}, #{responsUnit,jdbcType=VARCHAR}, 
+      #{responsParty,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, #{responsUnit,jdbcType=VARCHAR}, 
       #{responsPersonId,jdbcType=VARCHAR}, #{responsPerson,jdbcType=VARCHAR}, #{badNum,jdbcType=INTEGER}, 
       #{problemIn,jdbcType=VARCHAR}, #{measures,jdbcType=VARCHAR}, #{chargeNameId,jdbcType=VARCHAR}, 
       #{chargeName,jdbcType=VARCHAR}, #{planFinTime,jdbcType=TIMESTAMP}, #{actFinTime,jdbcType=TIMESTAMP}, 
@@ -211,7 +211,7 @@
         #{responsParty,jdbcType=VARCHAR},
       </if>
       <if test="supplierNo != null">
-        #{supplierNo,jdbcType=INTEGER},
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="responsUnit != null">
         #{responsUnit,jdbcType=VARCHAR},
@@ -304,7 +304,7 @@
         respons_party = #{responsParty,jdbcType=VARCHAR},
       </if>
       <if test="supplierNo != null">
-        supplier_no = #{supplierNo,jdbcType=INTEGER},
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="responsUnit != null">
         respons_unit = #{responsUnit,jdbcType=VARCHAR},
@@ -370,7 +370,7 @@
       ponderance = #{ponderance,jdbcType=VARCHAR},
       problem_dis = #{problemDis,jdbcType=VARCHAR},
       respons_party = #{responsParty,jdbcType=VARCHAR},
-      supplier_no = #{supplierNo,jdbcType=INTEGER},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
       respons_unit = #{responsUnit,jdbcType=VARCHAR},
       respons_person_id = #{responsPersonId,jdbcType=VARCHAR},
       respons_person = #{responsPerson,jdbcType=VARCHAR},
@@ -402,7 +402,7 @@
         #{item.prdItem,jdbcType=VARCHAR}, #{item.prdName,jdbcType=VARCHAR}, #{item.backPersonId,jdbcType=VARCHAR}, 
         #{item.backPersonName,jdbcType=VARCHAR}, #{item.defectType,jdbcType=VARCHAR}, #{item.nonName,jdbcType=VARCHAR}, 
         #{item.natureComplaint,jdbcType=VARCHAR}, #{item.ponderance,jdbcType=VARCHAR}, 
-        #{item.problemDis,jdbcType=VARCHAR}, #{item.responsParty,jdbcType=VARCHAR}, #{item.supplierNo,jdbcType=INTEGER}, 
+        #{item.problemDis,jdbcType=VARCHAR}, #{item.responsParty,jdbcType=VARCHAR}, #{item.supplierNo,jdbcType=VARCHAR}, 
         #{item.responsUnit,jdbcType=VARCHAR}, #{item.responsPersonId,jdbcType=VARCHAR}, 
         #{item.responsPerson,jdbcType=VARCHAR}, #{item.badNum,jdbcType=INTEGER}, #{item.problemIn,jdbcType=VARCHAR}, 
         #{item.measures,jdbcType=VARCHAR}, #{item.chargeNameId,jdbcType=VARCHAR}, #{item.chargeName,jdbcType=VARCHAR}, 
@@ -466,7 +466,7 @@
       #{ponderance,jdbcType=VARCHAR},
       #{problemDis,jdbcType=VARCHAR},
       #{responsParty,jdbcType=VARCHAR},
-      #{supplierNo,jdbcType=INTEGER},
+      #{supplierNo,jdbcType=VARCHAR},
       #{responsUnit,jdbcType=VARCHAR},
       #{responsPersonId,jdbcType=VARCHAR},
       #{responsPerson,jdbcType=VARCHAR},
@@ -501,7 +501,7 @@
       ponderance = #{ponderance,jdbcType=VARCHAR},
       problem_dis = #{problemDis,jdbcType=VARCHAR},
       respons_party = #{responsParty,jdbcType=VARCHAR},
-      supplier_no = #{supplierNo,jdbcType=INTEGER},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
       respons_unit = #{responsUnit,jdbcType=VARCHAR},
       respons_person_id = #{responsPersonId,jdbcType=VARCHAR},
       respons_person = #{responsPerson,jdbcType=VARCHAR},
@@ -659,7 +659,7 @@
         #{responsParty,jdbcType=VARCHAR},
       </if>
       <if test="supplierNo != null">
-        #{supplierNo,jdbcType=INTEGER},
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="responsUnit != null">
         #{responsUnit,jdbcType=VARCHAR},
@@ -752,7 +752,7 @@
         respons_party = #{responsParty,jdbcType=VARCHAR},
       </if>
       <if test="supplierNo != null">
-        supplier_no = #{supplierNo,jdbcType=INTEGER},
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="responsUnit != null">
         respons_unit = #{responsUnit,jdbcType=VARCHAR},
