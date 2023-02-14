@@ -1,5 +1,6 @@
 package com.ennova.pubinfowebsite.service;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfowebsite.dao.GwMessageMapper;
 import com.ennova.pubinfowebsite.entity.GwMessage;
@@ -10,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author yangjialong
@@ -19,12 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Slf4j
 @Service
-@Transactional(rollbackFor = Exception.class)
+@DS("master")
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class WebsiteService {
 
     private final GwMessageMapper gwMessageMapper;
 
+    @DS("slave_1")
     public Callback onlineMessage(GwMessageVO gwMessageVO) {
 
         if (!StringUtils.isNumeric(gwMessageVO.getPhone())) {
@@ -39,6 +40,7 @@ public class WebsiteService {
         return Callback.error("提交失败");
     }
 
+    @DS("slave_1")
     public Callback delete(Integer id) {
 
         GwMessage gwMessage = gwMessageMapper.selectByPrimaryKey(id);
