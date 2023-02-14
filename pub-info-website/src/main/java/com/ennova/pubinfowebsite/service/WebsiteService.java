@@ -1,6 +1,7 @@
 package com.ennova.pubinfowebsite.service;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfowebsite.dao.GwMessageMapper;
 import com.ennova.pubinfowebsite.entity.GwMessage;
@@ -19,13 +20,13 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-@DS("master")
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class WebsiteService {
 
     private final GwMessageMapper gwMessageMapper;
 
     @DS("slave_1")
+    @DSTransactional
     public Callback onlineMessage(GwMessageVO gwMessageVO) {
 
         if (!StringUtils.isNumeric(gwMessageVO.getPhone())) {
