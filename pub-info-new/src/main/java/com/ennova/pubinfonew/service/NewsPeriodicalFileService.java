@@ -170,9 +170,9 @@ public class NewsPeriodicalFileService {
     }
 
     public Callback<BaseVO<NewsVO>> selectPeriodicalFile(Integer page, Integer pageSize, Integer periodicalNum, Integer editionNum) {
-        String token = request.getHeader("Authorization");
+        /*String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
+        assert userVo != null;*/
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
         List<NewsVO> newsVOS = newsPeriodicalFileMapper.selectPeriodicalFile(periodicalNum, editionNum);
         List<NewsVO> collect = newsVOS.stream().filter(newsVO -> newsVO.getPeriodicalNum() != null).collect(Collectors.toList());

@@ -3,10 +3,8 @@ package com.ennova.pubinfostore.service;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
-import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfostore.dao.CkPadScanMapper;
 import com.ennova.pubinfostore.entity.CkPdaScan;
 import com.ennova.pubinfostore.vo.CkPdaScanVO;
@@ -55,9 +53,9 @@ public class CkPdaScanService {
     }
 
     public Callback<BaseVO<CkPdaScanVO>> selectPdaInfo(Integer page, Integer pageSize, String barCode, String startTime, String endTime){
-        String token = request.getHeader("Authorization");
+        /*String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
+        assert userVo != null;*/
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
         List<CkPdaScanVO> ckPdaScanVOS = ckPadScanMapper.selectPdaInfo(barCode, startTime, endTime);
         BaseVO<CkPdaScanVO> baseVO = new BaseVO<>(ckPdaScanVOS, new PageUtil(pageSize, (int) startPage.getTotal(), page));

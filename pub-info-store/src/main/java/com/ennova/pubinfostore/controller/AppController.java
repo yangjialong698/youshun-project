@@ -2,6 +2,7 @@ package com.ennova.pubinfostore.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
+import com.ennova.pubinfostore.config.LocalLock;
 import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.service.AppService;
 import com.ennova.pubinfostore.vo.SaveCountVO;
@@ -16,7 +17,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Api(tags = "公共信息平台App-问题反馈")
 @Slf4j
@@ -54,6 +54,7 @@ public class AppController {
 
     @ApiOperation(value = "APP移动端接口 - 问题反馈")
     @PostMapping("/pushFeedback")
+    @LocalLock(key = "book:arg[0]")
     public Callback pushFeedback(@RequestBody @Validated @ApiParam(value = "新增问题反馈请求参数", required = true)
                                          ScProblemFeedbackVO scProblemFeedbackVO) throws InterruptedException {
         return appService.pushFeedback(scProblemFeedbackVO);

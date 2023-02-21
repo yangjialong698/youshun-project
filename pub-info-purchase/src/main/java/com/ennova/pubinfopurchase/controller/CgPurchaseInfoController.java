@@ -14,12 +14,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.TemplateEngine;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -37,14 +34,14 @@ import java.util.List;
 public class CgPurchaseInfoController {
 
     private final CgPurchaseInfoService cgPurchaseInfoService;
-    private final JavaMailSender mailSender;
+    /*private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
     @Value("${spring.mail.username}")
     private String mailFrom;
 
     @Value("${spring.mail.mailFromNick}")
-    private String mailFromNick;
+    private String mailFromNick;*/
 
     @ApiOperation(value = "采购附件 - 文件上传")
     @PostMapping("/upload")
