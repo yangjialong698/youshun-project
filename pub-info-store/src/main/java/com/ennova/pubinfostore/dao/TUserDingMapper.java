@@ -24,4 +24,8 @@ public interface TUserDingMapper {
     int batchInsert(@Param("list") List<TUserDing> list);
 
     TUserDing selectByUserId(@Param("userId") String userId);
+
+    List<TUserDing> selectByDepartment(@Param("department")String department);
+
+
 }

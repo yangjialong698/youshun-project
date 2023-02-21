@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,14 +55,6 @@ public class PrdUserManageService {
         return tDeptDingArrayList;
     }
 
-    public Callback<TUserDing> queryNameByManageId(String manageId) {
-        TUserDing tUserDing = tUserDingMapper.selectByUserId(manageId);
-        if (null != tUserDing){
-            return Callback.success(tUserDing);
-        }
-        return Callback.success(new TUserDing());
-    }
-
     public Callback<TDeptDingVO> queryPrdDeptChildList() {
         TDeptDingVO tDeptDingVOFinal = new TDeptDingVO();
         List<TDeptDingVO> tDeptDingVOs = tDeptDingMapper.findListByParentId(PARENTID);
@@ -88,5 +81,31 @@ public class PrdUserManageService {
             }
         }
         return tDeptDingVO;
+    }
+
+    public Callback<TUserDing> queryNameByManageId(String manageId) {
+        TUserDing tUserDing = tUserDingMapper.selectByUserId(manageId);
+        if (null != tUserDing){
+            return Callback.success(tUserDing);
+        }
+        return Callback.success(new TUserDing());
+    }
+
+    public Callback<List<TUserDing>> queryNameByManageIdOrDeptId(String manageId, String deptName, String deptId) {
+        ArrayList<TUserDing> tUserDingList = new ArrayList<TUserDing>() ;
+        if (StringUtils.isNotEmpty(deptName) && StringUtils.isNotEmpty(deptId) && deptName.contains("设备")){
+            List<TUserDing> tUserDingList1 = tUserDingMapper.selectByDepartment(deptId);
+            if (CollectionUtil.isNotEmpty(tUserDingList1)){
+                return Callback.success(tUserDingList1);
+            }
+            return Callback.success(tUserDingList);
+        }else {
+            TUserDing tUserDing = tUserDingMapper.selectByUserId(manageId);
+            if (null != tUserDing){
+                tUserDingList.add(tUserDing);
+                return Callback.success(tUserDingList);
+            }
+            return Callback.success(tUserDingList);
+        }
     }
 }

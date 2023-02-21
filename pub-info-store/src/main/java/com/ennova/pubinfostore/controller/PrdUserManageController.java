@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,10 +32,18 @@ public class PrdUserManageController {
         return prdUserManageService.queryPrdDeptIds();
     }
 
-    @ApiOperation(value = "APP移动端接口 - 根据manageId查询用户姓名")
+//    @ApiOperation(value = "APP移动端接口 - 根据manageId查询用户姓名")
+//    @GetMapping("/queryNameByManageId")
+//    public Callback<TUserDing> queryNameByManageId(String manageId) {
+//        return prdUserManageService.queryNameByManageId(manageId);
+//    }
+
+    @ApiOperation(value = "APP移动端接口 - 根据manageId或者部门ID查询用户姓名")
     @GetMapping("/queryNameByManageId")
-    public Callback<TUserDing> queryNameByManageId(String manageId) {
-        return prdUserManageService.queryNameByManageId(manageId);
+    public Callback<List<TUserDing>> queryNameByManageIdOrDeptId(@RequestParam("manageId")String manageId ,
+                                                                 @RequestParam("deptName")String deptName,
+                                                                 @RequestParam("deptId")String deptId) {
+        return prdUserManageService.queryNameByManageIdOrDeptId(manageId,deptName,deptId);
     }
 
 

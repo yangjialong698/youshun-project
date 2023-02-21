@@ -331,4 +331,15 @@
     where
     user_id = #{userId,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectByDepartment" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_user_ding
+    <where>
+      <if test="department != null">
+        and department=#{department,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
 </mapper>
