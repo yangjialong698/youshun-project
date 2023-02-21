@@ -43,7 +43,7 @@ public class LockMethodInterceptor {
         String key = getKey(localLock.key(), pjp.getArgs());
         if (!StringUtils.isEmpty(key)) {
             if (CACHES.getIfPresent(key) != null) {
-                return Callback.error(2,"请勿重复请求");
+                return Callback.error(2,"请勿重复提交问题反馈");
             }
             // 如果是第一次请求,就将 key 当前对象压入缓存中
             CACHES.put(key, key);
