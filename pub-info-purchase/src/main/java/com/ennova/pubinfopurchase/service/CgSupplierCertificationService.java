@@ -258,10 +258,9 @@ public class CgSupplierCertificationService {
     }
 
     public Callback<BaseVO<CgSupplierCertificationVO>> getSupplierList(Integer page, Integer pageSize, Integer status, String supplierName) {
-        String token = req.getHeader("Authorization");
-        UserVO userVo = JWTUtil.getUserVOByToken(token);
-        assert userVo != null;
-
+//        String token = req.getHeader("Authorization");
+//        UserVO userVo = JWTUtil.getUserVOByToken(token);
+//        assert userVo != null;
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
         List<CgSupplierCertificationVO> cgSupplierCertificationVOS = cgSupplierCertificationMapper.selectByStatusAndSupplierName(status, supplierName);
         cgSupplierCertificationVOS.forEach(v -> {
