@@ -299,7 +299,8 @@ public class CgPurchaseInfoService {
                     .purchaseRequirements(cgPurchaseInfo.getPurchaseRequirements())
                     .issuerId(cgPurchaseInfo.getIssuerId())
                     .deliveryTime(cgPurchaseInfo.getDeliveryTime())
-                    .fileVOList(cgPurchaseFiles).build();
+                    .fileVOList(cgPurchaseFiles)
+                    .type(cgPurchaseInfo.getType()).build();
             return Callback.success(cgPurchaseInfoVO);
         }else {
             return Callback.error("未找到采购信息");

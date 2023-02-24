@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -104,5 +105,6 @@ public class CgPurchaseInfoVO {
      * 类型：0-采购 1-合作
      */
     @ApiModelProperty(value = "类型：0-采购 1-合作")
+    @NotNull(message = "采购或合作类型不能为空!")
     private Integer type;
 }
