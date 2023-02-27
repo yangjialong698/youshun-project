@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.daos.ErpScrapLossMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ErpScrapLoss">
+    <!--@mbg.generated-->
+    <!--@Table erp_scrap_loss-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="work_center_no" jdbcType="VARCHAR" property="workCenterNo" />
+    <result column="hour_cost" jdbcType="DOUBLE" property="hourCost" />
+    <result column="prd_per_cost" jdbcType="DOUBLE" property="prdPerCost" />
+    <result column="tool_oil" jdbcType="DOUBLE" property="toolOil" />
+    <result column="prd_no" jdbcType="VARCHAR" property="prdNo" />
+    <result column="prd_name" jdbcType="VARCHAR" property="prdName" />
+    <result column="order_date" jdbcType="VARCHAR" property="orderDate" />
+    <result column="work_hours" jdbcType="DOUBLE" property="workHours" />
+    <result column="scrap_num" jdbcType="INTEGER" property="scrapNum" />
+    <result column="Scrap_cost" jdbcType="DOUBLE" property="scrapCost" />
+    <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no, prd_name, order_date, 
+    work_hours, scrap_num, Scrap_cost, del_flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from erp_scrap_loss
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from erp_scrap_loss
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpScrapLoss" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_scrap_loss (work_center_no, hour_cost, prd_per_cost, 
+      tool_oil, prd_no, prd_name, 
+      order_date, work_hours, scrap_num, 
+      Scrap_cost, del_flag)
+    values (#{workCenterNo,jdbcType=VARCHAR}, #{hourCost,jdbcType=DOUBLE}, #{prdPerCost,jdbcType=DOUBLE}, 
+      #{toolOil,jdbcType=DOUBLE}, #{prdNo,jdbcType=VARCHAR}, #{prdName,jdbcType=VARCHAR}, 
+      #{orderDate,jdbcType=VARCHAR}, #{workHours,jdbcType=DOUBLE}, #{scrapNum,jdbcType=INTEGER}, 
+      #{scrapCost,jdbcType=DOUBLE}, #{delFlag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpScrapLoss" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_scrap_loss
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="workCenterNo != null">
+        work_center_no,
+      </if>
+      <if test="hourCost != null">
+        hour_cost,
+      </if>
+      <if test="prdPerCost != null">
+        prd_per_cost,
+      </if>
+      <if test="toolOil != null">
+        tool_oil,
+      </if>
+      <if test="prdNo != null">
+        prd_no,
+      </if>
+      <if test="prdName != null">
+        prd_name,
+      </if>
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="workHours != null">
+        work_hours,
+      </if>
+      <if test="scrapNum != null">
+        scrap_num,
+      </if>
+      <if test="scrapCost != null">
+        Scrap_cost,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="workCenterNo != null">
+        #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hourCost != null">
+        #{hourCost,jdbcType=DOUBLE},
+      </if>
+      <if test="prdPerCost != null">
+        #{prdPerCost,jdbcType=DOUBLE},
+      </if>
+      <if test="toolOil != null">
+        #{toolOil,jdbcType=DOUBLE},
+      </if>
+      <if test="prdNo != null">
+        #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workHours != null">
+        #{workHours,jdbcType=DOUBLE},
+      </if>
+      <if test="scrapNum != null">
+        #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapCost != null">
+        #{scrapCost,jdbcType=DOUBLE},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.ErpScrapLoss">
+    <!--@mbg.generated-->
+    update erp_scrap_loss
+    <set>
+      <if test="workCenterNo != null">
+        work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hourCost != null">
+        hour_cost = #{hourCost,jdbcType=DOUBLE},
+      </if>
+      <if test="prdPerCost != null">
+        prd_per_cost = #{prdPerCost,jdbcType=DOUBLE},
+      </if>
+      <if test="toolOil != null">
+        tool_oil = #{toolOil,jdbcType=DOUBLE},
+      </if>
+      <if test="prdNo != null">
+        prd_no = #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        prd_name = #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null">
+        order_date = #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workHours != null">
+        work_hours = #{workHours,jdbcType=DOUBLE},
+      </if>
+      <if test="scrapNum != null">
+        scrap_num = #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapCost != null">
+        Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.ErpScrapLoss">
+    <!--@mbg.generated-->
+    update erp_scrap_loss
+    set work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      hour_cost = #{hourCost,jdbcType=DOUBLE},
+      prd_per_cost = #{prdPerCost,jdbcType=DOUBLE},
+      tool_oil = #{toolOil,jdbcType=DOUBLE},
+      prd_no = #{prdNo,jdbcType=VARCHAR},
+      prd_name = #{prdName,jdbcType=VARCHAR},
+      order_date = #{orderDate,jdbcType=VARCHAR},
+      work_hours = #{workHours,jdbcType=DOUBLE},
+      scrap_num = #{scrapNum,jdbcType=INTEGER},
+      Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      del_flag = #{delFlag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_scrap_loss
+    (work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no, prd_name, order_date, 
+      work_hours, scrap_num, Scrap_cost, del_flag)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.workCenterNo,jdbcType=VARCHAR}, #{item.hourCost,jdbcType=DOUBLE}, #{item.prdPerCost,jdbcType=DOUBLE}, 
+        #{item.toolOil,jdbcType=DOUBLE}, #{item.prdNo,jdbcType=VARCHAR}, #{item.prdName,jdbcType=VARCHAR}, 
+        #{item.orderDate,jdbcType=VARCHAR}, #{item.workHours,jdbcType=DOUBLE}, #{item.scrapNum,jdbcType=INTEGER}, 
+        #{item.scrapCost,jdbcType=DOUBLE}, #{item.delFlag,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpScrapLoss" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_scrap_loss
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      work_center_no,
+      hour_cost,
+      prd_per_cost,
+      tool_oil,
+      prd_no,
+      prd_name,
+      order_date,
+      work_hours,
+      scrap_num,
+      Scrap_cost,
+      del_flag,
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      #{workCenterNo,jdbcType=VARCHAR},
+      #{hourCost,jdbcType=DOUBLE},
+      #{prdPerCost,jdbcType=DOUBLE},
+      #{toolOil,jdbcType=DOUBLE},
+      #{prdNo,jdbcType=VARCHAR},
+      #{prdName,jdbcType=VARCHAR},
+      #{orderDate,jdbcType=VARCHAR},
+      #{workHours,jdbcType=DOUBLE},
+      #{scrapNum,jdbcType=INTEGER},
+      #{scrapCost,jdbcType=DOUBLE},
+      #{delFlag,jdbcType=INTEGER},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      hour_cost = #{hourCost,jdbcType=DOUBLE},
+      prd_per_cost = #{prdPerCost,jdbcType=DOUBLE},
+      tool_oil = #{toolOil,jdbcType=DOUBLE},
+      prd_no = #{prdNo,jdbcType=VARCHAR},
+      prd_name = #{prdName,jdbcType=VARCHAR},
+      order_date = #{orderDate,jdbcType=VARCHAR},
+      work_hours = #{workHours,jdbcType=DOUBLE},
+      scrap_num = #{scrapNum,jdbcType=INTEGER},
+      Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      del_flag = #{delFlag,jdbcType=INTEGER},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpScrapLoss" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_scrap_loss
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="workCenterNo != null">
+        work_center_no,
+      </if>
+      <if test="hourCost != null">
+        hour_cost,
+      </if>
+      <if test="prdPerCost != null">
+        prd_per_cost,
+      </if>
+      <if test="toolOil != null">
+        tool_oil,
+      </if>
+      <if test="prdNo != null">
+        prd_no,
+      </if>
+      <if test="prdName != null">
+        prd_name,
+      </if>
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="workHours != null">
+        work_hours,
+      </if>
+      <if test="scrapNum != null">
+        scrap_num,
+      </if>
+      <if test="scrapCost != null">
+        Scrap_cost,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="workCenterNo != null">
+        #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hourCost != null">
+        #{hourCost,jdbcType=DOUBLE},
+      </if>
+      <if test="prdPerCost != null">
+        #{prdPerCost,jdbcType=DOUBLE},
+      </if>
+      <if test="toolOil != null">
+        #{toolOil,jdbcType=DOUBLE},
+      </if>
+      <if test="prdNo != null">
+        #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workHours != null">
+        #{workHours,jdbcType=DOUBLE},
+      </if>
+      <if test="scrapNum != null">
+        #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapCost != null">
+        #{scrapCost,jdbcType=DOUBLE},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=INTEGER},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="workCenterNo != null">
+        work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hourCost != null">
+        hour_cost = #{hourCost,jdbcType=DOUBLE},
+      </if>
+      <if test="prdPerCost != null">
+        prd_per_cost = #{prdPerCost,jdbcType=DOUBLE},
+      </if>
+      <if test="toolOil != null">
+        tool_oil = #{toolOil,jdbcType=DOUBLE},
+      </if>
+      <if test="prdNo != null">
+        prd_no = #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdName != null">
+        prd_name = #{prdName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null">
+        order_date = #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workHours != null">
+        work_hours = #{workHours,jdbcType=DOUBLE},
+      </if>
+      <if test="scrapNum != null">
+        scrap_num = #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapCost != null">
+        Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateDelFlag">
+      update  erp_scrap_loss set del_flag = 1
+      where id =#{id}
+  </update>
+
+  <select id="selectErpScrapLossList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from erp_scrap_loss esl
+    WHERE 1=1
+    AND esl.del_flag = 0
+
+    <if test="keyTime!=null and keyTime!=''">
+      AND esl.order_date = #{keyTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="prdNo != null and prdNo != ''">
+      AND esl.prd_no like trim(replace(CONCAT('%',#{prdNo},'%'),' ',''))
+    </if>
+    <if test="workCenterNo != null and workCenterNo != ''">
+      AND esl.work_center_no  = #{workCenterNo}
+    </if>
+    ORDER BY esl.order_date DESC
+  </select>
+
+  <select id="selectNullInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from erp_scrap_loss
+    where scrap_num is null AND Scrap_cost is null AND del_flag != 1
+  </select>
+
+  <update id="upDateByOrderDateMoveOutNoAndProductNo" >
+    update erp_scrap_loss
+    set scrap_num = #{scrapNumTotal,jdbcType=INTEGER},
+    Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+    where
+    order_date = #{orderDate,jdbcType=VARCHAR}
+    and move_out_no = #{workCenterNo,jdbcType=VARCHAR}
+    and product_no = #{prdNo,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selByOrderDateMoveOutNoAndProductNo" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from erp_scrap_loss
+    where  order_date = #{orderDate,jdbcType=VARCHAR}
+    and move_out_no = #{workCenterNo,jdbcType=VARCHAR}
+    and product_no = #{prdNo,jdbcType=VARCHAR}
+  </select>
+</mapper>

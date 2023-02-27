@@ -30,4 +30,20 @@
     </foreach>
     AND DATE_SUB(CURDATE(),INTERVAL 30 DAY) &lt;= DATE(order_date)
   </select>
+
+  <select id="selByOrderDateMoveOutNoAndProductNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from erp_transfer_order
+    where 1=1
+      <if test="orderDate!=null and orderDate!=''">
+        and order_date = #{orderDate}
+      </if>
+      <if test="workCenterNo!=null and workCenterNo!=''">
+        and move_out_no = #{workCenterNo}
+      </if>
+      <if test="prdNo!=null and prdNo!=''">
+        and product_no = #{prdNo}
+      </if>
+  </select>
 </mapper>

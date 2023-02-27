@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.daos.ErpPrdCostMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ErpPrdCost">
+    <!--@mbg.generated-->
+    <!--@Table erp_prd_cost-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="work_center_no" jdbcType="VARCHAR" property="workCenterNo" />
+    <result column="hour_cost" jdbcType="DOUBLE" property="hourCost" />
+    <result column="prd_per_cost" jdbcType="DOUBLE" property="prdPerCost" />
+    <result column="tool_oil" jdbcType="DOUBLE" property="toolOil" />
+    <result column="prd_no" jdbcType="VARCHAR" property="prdNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from erp_prd_cost
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from erp_prd_cost
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdCost" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_prd_cost (work_center_no, hour_cost, prd_per_cost, 
+      tool_oil, prd_no)
+    values (#{workCenterNo,jdbcType=VARCHAR}, #{hourCost,jdbcType=DOUBLE}, #{prdPerCost,jdbcType=DOUBLE}, 
+      #{toolOil,jdbcType=DOUBLE}, #{prdNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdCost" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_prd_cost
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="workCenterNo != null">
+        work_center_no,
+      </if>
+      <if test="hourCost != null">
+        hour_cost,
+      </if>
+      <if test="prdPerCost != null">
+        prd_per_cost,
+      </if>
+      <if test="toolOil != null">
+        tool_oil,
+      </if>
+      <if test="prdNo != null">
+        prd_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="workCenterNo != null">
+        #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hourCost != null">
+        #{hourCost,jdbcType=DOUBLE},
+      </if>
+      <if test="prdPerCost != null">
+        #{prdPerCost,jdbcType=DOUBLE},
+      </if>
+      <if test="toolOil != null">
+        #{toolOil,jdbcType=DOUBLE},
+      </if>
+      <if test="prdNo != null">
+        #{prdNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdCost">
+    <!--@mbg.generated-->
+    update erp_prd_cost
+    <set>
+      <if test="workCenterNo != null">
+        work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hourCost != null">
+        hour_cost = #{hourCost,jdbcType=DOUBLE},
+      </if>
+      <if test="prdPerCost != null">
+        prd_per_cost = #{prdPerCost,jdbcType=DOUBLE},
+      </if>
+      <if test="toolOil != null">
+        tool_oil = #{toolOil,jdbcType=DOUBLE},
+      </if>
+      <if test="prdNo != null">
+        prd_no = #{prdNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdCost">
+    <!--@mbg.generated-->
+    update erp_prd_cost
+    set work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      hour_cost = #{hourCost,jdbcType=DOUBLE},
+      prd_per_cost = #{prdPerCost,jdbcType=DOUBLE},
+      tool_oil = #{toolOil,jdbcType=DOUBLE},
+      prd_no = #{prdNo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_prd_cost
+    (work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.workCenterNo,jdbcType=VARCHAR}, #{item.hourCost,jdbcType=DOUBLE}, #{item.prdPerCost,jdbcType=DOUBLE}, 
+        #{item.toolOil,jdbcType=DOUBLE}, #{item.prdNo,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdCost" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_prd_cost
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      work_center_no,
+      hour_cost,
+      prd_per_cost,
+      tool_oil,
+      prd_no,
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      #{workCenterNo,jdbcType=VARCHAR},
+      #{hourCost,jdbcType=DOUBLE},
+      #{prdPerCost,jdbcType=DOUBLE},
+      #{toolOil,jdbcType=DOUBLE},
+      #{prdNo,jdbcType=VARCHAR},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      hour_cost = #{hourCost,jdbcType=DOUBLE},
+      prd_per_cost = #{prdPerCost,jdbcType=DOUBLE},
+      tool_oil = #{toolOil,jdbcType=DOUBLE},
+      prd_no = #{prdNo,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpPrdCost" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_prd_cost
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="workCenterNo != null">
+        work_center_no,
+      </if>
+      <if test="hourCost != null">
+        hour_cost,
+      </if>
+      <if test="prdPerCost != null">
+        prd_per_cost,
+      </if>
+      <if test="toolOil != null">
+        tool_oil,
+      </if>
+      <if test="prdNo != null">
+        prd_no,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="workCenterNo != null">
+        #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hourCost != null">
+        #{hourCost,jdbcType=DOUBLE},
+      </if>
+      <if test="prdPerCost != null">
+        #{prdPerCost,jdbcType=DOUBLE},
+      </if>
+      <if test="toolOil != null">
+        #{toolOil,jdbcType=DOUBLE},
+      </if>
+      <if test="prdNo != null">
+        #{prdNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="workCenterNo != null">
+        work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hourCost != null">
+        hour_cost = #{hourCost,jdbcType=DOUBLE},
+      </if>
+      <if test="prdPerCost != null">
+        prd_per_cost = #{prdPerCost,jdbcType=DOUBLE},
+      </if>
+      <if test="toolOil != null">
+        tool_oil = #{toolOil,jdbcType=DOUBLE},
+      </if>
+      <if test="prdNo != null">
+        prd_no = #{prdNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getWorkCenterNoList" resultType="java.lang.String">
+    SELECT DISTINCT
+      work_center_no AS workCenterNo
+    FROM
+      erp_prd_cost
+  </select>
+
+  <select id="getErpPerhourCost" resultType="com.ennova.pubinfoproduct.vo.ErpPerhourCostVO">
+    SELECT
+      work_center_no AS workCenterNo,
+      hour_cost AS hourCost
+    FROM
+      erp_prd_cost
+    WHERE
+      work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+    GROUP BY
+      work_center_no
+  </select>
+
+  <select id="selectErpPrdNameVoByPrdno" resultType="com.ennova.pubinfoproduct.vo.ErpPrdNameVO">
+    SELECT DISTINCT
+      prd_per_cost AS prdPerCost,
+      tool_oil AS toolOil,
+      prd_no AS prdNo
+    FROM
+      erp_prd_cost
+    WHERE
+      prd_no =#{prdNo,jdbcType=VARCHAR}
+  </select>
+</mapper>
