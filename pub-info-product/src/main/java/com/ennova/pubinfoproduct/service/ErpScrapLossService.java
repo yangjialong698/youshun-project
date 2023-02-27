@@ -42,7 +42,7 @@ public class ErpScrapLossService {
         ErpScrapLoss erpScrapLoss = new ErpScrapLoss();
         BeanUtils.copyProperties(erpScrapLossVO,erpScrapLoss);
         if (erpScrapLossVO.getId() != null){
-            ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOrderDateMoveOutNoAndProductNo(orderDate, workCenterNo, prdNo);
+            ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
             if (null != erpScrapLossOne){
                 return Callback.success("当天工作中心关联品号已存在!");
             }
@@ -98,7 +98,8 @@ public class ErpScrapLossService {
         return erpScrapLossList;
     }
 
-    public void upDateByOrderDateMoveOutNoAndProductNo(String orderDate, String workCenterNo, String prdNo, Integer scrapNumTotal, Double scrapCost) {
-        erpScrapLossMapper.upDateByOrderDateMoveOutNoAndProductNo(orderDate,workCenterNo,prdNo,scrapNumTotal,scrapCost);
+    public void updateByPrimaryKeySelective(ErpScrapLoss e) {
+        erpScrapLossMapper.updateByPrimaryKeySelective(e);
     }
+
 }

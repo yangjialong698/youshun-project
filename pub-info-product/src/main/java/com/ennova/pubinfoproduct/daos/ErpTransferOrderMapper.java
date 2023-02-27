@@ -10,7 +10,7 @@ public interface ErpTransferOrderMapper {
 
     List<ErpTransferOrder> selectAllByMoveOutNo(@Param("gxList") List<String> gxList);
 
-    List<ErpTransferOrder> selByOrderDateMoveOutNoAndProductNo( @Param("orderDate")String orderDate,
+    List<ErpTransferOrder> selByOmpNo( @Param("orderDate")String orderDate,
                                                                 @Param("workCenterNo")String workCenterNo,
                                                                 @Param("prdNo")String prdNo);
 }

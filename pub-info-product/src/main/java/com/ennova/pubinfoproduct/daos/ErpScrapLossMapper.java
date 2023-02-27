@@ -33,13 +33,7 @@ public interface ErpScrapLossMapper {
 
     List<ErpScrapLoss> selectNullInfo();
 
-    int upDateByOrderDateMoveOutNoAndProductNo( @Param("orderDate")String orderDate,
-                                                @Param("workCenterNo")String workCenterNo,
-                                                @Param("prdNo")String prdNo,
-                                                @Param("scrapNumTotal")Integer scrapNumTotal,
-                                                @Param("scrapCost")Double scrapCost);
-
-    ErpScrapLoss selByOrderDateMoveOutNoAndProductNo(@Param("orderDate")String orderDate,
+    ErpScrapLoss selByOmpNo(@Param("orderDate")String orderDate,
                                                      @Param("workCenterNo")String workCenterNo,
                                                      @Param("prdNo")String prdNo);
 }

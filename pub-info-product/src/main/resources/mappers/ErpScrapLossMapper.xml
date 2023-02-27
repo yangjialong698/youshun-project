@@ -394,17 +394,7 @@
     where scrap_num is null AND Scrap_cost is null AND del_flag != 1
   </select>
 
-  <update id="upDateByOrderDateMoveOutNoAndProductNo" >
-    update erp_scrap_loss
-    set scrap_num = #{scrapNumTotal,jdbcType=INTEGER},
-    Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
-    where
-    order_date = #{orderDate,jdbcType=VARCHAR}
-    and move_out_no = #{workCenterNo,jdbcType=VARCHAR}
-    and product_no = #{prdNo,jdbcType=VARCHAR}
-  </update>
-
-  <select id="selByOrderDateMoveOutNoAndProductNo" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selByOmpNo" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from erp_scrap_loss
