@@ -111,7 +111,8 @@ public class ErpScrapLossController {
                         Double perPerson = hourCost * workHours / efo.getAcceptanceNum();
                         //报废金额 = 报废数量*(单件人工+单件材料费+单件刀具油辅料)
                         Double scrapCost = efo.getScrapNum() * (perPerson + prdPerCost + toolOil);
-//                        erpTransferOrderMapper.updateById(scrapCost);
+                        efo.setScrapCost(scrapCost);
+                        erpTransferOrderMapper.updateByPrimaryKey(efo);
                         scrapCostTotal += scrapCost;
                     }
                     e.setScrapNum(scrapNumTotal);

@@ -14,13 +14,13 @@
     <result column="order_date" jdbcType="VARCHAR" property="orderDate" />
     <result column="work_hours" jdbcType="DOUBLE" property="workHours" />
     <result column="scrap_num" jdbcType="INTEGER" property="scrapNum" />
-    <result column="Scrap_cost" jdbcType="DOUBLE" property="scrapCost" />
+    <result column="scrap_cost" jdbcType="DOUBLE" property="scrapCost" />
     <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no, prd_name, order_date, 
-    work_hours, scrap_num, Scrap_cost, del_flag
+    work_hours, scrap_num, scrap_cost, del_flag
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -39,7 +39,7 @@
     insert into erp_scrap_loss (work_center_no, hour_cost, prd_per_cost, 
       tool_oil, prd_no, prd_name, 
       order_date, work_hours, scrap_num, 
-      Scrap_cost, del_flag)
+      scrap_cost, del_flag)
     values (#{workCenterNo,jdbcType=VARCHAR}, #{hourCost,jdbcType=DOUBLE}, #{prdPerCost,jdbcType=DOUBLE}, 
       #{toolOil,jdbcType=DOUBLE}, #{prdNo,jdbcType=VARCHAR}, #{prdName,jdbcType=VARCHAR}, 
       #{orderDate,jdbcType=VARCHAR}, #{workHours,jdbcType=DOUBLE}, #{scrapNum,jdbcType=INTEGER}, 
@@ -77,7 +77,7 @@
         scrap_num,
       </if>
       <if test="scrapCost != null">
-        Scrap_cost,
+        scrap_cost,
       </if>
       <if test="delFlag != null">
         del_flag,
@@ -151,7 +151,7 @@
         scrap_num = #{scrapNum,jdbcType=INTEGER},
       </if>
       <if test="scrapCost != null">
-        Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+        scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       </if>
       <if test="delFlag != null">
         del_flag = #{delFlag,jdbcType=INTEGER},
@@ -171,7 +171,7 @@
       order_date = #{orderDate,jdbcType=VARCHAR},
       work_hours = #{workHours,jdbcType=DOUBLE},
       scrap_num = #{scrapNum,jdbcType=INTEGER},
-      Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       del_flag = #{delFlag,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -179,7 +179,7 @@
     <!--@mbg.generated-->
     insert into erp_scrap_loss
     (work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no, prd_name, order_date, 
-      work_hours, scrap_num, Scrap_cost, del_flag)
+      work_hours, scrap_num, scrap_cost, del_flag)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.workCenterNo,jdbcType=VARCHAR}, #{item.hourCost,jdbcType=DOUBLE}, #{item.prdPerCost,jdbcType=DOUBLE}, 
@@ -204,7 +204,7 @@
       order_date,
       work_hours,
       scrap_num,
-      Scrap_cost,
+      scrap_cost,
       del_flag,
     </trim>
     values
@@ -238,7 +238,7 @@
       order_date = #{orderDate,jdbcType=VARCHAR},
       work_hours = #{workHours,jdbcType=DOUBLE},
       scrap_num = #{scrapNum,jdbcType=INTEGER},
-      Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       del_flag = #{delFlag,jdbcType=INTEGER},
     </trim>
   </insert>
@@ -277,7 +277,7 @@
         scrap_num,
       </if>
       <if test="scrapCost != null">
-        Scrap_cost,
+        scrap_cost,
       </if>
       <if test="delFlag != null">
         del_flag,
@@ -355,7 +355,7 @@
         scrap_num = #{scrapNum,jdbcType=INTEGER},
       </if>
       <if test="scrapCost != null">
-        Scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+        scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       </if>
       <if test="delFlag != null">
         del_flag = #{delFlag,jdbcType=INTEGER},

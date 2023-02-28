@@ -33,7 +33,7 @@ public interface ErpScrapLossMapper {
 
     List<ErpScrapLoss> selectNullInfo();
 
-    ErpScrapLoss selByOmpNo(@Param("orderDate")String orderDate,
-                                                     @Param("workCenterNo")String workCenterNo,
-                                                     @Param("prdNo")String prdNo);
+    ErpScrapLoss selByOmpNo(@Param("orderDate") String orderDate,
+                            @Param("workCenterNo") String workCenterNo,
+                            @Param("prdNo") String prdNo);
 }

@@ -2,6 +2,417 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ennova.pubinfoproduct.daos.ErpTransferOrderMapper">
   <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ErpTransferOrder">
+    <!--@mbg.generated-->
+    <!--@Table erp_transfer_order-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_date" jdbcType="VARCHAR" property="orderDate" />
+    <result column="transfer_order_no" jdbcType="VARCHAR" property="transferOrderNo" />
+    <result column="move_out_no" jdbcType="VARCHAR" property="moveOutNo" />
+    <result column="move_in_no" jdbcType="VARCHAR" property="moveInNo" />
+    <result column="work_order_no" jdbcType="VARCHAR" property="workOrderNo" />
+    <result column="product_no" jdbcType="VARCHAR" property="productNo" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="acceptance_num" jdbcType="INTEGER" property="acceptanceNum" />
+    <result column="scrap_num" jdbcType="INTEGER" property="scrapNum" />
+    <result column="bad_num" jdbcType="INTEGER" property="badNum" />
+    <result column="total_num" jdbcType="INTEGER" property="totalNum" />
+    <result column="scrap_cost" jdbcType="DOUBLE" property="scrapCost" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, order_date, transfer_order_no, move_out_no, move_in_no, work_order_no, product_no, 
+    product_name, acceptance_num, scrap_num, bad_num, total_num, scrap_cost, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from erp_transfer_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from erp_transfer_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpTransferOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_transfer_order (order_date, transfer_order_no, move_out_no, 
+      move_in_no, work_order_no, product_no, 
+      product_name, acceptance_num, scrap_num, 
+      bad_num, total_num, scrap_cost, 
+      create_time)
+    values (#{orderDate,jdbcType=VARCHAR}, #{transferOrderNo,jdbcType=VARCHAR}, #{moveOutNo,jdbcType=VARCHAR}, 
+      #{moveInNo,jdbcType=VARCHAR}, #{workOrderNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, 
+      #{productName,jdbcType=VARCHAR}, #{acceptanceNum,jdbcType=INTEGER}, #{scrapNum,jdbcType=INTEGER}, 
+      #{badNum,jdbcType=INTEGER}, #{totalNum,jdbcType=INTEGER}, #{scrapCost,jdbcType=DOUBLE}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpTransferOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_transfer_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="transferOrderNo != null">
+        transfer_order_no,
+      </if>
+      <if test="moveOutNo != null">
+        move_out_no,
+      </if>
+      <if test="moveInNo != null">
+        move_in_no,
+      </if>
+      <if test="workOrderNo != null">
+        work_order_no,
+      </if>
+      <if test="productNo != null">
+        product_no,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="acceptanceNum != null">
+        acceptance_num,
+      </if>
+      <if test="scrapNum != null">
+        scrap_num,
+      </if>
+      <if test="badNum != null">
+        bad_num,
+      </if>
+      <if test="totalNum != null">
+        total_num,
+      </if>
+      <if test="scrapCost != null">
+        scrap_cost,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="transferOrderNo != null">
+        #{transferOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="moveOutNo != null">
+        #{moveOutNo,jdbcType=VARCHAR},
+      </if>
+      <if test="moveInNo != null">
+        #{moveInNo,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrderNo != null">
+        #{workOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceNum != null">
+        #{acceptanceNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapNum != null">
+        #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="badNum != null">
+        #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        #{totalNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapCost != null">
+        #{scrapCost,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.ErpTransferOrder">
+    <!--@mbg.generated-->
+    update erp_transfer_order
+    <set>
+      <if test="orderDate != null">
+        order_date = #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="transferOrderNo != null">
+        transfer_order_no = #{transferOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="moveOutNo != null">
+        move_out_no = #{moveOutNo,jdbcType=VARCHAR},
+      </if>
+      <if test="moveInNo != null">
+        move_in_no = #{moveInNo,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrderNo != null">
+        work_order_no = #{workOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        product_no = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceNum != null">
+        acceptance_num = #{acceptanceNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapNum != null">
+        scrap_num = #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="badNum != null">
+        bad_num = #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        total_num = #{totalNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapCost != null">
+        scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.ErpTransferOrder">
+    <!--@mbg.generated-->
+    update erp_transfer_order
+    set order_date = #{orderDate,jdbcType=VARCHAR},
+      transfer_order_no = #{transferOrderNo,jdbcType=VARCHAR},
+      move_out_no = #{moveOutNo,jdbcType=VARCHAR},
+      move_in_no = #{moveInNo,jdbcType=VARCHAR},
+      work_order_no = #{workOrderNo,jdbcType=VARCHAR},
+      product_no = #{productNo,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      acceptance_num = #{acceptanceNum,jdbcType=INTEGER},
+      scrap_num = #{scrapNum,jdbcType=INTEGER},
+      bad_num = #{badNum,jdbcType=INTEGER},
+      total_num = #{totalNum,jdbcType=INTEGER},
+      scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_transfer_order
+    (order_date, transfer_order_no, move_out_no, move_in_no, work_order_no, product_no, 
+      product_name, acceptance_num, scrap_num, bad_num, total_num, scrap_cost, create_time
+      )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.orderDate,jdbcType=VARCHAR}, #{item.transferOrderNo,jdbcType=VARCHAR}, #{item.moveOutNo,jdbcType=VARCHAR}, 
+        #{item.moveInNo,jdbcType=VARCHAR}, #{item.workOrderNo,jdbcType=VARCHAR}, #{item.productNo,jdbcType=VARCHAR}, 
+        #{item.productName,jdbcType=VARCHAR}, #{item.acceptanceNum,jdbcType=INTEGER}, #{item.scrapNum,jdbcType=INTEGER}, 
+        #{item.badNum,jdbcType=INTEGER}, #{item.totalNum,jdbcType=INTEGER}, #{item.scrapCost,jdbcType=DOUBLE}, 
+        #{item.createTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpTransferOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_transfer_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      order_date,
+      transfer_order_no,
+      move_out_no,
+      move_in_no,
+      work_order_no,
+      product_no,
+      product_name,
+      acceptance_num,
+      scrap_num,
+      bad_num,
+      total_num,
+      scrap_cost,
+      create_time,
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      #{orderDate,jdbcType=VARCHAR},
+      #{transferOrderNo,jdbcType=VARCHAR},
+      #{moveOutNo,jdbcType=VARCHAR},
+      #{moveInNo,jdbcType=VARCHAR},
+      #{workOrderNo,jdbcType=VARCHAR},
+      #{productNo,jdbcType=VARCHAR},
+      #{productName,jdbcType=VARCHAR},
+      #{acceptanceNum,jdbcType=INTEGER},
+      #{scrapNum,jdbcType=INTEGER},
+      #{badNum,jdbcType=INTEGER},
+      #{totalNum,jdbcType=INTEGER},
+      #{scrapCost,jdbcType=DOUBLE},
+      #{createTime,jdbcType=TIMESTAMP},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      order_date = #{orderDate,jdbcType=VARCHAR},
+      transfer_order_no = #{transferOrderNo,jdbcType=VARCHAR},
+      move_out_no = #{moveOutNo,jdbcType=VARCHAR},
+      move_in_no = #{moveInNo,jdbcType=VARCHAR},
+      work_order_no = #{workOrderNo,jdbcType=VARCHAR},
+      product_no = #{productNo,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      acceptance_num = #{acceptanceNum,jdbcType=INTEGER},
+      scrap_num = #{scrapNum,jdbcType=INTEGER},
+      bad_num = #{badNum,jdbcType=INTEGER},
+      total_num = #{totalNum,jdbcType=INTEGER},
+      scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpTransferOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into erp_transfer_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="transferOrderNo != null">
+        transfer_order_no,
+      </if>
+      <if test="moveOutNo != null">
+        move_out_no,
+      </if>
+      <if test="moveInNo != null">
+        move_in_no,
+      </if>
+      <if test="workOrderNo != null">
+        work_order_no,
+      </if>
+      <if test="productNo != null">
+        product_no,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="acceptanceNum != null">
+        acceptance_num,
+      </if>
+      <if test="scrapNum != null">
+        scrap_num,
+      </if>
+      <if test="badNum != null">
+        bad_num,
+      </if>
+      <if test="totalNum != null">
+        total_num,
+      </if>
+      <if test="scrapCost != null">
+        scrap_cost,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="transferOrderNo != null">
+        #{transferOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="moveOutNo != null">
+        #{moveOutNo,jdbcType=VARCHAR},
+      </if>
+      <if test="moveInNo != null">
+        #{moveInNo,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrderNo != null">
+        #{workOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceNum != null">
+        #{acceptanceNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapNum != null">
+        #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="badNum != null">
+        #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        #{totalNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapCost != null">
+        #{scrapCost,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderDate != null">
+        order_date = #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="transferOrderNo != null">
+        transfer_order_no = #{transferOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="moveOutNo != null">
+        move_out_no = #{moveOutNo,jdbcType=VARCHAR},
+      </if>
+      <if test="moveInNo != null">
+        move_in_no = #{moveInNo,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrderNo != null">
+        work_order_no = #{workOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        product_no = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceNum != null">
+        acceptance_num = #{acceptanceNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapNum != null">
+        scrap_num = #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="badNum != null">
+        bad_num = #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        total_num = #{totalNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapCost != null">
+        scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ErpTransferOrder">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="order_date" jdbcType="VARCHAR" property="orderDate" />
     <result column="transfer_order_no" jdbcType="VARCHAR" property="transferOrderNo" />
@@ -22,10 +433,10 @@
 
   <select id="selectAllByMoveOutNo" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from erp_transfer_order
     where move_out_no in
-    <foreach item="item" index="index" collection="gxList" open="(" separator="," close=")">
+    <foreach close=")" collection="gxList" index="index" item="item" open="(" separator=",">
       #{item}
     </foreach>
     AND DATE_SUB(CURDATE(),INTERVAL 30 DAY) &lt;= DATE(order_date)
@@ -33,7 +444,7 @@
 
   <select id="selByOmpNo" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from erp_transfer_order
     where 1=1
       <if test="orderDate!=null and orderDate!=''">
