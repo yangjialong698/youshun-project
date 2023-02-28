@@ -89,7 +89,7 @@ public class ErpScrapLossController {
     }
 
     //计算报废数量+报废金额
-    @Scheduled(cron = "0 23 * * *")
+    @Scheduled(cron = " 0 0 23 * * ?")
     public void calculateScrapInfo() {
         //定时跑批查询无报废数量+报废金额的列表
         List<ErpScrapLoss> erpScrapLossList = erpScrapLossService.selectHisInfoList();

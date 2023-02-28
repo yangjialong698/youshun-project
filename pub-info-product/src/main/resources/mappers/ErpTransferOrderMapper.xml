@@ -412,24 +412,6 @@
       </if>
     </trim>
   </insert>
-  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ErpTransferOrder">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="order_date" jdbcType="VARCHAR" property="orderDate" />
-    <result column="transfer_order_no" jdbcType="VARCHAR" property="transferOrderNo" />
-    <result column="move_out_no" jdbcType="VARCHAR" property="moveOutNo" />
-    <result column="move_in_no" jdbcType="VARCHAR" property="moveInNo" />
-    <result column="work_order_no" jdbcType="VARCHAR" property="workOrderNo" />
-    <result column="product_no" jdbcType="VARCHAR" property="productNo" />
-    <result column="product_name" jdbcType="VARCHAR" property="productName" />
-    <result column="acceptance_num" jdbcType="INTEGER" property="acceptanceNum" />
-    <result column="scrap_num" jdbcType="INTEGER" property="scrapNum" />
-    <result column="bad_num" jdbcType="INTEGER" property="badNum" />
-    <result column="total_num" jdbcType="INTEGER" property="totalNum" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, order_date, transfer_order_no, move_out_no, move_in_no, work_order_no, product_no, 
-    product_name, acceptance_num, scrap_num,bad_num, total_num
-  </sql>
 
   <select id="selectAllByMoveOutNo" resultMap="BaseResultMap">
     select

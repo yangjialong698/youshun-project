@@ -231,7 +231,7 @@
     FROM
       erp_prd_cost
     WHERE
-      work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      work_center_no = #{workCenterNo,jdbcType=VARCHAR}
     GROUP BY
       work_center_no
   </select>
