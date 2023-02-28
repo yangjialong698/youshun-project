@@ -6,10 +6,12 @@ import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.vo.DutyDepartmentVO;
 import com.ennova.pubinfostore.vo.DutyPersonVO;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface ScProblemFeedbackMapper {
     int deleteByPrimaryKey(Integer id);
 
