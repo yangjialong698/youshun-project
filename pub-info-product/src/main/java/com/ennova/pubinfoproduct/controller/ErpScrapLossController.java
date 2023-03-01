@@ -74,7 +74,7 @@ public class ErpScrapLossController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "开始页"),
             @ApiImplicitParam(name = "pageSize", value = "显示条数"),
-            @ApiImplicitParam(name = "startTime", value = "起始月份"),
+            @ApiImplicitParam(name = "keyTime", value = "搜索月份"),
             @ApiImplicitParam(name = "workCenterNo", value = "工作中心"),
             @ApiImplicitParam(name = "prdNo", value = "品号"),
     })

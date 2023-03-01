@@ -36,6 +36,7 @@ public class ErpTransferOrderService{
                 int rkCount = value.stream().mapToInt(o->Objects.isNull(o.getTotalNum()) ? 0 :o.getTotalNum()).sum(); // 入库数量单品汇总
                 int bfCount = value.stream().mapToInt(o->Objects.isNull(o.getScrapNum()) ? 0 :o.getScrapNum()).sum(); // 报废数量单品汇总
                 int badCount = value.stream().mapToInt(o->Objects.isNull(o.getBadNum()) ? 0 :o.getBadNum()).sum(); // 不良数量单品汇总
+                Double scrapCostCount = value.stream().mapToDouble(o->Objects.isNull(o.getScrapCost()) ? 0 :o.getScrapCost()).sum(); // 报废金额单品汇总
                 NumberFormat num = NumberFormat.getInstance();
                 num.setMaximumFractionDigits(2);
                 String percent = num.format((float) (bfCount+badCount) / (float) rkCount * 100);
@@ -48,6 +49,7 @@ public class ErpTransferOrderService{
                     percent = String.valueOf(15);
                 }
                 scrapVO.setBadScrapRate(percent);
+                scrapVO.setScrapCostCount(scrapCostCount);
                 scrapVOArrayList.add(scrapVO);
                 return scrapVOArrayList;
             }).collect(Collectors.toList());

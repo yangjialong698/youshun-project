@@ -19,4 +19,6 @@ public class ScrapVO {
     private Integer badNum;
     @ApiModelProperty(value="不良及报废率")
     private String badScrapRate;
+    @ApiModelProperty(value="报废金额")
+    private Double scrapCostCount;
 }
