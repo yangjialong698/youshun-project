@@ -90,7 +90,7 @@ public class ErpScrapLossService {
         if (null != erpTransferOrder){
             prdName = erpTransferOrder.getProductName();
         }
-        ErpPrdNameVO erpPrdNameVO = erpPrdCostMapper.selectErpPrdNameVoByPrdno(prdNo);
+        ErpPrdNameVO erpPrdNameVO = erpPrdCostMapper.selectErpPrdNameVoByPrdno(workCenterNo,prdNo);
         if (null != erpPrdNameVO){
             erpPrdNameVO.setPrdName(prdName);
         }

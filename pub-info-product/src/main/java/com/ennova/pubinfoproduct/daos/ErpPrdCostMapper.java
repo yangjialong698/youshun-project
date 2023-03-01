@@ -33,6 +33,6 @@ public interface ErpPrdCostMapper {
 
     ErpPerhourCostVO getErpPerhourCost(@Param("workCenterNo")String workCenterNo);
 
-    ErpPrdNameVO selectErpPrdNameVoByPrdno(@Param("prdNo")String prdNo);
+    ErpPrdNameVO selectErpPrdNameVoByPrdno(@Param("workCenterNo")String workCenterNo,@Param("prdNo")String prdNo);
 
 }
