@@ -1,7 +1,9 @@
 package com.ennova.pubinfoproduct.daos;
 
 import com.ennova.pubinfoproduct.entity.ErpScrapLoss;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -394,12 +394,12 @@
     where scrap_num is null AND Scrap_cost is null AND del_flag != 1
   </select>
 
-  <select id="selByOmpNo" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selByOmpNo" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from erp_scrap_loss
     where  order_date = #{orderDate,jdbcType=VARCHAR}
-    and move_out_no = #{workCenterNo,jdbcType=VARCHAR}
-    and product_no = #{prdNo,jdbcType=VARCHAR}
+    and work_center_no = #{workCenterNo,jdbcType=VARCHAR}
+    and prd_no = #{prdNo,jdbcType=VARCHAR}
   </select>
 </mapper>

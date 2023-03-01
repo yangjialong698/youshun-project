@@ -20,6 +20,7 @@ import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -35,9 +36,6 @@ public class ErpScrapLossService {
     private ErpPrdCostMapper erpPrdCostMapper;
 
     @Autowired
-    private ErpPrdInfoMapper erpPrdInfoMapper;
-
-    @Autowired
     private ErpTransferOrderMapper erpTransferOrderMapper;
 
     public Callback insertOrUpdate(ErpScrapLossVO erpScrapLossVO) {
@@ -47,14 +45,14 @@ public class ErpScrapLossService {
         ErpScrapLoss erpScrapLoss = new ErpScrapLoss();
         BeanUtils.copyProperties(erpScrapLossVO,erpScrapLoss);
         if (erpScrapLossVO.getId() != null){
-            ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
-            if (null != erpScrapLossOne){
-                return Callback.success("当天工作中心关联品号已存在!");
-            }
             //更新
             erpScrapLossMapper.updateByPrimaryKey(erpScrapLoss);
         }else {
             //新增
+            ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
+            if (null != erpScrapLossOne){
+                return Callback.success("当天工作中心关联品号已存在!");
+            }
             erpScrapLoss.setDelFlag(0);
             erpScrapLossMapper.insertSelective(erpScrapLoss);
         }
@@ -99,17 +97,48 @@ public class ErpScrapLossService {
         return Callback.success(erpPrdNameVO);
     }
 
-    public List<ErpScrapLoss> selectHisInfoList() {
-        List<ErpScrapLoss> erpScrapLossList = erpScrapLossMapper.selectNullInfo();
-        return erpScrapLossList;
-    }
-
-    public void updateByPrimaryKeySelective(ErpScrapLoss e) {
-        erpScrapLossMapper.updateByPrimaryKeySelective(e);
-    }
-
     public Callback<ErpScrapLoss> getDetailById(Integer id) {
         ErpScrapLoss erpScrapLoss = erpScrapLossMapper.selectByPrimaryKey(id);
         return Callback.success(erpScrapLoss);
+    }
+
+    //计算报废数量+报废金额
+    @Scheduled(cron = " 0 0 23 * * ?")
+    public void calculateScrapInfo() {
+        List<ErpScrapLoss> erpScrapLossList = erpScrapLossMapper.selectNullInfo();
+        if (CollectionUtil.isNotEmpty(erpScrapLossList)) {
+            erpScrapLossList.forEach(e -> {
+                String orderDate = e.getOrderDate();//单据日期
+                String workCenterNo = e.getWorkCenterNo();//工作中心
+                String prdNo = e.getPrdNo();//产品品号
+                Double hourCost = e.getHourCost();//平均小时成本含社保
+                Double prdPerCost = e.getPrdPerCost();//单件材料费
+                Double workHours = e.getWorkHours();//工时
+                Double toolOil = e.getToolOil();//单件刀具油辅料
+                List<ErpTransferOrder> erpTransferOrderList = erpTransferOrderMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
+                if (CollectionUtil.isNotEmpty(erpTransferOrderList)) {
+                    Integer scrapNumTotal = erpTransferOrderList.stream().mapToInt(ErpTransferOrder::getScrapNum).sum();//总报废数量
+                    Double scrapCostTotal = 0.0;
+                    for (ErpTransferOrder efo : erpTransferOrderList) {
+                        Double perPerson = 0.0;
+                        //单件人工 = 平均小时成本含社保*工时/合格数量
+                        if (efo.getAcceptanceNum()==0){
+                            perPerson = 0.0;
+                        }else {
+                            perPerson = hourCost * workHours / efo.getAcceptanceNum();
+                        }
+                        //报废金额 = 报废数量*(单件人工+单件材料费+单件刀具油辅料)
+                        Double scrapCost = efo.getScrapNum() * (perPerson + prdPerCost + toolOil);
+                        efo.setScrapCost(scrapCost);
+                        erpTransferOrderMapper.updateByPrimaryKey(efo);
+                        scrapCostTotal += scrapCost;
+                    }
+                    e.setScrapNum(scrapNumTotal);
+                    e.setScrapCost(scrapCostTotal);
+                    //更新报废数量+报废金额
+                    erpScrapLossMapper.updateByPrimaryKeySelective(e);
+                }
+            });
+        }
     }
 }
