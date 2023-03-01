@@ -439,4 +439,20 @@
         and product_no = #{prdNo}
       </if>
   </select>
+
+
+  <select id="selectByMoveOutNoAndProductNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from erp_transfer_order
+    <where>
+      <if test="moveOutNo != null">
+        and move_out_no=#{moveOutNo,jdbcType=VARCHAR}
+      </if>
+      <if test="productNo != null">
+        and product_no=#{productNo,jdbcType=VARCHAR}
+      </if>
+    </where>
+    GROUP BY product_no
+  </select>
 </mapper>

@@ -54,8 +54,8 @@ public class ErpScrapLossController {
             @ApiImplicitParam(name = "prdNo", value = "品号", required = true)
     })
     @GetMapping("/getErpPrdByPrdno")
-    public Callback<ErpPrdNameVO> getErpPrdByPrdno(String prdNo) {
-        return erpScrapLossService.getErpPrdByPrdno(prdNo);
+    public Callback<ErpPrdNameVO> getErpPrdByPrdno( @RequestParam("workCenterNo")String workCenterNo,@RequestParam("prdNo")String prdNo) {
+        return erpScrapLossService.getErpPrdByPrdno(workCenterNo,prdNo);
     }
 
     @ApiOperation(value = "报废损失计算 - 新增和修改报废损失")
@@ -68,6 +68,15 @@ public class ErpScrapLossController {
     @DeleteMapping("/delete")
     public Callback delete(Integer id) {
         return erpScrapLossService.delete(id);
+    }
+
+    @ApiOperation(value = "报废损失计算 - 报废损失查看详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "报废损失id", required = true)
+    })
+    @GetMapping("/getDetailById")
+    public Callback<ErpScrapLoss> getDetailById(Integer id){
+        return erpScrapLossService.getDetailById(id);
     }
 
     @ApiOperation(value = "报废损失计算 - 查询客述台账信息分页列表")

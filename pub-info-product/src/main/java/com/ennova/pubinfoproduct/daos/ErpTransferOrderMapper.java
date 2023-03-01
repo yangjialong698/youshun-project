@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
-public interface ErpTransferOrderMapper {
+public interface ErpTransferOrderMapper<selectByMoveOutNoAndProductNo> {
     int deleteByPrimaryKey(Integer id);
 
     int insert(ErpTransferOrder record);
@@ -30,4 +30,8 @@ public interface ErpTransferOrderMapper {
     List<ErpTransferOrder> selByOmpNo(@Param("orderDate") String orderDate,
                                       @Param("workCenterNo") String workCenterNo,
                                       @Param("prdNo") String prdNo);
+
+    ErpTransferOrder selectByMoveOutNoAndProductNo(@Param("moveOutNo")String moveOutNo,@Param("productNo")String productNo);
+
+
 }

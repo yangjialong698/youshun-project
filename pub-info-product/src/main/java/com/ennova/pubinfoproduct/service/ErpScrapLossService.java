@@ -7,9 +7,11 @@ import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfoproduct.daos.ErpPrdCostMapper;
 import com.ennova.pubinfoproduct.daos.ErpPrdInfoMapper;
 import com.ennova.pubinfoproduct.daos.ErpScrapLossMapper;
+import com.ennova.pubinfoproduct.daos.ErpTransferOrderMapper;
 import com.ennova.pubinfoproduct.entity.CustomerAccountInfo;
 import com.ennova.pubinfoproduct.entity.ErpPrdInfo;
 import com.ennova.pubinfoproduct.entity.ErpScrapLoss;
+import com.ennova.pubinfoproduct.entity.ErpTransferOrder;
 import com.ennova.pubinfoproduct.vo.ErpPerhourCostVO;
 import com.ennova.pubinfoproduct.vo.ErpPrdNameVO;
 import com.ennova.pubinfoproduct.vo.ErpScrapLossVO;
@@ -35,6 +37,9 @@ public class ErpScrapLossService {
     @Autowired
     private ErpPrdInfoMapper erpPrdInfoMapper;
 
+    @Autowired
+    private ErpTransferOrderMapper erpTransferOrderMapper;
+
     public Callback insertOrUpdate(ErpScrapLossVO erpScrapLossVO) {
         String orderDate = erpScrapLossVO.getOrderDate();
         String workCenterNo = erpScrapLossVO.getWorkCenterNo();
@@ -50,6 +55,7 @@ public class ErpScrapLossService {
             erpScrapLossMapper.updateByPrimaryKey(erpScrapLoss);
         }else {
             //新增
+            erpScrapLoss.setDelFlag(0);
             erpScrapLossMapper.insertSelective(erpScrapLoss);
         }
         return Callback.success(true);
@@ -80,17 +86,17 @@ public class ErpScrapLossService {
         return erpPerhourCostVO;
     }
 
-    public Callback<ErpPrdNameVO> getErpPrdByPrdno(String prdNo) {
-        ErpPrdNameVO erpPrdNameFin = new ErpPrdNameVO();
+    public Callback<ErpPrdNameVO> getErpPrdByPrdno(String workCenterNo,String prdNo) {
         String prdName = "";
-        List<ErpPrdInfo> erpPrdInfos = erpPrdInfoMapper.selectByPrdNo(prdNo);
-        if (CollectionUtil.isNotEmpty(erpPrdInfos)){
-            prdName = erpPrdInfos.get(0).getPrdName();
+        ErpTransferOrder erpTransferOrder = erpTransferOrderMapper.selectByMoveOutNoAndProductNo(workCenterNo, prdNo);
+        if (null != erpTransferOrder){
+            prdName = erpTransferOrder.getProductName();
         }
-        erpPrdNameFin.setPrdName(prdName);
         ErpPrdNameVO erpPrdNameVO = erpPrdCostMapper.selectErpPrdNameVoByPrdno(prdNo);
-        BeanUtils.copyProperties(erpPrdNameVO,erpPrdNameFin);
-        return Callback.success(erpPrdNameFin);
+        if (null != erpPrdNameVO){
+            erpPrdNameVO.setPrdName(prdName);
+        }
+        return Callback.success(erpPrdNameVO);
     }
 
     public List<ErpScrapLoss> selectHisInfoList() {
@@ -102,4 +108,8 @@ public class ErpScrapLossService {
         erpScrapLossMapper.updateByPrimaryKeySelective(e);
     }
 
+    public Callback<ErpScrapLoss> getDetailById(Integer id) {
+        ErpScrapLoss erpScrapLoss = erpScrapLossMapper.selectByPrimaryKey(id);
+        return Callback.success(erpScrapLoss);
+    }
 }
