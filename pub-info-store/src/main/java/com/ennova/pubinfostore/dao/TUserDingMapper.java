@@ -27,5 +27,9 @@ public interface TUserDingMapper {
 
     List<TUserDing> selectByDepartment(@Param("department")String department);
 
+    List<TUserDing> selectByUsernameList(@Param("list")List<String> list);
+
+
+
 
 }

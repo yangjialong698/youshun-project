@@ -98,14 +98,19 @@ public class PrdUserManageService {
             if (CollectionUtil.isNotEmpty(tUserDingList1)){
                 return Callback.success(tUserDingList1);
             }
-            return Callback.success(tUserDingList);
+        }else if(StringUtils.isNotEmpty(deptName) &&  deptName.equals("试制装备部")){
+            List<String> userNameList = Arrays.asList("朱洪洲", "杨邢锋", "陈传明", "王晨雨", "许正东", "乔东华", "江飞", "周海健", "张丽军");
+            List<TUserDing> tUserNameDingList = tUserDingMapper.selectByUsernameList(userNameList);
+            if (CollectionUtil.isNotEmpty(tUserNameDingList)){
+                return Callback.success(tUserNameDingList);
+            }
         }else {
             TUserDing tUserDing = tUserDingMapper.selectByUserId(manageId);
             if (null != tUserDing){
                 tUserDingList.add(tUserDing);
                 return Callback.success(tUserDingList);
             }
-            return Callback.success(tUserDingList);
         }
+        return Callback.success(tUserDingList);
     }
 }

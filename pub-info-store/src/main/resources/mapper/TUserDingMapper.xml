@@ -342,4 +342,14 @@
       </if>
     </where>
   </select>
+
+  <select id="selectByUsernameList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user_ding
+        where username in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+          #{item,jdbcType=VARCHAR}
+        </foreach>
+    </select>
 </mapper>
