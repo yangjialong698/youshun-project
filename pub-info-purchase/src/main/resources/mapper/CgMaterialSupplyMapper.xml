@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfopurchase.dao.CgMaterialSupplyMapper">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfopurchase.entity.CgMaterialSupply">
+        <!--@mbg.generated-->
+        <!--@Table project.cg_material_supply-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="supplier_no" jdbcType="VARCHAR" property="supplierNo"/>
+        <result column="prd_name" jdbcType="VARCHAR" property="prdName"/>
+        <result column="prd_no" jdbcType="VARCHAR" property="prdNo"/>
+        <result column="spec" jdbcType="VARCHAR" property="spec"/>
+        <result column="delivery_num" jdbcType="INTEGER" property="deliveryNum"/>
+        <result column="delivery_date" jdbcType="TIMESTAMP" property="deliveryDate"/>
+        <result column="request_undue_num" jdbcType="INTEGER" property="requestUndueNum"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        supplier_name,
+        supplier_no,
+        prd_name,
+        prd_no,
+        spec,
+        delivery_num,
+        delivery_date,
+        request_undue_num,
+        del_flag,
+        create_time,
+        update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from project.cg_material_supply
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from project.cg_material_supply
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.ennova.pubinfopurchase.entity.CgMaterialSupply" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into project.cg_material_supply (supplier_name, supplier_no, prd_name,
+                                                prd_no, spec, delivery_num,
+                                                delivery_date, request_undue_num, del_flag,
+                                                create_time, update_time)
+        values (#{supplierName,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, #{prdName,jdbcType=VARCHAR},
+                #{prdNo,jdbcType=VARCHAR}, #{spec,jdbcType=VARCHAR}, #{deliveryNum,jdbcType=INTEGER},
+                #{deliveryDate,jdbcType=TIMESTAMP}, #{requestUndueNum,jdbcType=INTEGER}, #{delFlag,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.ennova.pubinfopurchase.entity.CgMaterialSupply" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into project.cg_material_supply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="supplierName != null">
+                supplier_name,
+            </if>
+            <if test="supplierNo != null">
+                supplier_no,
+            </if>
+            <if test="prdName != null">
+                prd_name,
+            </if>
+            <if test="prdNo != null">
+                prd_no,
+            </if>
+            <if test="spec != null">
+                spec,
+            </if>
+            <if test="deliveryNum != null">
+                delivery_num,
+            </if>
+            <if test="deliveryDate != null">
+                delivery_date,
+            </if>
+            <if test="requestUndueNum != null">
+                request_undue_num,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="supplierName != null">
+                #{supplierName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierNo != null">
+                #{supplierNo,jdbcType=VARCHAR},
+            </if>
+            <if test="prdName != null">
+                #{prdName,jdbcType=VARCHAR},
+            </if>
+            <if test="prdNo != null">
+                #{prdNo,jdbcType=VARCHAR},
+            </if>
+            <if test="spec != null">
+                #{spec,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryNum != null">
+                #{deliveryNum,jdbcType=INTEGER},
+            </if>
+            <if test="deliveryDate != null">
+                #{deliveryDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="requestUndueNum != null">
+                #{requestUndueNum,jdbcType=INTEGER},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfopurchase.entity.CgMaterialSupply">
+        <!--@mbg.generated-->
+        update project.cg_material_supply
+        <set>
+            <if test="supplierName != null">
+                supplier_name = #{supplierName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierNo != null">
+                supplier_no = #{supplierNo,jdbcType=VARCHAR},
+            </if>
+            <if test="prdName != null">
+                prd_name = #{prdName,jdbcType=VARCHAR},
+            </if>
+            <if test="prdNo != null">
+                prd_no = #{prdNo,jdbcType=VARCHAR},
+            </if>
+            <if test="spec != null">
+                spec = #{spec,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryNum != null">
+                delivery_num = #{deliveryNum,jdbcType=INTEGER},
+            </if>
+            <if test="deliveryDate != null">
+                delivery_date = #{deliveryDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="requestUndueNum != null">
+                request_undue_num = #{requestUndueNum,jdbcType=INTEGER},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfopurchase.entity.CgMaterialSupply">
+        <!--@mbg.generated-->
+        update project.cg_material_supply
+        set supplier_name     = #{supplierName,jdbcType=VARCHAR},
+            supplier_no       = #{supplierNo,jdbcType=VARCHAR},
+            prd_name          = #{prdName,jdbcType=VARCHAR},
+            prd_no            = #{prdNo,jdbcType=VARCHAR},
+            spec              = #{spec,jdbcType=VARCHAR},
+            delivery_num      = #{deliveryNum,jdbcType=INTEGER},
+            delivery_date     = #{deliveryDate,jdbcType=TIMESTAMP},
+            request_undue_num = #{requestUndueNum,jdbcType=INTEGER},
+            del_flag          = #{delFlag,jdbcType=INTEGER},
+            create_time       = #{createTime,jdbcType=TIMESTAMP},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update project.cg_material_supply
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="supplier_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.supplierName,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="supplier_no = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.supplierNo,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="prd_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.prdName,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="prd_no = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.prdNo,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="spec = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.spec,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="delivery_num = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.deliveryNum,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="delivery_date = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.deliveryDate,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="request_undue_num = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.requestUndueNum,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.delFlag,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="update_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into project.cg_material_supply
+        (supplier_name, supplier_no, prd_name, prd_no, spec, delivery_num, delivery_date,
+         request_undue_num, del_flag, create_time, update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.supplierName,jdbcType=VARCHAR}, #{item.supplierNo,jdbcType=VARCHAR},
+             #{item.prdName,jdbcType=VARCHAR},
+             #{item.prdNo,jdbcType=VARCHAR}, #{item.spec,jdbcType=VARCHAR}, #{item.deliveryNum,jdbcType=INTEGER},
+             #{item.deliveryDate,jdbcType=TIMESTAMP}, #{item.requestUndueNum,jdbcType=INTEGER},
+             #{item.delFlag,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP},
+             #{item.updateTime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
+
+    <select id="selectByPrdNo" resultType="com.ennova.pubinfopurchase.vo.PrdInfoVO">
+        select id,
+               prd_no   as prdNo,
+               prd_name as prdName,
+               spec,
+               prd_unit as prdUnit
+        from erp_prd_info
+        <where>
+            <if test="prdNo != null and prdNo != ''">
+                prd_no like concat('%', #{prdNo}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBySupplierNo" resultType="com.ennova.pubinfopurchase.vo.SupplierInfoVO">
+        select supplier_no AS supplierNo,
+               supplier    AS supplier
+        from supplier_info
+        <where>
+            <if test="supplierNo != null and supplierNo != ''">
+                supplier_no like concat('%', #{supplierNo}, '%')
+                  and is_delete = 0
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMaterialSupplyInfo" resultType="com.ennova.pubinfopurchase.vo.CgMaterialSupplyVO">
+        select id,
+               supplier_name     as supplierName,
+               supplier_no       as supplierNo,
+               prd_name          as prdName,
+               prd_no            as prdNo,
+               spec,
+               delivery_num      as deliveryNum,
+               delivery_date     as deliveryDate,
+               request_undue_num as requestUndueNum,
+               del_flag          as delFlag,
+               create_time       as createTime,
+               update_time       as updateTime
+        from cg_material_supply
+        where del_flag = 0
+        order by create_time desc
+    </select>
+</mapper>
