@@ -610,17 +610,17 @@ public class AppService {
     }
 
 
-    public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize,  String searchKey) {
-        if(page==null || page<1){
+    public Callback<BaseVO<ScProblemFeedbackVO>> getSfbDetailList(Integer page, Integer pageSize, String searchKey, Integer status) {
+        if (page == null || page < 1) {
             page = 1;
         }
-        if(pageSize==null || pageSize<1){
+        if (pageSize == null || pageSize < 1) {
             pageSize = 10;
         }
         int index = (page - 1) * pageSize;
         BaseVO<ScProblemFeedbackVO> baseVO;
         ArrayList<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
-        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectAllByBackStatusOrDutyPerson(searchKey);
+        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectAllByBackStatusOrDutyPerson(searchKey, status);
         if (CollectionUtil.isNotEmpty(scProblemFeedbacks)){
         long totalProblem = scProblemFeedbacks.size();
         long toDoProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("3")).count();
