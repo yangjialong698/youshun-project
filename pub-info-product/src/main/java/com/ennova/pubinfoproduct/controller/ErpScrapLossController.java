@@ -1,12 +1,8 @@
 package com.ennova.pubinfoproduct.controller;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
-import com.ennova.pubinfoproduct.daos.ErpTransferOrderMapper;
-import com.ennova.pubinfoproduct.entity.ErpPrdCost;
 import com.ennova.pubinfoproduct.entity.ErpScrapLoss;
-import com.ennova.pubinfoproduct.entity.ErpTransferOrder;
 import com.ennova.pubinfoproduct.service.ErpScrapLossService;
 import com.ennova.pubinfoproduct.vo.*;
 import io.swagger.annotations.Api;
@@ -14,14 +10,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @Api(tags = "报废损失计算")
 @RestController

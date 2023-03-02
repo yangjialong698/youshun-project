@@ -2,8 +2,6 @@ package com.ennova.pubinfoproduct.daos;
 
 import com.ennova.pubinfoproduct.entity.ErpPrdCost;
 import java.util.List;
-
-import com.ennova.pubinfoproduct.entity.ErpScrapLoss;
 import com.ennova.pubinfoproduct.vo.ErpPerhourCostVO;
 import com.ennova.pubinfoproduct.vo.ErpPrdNameVO;
 import org.apache.ibatis.annotations.Mapper;
