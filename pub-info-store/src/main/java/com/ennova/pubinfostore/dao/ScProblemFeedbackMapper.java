@@ -35,7 +35,7 @@ public interface ScProblemFeedbackMapper {
 
     UserDTO selectById(@Param("id") Integer id);
 
-    List<ScProblemFeedback> selectAllByBackStatusOrDutyPerson(@Param("searchKey") String searchKey);
+    List<ScProblemFeedback> selectAllByBackStatusOrDutyPerson(@Param("searchKey") String searchKey,@Param("status") Integer status);
 
     List<ScProblemFeedback> selectDateBoardList();
 

@@ -343,6 +343,9 @@
             and back_person like CONCAT('%', #{searchKey}, '%')
             or duty_person like CONCAT('%', #{searchKey}, '%')
         </if>
+        <if test="status != null">
+            and back_status = #{status}
+        </if>
         order by create_time desc
     </select>
 
