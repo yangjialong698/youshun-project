@@ -222,6 +222,7 @@
       work_center_no AS workCenterNo
     FROM
       erp_prd_cost
+    ORDER BY workCenterNo
   </select>
 
   <select id="getErpPerhourCost" resultType="com.ennova.pubinfoproduct.vo.ErpPerhourCostVO">
@@ -251,5 +252,14 @@
         and work_center_no =#{workCenterNo,jdbcType=VARCHAR}
       </if>
     </where>
+  </select>
+
+  <select id="selectPrdNoList" resultType="java.lang.String">
+    SELECT
+      prd_no
+    FROM
+      erp_prd_cost
+    WHERE
+      prd_no LIKE trim(replace(CONCAT('%',#{key},'%'),' ',''))
   </select>
 </mapper>

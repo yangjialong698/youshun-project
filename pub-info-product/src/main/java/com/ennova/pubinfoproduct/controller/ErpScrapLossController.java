@@ -30,10 +30,16 @@ public class ErpScrapLossController {
     @Autowired
     private ErpScrapLossService erpScrapLossService;
 
-    @ApiOperation(value = "报废损失计算-查询所有的工作中心")
+    @ApiOperation(value = "报废损失计算-查询所有的工作中心列表")
     @GetMapping("/getworkcenternolist")
     public Callback<List<String>> getWorkCenterNoList() {
         return Callback.success(erpScrapLossService.getWorkCenterNoList());
+    }
+
+    @ApiOperation(value = "报废损失计算-模糊查询品号列表")
+    @GetMapping("/getPrdNos")
+    public Callback<List<String>> getPrdNos(String key) {
+        return Callback.success(erpScrapLossService.getPrdNos(key));
     }
 
     @ApiOperation(value = "报废损失计算-根据工作中心查询平均小时成本")

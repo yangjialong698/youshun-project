@@ -79,6 +79,11 @@ public class ErpScrapLossService {
         return workCenterNos;
     }
 
+    public List<String> getPrdNos(String key) {
+        List<String> prdNoList = erpPrdCostMapper.selectPrdNoList(key);
+        return prdNoList;
+    }
+
     public ErpPerhourCostVO getErpPerhourCost(String workCenterNo) {
         ErpPerhourCostVO erpPerhourCostVO = erpPrdCostMapper.getErpPerhourCost(workCenterNo);
         return erpPerhourCostVO;
@@ -114,7 +119,7 @@ public class ErpScrapLossService {
                 Double hourCost = e.getHourCost();//平均小时成本含社保
                 Double prdPerCost = e.getPrdPerCost();//单件材料费
                 Double workHours = e.getWorkHours();//工时
-                Double toolOil = e.getToolOil();//单件刀具油辅料
+//                Double toolOil = e.getToolOil();//单件刀具油辅料
                 List<ErpTransferOrder> erpTransferOrderList = erpTransferOrderMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
                 if (CollectionUtil.isNotEmpty(erpTransferOrderList)) {
                     Integer scrapNumTotal = erpTransferOrderList.stream().mapToInt(ErpTransferOrder::getScrapNum).sum();//总报废数量
@@ -128,7 +133,8 @@ public class ErpScrapLossService {
                             perPerson = hourCost * workHours / efo.getAcceptanceNum();
                         }
                         //报废金额 = 报废数量*(单件人工+单件材料费+单件刀具油辅料)
-                        Double scrapCost = efo.getScrapNum() * (perPerson + prdPerCost + toolOil);
+//                        Double scrapCost = efo.getScrapNum() * (perPerson + prdPerCost + toolOil);
+                        Double scrapCost = efo.getScrapNum() * (perPerson + prdPerCost );
                         efo.setScrapCost(scrapCost);
                         erpTransferOrderMapper.updateByPrimaryKey(efo);
                         scrapCostTotal += scrapCost;
@@ -141,4 +147,6 @@ public class ErpScrapLossService {
             });
         }
     }
+
+
 }

@@ -35,4 +35,5 @@ public interface ErpPrdCostMapper {
 
     ErpPrdNameVO selectErpPrdNameVoByPrdno(@Param("workCenterNo")String workCenterNo,@Param("prdNo")String prdNo);
 
+    List<String> selectPrdNoList(@Param("key")String key);
 }
