@@ -255,7 +255,7 @@
   </select>
 
   <select id="selectPrdNoList" resultType="java.lang.String">
-    SELECT
+    SELECT DISTINCT
       prd_no
     FROM
       erp_prd_cost
