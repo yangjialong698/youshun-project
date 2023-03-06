@@ -120,30 +120,15 @@ public class ErpScrapLossService {
                 Double hourCost = e.getHourCost();//平均小时成本含社保
                 Double prdPerCost = e.getPrdPerCost();//单件材料费
                 Double workHours = e.getWorkHours();//工时
-//                Double toolOil = e.getToolOil();//单件刀具油辅料
                 List<ErpTransferOrder> erpTransferOrderList = erpTransferOrderMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
                 if (CollectionUtil.isNotEmpty(erpTransferOrderList)) {
                     Integer scrapNumTotal = erpTransferOrderList.stream().mapToInt(ErpTransferOrder::getScrapNum).sum();//总报废数量
-                    Double scrapCostTotal = 0.0; //总报废金额
+                    Integer acceptanceNumTotal = erpTransferOrderList.stream().mapToInt(ErpTransferOrder::getAcceptanceNum).sum();//总合格数量
                     Double perPerson = 0.0; //单件人工
-                    Double scrapCost = 0.0; //报废金额
-                    for (ErpTransferOrder efo : erpTransferOrderList) {
-                        if (efo.getScrapNum() == 0 ){
-                            scrapCost = 0.0;
-                        }else {
-                            //单件人工 = 平均小时成本含社保*工时/合格数量
-                            if (efo.getAcceptanceNum()==0){
-                                perPerson = 0.0;
-                            }else {
-                                perPerson = hourCost * workHours / efo.getAcceptanceNum();
-                            }
-                            //报废金额 = 报废数量*(单件人工+单件材料费)
-                            scrapCost = efo.getScrapNum() * (perPerson + prdPerCost );
-                        }
-                        efo.setScrapCost(scrapCost);
-                        erpTransferOrderMapper.updateByPrimaryKey(efo);
-                        scrapCostTotal += scrapCost;
-                    }
+                    Double scrapCostTotal = 0.0; //总报废金额
+                    perPerson = hourCost * workHours / acceptanceNumTotal;
+                    //报废金额 = 报废数量*(单件人工+单件材料费)
+                    scrapCostTotal = scrapNumTotal * (perPerson + prdPerCost );
                     e.setScrapNum(scrapNumTotal);
                     e.setScrapCost(scrapCostTotal);
                     //更新报废数量+报废金额
