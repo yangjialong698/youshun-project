@@ -22,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -109,6 +110,7 @@ public class ErpScrapLossService {
 
     //计算报废数量+报废金额
     @Scheduled(cron = " 0 0 23 * * ?")
+    @Transactional
     public void calculateScrapInfo() {
         List<ErpScrapLoss> erpScrapLossList = erpScrapLossMapper.selectNullInfo();
         if (CollectionUtil.isNotEmpty(erpScrapLossList)) {
@@ -123,18 +125,22 @@ public class ErpScrapLossService {
                 List<ErpTransferOrder> erpTransferOrderList = erpTransferOrderMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
                 if (CollectionUtil.isNotEmpty(erpTransferOrderList)) {
                     Integer scrapNumTotal = erpTransferOrderList.stream().mapToInt(ErpTransferOrder::getScrapNum).sum();//总报废数量
-                    Double scrapCostTotal = 0.0;
+                    Double scrapCostTotal = 0.0; //总报废金额
+                    Double perPerson = 0.0; //单件人工
+                    Double scrapCost = 0.0; //报废金额
                     for (ErpTransferOrder efo : erpTransferOrderList) {
-                        Double perPerson = 0.0;
-                        //单件人工 = 平均小时成本含社保*工时/合格数量
-                        if (efo.getAcceptanceNum()==0){
-                            perPerson = 0.0;
+                        if (efo.getScrapNum() == 0 ){
+                            scrapCost = 0.0;
                         }else {
-                            perPerson = hourCost * workHours / efo.getAcceptanceNum();
+                            //单件人工 = 平均小时成本含社保*工时/合格数量
+                            if (efo.getAcceptanceNum()==0){
+                                perPerson = 0.0;
+                            }else {
+                                perPerson = hourCost * workHours / efo.getAcceptanceNum();
+                            }
+                            //报废金额 = 报废数量*(单件人工+单件材料费)
+                            scrapCost = efo.getScrapNum() * (perPerson + prdPerCost );
                         }
-                        //报废金额 = 报废数量*(单件人工+单件材料费+单件刀具油辅料)
-//                        Double scrapCost = efo.getScrapNum() * (perPerson + prdPerCost + toolOil);
-                        Double scrapCost = efo.getScrapNum() * (perPerson + prdPerCost );
                         efo.setScrapCost(scrapCost);
                         erpTransferOrderMapper.updateByPrimaryKey(efo);
                         scrapCostTotal += scrapCost;
