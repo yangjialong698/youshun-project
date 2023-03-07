@@ -93,18 +93,20 @@ public class PrdUserManageService {
 
     public Callback<List<TUserDing>> queryNameByManageIdOrDeptId(String manageId, String deptName, String deptId) {
         ArrayList<TUserDing> tUserDingList = new ArrayList<TUserDing>() ;
-        if (StringUtils.isNotEmpty(deptName) && StringUtils.isNotEmpty(deptId) && deptName.contains("设备")){
+        if (StringUtils.isNotEmpty(deptName) && StringUtils.isNotEmpty(deptId) && deptName.contains("设备") || deptName.contains("工艺部")){
             List<TUserDing> tUserDingList1 = tUserDingMapper.selectByDepartment(deptId);
             if (CollectionUtil.isNotEmpty(tUserDingList1)){
                 return Callback.success(tUserDingList1);
             }
-        }else if(StringUtils.isNotEmpty(deptName) &&  deptName.equals("试制装备部")){
-            List<String> userNameList = Arrays.asList("朱洪洲", "杨邢锋", "陈传明", "王晨雨", "许正东", "乔东华", "江飞", "周海健", "张丽军");
-            List<TUserDing> tUserNameDingList = tUserDingMapper.selectByUsernameList(userNameList);
-            if (CollectionUtil.isNotEmpty(tUserNameDingList)){
-                return Callback.success(tUserNameDingList);
-            }
-        }else {
+        }
+//        else if(StringUtils.isNotEmpty(deptName) &&  deptName.equals("试制装备部")){
+//            List<String> userNameList = Arrays.asList("朱洪洲", "杨邢锋", "陈传明", "王晨雨", "许正东", "乔东华", "江飞", "周海健", "张丽军");
+//            List<TUserDing> tUserNameDingList = tUserDingMapper.selectByUsernameList(userNameList);
+//            if (CollectionUtil.isNotEmpty(tUserNameDingList)){
+//                return Callback.success(tUserNameDingList);
+//            }
+//        }
+        else {
             TUserDing tUserDing = tUserDingMapper.selectByUserId(manageId);
             if (null != tUserDing){
                 tUserDingList.add(tUserDing);
