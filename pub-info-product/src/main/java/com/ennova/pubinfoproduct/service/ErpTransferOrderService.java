@@ -117,7 +117,6 @@ public class ErpTransferOrderService {
         } else {
             gxList = Arrays.asList(outNo);
         }
-        AtomicReference<Double> scrapCostTotal = new AtomicReference<>(0.0); //单种工作中心+某天汇总所有品号总报废金额
         ArrayList<ScrapPerOutno> scrapVOArrayList = new ArrayList<>();
         for (String moveOutNo : gxList) {
             //1.通过单类工作中心查询近一个月的转移单数据
@@ -126,6 +125,7 @@ public class ErpTransferOrderService {
             if (CollectionUtil.isNotEmpty(erpTransferOrders)) {
                 Map<String, List<ErpTransferOrder>> listMap = erpTransferOrders.stream().collect(Collectors.groupingBy(ErpTransferOrder::getOrderDate));
                 listMap.entrySet().stream().map(key -> {
+                    AtomicReference<Double> scrapCostTotal = new AtomicReference<>(0.0); //单种工作中心+某天汇总所有品号总报废金额
                     ScrapPerOutno scrapPerOutno = new ScrapPerOutno();
                     //2.groupBy日期获取每天的转移单数据
                     String orderDate = key.getKey();
