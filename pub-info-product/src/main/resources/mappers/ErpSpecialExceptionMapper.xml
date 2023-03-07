@@ -149,6 +149,7 @@
                erp.create_time       as createTime,
                erp.update_time       as updateTime
         from erp_special_exception erp
+        where erp.del_flag = 0
         order by erp.create_time desc
     </select>
 
