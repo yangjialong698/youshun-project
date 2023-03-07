@@ -370,4 +370,15 @@
       </if>
     </trim>
   </insert>
+
+  <select id="selectByOutNos" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from scrap_per_outno
+    where move_out_no in
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+    AND DATE_SUB(CURDATE(),INTERVAL 30 DAY) &lt;= DATE(order_date)
+  </select>
 </mapper>

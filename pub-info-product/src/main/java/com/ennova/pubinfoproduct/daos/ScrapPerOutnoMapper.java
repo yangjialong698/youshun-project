@@ -28,4 +28,6 @@ public interface ScrapPerOutnoMapper {
     int updateBatchSelective(List<ScrapPerOutno> list);
 
     int batchInsert(@Param("list") List<ScrapPerOutno> list);
+
+    List<ScrapPerOutno> selectByOutNos(@Param("list")List<String> gxList);
 }
