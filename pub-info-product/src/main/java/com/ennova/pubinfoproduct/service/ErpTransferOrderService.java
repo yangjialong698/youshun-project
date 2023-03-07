@@ -87,7 +87,8 @@ public class ErpTransferOrderService {
         ArrayList<ScrapPerOutno> scrapVOArrayList = new ArrayList<>();
         for (String moveOutNo : gxList) {
             //1.通过单类工作中心查询近一个月的转移单数据
-            List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectByMoveOutNo(moveOutNo);
+           // List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectByMoveOutNo(moveOutNo);
+            List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectByMoveOutNoByDay(moveOutNo);
             if (CollectionUtil.isNotEmpty(erpTransferOrders)) {
                 Map<String, List<ErpTransferOrder>> listMap = erpTransferOrders.stream().collect(Collectors.groupingBy(ErpTransferOrder::getOrderDate));
                 listMap.entrySet().stream().map(key -> {
@@ -127,15 +128,18 @@ public class ErpTransferOrderService {
                                 prdPerCost = erpPrdNameVO.getPrdPerCost();
                             }
                             ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, moveOutNo, prdNo); //工时实体
-                            if (null != erpScrapLossOne.getHourCost()){
-                                if (acceptanceNumTotal != 0){
-                                    Double perPerson = erpPerhourCost.getHourCost() * erpScrapLossOne.getHourCost() / acceptanceNumTotal;
-                                    //5.单种工作中心+某天汇总所有品号总报废金额 = 报废数量*(单件人工+单件材料费)
-                                    Double scrapCostPerPrdNo = scrapNumTotal * (perPerson + prdPerCost);
-                                    scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
-                                }else {
-                                    Double scrapCostPerPrdNo = scrapNumTotal * prdPerCost + erpPerhourCost.getHourCost() * erpScrapLossOne.getHourCost();
-                                    scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
+                            if (null != erpScrapLossOne){
+                                Double hourCost = erpScrapLossOne.getHourCost();
+                                if (null != hourCost){
+                                    if (acceptanceNumTotal != 0){
+                                        Double perPerson = erpPerhourCost.getHourCost() * hourCost / acceptanceNumTotal;
+                                        //5.单种工作中心+某天汇总所有品号总报废金额 = 报废数量*(单件人工+单件材料费)
+                                        Double scrapCostPerPrdNo = scrapNumTotal * (perPerson + prdPerCost);
+                                        scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
+                                    }else {
+                                        Double scrapCostPerPrdNo = scrapNumTotal * prdPerCost + hourCost * erpScrapLossOne.getWorkHours();
+                                        scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
+                                    }
                                 }
                             }
                             return null;
@@ -143,6 +147,7 @@ public class ErpTransferOrderService {
                     }
                     Double perMoveScrap = scrapCostTotal.get();
                     scrapPerOutno.setScrapCost(perMoveScrap);
+                    scrapPerOutno.setMoveOutNo(moveOutNo);
                     scrapVOArrayList.add(scrapPerOutno);
                     //6.单个工作中心报废金额入库(orderDate,moveOutNo,perMoveScrap)
                     return scrapVOArrayList;

@@ -34,4 +34,6 @@ public interface ErpTransferOrderMapper<selectByMoveOutNoAndProductNo> {
     ErpTransferOrder selectByMoveOutNoAndProductNo(@Param("moveOutNo")String moveOutNo,@Param("productNo")String productNo);
 
     List<ErpTransferOrder> selectByMoveOutNo(@Param("mOutNo") String mOutNo);
+
+    List<ErpTransferOrder> selectByMoveOutNoByDay(@Param("mOutNo")String moveOutNo);
 }

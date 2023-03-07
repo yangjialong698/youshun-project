@@ -463,4 +463,12 @@
     where move_out_no = #{mOutNo,jdbcType=VARCHAR}
     AND DATE_SUB(CURDATE(),INTERVAL 30 DAY) &lt;= DATE(order_date)
   </select>
+
+  <select id="selectByMoveOutNoByDay" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from erp_transfer_order
+    where move_out_no = #{mOutNo,jdbcType=VARCHAR}
+    AND to_days(now())-to_days(order_date) = 1;
+  </select>
 </mapper>
