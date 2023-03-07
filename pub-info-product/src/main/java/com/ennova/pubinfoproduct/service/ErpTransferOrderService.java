@@ -122,11 +122,20 @@ public class ErpTransferOrderService {
                             //4.通过工作中心查询平均小时成本,通过工作中心+品号查询单件材料费，通过工作中心(mOutNo)+日期(orderDate)+品号(prdNo)查询工时
                             ErpPerhourCostVO erpPerhourCost = erpScrapLossService.getErpPerhourCost(moveOutNo); //平均小时成本实体
                             ErpPrdNameVO erpPrdNameVO = erpScrapLossService.getErpPrdByPrdno(moveOutNo, prdNo).getData(); //单件材料费实体
+                            Double prdPerCost = 0.0;
+                            if (null != erpPrdNameVO){
+                                prdPerCost = erpPrdNameVO.getPrdPerCost();
+                            }
                             ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, moveOutNo, prdNo); //工时实体
-                            Double perPerson = erpPerhourCost.getHourCost() * erpScrapLossOne.getHourCost() / acceptanceNumTotal;
-                            //5.单种工作中心+某天汇总所有品号总报废金额 = 报废数量*(单件人工+单件材料费)
-                            Double scrapCostPerPrdNo = scrapNumTotal * (perPerson + erpPrdNameVO.getPrdPerCost());
-                            scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
+                            if (acceptanceNumTotal != 0){
+                                Double perPerson = erpPerhourCost.getHourCost() * erpScrapLossOne.getHourCost() / acceptanceNumTotal;
+                                //5.单种工作中心+某天汇总所有品号总报废金额 = 报废数量*(单件人工+单件材料费)
+                                Double scrapCostPerPrdNo = scrapNumTotal * (perPerson + prdPerCost);
+                                scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
+                            }else {
+                                Double scrapCostPerPrdNo = scrapNumTotal * prdPerCost + erpPerhourCost.getHourCost() * erpScrapLossOne.getHourCost();
+                                scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
+                            }
                             return null;
                         }).collect(Collectors.toList());
                     }
