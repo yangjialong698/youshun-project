@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.daos.ScrapPerOutnoMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.ScrapPerOutno">
+    <!--@mbg.generated-->
+    <!--@Table scrap_per_outno-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_date" jdbcType="VARCHAR" property="orderDate" />
+    <result column="day_prd_num" jdbcType="INTEGER" property="dayPrdNum" />
+    <result column="scrap_num" jdbcType="INTEGER" property="scrapNum" />
+    <result column="bad_num" jdbcType="INTEGER" property="badNum" />
+    <result column="bad_scrap_rate" jdbcType="VARCHAR" property="badScrapRate" />
+    <result column="move_out_no" jdbcType="VARCHAR" property="moveOutNo" />
+    <result column="scrap_cost" jdbcType="DOUBLE" property="scrapCost" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, order_date, day_prd_num, scrap_num, bad_num, bad_scrap_rate, move_out_no, scrap_cost
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from scrap_per_outno
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from scrap_per_outno
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ScrapPerOutno" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into scrap_per_outno (order_date, day_prd_num, scrap_num, 
+      bad_num, bad_scrap_rate, move_out_no, 
+      scrap_cost)
+    values (#{orderDate,jdbcType=VARCHAR}, #{dayPrdNum,jdbcType=INTEGER}, #{scrapNum,jdbcType=INTEGER}, 
+      #{badNum,jdbcType=INTEGER}, #{badScrapRate,jdbcType=VARCHAR}, #{moveOutNo,jdbcType=VARCHAR}, 
+      #{scrapCost,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ScrapPerOutno" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into scrap_per_outno
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="dayPrdNum != null">
+        day_prd_num,
+      </if>
+      <if test="scrapNum != null">
+        scrap_num,
+      </if>
+      <if test="badNum != null">
+        bad_num,
+      </if>
+      <if test="badScrapRate != null">
+        bad_scrap_rate,
+      </if>
+      <if test="moveOutNo != null">
+        move_out_no,
+      </if>
+      <if test="scrapCost != null">
+        scrap_cost,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="dayPrdNum != null">
+        #{dayPrdNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapNum != null">
+        #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="badNum != null">
+        #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="badScrapRate != null">
+        #{badScrapRate,jdbcType=VARCHAR},
+      </if>
+      <if test="moveOutNo != null">
+        #{moveOutNo,jdbcType=VARCHAR},
+      </if>
+      <if test="scrapCost != null">
+        #{scrapCost,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.ScrapPerOutno">
+    <!--@mbg.generated-->
+    update scrap_per_outno
+    <set>
+      <if test="orderDate != null">
+        order_date = #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="dayPrdNum != null">
+        day_prd_num = #{dayPrdNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapNum != null">
+        scrap_num = #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="badNum != null">
+        bad_num = #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="badScrapRate != null">
+        bad_scrap_rate = #{badScrapRate,jdbcType=VARCHAR},
+      </if>
+      <if test="moveOutNo != null">
+        move_out_no = #{moveOutNo,jdbcType=VARCHAR},
+      </if>
+      <if test="scrapCost != null">
+        scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.ScrapPerOutno">
+    <!--@mbg.generated-->
+    update scrap_per_outno
+    set order_date = #{orderDate,jdbcType=VARCHAR},
+      day_prd_num = #{dayPrdNum,jdbcType=INTEGER},
+      scrap_num = #{scrapNum,jdbcType=INTEGER},
+      bad_num = #{badNum,jdbcType=INTEGER},
+      bad_scrap_rate = #{badScrapRate,jdbcType=VARCHAR},
+      move_out_no = #{moveOutNo,jdbcType=VARCHAR},
+      scrap_cost = #{scrapCost,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update scrap_per_outno
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="order_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.orderDate,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="day_prd_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.dayPrdNum,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="scrap_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.scrapNum,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="bad_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.badNum,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="bad_scrap_rate = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.badScrapRate,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="move_out_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.moveOutNo,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="scrap_cost = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.scrapCost,jdbcType=DOUBLE}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update scrap_per_outno
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="order_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.orderDate != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.orderDate,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="day_prd_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.dayPrdNum != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.dayPrdNum,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="scrap_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.scrapNum != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.scrapNum,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="bad_num = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.badNum != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.badNum,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="bad_scrap_rate = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.badScrapRate != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.badScrapRate,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="move_out_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.moveOutNo != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.moveOutNo,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="scrap_cost = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.scrapCost != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.scrapCost,jdbcType=DOUBLE}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into scrap_per_outno
+    (order_date, day_prd_num, scrap_num, bad_num, bad_scrap_rate, move_out_no, scrap_cost
+      )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.orderDate,jdbcType=VARCHAR}, #{item.dayPrdNum,jdbcType=INTEGER}, #{item.scrapNum,jdbcType=INTEGER}, 
+        #{item.badNum,jdbcType=INTEGER}, #{item.badScrapRate,jdbcType=VARCHAR}, #{item.moveOutNo,jdbcType=VARCHAR}, 
+        #{item.scrapCost,jdbcType=DOUBLE})
+    </foreach>
+  </insert>
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ScrapPerOutno" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into scrap_per_outno
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      order_date,
+      day_prd_num,
+      scrap_num,
+      bad_num,
+      bad_scrap_rate,
+      move_out_no,
+      scrap_cost,
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      #{orderDate,jdbcType=VARCHAR},
+      #{dayPrdNum,jdbcType=INTEGER},
+      #{scrapNum,jdbcType=INTEGER},
+      #{badNum,jdbcType=INTEGER},
+      #{badScrapRate,jdbcType=VARCHAR},
+      #{moveOutNo,jdbcType=VARCHAR},
+      #{scrapCost,jdbcType=DOUBLE},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      order_date = #{orderDate,jdbcType=VARCHAR},
+      day_prd_num = #{dayPrdNum,jdbcType=INTEGER},
+      scrap_num = #{scrapNum,jdbcType=INTEGER},
+      bad_num = #{badNum,jdbcType=INTEGER},
+      bad_scrap_rate = #{badScrapRate,jdbcType=VARCHAR},
+      move_out_no = #{moveOutNo,jdbcType=VARCHAR},
+      scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ScrapPerOutno" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into scrap_per_outno
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="dayPrdNum != null">
+        day_prd_num,
+      </if>
+      <if test="scrapNum != null">
+        scrap_num,
+      </if>
+      <if test="badNum != null">
+        bad_num,
+      </if>
+      <if test="badScrapRate != null">
+        bad_scrap_rate,
+      </if>
+      <if test="moveOutNo != null">
+        move_out_no,
+      </if>
+      <if test="scrapCost != null">
+        scrap_cost,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="dayPrdNum != null">
+        #{dayPrdNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapNum != null">
+        #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="badNum != null">
+        #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="badScrapRate != null">
+        #{badScrapRate,jdbcType=VARCHAR},
+      </if>
+      <if test="moveOutNo != null">
+        #{moveOutNo,jdbcType=VARCHAR},
+      </if>
+      <if test="scrapCost != null">
+        #{scrapCost,jdbcType=DOUBLE},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderDate != null">
+        order_date = #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="dayPrdNum != null">
+        day_prd_num = #{dayPrdNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapNum != null">
+        scrap_num = #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="badNum != null">
+        bad_num = #{badNum,jdbcType=INTEGER},
+      </if>
+      <if test="badScrapRate != null">
+        bad_scrap_rate = #{badScrapRate,jdbcType=VARCHAR},
+      </if>
+      <if test="moveOutNo != null">
+        move_out_no = #{moveOutNo,jdbcType=VARCHAR},
+      </if>
+      <if test="scrapCost != null">
+        scrap_cost = #{scrapCost,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+</mapper>

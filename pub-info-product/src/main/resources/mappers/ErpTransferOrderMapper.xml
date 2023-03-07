@@ -455,4 +455,12 @@
     </where>
     GROUP BY product_no
   </select>
+
+  <select id="selectByMoveOutNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from erp_transfer_order
+    where move_out_no = #{mOutNo,jdbcType=VARCHAR}
+    AND DATE_SUB(CURDATE(),INTERVAL 30 DAY) &lt;= DATE(order_date)
+  </select>
 </mapper>
