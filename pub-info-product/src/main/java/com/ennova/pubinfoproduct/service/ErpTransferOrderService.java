@@ -74,7 +74,7 @@ public class ErpTransferOrderService {
     }
 
     //计算近一个月的轮播图报废金额数据(手动跑一次)
-    @Scheduled(cron = " 0 0 23 * * ?")
+//    @Scheduled(cron = " 0 0 23 * * ?")
     public void calMonthErpScrapInfo(String outNo) {
 //      String outNo ===>  String ybz = "1003,1018,1019"  jjyb = "1008"   ybhcl = "1009"   zp = "1010"
         List<String> gxList = null;
@@ -127,14 +127,16 @@ public class ErpTransferOrderService {
                                 prdPerCost = erpPrdNameVO.getPrdPerCost();
                             }
                             ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, moveOutNo, prdNo); //工时实体
-                            if (acceptanceNumTotal != 0){
-                                Double perPerson = erpPerhourCost.getHourCost() * erpScrapLossOne.getHourCost() / acceptanceNumTotal;
-                                //5.单种工作中心+某天汇总所有品号总报废金额 = 报废数量*(单件人工+单件材料费)
-                                Double scrapCostPerPrdNo = scrapNumTotal * (perPerson + prdPerCost);
-                                scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
-                            }else {
-                                Double scrapCostPerPrdNo = scrapNumTotal * prdPerCost + erpPerhourCost.getHourCost() * erpScrapLossOne.getHourCost();
-                                scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
+                            if (null != erpScrapLossOne.getHourCost()){
+                                if (acceptanceNumTotal != 0){
+                                    Double perPerson = erpPerhourCost.getHourCost() * erpScrapLossOne.getHourCost() / acceptanceNumTotal;
+                                    //5.单种工作中心+某天汇总所有品号总报废金额 = 报废数量*(单件人工+单件材料费)
+                                    Double scrapCostPerPrdNo = scrapNumTotal * (perPerson + prdPerCost);
+                                    scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
+                                }else {
+                                    Double scrapCostPerPrdNo = scrapNumTotal * prdPerCost + erpPerhourCost.getHourCost() * erpScrapLossOne.getHourCost();
+                                    scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
+                                }
                             }
                             return null;
                         }).collect(Collectors.toList());

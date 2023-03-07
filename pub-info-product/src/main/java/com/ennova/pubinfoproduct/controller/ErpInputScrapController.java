@@ -29,9 +29,9 @@ public class ErpInputScrapController {
         return erpTransferOrderService.erpinputscrap(moveOutNo);
     }
 
-    @PostMapping("/test")
+    @GetMapping("/test")
     @ApiOperation(value = "测试跑每个工作中心报废数据", tags = "测试")
-    public void calMonthErpScrapInfo(String moveOutNo) {
-        erpTransferOrderService.calMonthErpScrapInfo(moveOutNo);
+    public void calMonthErpScrapInfo(String outNo) {
+        erpTransferOrderService.calMonthErpScrapInfo(outNo);
     }
 }
