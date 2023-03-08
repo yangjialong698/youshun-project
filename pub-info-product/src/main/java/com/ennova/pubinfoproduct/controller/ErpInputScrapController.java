@@ -31,7 +31,7 @@ public class ErpInputScrapController {
 
     @GetMapping("/test")
     @ApiOperation(value = "测试跑每个工作中心报废数据", tags = "测试")
-    public void calMonthErpScrapInfo(String outNo) {
-        erpTransferOrderService.calMonthErpScrapInfo(outNo);
+    public void calMonthErpScrapInfo() {
+        erpTransferOrderService.calMonthErpScrapInfo();
     }
 }
