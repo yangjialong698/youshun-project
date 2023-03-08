@@ -16,13 +16,12 @@
     <result column="scrap_num" jdbcType="INTEGER" property="scrapNum" />
     <result column="bad_num" jdbcType="INTEGER" property="badNum" />
     <result column="total_num" jdbcType="INTEGER" property="totalNum" />
-    <result column="scrap_cost" jdbcType="DOUBLE" property="scrapCost" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, order_date, transfer_order_no, move_out_no, move_in_no, work_order_no, product_no, 
-    product_name, acceptance_num, scrap_num, bad_num, total_num, scrap_cost, create_time
+    product_name, acceptance_num, scrap_num, bad_num, total_num, create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -41,13 +40,13 @@
     insert into erp_transfer_order (order_date, transfer_order_no, move_out_no, 
       move_in_no, work_order_no, product_no, 
       product_name, acceptance_num, scrap_num, 
-      bad_num, total_num, scrap_cost, 
-      create_time)
+      bad_num, total_num, create_time
+      )
     values (#{orderDate,jdbcType=VARCHAR}, #{transferOrderNo,jdbcType=VARCHAR}, #{moveOutNo,jdbcType=VARCHAR}, 
       #{moveInNo,jdbcType=VARCHAR}, #{workOrderNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, 
       #{productName,jdbcType=VARCHAR}, #{acceptanceNum,jdbcType=INTEGER}, #{scrapNum,jdbcType=INTEGER}, 
-      #{badNum,jdbcType=INTEGER}, #{totalNum,jdbcType=INTEGER}, #{scrapCost,jdbcType=DOUBLE}, 
-      #{createTime,jdbcType=TIMESTAMP})
+      #{badNum,jdbcType=INTEGER}, #{totalNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpTransferOrder" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -86,9 +85,6 @@
       <if test="totalNum != null">
         total_num,
       </if>
-      <if test="scrapCost != null">
-        scrap_cost,
-      </if>
       <if test="createTime != null">
         create_time,
       </if>
@@ -126,9 +122,6 @@
       </if>
       <if test="totalNum != null">
         #{totalNum,jdbcType=INTEGER},
-      </if>
-      <if test="scrapCost != null">
-        #{scrapCost,jdbcType=DOUBLE},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -172,9 +165,6 @@
       <if test="totalNum != null">
         total_num = #{totalNum,jdbcType=INTEGER},
       </if>
-      <if test="scrapCost != null">
-        scrap_cost = #{scrapCost,jdbcType=DOUBLE},
-      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -195,7 +185,6 @@
       scrap_num = #{scrapNum,jdbcType=INTEGER},
       bad_num = #{badNum,jdbcType=INTEGER},
       total_num = #{totalNum,jdbcType=INTEGER},
-      scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -203,15 +192,14 @@
     <!--@mbg.generated-->
     insert into erp_transfer_order
     (order_date, transfer_order_no, move_out_no, move_in_no, work_order_no, product_no, 
-      product_name, acceptance_num, scrap_num, bad_num, total_num, scrap_cost, create_time
-      )
+      product_name, acceptance_num, scrap_num, bad_num, total_num, create_time)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.orderDate,jdbcType=VARCHAR}, #{item.transferOrderNo,jdbcType=VARCHAR}, #{item.moveOutNo,jdbcType=VARCHAR}, 
         #{item.moveInNo,jdbcType=VARCHAR}, #{item.workOrderNo,jdbcType=VARCHAR}, #{item.productNo,jdbcType=VARCHAR}, 
         #{item.productName,jdbcType=VARCHAR}, #{item.acceptanceNum,jdbcType=INTEGER}, #{item.scrapNum,jdbcType=INTEGER}, 
-        #{item.badNum,jdbcType=INTEGER}, #{item.totalNum,jdbcType=INTEGER}, #{item.scrapCost,jdbcType=DOUBLE}, 
-        #{item.createTime,jdbcType=TIMESTAMP})
+        #{item.badNum,jdbcType=INTEGER}, #{item.totalNum,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}
+        )
     </foreach>
   </insert>
   <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpTransferOrder" useGeneratedKeys="true">
@@ -232,7 +220,6 @@
       scrap_num,
       bad_num,
       total_num,
-      scrap_cost,
       create_time,
     </trim>
     values
@@ -251,7 +238,6 @@
       #{scrapNum,jdbcType=INTEGER},
       #{badNum,jdbcType=INTEGER},
       #{totalNum,jdbcType=INTEGER},
-      #{scrapCost,jdbcType=DOUBLE},
       #{createTime,jdbcType=TIMESTAMP},
     </trim>
     on duplicate key update 
@@ -270,7 +256,6 @@
       scrap_num = #{scrapNum,jdbcType=INTEGER},
       bad_num = #{badNum,jdbcType=INTEGER},
       total_num = #{totalNum,jdbcType=INTEGER},
-      scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
     </trim>
   </insert>
@@ -314,9 +299,6 @@
       <if test="totalNum != null">
         total_num,
       </if>
-      <if test="scrapCost != null">
-        scrap_cost,
-      </if>
       <if test="createTime != null">
         create_time,
       </if>
@@ -359,9 +341,6 @@
       <if test="totalNum != null">
         #{totalNum,jdbcType=INTEGER},
       </if>
-      <if test="scrapCost != null">
-        #{scrapCost,jdbcType=DOUBLE},
-      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -403,9 +382,6 @@
       </if>
       <if test="totalNum != null">
         total_num = #{totalNum,jdbcType=INTEGER},
-      </if>
-      <if test="scrapCost != null">
-        scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},

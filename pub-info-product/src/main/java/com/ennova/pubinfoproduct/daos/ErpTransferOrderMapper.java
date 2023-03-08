@@ -1,12 +1,14 @@
 package com.ennova.pubinfoproduct.daos;
 
 import com.ennova.pubinfoproduct.entity.ErpTransferOrder;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
-public interface ErpTransferOrderMapper<selectByMoveOutNoAndProductNo> {
+public interface ErpTransferOrderMapper {
     int deleteByPrimaryKey(Integer id);
 
     int insert(ErpTransferOrder record);
@@ -33,5 +35,5 @@ public interface ErpTransferOrderMapper<selectByMoveOutNoAndProductNo> {
 
     List<ErpTransferOrder> selectByMoveOutNo(@Param("mOutNo") String mOutNo);
 
-    List<ErpTransferOrder> selectByMoveOutNoByDay(@Param("mOutNo")String moveOutNo);
+    List<ErpTransferOrder> selectByMoveOutNoByDay(@Param("mOutNo") String moveOutNo);
 }
