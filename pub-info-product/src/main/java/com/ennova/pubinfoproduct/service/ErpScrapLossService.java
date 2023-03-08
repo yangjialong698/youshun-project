@@ -39,6 +39,9 @@ public class ErpScrapLossService {
     @Autowired
     private ErpTransferOrderMapper erpTransferOrderMapper;
 
+    @Autowired
+    private ErpPrdInfoMapper erpPrdInfoMapper;
+
     public Callback insertOrUpdate(ErpScrapLossVO erpScrapLossVO) {
         String orderDate = erpScrapLossVO.getOrderDate();
         String workCenterNo = erpScrapLossVO.getWorkCenterNo();
@@ -81,7 +84,7 @@ public class ErpScrapLossService {
     }
 
     public List<String> getPrdNos(String key) {
-        List<String> prdNoList = erpPrdCostMapper.selectPrdNoList(key);
+        List<String> prdNoList = erpPrdInfoMapper.selectPrdNoList(key);
         return prdNoList;
     }
 
@@ -92,9 +95,9 @@ public class ErpScrapLossService {
 
     public Callback<ErpPrdNameVO> getErpPrdByPrdno(String workCenterNo,String prdNo) {
         String prdName = "";
-        ErpTransferOrder erpTransferOrder = erpTransferOrderMapper.selectByMoveOutNoAndProductNo(workCenterNo, prdNo);
-        if (null != erpTransferOrder){
-            prdName = erpTransferOrder.getProductName();
+        List<ErpPrdInfo> erpPrdInfos = erpPrdInfoMapper.selectByPrdNo(prdNo);
+        if (CollectionUtil.isNotEmpty(erpPrdInfos)){
+            prdName = erpPrdInfos.get(0).getPrdName();
         }
         ErpPrdNameVO erpPrdNameVO = erpPrdCostMapper.selectErpPrdNameVoByPrdno(workCenterNo,prdNo);
         if (null != erpPrdNameVO){

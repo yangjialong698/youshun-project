@@ -254,12 +254,4 @@
     </where>
   </select>
 
-  <select id="selectPrdNoList" resultType="java.lang.String">
-    SELECT DISTINCT
-      prd_no
-    FROM
-      erp_prd_cost
-    WHERE
-      prd_no LIKE trim(replace(CONCAT('%',#{key},'%'),' ',''))
-  </select>
 </mapper>

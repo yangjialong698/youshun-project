@@ -24,4 +24,6 @@ public interface ErpPrdInfoMapper {
     int batchInsert(@Param("list") List<ErpPrdInfo> list);
 
     List<ErpPrdInfo> selectByPrdNo(@Param("prdNo")String prdNo);
+
+    List<String> selectPrdNoList(@Param("key")String key);
 }

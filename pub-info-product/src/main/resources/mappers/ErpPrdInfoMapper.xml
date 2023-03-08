@@ -140,4 +140,13 @@
         from erp_prd_info
         where prd_no=#{prdNo,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectPrdNoList" resultType="java.lang.String">
+    SELECT DISTINCT
+    prd_no
+    FROM
+    erp_prd_info
+    WHERE
+    prd_no LIKE trim(replace(CONCAT('%',#{key},'%'),' ',''))
+  </select>
 </mapper>
