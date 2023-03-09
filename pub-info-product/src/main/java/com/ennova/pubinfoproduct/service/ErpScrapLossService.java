@@ -121,21 +121,28 @@ public class ErpScrapLossService {
                 String workCenterNo = e.getWorkCenterNo();//工作中心
                 String prdNo = e.getPrdNo();//产品品号
                 Double hourCost = e.getHourCost();//平均小时成本含社保
-                Double prdPerCost = e.getPrdPerCost();//单件材料费
-                Double workHours = e.getWorkHours();//工时
-                List<ErpTransferOrder> erpTransferOrderList = erpTransferOrderMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
-                if (CollectionUtil.isNotEmpty(erpTransferOrderList)) {
-                    Integer scrapNumTotal = erpTransferOrderList.stream().mapToInt(ErpTransferOrder::getScrapNum).sum();//总报废数量
-                    Integer acceptanceNumTotal = erpTransferOrderList.stream().mapToInt(ErpTransferOrder::getAcceptanceNum).sum();//总合格数量
-                    Double perPerson = 0.0; //单件人工
-                    Double scrapCostTotal = 0.0; //总报废金额
-                    perPerson = hourCost * workHours / acceptanceNumTotal;
-                    //报废金额 = 报废数量*(单件人工+单件材料费)
-                    scrapCostTotal = scrapNumTotal * (perPerson + prdPerCost );
-                    e.setScrapNum(scrapNumTotal);
-                    e.setScrapCost(scrapCostTotal);
-                    //更新报废数量+报废金额
-                    erpScrapLossMapper.updateByPrimaryKeySelective(e);
+                Double prdPerCost = 0.0;
+                if (null != e.getPrdPerCost()){
+                    prdPerCost = e.getPrdPerCost();//单件材料费
+                    Double workHours = e.getWorkHours();//工时
+                    List<ErpTransferOrder> erpTransferOrderList = erpTransferOrderMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
+                    if (CollectionUtil.isNotEmpty(erpTransferOrderList)) {
+                        Integer scrapNumTotal = erpTransferOrderList.stream().mapToInt(ErpTransferOrder::getScrapNum).sum();//总报废数量
+                        Integer acceptanceNumTotal = erpTransferOrderList.stream().mapToInt(ErpTransferOrder::getAcceptanceNum).sum();//总合格数量
+                        Double perPerson = 0.0; //单件人工
+                        Double scrapCostTotal = 0.0; //总报废金额
+                        if (acceptanceNumTotal != 0){
+                            perPerson = hourCost * workHours / acceptanceNumTotal;
+                            //报废金额 = 报废数量*(单件人工+单件材料费)
+                            scrapCostTotal = scrapNumTotal * (perPerson + prdPerCost );
+                        }else {
+                            scrapCostTotal = scrapNumTotal * prdPerCost + hourCost * workHours;
+                        }
+                        e.setScrapNum(scrapNumTotal);
+                        e.setScrapCost(scrapCostTotal);
+                        //更新报废数量+报废金额
+                        erpScrapLossMapper.updateByPrimaryKeySelective(e);
+                    }
                 }
             });
         }

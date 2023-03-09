@@ -111,20 +111,6 @@ public class ErpTransferOrderService {
 //    @Scheduled(cron = " 0 0 23 * * ?")
     public void calMonthErpScrapInfo() {
         List<String> outNoList = Arrays.asList("1003","1018","1019", "1008", "1009", "1010");
-//        List<String> gxList = null;
-//        for (String perOutNo : outNoList) {
-//            if (perOutNo.contains(",")) {
-//                gxList = Arrays.asList(perOutNo.split(","));
-//            } else {
-//                gxList = Arrays.asList(perOutNo);
-//            }
-//        }
-//        List<String> gxList = null;
-//        if (outNo.contains(",")) {
-//            gxList = Arrays.asList(outNo.split(","));
-//        } else {
-//            gxList = Arrays.asList(outNo);
-//        }
         ArrayList<ScrapPerOutno> scrapVOArrayList = new ArrayList<>();
         for (String moveOutNo : outNoList) {
             //1.通过单类工作中心查询近一个月的转移单数据
