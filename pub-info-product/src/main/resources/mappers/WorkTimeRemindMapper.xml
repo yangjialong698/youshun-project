@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfoproduct.daos.WorkTimeRemindMapper">
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfoproduct.entity.WorkTimeRemind">
+    <!--@mbg.generated-->
+    <!--@Table work_time_remind-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="work_center_no" jdbcType="VARCHAR" property="workCenterNo" />
+    <result column="prd_no" jdbcType="VARCHAR" property="prdNo" />
+    <result column="order_date" jdbcType="VARCHAR" property="orderDate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, work_center_no, prd_no, order_date, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from work_time_remind
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from work_time_remind
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.WorkTimeRemind" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into work_time_remind (work_center_no, prd_no, order_date, 
+      create_time)
+    values (#{workCenterNo,jdbcType=VARCHAR}, #{prdNo,jdbcType=VARCHAR}, #{orderDate,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.WorkTimeRemind" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into work_time_remind
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="workCenterNo != null">
+        work_center_no,
+      </if>
+      <if test="prdNo != null">
+        prd_no,
+      </if>
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="workCenterNo != null">
+        #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdNo != null">
+        #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfoproduct.entity.WorkTimeRemind">
+    <!--@mbg.generated-->
+    update work_time_remind
+    <set>
+      <if test="workCenterNo != null">
+        work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdNo != null">
+        prd_no = #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null">
+        order_date = #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfoproduct.entity.WorkTimeRemind">
+    <!--@mbg.generated-->
+    update work_time_remind
+    set work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      prd_no = #{prdNo,jdbcType=VARCHAR},
+      order_date = #{orderDate,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into work_time_remind
+    (work_center_no, prd_no, order_date, create_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.workCenterNo,jdbcType=VARCHAR}, #{item.prdNo,jdbcType=VARCHAR}, #{item.orderDate,jdbcType=VARCHAR}, 
+        #{item.createTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.WorkTimeRemind" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into work_time_remind
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      work_center_no,
+      prd_no,
+      order_date,
+      create_time,
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      #{workCenterNo,jdbcType=VARCHAR},
+      #{prdNo,jdbcType=VARCHAR},
+      #{orderDate,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      prd_no = #{prdNo,jdbcType=VARCHAR},
+      order_date = #{orderDate,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.WorkTimeRemind" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into work_time_remind
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="workCenterNo != null">
+        work_center_no,
+      </if>
+      <if test="prdNo != null">
+        prd_no,
+      </if>
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="workCenterNo != null">
+        #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdNo != null">
+        #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="workCenterNo != null">
+        work_center_no = #{workCenterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prdNo != null">
+        prd_no = #{prdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null">
+        order_date = #{orderDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -5,9 +5,11 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfoproduct.daos.ErpScrapLossMapper;
 import com.ennova.pubinfoproduct.daos.ErpTransferOrderMapper;
 import com.ennova.pubinfoproduct.daos.ScrapPerOutnoMapper;
+import com.ennova.pubinfoproduct.daos.WorkTimeRemindMapper;
 import com.ennova.pubinfoproduct.entity.ErpScrapLoss;
 import com.ennova.pubinfoproduct.entity.ErpTransferOrder;
 import com.ennova.pubinfoproduct.entity.ScrapPerOutno;
+import com.ennova.pubinfoproduct.entity.WorkTimeRemind;
 import com.ennova.pubinfoproduct.vo.ErpPerhourCostVO;
 import com.ennova.pubinfoproduct.vo.ErpPrdNameVO;
 import com.ennova.pubinfoproduct.vo.ScrapVO;
@@ -31,6 +33,8 @@ public class ErpTransferOrderService {
     private ErpScrapLossMapper erpScrapLossMapper;
     @Resource
     private ScrapPerOutnoMapper scrapPerOutnoMapper;
+    @Resource
+    private WorkTimeRemindMapper workTimeRemindMapper;
 
 //    public Callback<List<ScrapVO>> erpinputscrapOld(String moveOutNo) {
 //        List<String> gxList = null;
@@ -159,7 +163,7 @@ public class ErpTransferOrderService {
                                     prdPerCost = 0.0;
                                 }
                             }
-                            ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, moveOutNo, prdNo); //工时实体  -----落库
+                            ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, moveOutNo, prdNo); //工时实体
                             if (null != erpScrapLossOne) {
                                 Double hourCost = erpScrapLossOne.getHourCost();
                                 if (null != hourCost) {
@@ -173,6 +177,9 @@ public class ErpTransferOrderService {
                                         scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
                                     }
                                 }
+                            }else {
+                                WorkTimeRemind workTimeRemind = WorkTimeRemind.builder().createTime(new Date()).workCenterNo(moveOutNo).orderDate(orderDate).prdNo(prdNo).build();
+                                workTimeRemindMapper.insertSelective(workTimeRemind);
                             }
                             return null;
                         }).collect(Collectors.toList());
