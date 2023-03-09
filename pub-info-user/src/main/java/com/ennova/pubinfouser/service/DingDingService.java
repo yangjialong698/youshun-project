@@ -50,6 +50,8 @@ public class DingDingService  {
     @Autowired
     private TDingClockMapper tDingClockMapper;
 
+    private static final Long PERPAGENUM = 100L;
+
     //获取最后一级部门接口
     public Callback<List<Long>> lastDeptIds() {
         String accesstoken = DingDingUtil.getAccess_Token();
@@ -126,8 +128,8 @@ public class DingDingService  {
 
     //每天上午10点下午3点跑一次获取钉钉用户列表
 
-    @Scheduled(cron="0 0 09,14/12 * * ?") //测试
-    //@Scheduled(cron="0 0 01,12/12 * * ?") //线上 中午12点出发一次
+    //@Scheduled(cron="0 0 09,14/12 * * ?") //测试
+    @Scheduled(cron="0 0 01,12/12 * * ?") //线上 中午12点出发一次
     public void userDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         List<Long> deptIds = null ;
@@ -142,14 +144,29 @@ public class DingDingService  {
         ArrayList<DingUserVO> dingUserVOS = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(deptIds)){
             deptIds.forEach(deptId->{
-                OapiV2UserListResponse.PageResult departmentUser = DingDingUtil.getDepartmentUser(deptId, 0, 100, accesstoken);
-                List<OapiV2UserListResponse.ListUserResponse> userList = departmentUser.getList();
-                userList.forEach(e->{
-                    DingUserVO dingUserVO = new DingUserVO();
-                    BeanUtils.copyProperties(e,dingUserVO);
-                    dingUserVO.setDeptIdList(e.getDeptIdList());
-                    dingUserVOS.add(dingUserVO);
-                });
+                List<OapiV2UserListResponse.ListUserResponse> userList = new ArrayList<>();
+                //获取每个部门号对应的用户集合
+                List<String> userIdList = DingDingUtil.getUserIdsByDeptId(deptId, accesstoken);
+                if (userIdList.size() > 0){
+                    int i = userIdList.size() / PERPAGENUM.intValue();
+                    if (userIdList.size() > PERPAGENUM){
+                        for (int j = 0; j <= i; j++) {
+                            OapiV2UserListResponse.PageResult departmentUsers = DingDingUtil.getDepartmentUser(deptId, j*PERPAGENUM +j, PERPAGENUM, accesstoken);
+                            List<OapiV2UserListResponse.ListUserResponse> userLists = departmentUsers.getList();
+                            userList.addAll(userLists);
+                        }
+                    }else {
+                        OapiV2UserListResponse.PageResult departmentUser = DingDingUtil.getDepartmentUser(deptId, 0, 100, accesstoken);
+                        userList = departmentUser.getList();
+                    }
+                    List<String> collect = userList.stream().map(e -> e.getName()).collect(Collectors.toList());
+                    userList.forEach(e->{
+                        DingUserVO dingUserVO = new DingUserVO();
+                        BeanUtils.copyProperties(e,dingUserVO);
+                        dingUserVO.setDeptIdList(e.getDeptIdList());
+                        dingUserVOS.add(dingUserVO);
+                    });
+                }
             });
             ArrayList<String> deptManagerUseridList = new ArrayList<>();
             String alldepts = redisTemplate.opsForValue().get("alldepts");
@@ -225,9 +242,9 @@ public class DingDingService  {
 
 
 
-    @Scheduled(cron="0 0 3 * * ? ") //测试
+    //@Scheduled(cron="0 0 3 * * ? ") //测试
     //@Scheduled(cron="0 0 2 * * ? ") //线上1
-    //@Scheduled(cron="0 0 02,12/12 * * ?") //线上2 中午12点出发一次
+    @Scheduled(cron="0 0 02,12/12 * * ?") //线上2 中午12点出发一次
     public Callback<List<DingDeptVO>> deptDetails() {
         String accesstoken = DingDingUtil.getAccess_Token();
         Callback<List<Long>> listCallback = this.listDeptAllIds();
@@ -268,8 +285,8 @@ public class DingDingService  {
 
 
 
-    @Scheduled(cron="0 0 10,15/12 * * ?") //测试
-    //@Scheduled(cron="0 0 02,13/12 * * ?") //线上 下1点出发一次
+    //@Scheduled(cron="0 0 10,15/12 * * ?") //测试
+    @Scheduled(cron="0 0 02,13/12 * * ?") //线上 下1点出发一次
     public void updatTuser() {
         //1.查询t_user无,t_user_ding有的数据(新入职)
         List<TUserDing> tUserDingList = tUserDingMapper.selectEntry();
@@ -316,9 +333,9 @@ public class DingDingService  {
 //    }
 
 
-    @Scheduled(cron="0 0 10 * * ? ") //部门测试第二版
+    //@Scheduled(cron="0 0 10 * * ? ") //部门测试第二版
     //@Scheduled(cron="0 0 3 * * ? ") //部门线上第二版
-    //@Scheduled(cron="0 0 03,13/12 * * ?") //部门线上第三版 下1点出发一次
+    @Scheduled(cron="0 0 03,13/12 * * ?") //部门线上第三版 下1点出发一次
     public void updatTempTdept() {
         //1.查询t_dept无,t_dept_ding有的数据(新建部门)
         List<TDeptDing> tDeptDingList = tDeptDingMapper.selectEntry();

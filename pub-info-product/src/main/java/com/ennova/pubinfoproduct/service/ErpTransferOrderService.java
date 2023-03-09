@@ -128,7 +128,7 @@ public class ErpTransferOrderService {
         ArrayList<ScrapPerOutno> scrapVOArrayList = new ArrayList<>();
         for (String moveOutNo : outNoList) {
             //1.通过单类工作中心查询近一个月的转移单数据
-            // List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectByMoveOutNo(moveOutNo);
+            //List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectByMoveOutNo(moveOutNo);
             List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectByMoveOutNoByDay(moveOutNo);
             if (CollectionUtil.isNotEmpty(erpTransferOrders)) {
                 Map<String, List<ErpTransferOrder>> listMap = erpTransferOrders.stream().collect(Collectors.groupingBy(ErpTransferOrder::getOrderDate));

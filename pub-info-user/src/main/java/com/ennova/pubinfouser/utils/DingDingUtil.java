@@ -156,8 +156,8 @@ public class DingDingUtil {
         List<String> userList = Arrays.asList("5195");
         String checkDateFrom = "2022-11-09 05:00:00";
         String checkDateTo = "2022-11-11 20:00:00";
-        List<OapiAttendanceListRecordResponse.Recordresult> onClassDetail = DingDingUtil.getOnClassTime(userList,checkDateFrom,checkDateTo,accesstoken);
-        System.out.println(onClassDetail);
+        OapiV2UserListResponse.PageResult departmentUser = DingDingUtil.getDepartmentUser(Long.valueOf(720740230), 0, 100, accesstoken);
+        System.out.println(departmentUser);
 
 
 //        String access_token = DingDingUtil.getAccess_Token();
