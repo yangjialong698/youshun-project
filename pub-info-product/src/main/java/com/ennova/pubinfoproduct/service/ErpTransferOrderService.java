@@ -149,9 +149,9 @@ public class ErpTransferOrderService {
                             Integer scrapNumTotal = value1.stream().mapToInt(ErpTransferOrder::getScrapNum).sum();//单天单品号总报废数量
                             Integer acceptanceNumTotal = value1.stream().mapToInt(ErpTransferOrder::getAcceptanceNum).sum();//单天单品号总合格数量
                             //4.通过工作中心查询平均小时成本,通过工作中心+品号查询单件材料费，通过工作中心(mOutNo)+日期(orderDate)+品号(prdNo)查询工时
-                            ErpPerhourCostVO erpPerhourCost = erpScrapLossService.getErpPerhourCost(moveOutNo); //平均小时成本实体
+//                            ErpPerhourCostVO erpPerhourCost = erpScrapLossService.getErpPerhourCost(moveOutNo); //平均小时成本实体
                             ErpPrdNameVO erpPrdNameVO = erpScrapLossService.getErpPrdByPrdno(moveOutNo, prdNo).getData(); //单件材料费实体
-                            Double prdPerCost = 0.0;
+                            Double prdPerCost = 0.0; //单件材料费
                             if (null != erpPrdNameVO) {
                                 if (null != erpPrdNameVO.getPrdPerCost()){
                                     prdPerCost = erpPrdNameVO.getPrdPerCost();
@@ -159,12 +159,12 @@ public class ErpTransferOrderService {
                                     prdPerCost = 0.0;
                                 }
                             }
-                            ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, moveOutNo, prdNo); //工时实体
+                            ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, moveOutNo, prdNo); //工时实体  -----落库
                             if (null != erpScrapLossOne) {
                                 Double hourCost = erpScrapLossOne.getHourCost();
                                 if (null != hourCost) {
-                                    if (rcCount != 0) {
-                                        Double perPerson = erpPerhourCost.getHourCost() * hourCost / acceptanceNumTotal;
+                                    if (acceptanceNumTotal != 0) {
+                                        Double perPerson = erpScrapLossOne.getWorkHours() * hourCost / acceptanceNumTotal;
                                         //5.单种工作中心+某天汇总所有品号总报废金额 = 报废数量*(单件人工+单件材料费)
                                         Double scrapCostPerPrdNo = scrapNumTotal * (perPerson + prdPerCost);
                                         scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
