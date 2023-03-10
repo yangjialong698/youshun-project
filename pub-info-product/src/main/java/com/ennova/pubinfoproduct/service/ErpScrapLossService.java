@@ -54,7 +54,7 @@ public class ErpScrapLossService {
             //新增
             ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
             if (null != erpScrapLossOne){
-                return Callback.success("当天工作中心关联品号已存在!");
+                return Callback.error("当天工作中心关联品号已存在!");
             }
             if (null == erpScrapLossVO.getHourCost() || null == erpScrapLossVO.getPrdPerCost()){
                 WorkTimeRemind workTimeRemind = WorkTimeRemind.builder().createTime(new Date()).workCenterNo(workCenterNo).orderDate(orderDate).prdNo(prdNo).build();
