@@ -167,7 +167,7 @@ public class ErpTransferOrderService {
                             }
                             ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, moveOutNo, prdNo); //工时实体
                             if (null != erpScrapLossOne) {
-                                Double hourCost = erpScrapLossOne.getHourCost();
+                                Double hourCost = erpScrapLossOne.getHourCost(); //平均小时成本
                                 if (null != hourCost) {
                                     if (acceptanceNumTotal != 0) {
                                         Double perPerson = erpScrapLossOne.getWorkHours() * hourCost / acceptanceNumTotal;
@@ -179,10 +179,11 @@ public class ErpTransferOrderService {
                                         scrapCostTotal.updateAndGet(v -> v + scrapCostPerPrdNo);
                                     }
                                 }
-                            }else {
-                                WorkTimeRemind workTimeRemind = WorkTimeRemind.builder().createTime(new Date()).workCenterNo(moveOutNo).orderDate(orderDate).prdNo(prdNo).build();
-                                workTimeRemindMapper.insertSelective(workTimeRemind);
                             }
+//                            else {
+//                                WorkTimeRemind workTimeRemind = WorkTimeRemind.builder().createTime(new Date()).workCenterNo(moveOutNo).orderDate(orderDate).prdNo(prdNo).build();
+//                                workTimeRemindMapper.insertSelective(workTimeRemind);
+//                            }
                             return null;
                         }).collect(Collectors.toList());
                     }

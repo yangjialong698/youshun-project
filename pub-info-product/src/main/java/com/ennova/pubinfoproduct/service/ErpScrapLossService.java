@@ -4,14 +4,8 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
-import com.ennova.pubinfoproduct.daos.ErpPrdCostMapper;
-import com.ennova.pubinfoproduct.daos.ErpPrdInfoMapper;
-import com.ennova.pubinfoproduct.daos.ErpScrapLossMapper;
-import com.ennova.pubinfoproduct.daos.ErpTransferOrderMapper;
-import com.ennova.pubinfoproduct.entity.CustomerAccountInfo;
-import com.ennova.pubinfoproduct.entity.ErpPrdInfo;
-import com.ennova.pubinfoproduct.entity.ErpScrapLoss;
-import com.ennova.pubinfoproduct.entity.ErpTransferOrder;
+import com.ennova.pubinfoproduct.daos.*;
+import com.ennova.pubinfoproduct.entity.*;
 import com.ennova.pubinfoproduct.vo.ErpPerhourCostVO;
 import com.ennova.pubinfoproduct.vo.ErpPrdNameVO;
 import com.ennova.pubinfoproduct.vo.ErpScrapLossVO;
@@ -24,6 +18,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -42,6 +38,9 @@ public class ErpScrapLossService {
     @Autowired
     private ErpPrdInfoMapper erpPrdInfoMapper;
 
+    @Autowired
+    private WorkTimeRemindMapper workTimeRemindMapper;
+
     public Callback insertOrUpdate(ErpScrapLossVO erpScrapLossVO) {
         String orderDate = erpScrapLossVO.getOrderDate();
         String workCenterNo = erpScrapLossVO.getWorkCenterNo();
@@ -56,6 +55,10 @@ public class ErpScrapLossService {
             ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
             if (null != erpScrapLossOne){
                 return Callback.success("当天工作中心关联品号已存在!");
+            }
+            if (null == erpScrapLossVO.getHourCost() || null == erpScrapLossVO.getPrdPerCost()){
+                WorkTimeRemind workTimeRemind = WorkTimeRemind.builder().createTime(new Date()).workCenterNo(workCenterNo).orderDate(orderDate).prdNo(prdNo).build();
+                workTimeRemindMapper.insertSelective(workTimeRemind);
             }
             erpScrapLoss.setDelFlag(0);
             erpScrapLossMapper.insertSelective(erpScrapLoss);
@@ -98,12 +101,19 @@ public class ErpScrapLossService {
         List<ErpPrdInfo> erpPrdInfos = erpPrdInfoMapper.selectByPrdNo(prdNo);
         if (CollectionUtil.isNotEmpty(erpPrdInfos)){
             prdName = erpPrdInfos.get(0).getPrdName();
+        }else {
+            return Callback.error("该品名无品号!");
         }
-        ErpPrdNameVO erpPrdNameVO = erpPrdCostMapper.selectErpPrdNameVoByPrdno(workCenterNo,prdNo);
+        ErpPrdNameVO erpPrdNameVO = erpPrdCostMapper.selectErpPrdNameVoByPrdno(workCenterNo,prdNo); //查单件材料费
         if (null != erpPrdNameVO){
             erpPrdNameVO.setPrdName(prdName);
+            return Callback.success(erpPrdNameVO);
+        }else {
+            ErpPrdNameVO erpPrdNameVO1 = new ErpPrdNameVO();
+            erpPrdNameVO1.setPrdName(prdName);
+            erpPrdNameVO1.setPrdNo(prdNo);
+            return Callback.success(erpPrdNameVO1);
         }
-        return Callback.success(erpPrdNameVO);
     }
 
     public Callback<ErpScrapLoss> getDetailById(Integer id) {

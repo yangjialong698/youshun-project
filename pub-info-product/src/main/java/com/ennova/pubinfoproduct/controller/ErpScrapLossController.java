@@ -44,7 +44,7 @@ public class ErpScrapLossController {
         return Callback.success(erpPerhourCostVO);
     }
 
-    @ApiOperation(value = "报废损失计算-根据品号查询品名材料油辅料")
+    @ApiOperation(value = "报废损失计算-根据品号查询品名+单件材料费")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "prdNo", value = "品号", required = true)
     })

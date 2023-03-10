@@ -240,6 +240,7 @@
   <select id="selectErpPrdNameVoByPrdno" resultType="com.ennova.pubinfoproduct.vo.ErpPrdNameVO">
     SELECT DISTINCT
       prd_per_cost AS prdPerCost,
+      hour_cost  AS hourCost,
       tool_oil AS toolOil,
       prd_no AS prdNo
     FROM
