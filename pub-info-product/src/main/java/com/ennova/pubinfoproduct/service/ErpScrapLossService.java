@@ -112,7 +112,8 @@ public class ErpScrapLossService {
     }
 
     //计算报废数量+报废金额
-    @Scheduled(cron = " 0 0 23 * * ?")
+//    @Scheduled(cron = " 0 0 23 * * ?")
+    @Scheduled(cron = " 0 0 1 * * ? ")
     public void calculateScrapInfo() {
         List<ErpScrapLoss> erpScrapLossList = erpScrapLossMapper.selectNullInfo();
         if (CollectionUtil.isNotEmpty(erpScrapLossList)) {

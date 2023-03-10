@@ -13,6 +13,7 @@ import com.ennova.pubinfoproduct.entity.WorkTimeRemind;
 import com.ennova.pubinfoproduct.vo.ErpPerhourCostVO;
 import com.ennova.pubinfoproduct.vo.ErpPrdNameVO;
 import com.ennova.pubinfoproduct.vo.ScrapVO;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -113,6 +114,7 @@ public class ErpTransferOrderService {
 
     //计算近一个月的轮播图报废金额数据(手动跑一次)
 //    @Scheduled(cron = " 0 0 23 * * ?")
+    @Scheduled(cron = " 0 0 1 * * ? ")
     public void calMonthErpScrapInfo() {
         List<String> outNoList = Arrays.asList("1003","1018","1019", "1008", "1009", "1010");
         ArrayList<ScrapPerOutno> scrapVOArrayList = new ArrayList<>();
