@@ -61,6 +61,7 @@ public class ErpScrapLossService {
                 workTimeRemindMapper.insertSelective(workTimeRemind);
             }
             erpScrapLoss.setDelFlag(0);
+            erpScrapLoss.setCreateTime(new Date());
             erpScrapLossMapper.insertSelective(erpScrapLoss);
         }
         return Callback.success(true);
