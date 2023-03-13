@@ -48,21 +48,66 @@ public class ErpScrapLossService {
         ErpScrapLoss erpScrapLoss = new ErpScrapLoss();
         BeanUtils.copyProperties(erpScrapLossVO,erpScrapLoss);
         if (erpScrapLossVO.getId() != null){
-            //更新
-            erpScrapLossMapper.updateByPrimaryKey(erpScrapLoss);
+            if (null == erpScrapLossVO.getScrapNum()){
+                Double dayWorkHours = erpScrapLossVO.getDayWorkHours();
+                Double nightWorkHours = erpScrapLossVO.getNightWorkHours();
+                if (null != dayWorkHours && null != nightWorkHours){
+                    erpScrapLoss.setWorkHours(dayWorkHours + nightWorkHours);
+                }else if (null != dayWorkHours && null == nightWorkHours){
+                    erpScrapLoss.setWorkHours(dayWorkHours);
+                }else if (null == dayWorkHours && null != nightWorkHours){
+                    erpScrapLoss.setWorkHours(nightWorkHours);
+                }
+                //更新
+                erpScrapLossMapper.updateByPrimaryKey(erpScrapLoss);
+            }else {
+                return Callback.error("报废数据量金额已计算无法修改!");
+            }
         }else {
             //新增
             ErpScrapLoss erpScrapLossOne = erpScrapLossMapper.selByOmpNo(orderDate, workCenterNo, prdNo);
             if (null != erpScrapLossOne){
-                return Callback.error("当天工作中心关联品号已存在!");
+                //白班工时+夜班工时已录入就不能再录入
+                if (null != erpScrapLossOne.getDayWorkHours() && null != erpScrapLossOne.getNightWorkHours()){
+                    return Callback.error("当天工作中心关联品号已存在!");
+                }else {
+                    //更新夜班
+                    Double dayWorkHours = erpScrapLossOne.getDayWorkHours();
+                    if (null != dayWorkHours){
+                        erpScrapLoss.setDelFlag(0);
+                        erpScrapLoss.setDayWorkHours(dayWorkHours);
+                        erpScrapLoss.setNightWorkHours(erpScrapLoss.getNightWorkHours());
+                        erpScrapLoss.setWorkHours(dayWorkHours + erpScrapLoss.getNightWorkHours());
+                    }
+                    //更新白班
+                    Double nightWorkHours = erpScrapLossOne.getNightWorkHours();
+                    if (null != nightWorkHours){
+                        erpScrapLoss.setDelFlag(0);
+                        erpScrapLoss.setNightWorkHours(nightWorkHours);
+                        erpScrapLoss.setDayWorkHours(erpScrapLoss.getDayWorkHours());
+                        erpScrapLoss.setWorkHours(nightWorkHours + erpScrapLoss.getDayWorkHours());
+                    }
+                    erpScrapLoss.setId(erpScrapLossOne.getId());
+                    erpScrapLossMapper.updateByPrimaryKey(erpScrapLoss);
+                }
+            }else {
+                //新增
+                Double dayWorkHours = erpScrapLoss.getDayWorkHours();
+                if (null != dayWorkHours){
+                    erpScrapLoss.setWorkHours(dayWorkHours);
+                }
+                Double nightWorkHours = erpScrapLoss.getNightWorkHours();
+                if (null != nightWorkHours){
+                    erpScrapLoss.setWorkHours(nightWorkHours);
+                }
+                erpScrapLoss.setDelFlag(0);
+                erpScrapLoss.setCreateTime(new Date());
+                erpScrapLossMapper.insertSelective(erpScrapLoss);
             }
             if (null == erpScrapLossVO.getHourCost() || null == erpScrapLossVO.getPrdPerCost()){
                 WorkTimeRemind workTimeRemind = WorkTimeRemind.builder().createTime(new Date()).workCenterNo(workCenterNo).orderDate(orderDate).prdNo(prdNo).build();
                 workTimeRemindMapper.insertSelective(workTimeRemind);
             }
-            erpScrapLoss.setDelFlag(0);
-            erpScrapLoss.setCreateTime(new Date());
-            erpScrapLossMapper.insertSelective(erpScrapLoss);
         }
         return Callback.success(true);
     }

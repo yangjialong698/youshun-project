@@ -1,5 +1,6 @@
 package com.ennova.pubinfoproduct.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,14 +52,29 @@ public class ErpScrapLossVO {
     private String orderDate;
 
     /**
-    * 工时
-    */
+     * 总工时
+     */
     private Double workHours;
+
+    /**
+     * 白班工时
+     */
+    private Double dayWorkHours;
+
+    /**
+     * 夜班工时
+     */
+    private Double nightWorkHours;
 
     /**
     * 报废数量
     */
     private Integer scrapNum;
+
+    /**
+     * 备注
+     */
+    private String remarks;
 
     /**
     * 报废金额

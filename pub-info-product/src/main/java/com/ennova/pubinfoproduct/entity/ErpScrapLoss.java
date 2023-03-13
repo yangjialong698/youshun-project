@@ -1,6 +1,5 @@
 package com.ennova.pubinfoproduct.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
@@ -64,16 +63,34 @@ public class ErpScrapLoss {
     private String orderDate;
 
     /**
-     * 工时
+     * 总工时
      */
-    @ApiModelProperty(value = "工时")
+    @ApiModelProperty(value = "总工时")
     private Double workHours;
+
+    /**
+     * 白班工时
+     */
+    @ApiModelProperty(value = "白班工时")
+    private Double dayWorkHours;
+
+    /**
+     * 夜班工时
+     */
+    @ApiModelProperty(value = "夜班工时")
+    private Double nightWorkHours;
 
     /**
      * 报废数量
      */
     @ApiModelProperty(value = "报废数量")
     private Integer scrapNum;
+
+    /**
+     * 备注
+     */
+    @ApiModelProperty(value = "备注")
+    private String remarks;
 
     /**
      * 报废金额
@@ -85,7 +102,6 @@ public class ErpScrapLoss {
      * 创建日期
      */
     @ApiModelProperty(value = "创建日期")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**

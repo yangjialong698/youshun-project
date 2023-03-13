@@ -13,7 +13,10 @@
     <result column="prd_name" jdbcType="VARCHAR" property="prdName" />
     <result column="order_date" jdbcType="VARCHAR" property="orderDate" />
     <result column="work_hours" jdbcType="DOUBLE" property="workHours" />
+    <result column="day_work_hours" jdbcType="DOUBLE" property="dayWorkHours" />
+    <result column="night_work_hours" jdbcType="DOUBLE" property="nightWorkHours" />
     <result column="scrap_num" jdbcType="INTEGER" property="scrapNum" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="scrap_cost" jdbcType="DOUBLE" property="scrapCost" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
@@ -21,7 +24,8 @@
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no, prd_name, order_date, 
-    work_hours, scrap_num, scrap_cost, create_time, del_flag
+    work_hours, day_work_hours, night_work_hours, scrap_num, remarks, scrap_cost, create_time, 
+    del_flag
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -39,12 +43,14 @@
     <!--@mbg.generated-->
     insert into erp_scrap_loss (work_center_no, hour_cost, prd_per_cost, 
       tool_oil, prd_no, prd_name, 
-      order_date, work_hours, scrap_num, 
+      order_date, work_hours, day_work_hours, 
+      night_work_hours, scrap_num, remarks, 
       scrap_cost, create_time, del_flag
       )
     values (#{workCenterNo,jdbcType=VARCHAR}, #{hourCost,jdbcType=DOUBLE}, #{prdPerCost,jdbcType=DOUBLE}, 
       #{toolOil,jdbcType=DOUBLE}, #{prdNo,jdbcType=VARCHAR}, #{prdName,jdbcType=VARCHAR}, 
-      #{orderDate,jdbcType=VARCHAR}, #{workHours,jdbcType=DOUBLE}, #{scrapNum,jdbcType=INTEGER}, 
+      #{orderDate,jdbcType=VARCHAR}, #{workHours,jdbcType=DOUBLE}, #{dayWorkHours,jdbcType=DOUBLE}, 
+      #{nightWorkHours,jdbcType=DOUBLE}, #{scrapNum,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
       #{scrapCost,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=INTEGER}
       )
   </insert>
@@ -76,8 +82,17 @@
       <if test="workHours != null">
         work_hours,
       </if>
+      <if test="dayWorkHours != null">
+        day_work_hours,
+      </if>
+      <if test="nightWorkHours != null">
+        night_work_hours,
+      </if>
       <if test="scrapNum != null">
         scrap_num,
+      </if>
+      <if test="remarks != null">
+        remarks,
       </if>
       <if test="scrapCost != null">
         scrap_cost,
@@ -114,8 +129,17 @@
       <if test="workHours != null">
         #{workHours,jdbcType=DOUBLE},
       </if>
+      <if test="dayWorkHours != null">
+        #{dayWorkHours,jdbcType=DOUBLE},
+      </if>
+      <if test="nightWorkHours != null">
+        #{nightWorkHours,jdbcType=DOUBLE},
+      </if>
       <if test="scrapNum != null">
         #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
       </if>
       <if test="scrapCost != null">
         #{scrapCost,jdbcType=DOUBLE},
@@ -156,8 +180,17 @@
       <if test="workHours != null">
         work_hours = #{workHours,jdbcType=DOUBLE},
       </if>
+      <if test="dayWorkHours != null">
+        day_work_hours = #{dayWorkHours,jdbcType=DOUBLE},
+      </if>
+      <if test="nightWorkHours != null">
+        night_work_hours = #{nightWorkHours,jdbcType=DOUBLE},
+      </if>
       <if test="scrapNum != null">
         scrap_num = #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
       </if>
       <if test="scrapCost != null">
         scrap_cost = #{scrapCost,jdbcType=DOUBLE},
@@ -182,7 +215,10 @@
       prd_name = #{prdName,jdbcType=VARCHAR},
       order_date = #{orderDate,jdbcType=VARCHAR},
       work_hours = #{workHours,jdbcType=DOUBLE},
+      day_work_hours = #{dayWorkHours,jdbcType=DOUBLE},
+      night_work_hours = #{nightWorkHours,jdbcType=DOUBLE},
       scrap_num = #{scrapNum,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
       scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       del_flag = #{delFlag,jdbcType=INTEGER}
@@ -192,12 +228,14 @@
     <!--@mbg.generated-->
     insert into erp_scrap_loss
     (work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no, prd_name, order_date, 
-      work_hours, scrap_num, scrap_cost, create_time, del_flag)
+      work_hours, day_work_hours, night_work_hours, scrap_num, remarks, scrap_cost, create_time, 
+      del_flag)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.workCenterNo,jdbcType=VARCHAR}, #{item.hourCost,jdbcType=DOUBLE}, #{item.prdPerCost,jdbcType=DOUBLE}, 
         #{item.toolOil,jdbcType=DOUBLE}, #{item.prdNo,jdbcType=VARCHAR}, #{item.prdName,jdbcType=VARCHAR}, 
-        #{item.orderDate,jdbcType=VARCHAR}, #{item.workHours,jdbcType=DOUBLE}, #{item.scrapNum,jdbcType=INTEGER}, 
+        #{item.orderDate,jdbcType=VARCHAR}, #{item.workHours,jdbcType=DOUBLE}, #{item.dayWorkHours,jdbcType=DOUBLE}, 
+        #{item.nightWorkHours,jdbcType=DOUBLE}, #{item.scrapNum,jdbcType=INTEGER}, #{item.remarks,jdbcType=VARCHAR}, 
         #{item.scrapCost,jdbcType=DOUBLE}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.delFlag,jdbcType=INTEGER}
         )
     </foreach>
@@ -217,7 +255,10 @@
       prd_name,
       order_date,
       work_hours,
+      day_work_hours,
+      night_work_hours,
       scrap_num,
+      remarks,
       scrap_cost,
       create_time,
       del_flag,
@@ -235,7 +276,10 @@
       #{prdName,jdbcType=VARCHAR},
       #{orderDate,jdbcType=VARCHAR},
       #{workHours,jdbcType=DOUBLE},
+      #{dayWorkHours,jdbcType=DOUBLE},
+      #{nightWorkHours,jdbcType=DOUBLE},
       #{scrapNum,jdbcType=INTEGER},
+      #{remarks,jdbcType=VARCHAR},
       #{scrapCost,jdbcType=DOUBLE},
       #{createTime,jdbcType=TIMESTAMP},
       #{delFlag,jdbcType=INTEGER},
@@ -253,7 +297,10 @@
       prd_name = #{prdName,jdbcType=VARCHAR},
       order_date = #{orderDate,jdbcType=VARCHAR},
       work_hours = #{workHours,jdbcType=DOUBLE},
+      day_work_hours = #{dayWorkHours,jdbcType=DOUBLE},
+      night_work_hours = #{nightWorkHours,jdbcType=DOUBLE},
       scrap_num = #{scrapNum,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
       scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       del_flag = #{delFlag,jdbcType=INTEGER},
@@ -290,8 +337,17 @@
       <if test="workHours != null">
         work_hours,
       </if>
+      <if test="dayWorkHours != null">
+        day_work_hours,
+      </if>
+      <if test="nightWorkHours != null">
+        night_work_hours,
+      </if>
       <if test="scrapNum != null">
         scrap_num,
+      </if>
+      <if test="remarks != null">
+        remarks,
       </if>
       <if test="scrapCost != null">
         scrap_cost,
@@ -332,8 +388,17 @@
       <if test="workHours != null">
         #{workHours,jdbcType=DOUBLE},
       </if>
+      <if test="dayWorkHours != null">
+        #{dayWorkHours,jdbcType=DOUBLE},
+      </if>
+      <if test="nightWorkHours != null">
+        #{nightWorkHours,jdbcType=DOUBLE},
+      </if>
       <if test="scrapNum != null">
         #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
       </if>
       <if test="scrapCost != null">
         #{scrapCost,jdbcType=DOUBLE},
@@ -374,8 +439,17 @@
       <if test="workHours != null">
         work_hours = #{workHours,jdbcType=DOUBLE},
       </if>
+      <if test="dayWorkHours != null">
+        day_work_hours = #{dayWorkHours,jdbcType=DOUBLE},
+      </if>
+      <if test="nightWorkHours != null">
+        night_work_hours = #{nightWorkHours,jdbcType=DOUBLE},
+      </if>
       <if test="scrapNum != null">
         scrap_num = #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
       </if>
       <if test="scrapCost != null">
         scrap_cost = #{scrapCost,jdbcType=DOUBLE},
