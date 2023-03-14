@@ -37,80 +37,80 @@ public class ErpTransferOrderService {
     @Resource
     private WorkTimeRemindMapper workTimeRemindMapper;
 
-//    public Callback<List<ScrapVO>> erpinputscrapOld(String moveOutNo) {
-//        List<String> gxList = null;
-//        if (moveOutNo.contains(",")) {
-//            gxList = Arrays.asList(moveOutNo.split(","));
-//        } else {
-//            gxList = Arrays.asList(moveOutNo);
-//        }
-//        List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectAllByMoveOutNo(gxList);
-//        ArrayList<ScrapVO> scrapVOArrayList = new ArrayList<>();
-//        if (CollectionUtil.isNotEmpty(erpTransferOrders)) {
-//            Map<String, List<ErpTransferOrder>> listMap = erpTransferOrders.stream().collect(Collectors.groupingBy(ErpTransferOrder::getOrderDate));
-//            listMap.entrySet().stream().map(key -> {
-//                ScrapVO scrapVO = new ScrapVO();
-//                List<ErpTransferOrder> value = key.getValue();
-//                int rcCount = value.stream().mapToInt(o -> Objects.isNull(o.getAcceptanceNum()) ? 0 : o.getAcceptanceNum()).sum();// 日产量单品汇总
-//                int rkCount = value.stream().mapToInt(o -> Objects.isNull(o.getTotalNum()) ? 0 : o.getTotalNum()).sum(); // 入库数量单品汇总
-//                int bfCount = value.stream().mapToInt(o -> Objects.isNull(o.getScrapNum()) ? 0 : o.getScrapNum()).sum(); // 报废数量单品汇总
-//                int badCount = value.stream().mapToInt(o -> Objects.isNull(o.getBadNum()) ? 0 : o.getBadNum()).sum(); // 不良数量单品汇总
-//                //Double scrapCostCount = value.stream().mapToDouble(o->Objects.isNull(o.getScrapCost()) ? 0 :o.getScrapCost()).sum(); // 报废金额单品汇总
-//                NumberFormat num = NumberFormat.getInstance();
-//                num.setMaximumFractionDigits(2);
-//                String percent = num.format((float) (bfCount + badCount) / (float) rkCount * 100);
-//                scrapVO.setScrapNum(bfCount);
-//                scrapVO.setBadNum(badCount);
-//                scrapVO.setDayPrdNum(rcCount);
-//                scrapVO.setOrderDate(value.get(0).getOrderDate());
-//                BigDecimal decimalPercent = new BigDecimal(percent);
-//                if (decimalPercent.compareTo(new BigDecimal(15)) >= 0) {
-//                    percent = String.valueOf(15);
-//                }
-//                scrapVO.setBadScrapRate(percent);
-//                //scrapVO.setScrapCostCount(scrapCostCount);
-//                scrapVOArrayList.add(scrapVO);
-//                return scrapVOArrayList;
-//            }).collect(Collectors.toList());
-//        }
-//        List<ScrapVO> collect = scrapVOArrayList.stream().sorted(Comparator.comparing(ScrapVO::getOrderDate)).collect(Collectors.toList());
-//        return Callback.success(collect);
-//    }
-
-    public Callback<List<ScrapVO>> erpinputscrapNew(String moveOutNo) {
-        ArrayList<ScrapVO> scrapVOS = new ArrayList<>();
+    public Callback<List<ScrapVO>> erpinputscrapOld(String moveOutNo) {
         List<String> gxList = null;
         if (moveOutNo.contains(",")) {
             gxList = Arrays.asList(moveOutNo.split(","));
         } else {
             gxList = Arrays.asList(moveOutNo);
         }
-        List<ScrapPerOutno> scrapPerOutnoList = scrapPerOutnoMapper.selectByOutNos(gxList);
-        if (CollectionUtil.isNotEmpty(scrapPerOutnoList)) {
-            Map<String, List<ScrapPerOutno>> listMap = scrapPerOutnoList.stream().collect(Collectors.groupingBy(ScrapPerOutno::getOrderDate));
+        List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectAllByMoveOutNo(gxList);
+        ArrayList<ScrapVO> scrapVOArrayList = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(erpTransferOrders)) {
+            Map<String, List<ErpTransferOrder>> listMap = erpTransferOrders.stream().collect(Collectors.groupingBy(ErpTransferOrder::getOrderDate));
             listMap.entrySet().stream().map(key -> {
                 ScrapVO scrapVO = new ScrapVO();
-                String orderDate = key.getKey();
-                List<ScrapPerOutno> value = key.getValue();
-                int dayPrdCount = value.stream().mapToInt(o -> Objects.isNull(o.getDayPrdNum()) ? 0 : o.getDayPrdNum()).sum();// 日产量汇总
-                int scrapCount = value.stream().mapToInt(o -> Objects.isNull(o.getScrapNum()) ? 0 : o.getScrapNum()).sum(); // 报废数量汇总
-                int badCount = value.stream().mapToInt(o -> Objects.isNull(o.getBadNum()) ? 0 : o.getBadNum()).sum(); // 不良数量汇总
-                Double badScrapRate = value.stream().mapToDouble(o -> Objects.isNull(o.getBadScrapRate()) ? 0 : Double.parseDouble(o.getBadScrapRate())).sum(); // 报废率汇总
-                Double scrapCostCount = value.stream().mapToDouble(o -> Objects.isNull(o.getScrapCost()) ? 0 : o.getScrapCost()).sum(); // 报废金额汇总
-                scrapVO.setScrapCostCount(scrapCostCount);
-                scrapVO.setScrapNum(scrapCount);
-                scrapVO.setBadScrapRate(badScrapRate.toString());
-                scrapVO.setOrderDate(orderDate);
-                scrapVO.setDayPrdNum(dayPrdCount);
+                List<ErpTransferOrder> value = key.getValue();
+                int rcCount = value.stream().mapToInt(o -> Objects.isNull(o.getAcceptanceNum()) ? 0 : o.getAcceptanceNum()).sum();// 日产量单品汇总
+                int rkCount = value.stream().mapToInt(o -> Objects.isNull(o.getTotalNum()) ? 0 : o.getTotalNum()).sum(); // 入库数量单品汇总
+                int bfCount = value.stream().mapToInt(o -> Objects.isNull(o.getScrapNum()) ? 0 : o.getScrapNum()).sum(); // 报废数量单品汇总
+                int badCount = value.stream().mapToInt(o -> Objects.isNull(o.getBadNum()) ? 0 : o.getBadNum()).sum(); // 不良数量单品汇总
+                //Double scrapCostCount = value.stream().mapToDouble(o->Objects.isNull(o.getScrapCost()) ? 0 :o.getScrapCost()).sum(); // 报废金额单品汇总
+                NumberFormat num = NumberFormat.getInstance();
+                num.setMaximumFractionDigits(2);
+                String percent = num.format((float) (bfCount + badCount) / (float) rkCount * 100);
+                scrapVO.setScrapNum(bfCount);
                 scrapVO.setBadNum(badCount);
-                scrapVOS.add(scrapVO);
-                return scrapVOS;
+                scrapVO.setDayPrdNum(rcCount);
+                scrapVO.setOrderDate(value.get(0).getOrderDate());
+                BigDecimal decimalPercent = new BigDecimal(percent);
+                if (decimalPercent.compareTo(new BigDecimal(15)) >= 0) {
+                    percent = String.valueOf(15);
+                }
+                scrapVO.setBadScrapRate(percent);
+                scrapVO.setScrapCostCount(0.0);
+                scrapVOArrayList.add(scrapVO);
+                return scrapVOArrayList;
             }).collect(Collectors.toList());
-            List<ScrapVO> collect = scrapVOS.stream().sorted(Comparator.comparing(ScrapVO::getOrderDate)).collect(Collectors.toList());
-            return Callback.success(collect);
         }
-        return null;
+        List<ScrapVO> collect = scrapVOArrayList.stream().sorted(Comparator.comparing(ScrapVO::getOrderDate)).collect(Collectors.toList());
+        return Callback.success(collect);
     }
+
+//    public Callback<List<ScrapVO>> erpinputscrapNew(String moveOutNo) {
+//        ArrayList<ScrapVO> scrapVOS = new ArrayList<>();
+//        List<String> gxList = null;
+//        if (moveOutNo.contains(",")) {
+//            gxList = Arrays.asList(moveOutNo.split(","));
+//        } else {
+//            gxList = Arrays.asList(moveOutNo);
+//        }
+//        List<ScrapPerOutno> scrapPerOutnoList = scrapPerOutnoMapper.selectByOutNos(gxList);
+//        if (CollectionUtil.isNotEmpty(scrapPerOutnoList)) {
+//            Map<String, List<ScrapPerOutno>> listMap = scrapPerOutnoList.stream().collect(Collectors.groupingBy(ScrapPerOutno::getOrderDate));
+//            listMap.entrySet().stream().map(key -> {
+//                ScrapVO scrapVO = new ScrapVO();
+//                String orderDate = key.getKey();
+//                List<ScrapPerOutno> value = key.getValue();
+//                int dayPrdCount = value.stream().mapToInt(o -> Objects.isNull(o.getDayPrdNum()) ? 0 : o.getDayPrdNum()).sum();// 日产量汇总
+//                int scrapCount = value.stream().mapToInt(o -> Objects.isNull(o.getScrapNum()) ? 0 : o.getScrapNum()).sum(); // 报废数量汇总
+//                int badCount = value.stream().mapToInt(o -> Objects.isNull(o.getBadNum()) ? 0 : o.getBadNum()).sum(); // 不良数量汇总
+//                Double badScrapRate = value.stream().mapToDouble(o -> Objects.isNull(o.getBadScrapRate()) ? 0 : Double.parseDouble(o.getBadScrapRate())).sum(); // 报废率汇总
+//                Double scrapCostCount = value.stream().mapToDouble(o -> Objects.isNull(o.getScrapCost()) ? 0 : o.getScrapCost()).sum(); // 报废金额汇总
+//                scrapVO.setScrapCostCount(scrapCostCount);
+//                scrapVO.setScrapNum(scrapCount);
+//                scrapVO.setBadScrapRate(badScrapRate.toString());
+//                scrapVO.setOrderDate(orderDate);
+//                scrapVO.setDayPrdNum(dayPrdCount);
+//                scrapVO.setBadNum(badCount);
+//                scrapVOS.add(scrapVO);
+//                return scrapVOS;
+//            }).collect(Collectors.toList());
+//            List<ScrapVO> collect = scrapVOS.stream().sorted(Comparator.comparing(ScrapVO::getOrderDate)).collect(Collectors.toList());
+//            return Callback.success(collect);
+//        }
+//        return null;
+//    }
 
     //计算近一个月的轮播图报废金额数据(手动跑一次)
 //    @Scheduled(cron = " 0 0 23 * * ?")
