@@ -64,4 +64,9 @@ public class PcController {
         return pcService.getProblemsStatus();
     }
 
+    @ApiOperation(value = "Pc端接口 - 呼叫历史记录列表导出")
+    @GetMapping("/exportHistoryDateBoardData")
+    public void exportHistoryDateBoardData(Integer status) {
+        pcService.exportHistoryDateBoardData(status);
+    }
 }
