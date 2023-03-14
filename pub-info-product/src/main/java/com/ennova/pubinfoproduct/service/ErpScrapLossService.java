@@ -72,6 +72,10 @@ public class ErpScrapLossService {
                 //白班工时+夜班工时已录入就不能再录入
                 if (null != erpScrapLossOne.getDayWorkHours() && null != erpScrapLossOne.getNightWorkHours()){
                     return Callback.error("当天工作中心关联品号已存在!");
+                }else if (null != erpScrapLossOne.getDayWorkHours() && null != erpScrapLossVO.getDayWorkHours()){
+                    return Callback.error("当天工作中心白班数据已存在!");
+                }else if (null != erpScrapLossOne.getNightWorkHours() && null != erpScrapLossVO.getNightWorkHours()){
+                    return Callback.error("当天工作中心夜班数据已存在!");
                 }else {
                     //更新夜班
                     Double dayWorkHours = erpScrapLossOne.getDayWorkHours();
