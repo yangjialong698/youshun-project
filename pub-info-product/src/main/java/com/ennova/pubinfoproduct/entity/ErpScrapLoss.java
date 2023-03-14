@@ -87,10 +87,16 @@ public class ErpScrapLoss {
     private Integer scrapNum;
 
     /**
-     * 备注
+     * 白班备注
      */
-    @ApiModelProperty(value = "备注")
+    @ApiModelProperty(value = "白班备注")
     private String remarks;
+
+    /**
+     * 晚班备注
+     */
+    @ApiModelProperty(value = "晚班备注")
+    private String nightRemarks;
 
     /**
      * 报废金额

@@ -17,6 +17,7 @@
     <result column="night_work_hours" jdbcType="DOUBLE" property="nightWorkHours" />
     <result column="scrap_num" jdbcType="INTEGER" property="scrapNum" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="night_remarks" jdbcType="VARCHAR" property="nightRemarks" />
     <result column="scrap_cost" jdbcType="DOUBLE" property="scrapCost" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
@@ -24,8 +25,8 @@
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no, prd_name, order_date, 
-    work_hours, day_work_hours, night_work_hours, scrap_num, remarks, scrap_cost, create_time, 
-    del_flag
+    work_hours, day_work_hours, night_work_hours, scrap_num, remarks, night_remarks, 
+    scrap_cost, create_time, del_flag
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -45,14 +46,14 @@
       tool_oil, prd_no, prd_name, 
       order_date, work_hours, day_work_hours, 
       night_work_hours, scrap_num, remarks, 
-      scrap_cost, create_time, del_flag
-      )
+      night_remarks, scrap_cost, create_time, 
+      del_flag)
     values (#{workCenterNo,jdbcType=VARCHAR}, #{hourCost,jdbcType=DOUBLE}, #{prdPerCost,jdbcType=DOUBLE}, 
       #{toolOil,jdbcType=DOUBLE}, #{prdNo,jdbcType=VARCHAR}, #{prdName,jdbcType=VARCHAR}, 
       #{orderDate,jdbcType=VARCHAR}, #{workHours,jdbcType=DOUBLE}, #{dayWorkHours,jdbcType=DOUBLE}, 
       #{nightWorkHours,jdbcType=DOUBLE}, #{scrapNum,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
-      #{scrapCost,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=INTEGER}
-      )
+      #{nightRemarks,jdbcType=VARCHAR}, #{scrapCost,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{delFlag,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpScrapLoss" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -93,6 +94,9 @@
       </if>
       <if test="remarks != null">
         remarks,
+      </if>
+      <if test="nightRemarks != null">
+        night_remarks,
       </if>
       <if test="scrapCost != null">
         scrap_cost,
@@ -140,6 +144,9 @@
       </if>
       <if test="remarks != null">
         #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="nightRemarks != null">
+        #{nightRemarks,jdbcType=VARCHAR},
       </if>
       <if test="scrapCost != null">
         #{scrapCost,jdbcType=DOUBLE},
@@ -192,6 +199,9 @@
       <if test="remarks != null">
         remarks = #{remarks,jdbcType=VARCHAR},
       </if>
+      <if test="nightRemarks != null">
+        night_remarks = #{nightRemarks,jdbcType=VARCHAR},
+      </if>
       <if test="scrapCost != null">
         scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       </if>
@@ -219,6 +229,7 @@
       night_work_hours = #{nightWorkHours,jdbcType=DOUBLE},
       scrap_num = #{scrapNum,jdbcType=INTEGER},
       remarks = #{remarks,jdbcType=VARCHAR},
+      night_remarks = #{nightRemarks,jdbcType=VARCHAR},
       scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       del_flag = #{delFlag,jdbcType=INTEGER}
@@ -228,16 +239,16 @@
     <!--@mbg.generated-->
     insert into erp_scrap_loss
     (work_center_no, hour_cost, prd_per_cost, tool_oil, prd_no, prd_name, order_date, 
-      work_hours, day_work_hours, night_work_hours, scrap_num, remarks, scrap_cost, create_time, 
-      del_flag)
+      work_hours, day_work_hours, night_work_hours, scrap_num, remarks, night_remarks, 
+      scrap_cost, create_time, del_flag)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.workCenterNo,jdbcType=VARCHAR}, #{item.hourCost,jdbcType=DOUBLE}, #{item.prdPerCost,jdbcType=DOUBLE}, 
         #{item.toolOil,jdbcType=DOUBLE}, #{item.prdNo,jdbcType=VARCHAR}, #{item.prdName,jdbcType=VARCHAR}, 
         #{item.orderDate,jdbcType=VARCHAR}, #{item.workHours,jdbcType=DOUBLE}, #{item.dayWorkHours,jdbcType=DOUBLE}, 
         #{item.nightWorkHours,jdbcType=DOUBLE}, #{item.scrapNum,jdbcType=INTEGER}, #{item.remarks,jdbcType=VARCHAR}, 
-        #{item.scrapCost,jdbcType=DOUBLE}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.delFlag,jdbcType=INTEGER}
-        )
+        #{item.nightRemarks,jdbcType=VARCHAR}, #{item.scrapCost,jdbcType=DOUBLE}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.delFlag,jdbcType=INTEGER})
     </foreach>
   </insert>
   <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfoproduct.entity.ErpScrapLoss" useGeneratedKeys="true">
@@ -259,6 +270,7 @@
       night_work_hours,
       scrap_num,
       remarks,
+      night_remarks,
       scrap_cost,
       create_time,
       del_flag,
@@ -280,6 +292,7 @@
       #{nightWorkHours,jdbcType=DOUBLE},
       #{scrapNum,jdbcType=INTEGER},
       #{remarks,jdbcType=VARCHAR},
+      #{nightRemarks,jdbcType=VARCHAR},
       #{scrapCost,jdbcType=DOUBLE},
       #{createTime,jdbcType=TIMESTAMP},
       #{delFlag,jdbcType=INTEGER},
@@ -301,6 +314,7 @@
       night_work_hours = #{nightWorkHours,jdbcType=DOUBLE},
       scrap_num = #{scrapNum,jdbcType=INTEGER},
       remarks = #{remarks,jdbcType=VARCHAR},
+      night_remarks = #{nightRemarks,jdbcType=VARCHAR},
       scrap_cost = #{scrapCost,jdbcType=DOUBLE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       del_flag = #{delFlag,jdbcType=INTEGER},
@@ -348,6 +362,9 @@
       </if>
       <if test="remarks != null">
         remarks,
+      </if>
+      <if test="nightRemarks != null">
+        night_remarks,
       </if>
       <if test="scrapCost != null">
         scrap_cost,
@@ -400,6 +417,9 @@
       <if test="remarks != null">
         #{remarks,jdbcType=VARCHAR},
       </if>
+      <if test="nightRemarks != null">
+        #{nightRemarks,jdbcType=VARCHAR},
+      </if>
       <if test="scrapCost != null">
         #{scrapCost,jdbcType=DOUBLE},
       </if>
@@ -450,6 +470,9 @@
       </if>
       <if test="remarks != null">
         remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="nightRemarks != null">
+        night_remarks = #{nightRemarks,jdbcType=VARCHAR},
       </if>
       <if test="scrapCost != null">
         scrap_cost = #{scrapCost,jdbcType=DOUBLE},

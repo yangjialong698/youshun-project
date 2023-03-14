@@ -8,10 +8,12 @@ import com.ennova.pubinfoproduct.daos.*;
 import com.ennova.pubinfoproduct.entity.*;
 import com.ennova.pubinfoproduct.vo.ErpPerhourCostVO;
 import com.ennova.pubinfoproduct.vo.ErpPrdNameVO;
+import com.ennova.pubinfoproduct.vo.ErpScrLossDtlVO;
 import com.ennova.pubinfoproduct.vo.ErpScrapLossVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -74,30 +76,53 @@ public class ErpScrapLossService {
                     //更新夜班
                     Double dayWorkHours = erpScrapLossOne.getDayWorkHours();
                     if (null != dayWorkHours){
+                        String nightRemarks = erpScrapLoss.getNightRemarks();
+                        if (StringUtils.isNotEmpty(nightRemarks)){
+                            erpScrapLoss.setNightRemarks(nightRemarks);
+                        }
+                        erpScrapLoss.setRemarks(erpScrapLossOne.getRemarks());
+                        erpScrapLoss.setCreateTime(erpScrapLossOne.getCreateTime());
                         erpScrapLoss.setDelFlag(0);
                         erpScrapLoss.setDayWorkHours(dayWorkHours);
                         erpScrapLoss.setNightWorkHours(erpScrapLoss.getNightWorkHours());
                         erpScrapLoss.setWorkHours(dayWorkHours + erpScrapLoss.getNightWorkHours());
+                        erpScrapLoss.setId(erpScrapLossOne.getId());
+                       return Callback.success(erpScrapLossMapper.updateByPrimaryKey(erpScrapLoss));
                     }
                     //更新白班
                     Double nightWorkHours = erpScrapLossOne.getNightWorkHours();
                     if (null != nightWorkHours){
+                        String remarks = erpScrapLoss.getRemarks();
+                        if (StringUtils.isNotEmpty(remarks)){
+                            erpScrapLoss.setRemarks(remarks);
+                        }
+                        erpScrapLoss.setNightRemarks(erpScrapLossOne.getNightRemarks());
+                        erpScrapLoss.setCreateTime(erpScrapLossOne.getCreateTime());
                         erpScrapLoss.setDelFlag(0);
                         erpScrapLoss.setNightWorkHours(nightWorkHours);
                         erpScrapLoss.setDayWorkHours(erpScrapLoss.getDayWorkHours());
                         erpScrapLoss.setWorkHours(nightWorkHours + erpScrapLoss.getDayWorkHours());
+                        erpScrapLoss.setId(erpScrapLossOne.getId());
+                        return Callback.success(erpScrapLossMapper.updateByPrimaryKey(erpScrapLoss));
                     }
-                    erpScrapLoss.setId(erpScrapLossOne.getId());
-                    erpScrapLossMapper.updateByPrimaryKey(erpScrapLoss);
+
                 }
             }else {
                 //新增
                 Double dayWorkHours = erpScrapLoss.getDayWorkHours();
                 if (null != dayWorkHours){
+                    String remarks = erpScrapLoss.getRemarks();
+                    if (StringUtils.isNotEmpty(remarks)){
+                        erpScrapLoss.setRemarks(remarks);
+                    }
                     erpScrapLoss.setWorkHours(dayWorkHours);
                 }
                 Double nightWorkHours = erpScrapLoss.getNightWorkHours();
                 if (null != nightWorkHours){
+                    String nightRemarks = erpScrapLoss.getNightRemarks();
+                    if (StringUtils.isNotEmpty(nightRemarks)){
+                        erpScrapLoss.setNightRemarks(nightRemarks);
+                    }
                     erpScrapLoss.setWorkHours(nightWorkHours);
                 }
                 erpScrapLoss.setDelFlag(0);
@@ -162,9 +187,24 @@ public class ErpScrapLossService {
         }
     }
 
-    public Callback<ErpScrapLoss> getDetailById(Integer id) {
+    public Callback<ErpScrLossDtlVO> getDetailById(Integer id) {
+        ErpScrLossDtlVO erpScrLossDtlVO = new ErpScrLossDtlVO();
         ErpScrapLoss erpScrapLoss = erpScrapLossMapper.selectByPrimaryKey(id);
-        return Callback.success(erpScrapLoss);
+        if (null != erpScrapLoss){
+            BeanUtils.copyProperties(erpScrapLoss,erpScrLossDtlVO);
+            String remarks = erpScrapLoss.getRemarks();
+            String nightRemarks = erpScrapLoss.getNightRemarks();
+            if (StringUtils.isNotEmpty(remarks) && StringUtils.isNotEmpty(nightRemarks)){
+                erpScrLossDtlVO.setTotalRemarks("白班备注:"+remarks.concat("  夜班备注:"+nightRemarks));
+            }else if (StringUtils.isNotEmpty(remarks) && StringUtils.isEmpty(nightRemarks)){
+                erpScrLossDtlVO.setTotalRemarks("白班备注:"+remarks);
+            }else if (StringUtils.isEmpty(remarks) && StringUtils.isNotEmpty(nightRemarks)){
+                erpScrLossDtlVO.setTotalRemarks("夜班备注:"+nightRemarks);
+            }else {
+                erpScrLossDtlVO.setTotalRemarks("");
+            }
+        }
+        return Callback.success(erpScrLossDtlVO);
     }
 
     //计算报废数量+报废金额

@@ -1,6 +1,5 @@
 package com.ennova.pubinfoproduct.vo;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +14,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErpScrapLossVO {
+public class ErpScrLossDtlVO {
     private Integer id;
 
     /**
@@ -82,6 +81,11 @@ public class ErpScrapLossVO {
      * 晚班备注
      */
     private String nightRemarks;
+
+    /**
+     * 完整备注（早班+晚班）
+     */
+    private String totalRemarks;
 
     /**
     * 报废金额

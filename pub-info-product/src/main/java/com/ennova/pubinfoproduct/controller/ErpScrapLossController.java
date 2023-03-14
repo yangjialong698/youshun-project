@@ -70,7 +70,7 @@ public class ErpScrapLossController {
             @ApiImplicitParam(name = "id", value = "报废损失id", required = true)
     })
     @GetMapping("/getDetailById")
-    public Callback<ErpScrapLoss> getDetailById(Integer id){
+    public Callback<ErpScrLossDtlVO> getDetailById(Integer id){
         return erpScrapLossService.getDetailById(id);
     }
 
