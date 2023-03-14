@@ -51,6 +51,6 @@ public class GwMessageVO {
      * 备注
      */
     @ApiModelProperty(value = "备注")
-    @NotBlank(message = "备注: 不能为空!")
+    @NotBlank(message = "留言: 不能为空!")
     private String remark;
 }
