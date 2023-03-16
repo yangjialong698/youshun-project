@@ -431,6 +431,7 @@
     where move_out_no = #{mOutNo,jdbcType=VARCHAR}
     AND to_days(now())-to_days(order_date) = 2;
   </select>
+<!--  AND to_days(now())-to_days(order_date) = 2;-->
   <!--    AND to_days(now())-to_days(order_date) = 1;-->
 <!--  AND order_date BETWEEN '2023-03-04' and '2023-03-05'-->
 </mapper>

@@ -99,7 +99,9 @@ public class ErpTransferOrderService {
                 Double scrapCostCount = value.stream().mapToDouble(o -> Objects.isNull(o.getScrapCost()) ? 0 : o.getScrapCost()).sum(); // 报废金额汇总
                 scrapVO.setScrapCostCount(scrapCostCount);
                 scrapVO.setScrapNum(scrapCount);
-                scrapVO.setBadScrapRate(badScrapRate.toString());
+                BigDecimal bg = new BigDecimal(badScrapRate);
+                double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                scrapVO.setBadScrapRate(String.valueOf(f1));
                 scrapVO.setOrderDate(orderDate);
                 scrapVO.setDayPrdNum(dayPrdCount);
                 scrapVO.setBadNum(badCount);
