@@ -26,7 +26,7 @@ public class ErpInputScrapController {
     @GetMapping("/erpInputScrap")
     public Callback<List<ScrapVO>> erpinputscrap(String moveOutNo) {
 
-        return erpTransferOrderService.erpinputscrapOld(moveOutNo);
+        return erpTransferOrderService.erpinputscrapNew(moveOutNo);
     }
 
     @GetMapping("/test")

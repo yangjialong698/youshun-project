@@ -77,40 +77,40 @@ public class ErpTransferOrderService {
         return Callback.success(collect);
     }
 
-//    public Callback<List<ScrapVO>> erpinputscrapNew(String moveOutNo) {
-//        ArrayList<ScrapVO> scrapVOS = new ArrayList<>();
-//        List<String> gxList = null;
-//        if (moveOutNo.contains(",")) {
-//            gxList = Arrays.asList(moveOutNo.split(","));
-//        } else {
-//            gxList = Arrays.asList(moveOutNo);
-//        }
-//        List<ScrapPerOutno> scrapPerOutnoList = scrapPerOutnoMapper.selectByOutNos(gxList);
-//        if (CollectionUtil.isNotEmpty(scrapPerOutnoList)) {
-//            Map<String, List<ScrapPerOutno>> listMap = scrapPerOutnoList.stream().collect(Collectors.groupingBy(ScrapPerOutno::getOrderDate));
-//            listMap.entrySet().stream().map(key -> {
-//                ScrapVO scrapVO = new ScrapVO();
-//                String orderDate = key.getKey();
-//                List<ScrapPerOutno> value = key.getValue();
-//                int dayPrdCount = value.stream().mapToInt(o -> Objects.isNull(o.getDayPrdNum()) ? 0 : o.getDayPrdNum()).sum();// 日产量汇总
-//                int scrapCount = value.stream().mapToInt(o -> Objects.isNull(o.getScrapNum()) ? 0 : o.getScrapNum()).sum(); // 报废数量汇总
-//                int badCount = value.stream().mapToInt(o -> Objects.isNull(o.getBadNum()) ? 0 : o.getBadNum()).sum(); // 不良数量汇总
-//                Double badScrapRate = value.stream().mapToDouble(o -> Objects.isNull(o.getBadScrapRate()) ? 0 : Double.parseDouble(o.getBadScrapRate())).sum(); // 报废率汇总
-//                Double scrapCostCount = value.stream().mapToDouble(o -> Objects.isNull(o.getScrapCost()) ? 0 : o.getScrapCost()).sum(); // 报废金额汇总
-//                scrapVO.setScrapCostCount(scrapCostCount);
-//                scrapVO.setScrapNum(scrapCount);
-//                scrapVO.setBadScrapRate(badScrapRate.toString());
-//                scrapVO.setOrderDate(orderDate);
-//                scrapVO.setDayPrdNum(dayPrdCount);
-//                scrapVO.setBadNum(badCount);
-//                scrapVOS.add(scrapVO);
-//                return scrapVOS;
-//            }).collect(Collectors.toList());
-//            List<ScrapVO> collect = scrapVOS.stream().sorted(Comparator.comparing(ScrapVO::getOrderDate)).collect(Collectors.toList());
-//            return Callback.success(collect);
-//        }
-//        return null;
-//    }
+    public Callback<List<ScrapVO>> erpinputscrapNew(String moveOutNo) {
+        ArrayList<ScrapVO> scrapVOS = new ArrayList<>();
+        List<String> gxList = null;
+        if (moveOutNo.contains(",")) {
+            gxList = Arrays.asList(moveOutNo.split(","));
+        } else {
+            gxList = Arrays.asList(moveOutNo);
+        }
+        List<ScrapPerOutno> scrapPerOutnoList = scrapPerOutnoMapper.selectByOutNos(gxList);
+        if (CollectionUtil.isNotEmpty(scrapPerOutnoList)) {
+            Map<String, List<ScrapPerOutno>> listMap = scrapPerOutnoList.stream().collect(Collectors.groupingBy(ScrapPerOutno::getOrderDate));
+            listMap.entrySet().stream().map(key -> {
+                ScrapVO scrapVO = new ScrapVO();
+                String orderDate = key.getKey();
+                List<ScrapPerOutno> value = key.getValue();
+                int dayPrdCount = value.stream().mapToInt(o -> Objects.isNull(o.getDayPrdNum()) ? 0 : o.getDayPrdNum()).sum();// 日产量汇总
+                int scrapCount = value.stream().mapToInt(o -> Objects.isNull(o.getScrapNum()) ? 0 : o.getScrapNum()).sum(); // 报废数量汇总
+                int badCount = value.stream().mapToInt(o -> Objects.isNull(o.getBadNum()) ? 0 : o.getBadNum()).sum(); // 不良数量汇总
+                Double badScrapRate = value.stream().mapToDouble(o -> Objects.isNull(o.getBadScrapRate()) ? 0 : Double.parseDouble(o.getBadScrapRate())).sum(); // 报废率汇总
+                Double scrapCostCount = value.stream().mapToDouble(o -> Objects.isNull(o.getScrapCost()) ? 0 : o.getScrapCost()).sum(); // 报废金额汇总
+                scrapVO.setScrapCostCount(scrapCostCount);
+                scrapVO.setScrapNum(scrapCount);
+                scrapVO.setBadScrapRate(badScrapRate.toString());
+                scrapVO.setOrderDate(orderDate);
+                scrapVO.setDayPrdNum(dayPrdCount);
+                scrapVO.setBadNum(badCount);
+                scrapVOS.add(scrapVO);
+                return scrapVOS;
+            }).collect(Collectors.toList());
+            List<ScrapVO> collect = scrapVOS.stream().sorted(Comparator.comparing(ScrapVO::getOrderDate)).collect(Collectors.toList());
+            return Callback.success(collect);
+        }
+        return null;
+    }
 
     //计算近一个月的轮播图报废金额数据(手动跑一次)
 //    @Scheduled(cron = " 0 0 23 * * ?")
