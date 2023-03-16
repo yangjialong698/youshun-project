@@ -64,6 +64,22 @@ public class CgMaterialSupplyController {
         return cgMaterialSupplyService.selectMaterialSupply(page, pageSize);
     }
 
+    @ApiOperation(value = "采购供需 - 采购供需信息查看详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "采购供需ID", required = true)
+    })
+    @GetMapping("/getDetail")
+    public Callback<CgMaterialSupplyVO> getDetail(Integer id) {
+        return cgMaterialSupplyService.getDetail(id);
+    }
 
+    @ApiOperation(value = "采购供需 - 删除")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "采购供需ID", required = true)
+    })
+    @GetMapping("/delete")
+    public Callback delete(Integer id) {
+        return cgMaterialSupplyService.delete(id);
+    }
 
 }

@@ -65,7 +65,7 @@ public class CgMaterialSupplyVO {
      *
     */
     @ApiModelProperty(value = "规格")
-    @Size(max = 10,message = "规格最大长度要小于 10")
+    @Size(max = 50,message = "规格最大长度要小于 50")
     private String spec;
 
     /**

@@ -82,4 +82,28 @@ public class CgMaterialSupplyService {
         BaseVO<CgMaterialSupplyVO> baseVO = new BaseVO<>(materialSupplyVOList, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
+
+    public Callback<CgMaterialSupplyVO> getDetail(Integer id) {
+        CgMaterialSupply cgMaterialSupply = cgMaterialSupplyMapper.selectByPrimaryKey(id);
+        CgMaterialSupplyVO cgMaterialSupplyVO = BeanConvertUtils.convertTo(cgMaterialSupply, CgMaterialSupplyVO::new);
+        if (cgMaterialSupply != null) {
+            return Callback.success(cgMaterialSupplyVO);
+        } else {
+            return Callback.error("未找到采购供需信息");
+        }
+    }
+
+    public Callback delete(Integer id) {
+
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+        CgMaterialSupply cgMaterialSupply = cgMaterialSupplyMapper.selectByPrimaryKey(id);
+        if (cgMaterialSupply != null) {
+            cgMaterialSupplyMapper.deleteByPrimaryKey(cgMaterialSupply.getId());
+            return Callback.success(true);
+        }
+        return Callback.error(2, "删除失败");
+    }
+
 }
