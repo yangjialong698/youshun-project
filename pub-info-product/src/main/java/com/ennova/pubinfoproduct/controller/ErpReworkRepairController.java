@@ -66,4 +66,9 @@ public class ErpReworkRepairController {
     public Callback<String>  getPrdName(@RequestParam String productNo){
         return erpReworkRepairService.getPrdName(productNo);
     }
+    @ApiOperation(value = "根据供应商编号和时间查询返工返修信息")
+    @GetMapping("/selectBySupplierNoAndTimeList")
+    public Callback<List<ErpReworkRepair>> selectBySupplierNoAndTimeList(String supplierNo, String year, String month) {
+        return erpReworkRepairService.selectBySupplierNoAndTimeList(supplierNo,year,month);
+    }
 }

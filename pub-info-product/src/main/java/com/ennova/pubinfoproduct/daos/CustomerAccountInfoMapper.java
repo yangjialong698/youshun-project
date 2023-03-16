@@ -28,4 +28,6 @@ public interface CustomerAccountInfoMapper {
     List<CustomerAccountInfoVO> selectByMonthNumAndKey(@Param("monthNum") Integer monthNum, @Param("key") String key);
 
     List<ComplaintVO> selectByComplainTime(@Param("year") int year, @Param("month") int month);
+
+    List<CustomerAccountInfoVO> selectBySupplierNoAndTimeList(@Param("supplierNo") String supplierNo, @Param("year") String year, @Param("month") String month);
 }

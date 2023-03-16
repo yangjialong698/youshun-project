@@ -18,6 +18,7 @@ import com.ennova.pubinfoproduct.vo.SupplierEvaluationVO;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -52,6 +53,8 @@ public class SupplierEvaluationService{
             return Callback.error("文件为空");
         }
 
+        List<SupplierEvaluation> supplierInfoList = new ArrayList<>();
+
         List<SupplierEvaluation> list = new ArrayList<>();
         try{
             Sheet sheet = ExcelReaderUtil.getSheetByExcel(file);
@@ -69,9 +72,16 @@ public class SupplierEvaluationService{
             String header5 = ExcelReaderUtil.convertCellValueToString(headRow.getCell(4));
             String header6 = ExcelReaderUtil.convertCellValueToString(headRow.getCell(5));
             String header7 = ExcelReaderUtil.convertCellValueToString(headRow.getCell(6));
+            String header8 = ExcelReaderUtil.convertCellValueToString(headRow.getCell(7));
+            String header9 = ExcelReaderUtil.convertCellValueToString(headRow.getCell(8));
+            String header10 = ExcelReaderUtil.convertCellValueToString(headRow.getCell(9));
+            String header11= ExcelReaderUtil.convertCellValueToString(headRow.getCell(10));
 
-            if(!"供应商编号".equals(header1) ||!"供应商名称".equals(header2) ||!"来料不良率".equals(header3) ||!"到货及时性".equals(header4)
-             ||!"配合度".equals(header5) ||!"来料短缺量".equals(header6) ||!"评价时间".equals(header7)){
+            if(!"供应商编号".equals(header1) ||!"供应商名称".equals(header2) ||!"来料不良率".equals(header3) || !"来料不良率评价".equals(header4)
+                    ||!"到货及时性".equals(header5) ||!"到货及时性评价".equals(header6)
+                    ||!"配合度".equals(header7)  ||!"配合度评价".equals(header8)
+                    ||!"来料短缺量".equals(header9) ||!"来料短缺量评价".equals(header10)
+                    ||!"评价时间".equals(header11)){
                 return Callback.error("请导入正确的模板");
             }
             for (int i = 1; i < sheet.getLastRowNum() + 1; i++) {
@@ -83,18 +93,36 @@ public class SupplierEvaluationService{
                 String supplierNo = ExcelReaderUtil.convertCellValueToString(row.getCell(0)); // 供应商编码
                 String supplierName = ExcelReaderUtil.convertCellValueToString(row.getCell(1)); // 供应商名称
                 String incomingDefectiveRate = ExcelReaderUtil.convertCellValueToString(row.getCell(2)); // 来料不良率
-                String timelyDelivery = ExcelReaderUtil.convertCellValueToString(row.getCell(3)); // 到货及时性
-                String cooperation = ExcelReaderUtil.convertCellValueToString(row.getCell(4)); // 配合度
-                String incomingShortage = ExcelReaderUtil.convertCellValueToString(row.getCell(5)); // 来料短缺量
-                String evaluationTime = ExcelReaderUtil.convertCellValueToString(row.getCell(6)); // 评价时间
-                SupplierEvaluation supplierEvaluation = SupplierEvaluation.builder().supplierNo(supplierNo).supplierName(supplierName).incomingDefectiveRate(Integer.valueOf(incomingDefectiveRate))
-                        .timelyDelivery(Integer.valueOf(timelyDelivery)).cooperation(Integer.valueOf(cooperation)).incomingShortage(Integer.valueOf(incomingShortage)).build();
+                String incomingDefectiveRateScore = ExcelReaderUtil.convertCellValueToString(row.getCell(3)); // 来料不良率
+                String timelyDelivery = ExcelReaderUtil.convertCellValueToString(row.getCell(4)); // 到货及时性
+                String timelyDeliveryScore = ExcelReaderUtil.convertCellValueToString(row.getCell(5)); // 到货及时性
+                String cooperation = ExcelReaderUtil.convertCellValueToString(row.getCell(6)); // 配合度
+                String cooperationScore = ExcelReaderUtil.convertCellValueToString(row.getCell(7)); // 配合度
+                String incomingShortage = ExcelReaderUtil.convertCellValueToString(row.getCell(8)); // 来料短缺量
+                String incomingShortageScore = ExcelReaderUtil.convertCellValueToString(row.getCell(9)); // 来料短缺量
+                String evaluationTime = ExcelReaderUtil.convertCellValueToString(row.getCell(10)); // 评价时间
 
-                if (StringUtils.isNotBlank(evaluationTime) && DateUtil.parse(evaluationTime, "yyyy-MM-dd") != null) {
-                    DateTime paseEvaluationTime = DateUtil.parseDate(evaluationTime);
-                    supplierEvaluation.setEvaluationTime(paseEvaluationTime);
+                SupplierEvaluation supplierEvaluation = SupplierEvaluation.builder().supplierNo(supplierNo).supplierName(supplierName).incomingDefectiveRate(Integer.valueOf(incomingDefectiveRate))
+                        .incomingDefectiveRateScore(incomingDefectiveRateScore)
+                        .timelyDelivery(Integer.valueOf(timelyDelivery))
+                        .timelyDeliveryScore(timelyDeliveryScore)
+                        .cooperation(Integer.valueOf(cooperation))
+                        .cooperationScore(cooperationScore)
+                        .incomingShortage(Integer.valueOf(incomingShortage))
+                        .incomingShortageScore(incomingShortageScore)
+                        .build();
+
+                SupplierInfo supplierInfo = supplierInfoMapper.selectBySupplierNo(supplierNo);
+                if (supplierInfo == null) {
+                    supplierInfoList.add(supplierEvaluation);
+                }else{
+                    if (StringUtils.isNotBlank(evaluationTime) && DateUtil.parse(evaluationTime, "yyyy-MM-dd") != null) {
+                        DateTime paseEvaluationTime = DateUtil.parseDate(evaluationTime);
+                        supplierEvaluation.setEvaluationTime(paseEvaluationTime);
+                    }
+
+                    list.add(supplierEvaluation);
                 }
-                list.add(supplierEvaluation);
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -134,6 +162,12 @@ public class SupplierEvaluationService{
                 supplierEvaluationMapper.insertSelective(supplierEvaluation);
             }
         });
+
+
+        if (CollectionUtils.isNotEmpty(supplierInfoList)) {
+            return Callback.error("供应商编码不存在", supplierInfoList);
+        }
+
         return Callback.success();
     }
 

@@ -837,4 +837,50 @@
       and MONTH(complain_time)=#{month}
     GROUP BY supplier_no
   </select>
+<!--  @Param("supplierNo") String supplierNo, @Param("year") String year, @Param("month") String month-->
+  <select id="selectBySupplierNoAndTimeList" resultMap="BaseResultMap">
+    SELECT
+        id,
+        month_num as monthNum,
+        complain_time as complainTime,
+        business_person as businessPerson,
+        prd_item as prdItem,
+        prd_name as prdName,
+        back_person_id as backPersonId,
+        back_person_name as backPersonName,
+        defect_type as defectType,
+        non_name as nonName,
+        nature_complaint as natureComplaint,
+        ponderance,
+        problem_dis as problemDis,
+        respons_party as responsParty,
+        supplier_no as supplierNo,
+        respons_unit as responsUnit,
+        respons_person_id as responsPersonId,
+        respons_person as responsPerson,
+        bad_num as badNum,
+        problem_in as problemIn,
+        measures,
+        charge_name_id as chargeNameId,
+        charge_name as chargeName,
+        plan_fin_time as planFinTime,
+        act_fin_time as actFinTime,
+        result_confirm as resultConfirm,
+        close_info as closeInfo,
+        remarks,
+        create_time as createTime,
+        update_time as updateTime
+    FROM customer_account_info
+    <where>
+      <if test="supplierNo != null and supplierNo != ''">
+        AND supplier_no = #{supplierNo}
+      </if>
+      <if test="year != null and year != ''">
+        AND YEAR(complain_time)=#{year}
+      </if>
+      <if test="month != null and month != ''">
+        AND MONTH(complain_time)=#{month}
+      </if>
+    </where>
+  </select>
 </mapper>

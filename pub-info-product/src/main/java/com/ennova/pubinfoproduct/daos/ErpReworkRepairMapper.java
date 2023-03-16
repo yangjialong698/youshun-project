@@ -28,4 +28,6 @@ public interface ErpReworkRepairMapper {
     List<ErpReworkRepair> selectAll(@Param("key") String key);
 
     List<DefectRateVO> selectByReworkTime(@Param("year") int year, @Param("month") int month);
+
+    List<ErpReworkRepair> selectBySupplierNoAndTime(@Param("supplierNo") String supplierNo, @Param("year") String year, @Param("month") String month);
 }

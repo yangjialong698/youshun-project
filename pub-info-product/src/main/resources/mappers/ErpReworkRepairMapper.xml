@@ -362,4 +362,12 @@
         AND MONTH ( rework_time )=  #{month}
       group by supplier_no
     </select>
+  <select id="selectBySupplierNoAndTime" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from erp_rework_repair
+    where supplier_no = #{supplierNo}
+    and YEAR ( rework_time )= #{year}
+    and MONTH ( rework_time )=  #{month}
+  </select>
 </mapper>

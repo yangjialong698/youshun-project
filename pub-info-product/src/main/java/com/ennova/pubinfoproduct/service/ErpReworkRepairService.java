@@ -89,4 +89,10 @@ public class ErpReworkRepairService {
         List<SupplierInfoVO> supplierInfoVOS = supplierInfoMapper.selectBySupplier(supplier);
         return Callback.success(supplierInfoVOS);
     }
+
+    public Callback<List<ErpReworkRepair>> selectBySupplierNoAndTimeList(String supplierNo, String year, String month) {
+        List<ErpReworkRepair> list = erpReworkRepairMapper.selectBySupplierNoAndTime(supplierNo, year, month);
+        return Callback.success(list);
+    }
+
 }

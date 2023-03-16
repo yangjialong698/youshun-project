@@ -86,4 +86,10 @@ public class CustomerAccountInfoController {
                                                                       @RequestParam("key") String key) {
         return customerAccountInfoService.selectCustomerAccountInfoList(page, pageSize, monthNum, key);
     }
+
+    @ApiOperation(value = "客述台账 - 根据供应商编号和时间查询客述台账信息")
+    @GetMapping("/selectBySupplierNoAndTimeList")
+    public Callback<List<CustomerAccountInfoVO>> selectBySupplierNoAndTimeList(String supplierNo, String year, String month) {
+        return customerAccountInfoService.selectBySupplierNoAndTimeList(supplierNo, year, month);
+    }
 }

@@ -278,4 +278,9 @@ public class CustomerAccountInfoService {
         List<CusAccSupplierVO> cusAccSupplierVOS = supplierInfoMapper.selectBySupplierParty(responsParty);
         return Callback.success(cusAccSupplierVOS);
     }
+
+    public Callback<List<CustomerAccountInfoVO>> selectBySupplierNoAndTimeList(String supplierNo, String year, String month) {
+        List<CustomerAccountInfoVO> customerAccountInfoVOS = customerAccountInfoMapper.selectBySupplierNoAndTimeList(supplierNo, year, month);
+        return Callback.success(customerAccountInfoVOS);
+    }
 }

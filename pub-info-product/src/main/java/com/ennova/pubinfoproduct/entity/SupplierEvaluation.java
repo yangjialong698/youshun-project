@@ -1,6 +1,5 @@
 package com.ennova.pubinfoproduct.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
@@ -82,20 +81,41 @@ public class SupplierEvaluation {
      * 评价时间
      */
     @ApiModelProperty(value = "评价时间")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date evaluationTime;
 
     /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     /**
      * 更新时间
      */
     @ApiModelProperty(value = "更新时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
+
+    /**
+     * 来料不良率评价
+     */
+    @ApiModelProperty(value = "来料不良率评价")
+    private String incomingDefectiveRateScore;
+
+    /**
+     * 到货及时性评价
+     */
+    @ApiModelProperty(value = "到货及时性评价")
+    private String timelyDeliveryScore;
+
+    /**
+     * 配合度评价
+     */
+    @ApiModelProperty(value = "配合度评价")
+    private String cooperationScore;
+
+    /**
+     * 来料短缺量评价
+     */
+    @ApiModelProperty(value = "来料短缺量评价")
+    private String incomingShortageScore;
 }

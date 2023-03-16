@@ -28,6 +28,13 @@ public class Callback<T> {
         return this;
     }
 
+    public Callback<T> setCallback(int errCode, String message, T object) {
+        this.errCode = errCode;
+        this.message = message;
+        this.data = object;
+        return this;
+    }
+
     private static final int INT_SUCCESS = 0;
     private static final int INT_FAIL = 1;
     private static final String STRING_SUCCESS = "OK";
@@ -45,5 +52,8 @@ public class Callback<T> {
 
     public static <T> Callback<T> error(int errCode, String message) {
         return new Callback<T>().setCallback(errCode,message);
+    }
+    public static <T> Callback<T> error(String message, T data) {
+        return new Callback<T>().setCallback(INT_FAIL,message,data);
     }
 }
