@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -45,8 +46,9 @@ public class PcController {
 
     @ApiOperation(value = "Pc端接口 - 呼叫历史记录列表")
     @GetMapping("/getHistoryDateBoardList")
-    public Callback<List<ScProblemFeedbackVO>> getHistoryDateBoardList(Integer status) {
-        return pcService.getHistoryDateBoardList(status);
+    public Callback<BaseVO<ScProblemFeedbackVO>> getHistoryDateBoardList(Integer status, @RequestParam(defaultValue = "1") Integer page,
+                                                                       @RequestParam(defaultValue = "10") Integer pageSize, String startTime, String endTime) {
+        return pcService.getHistoryDateBoardList(status, page, pageSize, startTime, endTime);
     }
 
     @ApiOperation(value = "Pc端接口 - 呼叫系统数据看板和历史记录查看详情")
@@ -66,7 +68,14 @@ public class PcController {
 
     @ApiOperation(value = "Pc端接口 - 呼叫历史记录列表导出")
     @GetMapping("/exportHistoryDateBoardData")
-    public void exportHistoryDateBoardData(Integer status) {
-        pcService.exportHistoryDateBoardData(status);
+    public void exportHistoryDateBoardData(Integer status, String startTime, String endTime) {
+        pcService.exportHistoryDateBoardData(status, startTime, endTime);
     }
+
+    @ApiOperation(value = "Pc端接口 - 各车间当月呼叫问题解决状态统计")
+    @GetMapping("/getDepartmentHistoryDateList")
+    public Callback<List<ScProblemFeedbackVO>> getDepartmentHistoryDateList() {
+        return pcService.getDepartmentHistoryDateList();
+    }
+
 }

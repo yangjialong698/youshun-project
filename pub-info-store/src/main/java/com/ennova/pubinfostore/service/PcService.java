@@ -15,6 +15,8 @@ import com.ennova.pubinfostore.entity.ScProblemFeedback;
 import com.ennova.pubinfostore.entity.ScProblemFile;
 import com.ennova.pubinfostore.utils.ProblemStatusEnum;
 import com.ennova.pubinfostore.vo.ScProblemFeedbackVO;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -25,10 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * @author yangjialong
@@ -122,25 +123,26 @@ public class PcService {
         return list;
     }
 
-    public Callback<List<ScProblemFeedbackVO>> getHistoryDateBoardList(Integer status) {
-
-        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectHistoryDateBoardList(status);
+    public Callback<BaseVO<ScProblemFeedbackVO>> getHistoryDateBoardList(Integer status, Integer page, Integer pageSize, String startTime, String endTime) {
+        Page<ScProblemFeedback> startPage = PageHelper.startPage(page, pageSize);
+        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectHistoryDateBoardList(status, startTime, endTime);
         List<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(scProblemFeedbacks)){
+        if (CollectionUtils.isNotEmpty(scProblemFeedbacks)) {
             for (ScProblemFeedback scProblemFeedback : scProblemFeedbacks) {
                 ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
-                BeanUtils.copyProperties(scProblemFeedback,scProblemFeedbackVO);
-                if(!scProblemFeedback.getBackStatus().equals("1")){
+                BeanUtils.copyProperties(scProblemFeedback, scProblemFeedbackVO);
+                if (!scProblemFeedback.getBackStatus().equals("1")) {
                     long betweenHour = DateUtil.between(scProblemFeedback.getCreateTime(), new Date(), DateUnit.HOUR);
                     scProblemFeedbackVO.setGqTime(betweenHour);
-                }else {
+                } else {
                     long betweenHour = DateUtil.between(scProblemFeedback.getCreateTime(), scProblemFeedback.getSolveTime(), DateUnit.HOUR);
                     scProblemFeedbackVO.setGqTime(betweenHour);
                 }
                 scProblemFeedbackVOS.add(scProblemFeedbackVO);
             }
         }
-        return Callback.success(scProblemFeedbackVOS);
+        BaseVO<ScProblemFeedbackVO> baseVO = new BaseVO<>(scProblemFeedbackVOS, new PageUtil(pageSize, (int) startPage.getTotal(), page));
+        return Callback.success(baseVO);
     }
 
     public Callback<ScProblemFeedbackVO> getHistoryDateBoardDetail(Integer id) {
@@ -170,8 +172,8 @@ public class PcService {
         return Callback.success(myProblemsStatus);
     }
 
-    public void exportHistoryDateBoardData(Integer status) {
-        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectHistoryDateBoardList(status);
+    public void exportHistoryDateBoardData(Integer status, String startTime, String endTime) {
+        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectHistoryDateBoardByDateList(status, startTime, endTime);
         List<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(scProblemFeedbacks)) {
             for (ScProblemFeedback scProblemFeedback : scProblemFeedbacks) {
@@ -217,5 +219,25 @@ public class PcService {
             list.add(rowList);
         }
         ExcelWriteUtil.createHeader(response, titleStr, titleList, list);
+    }
+
+    public Callback<List<ScProblemFeedbackVO>> getDepartmentHistoryDateList() {
+        List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.getDepartmentHistoryDateList();
+        List<ScProblemFeedbackVO> list = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(scProblemFeedbacks)) {
+            Map<String, List<ScProblemFeedback>> collectMap = scProblemFeedbacks.stream().collect(Collectors.groupingBy(scProblemFeedback -> scProblemFeedback.getBackDepartment()));
+            collectMap.entrySet().stream().map(v -> {
+                ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
+                List<ScProblemFeedback> value = v.getValue();
+                scProblemFeedbackVO.setBackDepartment(v.getKey());
+                scProblemFeedbackVO.setUnDoneProblem(value.stream().map(o -> o.getBackStatus().equals(0)).count());
+                scProblemFeedbackVO.setDoneProblem(value.stream().map(o -> o.getBackStatus().equals(1)).count());
+                scProblemFeedbackVO.setDoingProblem(value.stream().map(o -> o.getBackStatus().equals(2)).count());
+                scProblemFeedbackVO.setToDoProblem(value.stream().map(o -> o.getBackStatus().equals(3)).count());
+                list.add(scProblemFeedbackVO);
+                return list;
+            }).collect(Collectors.toList());
+        }
+        return Callback.success(list);
     }
 }

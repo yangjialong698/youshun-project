@@ -8,14 +8,11 @@ import com.ennova.pubinfostore.entity.TDeptDing;
 import com.ennova.pubinfostore.entity.TUserDing;
 import com.ennova.pubinfostore.vo.TDeptDingVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PrdUserManageService {
@@ -93,7 +90,7 @@ public class PrdUserManageService {
 
     public Callback<List<TUserDing>> queryNameByManageIdOrDeptId(String manageId, String deptName, String deptId) {
         ArrayList<TUserDing> tUserDingList = new ArrayList<TUserDing>() ;
-        if (StringUtils.isNotEmpty(deptName) && StringUtils.isNotEmpty(deptId) && deptName.contains("设备") || deptName.contains("工艺部")){
+        if (StringUtils.isNotEmpty(deptName) && StringUtils.isNotEmpty(deptId) && deptName.contains("设备") || deptName.contains("工艺部") || deptName.contains("机加")){
             List<TUserDing> tUserDingList1 = tUserDingMapper.selectByDepartment(deptId);
             if (CollectionUtil.isNotEmpty(tUserDingList1)){
                 return Callback.success(tUserDingList1);

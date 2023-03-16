@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -97,7 +96,6 @@ public class ScProblemFeedbackVO {
      * 责任人
      */
     @ApiModelProperty(value = "责任人")
-    @NotBlank
     private String dutyPerson;
 
     /**

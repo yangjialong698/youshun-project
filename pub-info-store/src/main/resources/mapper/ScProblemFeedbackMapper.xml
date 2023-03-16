@@ -470,6 +470,38 @@
         <if test="status != null">
             and back_status = #{status}
         </if>
+        <if test="startTime!=null and startTime!=''">
+            AND create_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND create_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="selectHistoryDateBoardByDateList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sc_problem_feedback
+        where 1 = 1
+        <if test="status != null">
+            and back_status = #{status}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            AND create_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND create_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="getDepartmentHistoryDateList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sc_problem_feedback
+        where 1 = 1
+        AND date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m')
         order by create_time desc
     </select>
 </mapper>
