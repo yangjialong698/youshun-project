@@ -620,13 +620,14 @@ public class AppService {
         int index = (page - 1) * pageSize;
         BaseVO<ScProblemFeedbackVO> baseVO;
         ArrayList<ScProblemFeedbackVO> scProblemFeedbackVOS = new ArrayList<>();
+        List<ScProblemFeedback> scProblemFeedbackCount = scProblemFeedbackMapper.selectAllByBackStatusOrDutyPerson(searchKey, null);
+        if (CollectionUtil.isNotEmpty(scProblemFeedbackCount)){
+        long totalProblem = scProblemFeedbackCount.size();
+        long toDoProblem = scProblemFeedbackCount.stream().filter(s -> s.getBackStatus().equals("3")).count();
+        long doneProblem = scProblemFeedbackCount.stream().filter(s -> s.getBackStatus().equals("1")).count();
+        long doingProblem = scProblemFeedbackCount.stream().filter(s -> s.getBackStatus().equals("2")).count();
+        long unDoneProblem = scProblemFeedbackCount.stream().filter(s -> s.getBackStatus().equals("0")).count();
         List<ScProblemFeedback> scProblemFeedbacks = scProblemFeedbackMapper.selectAllByBackStatusOrDutyPerson(searchKey, status);
-        if (CollectionUtil.isNotEmpty(scProblemFeedbacks)){
-        long totalProblem = scProblemFeedbacks.size();
-        long toDoProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("3")).count();
-        long doneProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("1")).count();
-        long doingProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("2")).count();
-        long unDoneProblem = scProblemFeedbacks.stream().filter(s -> s.getBackStatus().equals("0")).count();
         scProblemFeedbacks.forEach(e->{
                 ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
                 BeanUtils.copyProperties(e,scProblemFeedbackVO);
