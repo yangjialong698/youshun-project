@@ -226,17 +226,16 @@ public class PcService {
         List<ScProblemFeedbackVO> list = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(scProblemFeedbacks)) {
             Map<String, List<ScProblemFeedback>> collectMap = scProblemFeedbacks.stream().collect(Collectors.groupingBy(scProblemFeedback -> scProblemFeedback.getBackDepartment()));
-            collectMap.entrySet().stream().map(v -> {
+            for (Map.Entry<String, List<ScProblemFeedback>> stringListEntry : collectMap.entrySet()) {
                 ScProblemFeedbackVO scProblemFeedbackVO = new ScProblemFeedbackVO();
-                List<ScProblemFeedback> value = v.getValue();
-                scProblemFeedbackVO.setBackDepartment(v.getKey());
-                scProblemFeedbackVO.setUnDoneProblem(value.stream().map(o -> o.getBackStatus().equals(0)).count());
-                scProblemFeedbackVO.setDoneProblem(value.stream().map(o -> o.getBackStatus().equals(1)).count());
-                scProblemFeedbackVO.setDoingProblem(value.stream().map(o -> o.getBackStatus().equals(2)).count());
-                scProblemFeedbackVO.setToDoProblem(value.stream().map(o -> o.getBackStatus().equals(3)).count());
+                List<ScProblemFeedback> value = stringListEntry.getValue();
+                scProblemFeedbackVO.setBackDepartment(stringListEntry.getKey());
+                scProblemFeedbackVO.setUnDoneProblem(value.stream().filter(scProblemFeedback -> scProblemFeedback.getBackStatus().equals("0")).count());
+                scProblemFeedbackVO.setDoneProblem(value.stream().filter(scProblemFeedback -> scProblemFeedback.getBackStatus().equals("1")).count());
+                scProblemFeedbackVO.setDoingProblem(value.stream().filter(scProblemFeedback -> scProblemFeedback.getBackStatus().equals("2")).count());
+                scProblemFeedbackVO.setToDoProblem(value.stream().filter(scProblemFeedback -> scProblemFeedback.getBackStatus().equals("3")).count());
                 list.add(scProblemFeedbackVO);
-                return list;
-            }).collect(Collectors.toList());
+            }
         }
         return Callback.success(list);
     }
