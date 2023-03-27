@@ -1,0 +1,82 @@
+package com.ennova.pubinfopurchase.controller;
+
+import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfopurchase.dto.BadDisposalDTO;
+import com.ennova.pubinfopurchase.dto.BadItemDTO;
+import com.ennova.pubinfopurchase.dto.PrdInfoDTO;
+import com.ennova.pubinfopurchase.service.OaRejectsDetailService;
+import com.ennova.pubinfopurchase.vo.FileVO;
+import com.ennova.pubinfopurchase.vo.OaRejectsDetailVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+/**
+ * @author yangjialong
+ * @version 1.0
+ * @date 2023/3/17
+ */
+@Slf4j
+@Api(tags = "公共信息平台-oa不合格品处理单明细")
+@RestController
+@RequiredArgsConstructor(onConstructor = @_(@Autowired))
+@RequestMapping("/rejectsDetail")
+public class OaRejectsDetailController {
+
+    private final OaRejectsDetailService oaRejectsDetailService;
+
+    @ApiOperation(value = "根据工单号查询零件号和零件名称")
+    @GetMapping("/getPrdInfo")
+    public Callback<List<PrdInfoDTO>> getPrdInfo(String workOrderNo){
+        return oaRejectsDetailService.getPrdInfo(workOrderNo);
+    }
+
+    @ApiOperation(value = "获取不良项目")
+    @GetMapping("/getBadItem")
+    public Callback<List<BadItemDTO>> getBadItem(){
+        return oaRejectsDetailService.getBadItem();
+    }
+
+    @ApiOperation(value = "获取不良处置")
+    @GetMapping("/getBadDisposal")
+    public Callback<List<BadDisposalDTO>> getBadDisposal(){
+        return oaRejectsDetailService.getBadDisposal();
+    }
+
+    @ApiOperation(value = "oa不合格品处理单 - 新增不良品明细信息")
+    @PostMapping("/insertRejectsDetail")
+    public Callback insertRejectsDetail(@RequestBody @Validated OaRejectsDetailVO oaRejectsDetailVO) {
+        return oaRejectsDetailService.insertRejectsDetail(oaRejectsDetailVO);
+    }
+
+    @ApiOperation(value = "oa不合格品处理单 - 不良品明细信息列表")
+    @GetMapping("/selectRejectsDetail")
+    public Callback<List<OaRejectsDetailVO>> selectRejectsDetail() {
+        return oaRejectsDetailService.selectRejectsDetail();
+    }
+
+    @ApiOperation(value = "oa不合格品处理单 - 不良品删除")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "不良品明细ID", required = true)
+    })
+    @GetMapping("/deleteRejectsDetail")
+    public Callback deleteRejectsDetail(Integer id) {
+        return oaRejectsDetailService.deleteRejectsDetail(id);
+    }
+
+    @ApiOperation(value = "oa不合格品处理单 -  不良品明细文件上传")
+    @PostMapping("/upload")
+    public Callback<FileVO> upload(MultipartFile file) {
+        return oaRejectsDetailService.uploadFile(file);
+    }
+
+}

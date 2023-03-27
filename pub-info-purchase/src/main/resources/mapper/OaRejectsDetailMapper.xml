@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfopurchase.dao.OaRejectsDetailMapper">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfopurchase.entity.OaRejectsDetail">
+        <!--@mbg.generated-->
+        <!--@Table project.oa_rejects_detail-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="rejects_id" jdbcType="INTEGER" property="rejectsId"/>
+        <result column="work_class" jdbcType="VARCHAR" property="workClass"/>
+        <result column="work_number" jdbcType="VARCHAR" property="workNumber"/>
+        <result column="prd_no" jdbcType="VARCHAR" property="prdNo"/>
+        <result column="prd_name" jdbcType="VARCHAR" property="prdName"/>
+        <result column="process" jdbcType="VARCHAR" property="process"/>
+        <result column="machine_number" jdbcType="VARCHAR" property="machineNumber"/>
+        <result column="bad_source" jdbcType="VARCHAR" property="badSource"/>
+        <result column="bad_item" jdbcType="VARCHAR" property="badItem"/>
+        <result column="bad_num" jdbcType="INTEGER" property="badNum"/>
+        <result column="bad_description" jdbcType="VARCHAR" property="badDescription"/>
+        <result column="duty_department" jdbcType="VARCHAR" property="dutyDepartment"/>
+        <result column="duty_person" jdbcType="VARCHAR" property="dutyPerson"/>
+        <result column="inspector" jdbcType="VARCHAR" property="inspector"/>
+        <result column="bad_disposal" jdbcType="VARCHAR" property="badDisposal"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        rejects_id,
+        work_class,
+        work_number,
+        prd_no,
+        prd_name,
+        `process`,
+        machine_number,
+        bad_source,
+        bad_item,
+        bad_num,
+        bad_description,
+        duty_department,
+        duty_person,
+        inspector,
+        bad_disposal,
+        remark,
+        create_time,
+        del_flag
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from project.oa_rejects_detail
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        update project.oa_rejects_detail
+        set del_flag = 1
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.ennova.pubinfopurchase.entity.OaRejectsDetail" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into project.oa_rejects_detail (rejects_id, work_class, work_number,
+                                               prd_no, prd_name, `process`,
+                                               machine_number, bad_source, bad_item,
+                                               bad_num, bad_description, duty_department,
+                                               duty_person, inspector, bad_disposal,
+                                               remark, create_time, del_flag)
+        values (#{rejectsId,jdbcType=INTEGER}, #{workClass,jdbcType=VARCHAR}, #{workNumber,jdbcType=VARCHAR},
+                #{prdNo,jdbcType=VARCHAR}, #{prdName,jdbcType=VARCHAR}, #{process,jdbcType=VARCHAR},
+                #{machineNumber,jdbcType=VARCHAR}, #{badSource,jdbcType=VARCHAR}, #{badItem,jdbcType=VARCHAR},
+                #{badNum,jdbcType=INTEGER}, #{badDescription,jdbcType=VARCHAR}, #{dutyDepartment,jdbcType=VARCHAR},
+                #{dutyPerson,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, #{badDisposal,jdbcType=VARCHAR},
+                #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.ennova.pubinfopurchase.entity.OaRejectsDetail" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into project.oa_rejects_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rejectsId != null">
+                rejects_id,
+            </if>
+            <if test="workClass != null">
+                work_class,
+            </if>
+            <if test="workNumber != null">
+                work_number,
+            </if>
+            <if test="prdNo != null">
+                prd_no,
+            </if>
+            <if test="prdName != null">
+                prd_name,
+            </if>
+            <if test="process != null">
+                `process`,
+            </if>
+            <if test="machineNumber != null">
+                machine_number,
+            </if>
+            <if test="badSource != null">
+                bad_source,
+            </if>
+            <if test="badItem != null">
+                bad_item,
+            </if>
+            <if test="badNum != null">
+                bad_num,
+            </if>
+            <if test="badDescription != null">
+                bad_description,
+            </if>
+            <if test="dutyDepartment != null">
+                duty_department,
+            </if>
+            <if test="dutyPerson != null">
+                duty_person,
+            </if>
+            <if test="inspector != null">
+                inspector,
+            </if>
+            <if test="badDisposal != null">
+                bad_disposal,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rejectsId != null">
+                #{rejectsId,jdbcType=INTEGER},
+            </if>
+            <if test="workClass != null">
+                #{workClass,jdbcType=VARCHAR},
+            </if>
+            <if test="workNumber != null">
+                #{workNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="prdNo != null">
+                #{prdNo,jdbcType=VARCHAR},
+            </if>
+            <if test="prdName != null">
+                #{prdName,jdbcType=VARCHAR},
+            </if>
+            <if test="process != null">
+                #{process,jdbcType=VARCHAR},
+            </if>
+            <if test="machineNumber != null">
+                #{machineNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="badSource != null">
+                #{badSource,jdbcType=VARCHAR},
+            </if>
+            <if test="badItem != null">
+                #{badItem,jdbcType=VARCHAR},
+            </if>
+            <if test="badNum != null">
+                #{badNum,jdbcType=INTEGER},
+            </if>
+            <if test="badDescription != null">
+                #{badDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="dutyDepartment != null">
+                #{dutyDepartment,jdbcType=VARCHAR},
+            </if>
+            <if test="dutyPerson != null">
+                #{dutyPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="inspector != null">
+                #{inspector,jdbcType=VARCHAR},
+            </if>
+            <if test="badDisposal != null">
+                #{badDisposal,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfopurchase.entity.OaRejectsDetail">
+        <!--@mbg.generated-->
+        update project.oa_rejects_detail
+        <set>
+            <if test="rejectsId != null">
+                rejects_id = #{rejectsId,jdbcType=INTEGER},
+            </if>
+            <if test="workClass != null">
+                work_class = #{workClass,jdbcType=VARCHAR},
+            </if>
+            <if test="workNumber != null">
+                work_number = #{workNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="prdNo != null">
+                prd_no = #{prdNo,jdbcType=VARCHAR},
+            </if>
+            <if test="prdName != null">
+                prd_name = #{prdName,jdbcType=VARCHAR},
+            </if>
+            <if test="process != null">
+                `process` = #{process,jdbcType=VARCHAR},
+            </if>
+            <if test="machineNumber != null">
+                machine_number = #{machineNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="badSource != null">
+                bad_source = #{badSource,jdbcType=VARCHAR},
+            </if>
+            <if test="badItem != null">
+                bad_item = #{badItem,jdbcType=VARCHAR},
+            </if>
+            <if test="badNum != null">
+                bad_num = #{badNum,jdbcType=INTEGER},
+            </if>
+            <if test="badDescription != null">
+                bad_description = #{badDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="dutyDepartment != null">
+                duty_department = #{dutyDepartment,jdbcType=VARCHAR},
+            </if>
+            <if test="dutyPerson != null">
+                duty_person = #{dutyPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="inspector != null">
+                inspector = #{inspector,jdbcType=VARCHAR},
+            </if>
+            <if test="badDisposal != null">
+                bad_disposal = #{badDisposal,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfopurchase.entity.OaRejectsDetail">
+        <!--@mbg.generated-->
+        update project.oa_rejects_detail
+        set rejects_id      = #{rejectsId,jdbcType=INTEGER},
+            work_class      = #{workClass,jdbcType=VARCHAR},
+            work_number     = #{workNumber,jdbcType=VARCHAR},
+            prd_no          = #{prdNo,jdbcType=VARCHAR},
+            prd_name        = #{prdName,jdbcType=VARCHAR},
+            `process`       = #{process,jdbcType=VARCHAR},
+            machine_number  = #{machineNumber,jdbcType=VARCHAR},
+            bad_source      = #{badSource,jdbcType=VARCHAR},
+            bad_item        = #{badItem,jdbcType=VARCHAR},
+            bad_num         = #{badNum,jdbcType=INTEGER},
+            bad_description = #{badDescription,jdbcType=VARCHAR},
+            duty_department = #{dutyDepartment,jdbcType=VARCHAR},
+            duty_person     = #{dutyPerson,jdbcType=VARCHAR},
+            inspector       = #{inspector,jdbcType=VARCHAR},
+            bad_disposal    = #{badDisposal,jdbcType=VARCHAR},
+            remark          = #{remark,jdbcType=VARCHAR},
+            create_time     = #{createTime,jdbcType=TIMESTAMP},
+            del_flag        = #{delFlag,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update project.oa_rejects_detail
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="rejects_id = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.rejectsId,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="work_class = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.workClass,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="work_number = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.workNumber,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="prd_no = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.prdNo,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="prd_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.prdName,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="`process` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.process,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="machine_number = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.machineNumber,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="bad_source = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.badSource,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="bad_item = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.badItem,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="bad_num = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.badNum,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="bad_description = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.badDescription,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="duty_department = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.dutyDepartment,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="duty_person = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.dutyPerson,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="inspector = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.inspector,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="bad_disposal = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.badDisposal,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="remark = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.remark,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=INTEGER} then #{item.delFlag,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into project.oa_rejects_detail
+        (rejects_id, work_class, work_number, prd_no, prd_name, `process`, machine_number,
+         bad_source, bad_item, bad_num, bad_description, duty_department, duty_person, inspector,
+         bad_disposal, remark, create_time, del_flag)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.rejectsId,jdbcType=INTEGER}, #{item.workClass,jdbcType=VARCHAR},
+             #{item.workNumber,jdbcType=VARCHAR},
+             #{item.prdNo,jdbcType=VARCHAR}, #{item.prdName,jdbcType=VARCHAR}, #{item.process,jdbcType=VARCHAR},
+             #{item.machineNumber,jdbcType=VARCHAR}, #{item.badSource,jdbcType=VARCHAR},
+             #{item.badItem,jdbcType=VARCHAR},
+             #{item.badNum,jdbcType=INTEGER}, #{item.badDescription,jdbcType=VARCHAR},
+             #{item.dutyDepartment,jdbcType=VARCHAR},
+             #{item.dutyPerson,jdbcType=VARCHAR}, #{item.inspector,jdbcType=VARCHAR},
+             #{item.badDisposal,jdbcType=VARCHAR},
+             #{item.remark,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.delFlag,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <select id="selectByWorkOrderNo" resultType="com.ennova.pubinfopurchase.dto.PrdInfoDTO">
+        select work_order_no as workOrderNo,
+               prd_no        as prdNo,
+               prd_name      as prdName
+        from erp_qualified_rate
+        <where>
+            <if test="workOrderNo != null and workOrderNo != ''">
+                work_order_no like concat('%', #{workOrderNo}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBadItemInfo" resultType="com.ennova.pubinfopurchase.dto.BadItemDTO">
+        select bad_item as badItem
+        from oa_bad_item
+        where del_flag = 0
+    </select>
+
+    <select id="selectBadDisposalInfo" resultType="com.ennova.pubinfopurchase.dto.BadDisposalDTO">
+        select bad_disposal as badDisposal
+        from oa_bad_disposal
+        where del_flag = 0
+    </select>
+
+    <select id="selectRejectsDetail" resultType="com.ennova.pubinfopurchase.vo.OaRejectsDetailVO">
+        select id,
+               rejects_id as rejectId,
+               work_class as workClass,
+               work_number as workNumber,
+               prd_no as prdNo,
+               prd_name as prdName,
+               `process`,
+               machine_number as machineNumber,
+               bad_source as badSource,
+               bad_item as badItem,
+               bad_num as badNum,
+               bad_description as badDescription,
+               duty_department as dutyDepartment,
+               duty_person as dutyPerson,
+               inspector,
+               bad_disposal as badDisposal,
+               remark,
+               create_time as createTime,
+               del_flag as delFlag
+        from oa_rejects_detail
+        where del_flag = 0
+    </select>
+
+    <select id="selectByRejectsId" resultType="com.ennova.pubinfopurchase.vo.OaRejectsDetailVO">
+        select id,
+               rejects_id as rejectsId,
+               work_class as workClass,
+               work_number as workNumber,
+               prd_no as prdNo,
+               prd_name as prdName,
+               `process`,
+               machine_number as machineNumber,
+               bad_source as badSource,
+               bad_item as badItem,
+               bad_num as badNum,
+               bad_description as badDescription,
+               duty_department as dutyDepartment,
+               duty_person as dutyPerson,
+               inspector,
+               bad_disposal as badDisposal,
+               remark,
+               create_time as createTime,
+               del_flag as delFlag
+        from oa_rejects_detail
+        where del_flag = 0 and rejects_id=#{rejectsId,jdbcType=INTEGER}
+    </select>
+</mapper>
