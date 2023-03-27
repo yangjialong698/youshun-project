@@ -566,6 +566,14 @@ public class AppService {
         scProblemFeedback.setBackStatus("2");
         scProblemFeedbackMapper.updateByPrimaryKeySelective(scProblemFeedback);
         Integer id = scProblemFeedback.getId();
+        List<ScProblemFile> scProblemFiles = scProblemFileMapper.selectFilesByProblemIds(id);
+        if (CollectionUtil.isNotEmpty(scProblemFiles)){
+            for (ScProblemFile scProblemFile : scProblemFiles) {
+                if (ObjectUtil.isNotEmpty(scProblemFile)){
+                    scProblemFileMapper.deleteByPrimaryKey(scProblemFile.getId());
+                }
+            }
+        }
         if (CollectionUtil.isNotEmpty(scProblemFeedbackVO.getScProblemFileId())) {
             for (Integer scProblemFileId : scProblemFeedbackVO.getScProblemFileId()) {
                 ScProblemFile scProblemFile = scProblemFileMapper.selectByPrimaryKey(scProblemFileId);
