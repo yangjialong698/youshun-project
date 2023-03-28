@@ -30,4 +30,8 @@ public interface ScrapPerOutnoMapper {
     int batchInsert(@Param("list") List<ScrapPerOutno> list);
 
     List<ScrapPerOutno> selectByOutNos(@Param("list")List<String> gxList);
+
+    List<ScrapPerOutno> selectByMoveOutNoAndOrderDate(@Param("moveOutNo")String moveOutNo,@Param("orderDate")String orderDate);
+
+
 }

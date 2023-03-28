@@ -119,8 +119,11 @@ public class ErpTransferOrderService {
     @Scheduled(cron = " 0 0 1 * * ? ")
     public void calMonthErpScrapInfo() {
         List<String> outNoList = Arrays.asList("1003","1018","1019", "1008", "1009", "1010");
-        ArrayList<ScrapPerOutno> scrapVOArrayList = new ArrayList<>();
+
+        ArrayList<ScrapPerOutno> scrapPerOutnosUp = new ArrayList<>();
+        ArrayList<ScrapPerOutno> scrapPerOutnosIn = new ArrayList<>();
         for (String moveOutNo : outNoList) {
+            ArrayList<ScrapPerOutno> scrapVOArrayList = new ArrayList<>();
             //1.通过单类工作中心查询近一个月的转移单数据
             //List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectByMoveOutNo(moveOutNo);
             List<ErpTransferOrder> erpTransferOrders = erpTransferOrderMapper.selectByMoveOutNoByDay(moveOutNo);
@@ -197,7 +200,25 @@ public class ErpTransferOrderService {
                     return scrapVOArrayList;
                 }).collect(Collectors.toList());
             }
+            if (CollectionUtil.isNotEmpty(scrapVOArrayList)){
+                scrapVOArrayList.forEach(scrapPerOutno-> {
+                    String mOutNo = scrapPerOutno.getMoveOutNo();
+                    String orderDate = scrapPerOutno.getOrderDate();
+                    List<ScrapPerOutno> scrapPerOutnos = scrapPerOutnoMapper.selectByMoveOutNoAndOrderDate(mOutNo, orderDate);
+                    if (CollectionUtil.isNotEmpty(scrapPerOutnos)){
+                        scrapPerOutno.setId(scrapPerOutnos.get(0).getId());
+                        scrapPerOutnosUp.add(scrapPerOutno);
+                    }else {
+                        scrapPerOutnosIn.add(scrapPerOutno);
+                    }
+                });
+            }
         }
-        scrapPerOutnoMapper.batchInsert(scrapVOArrayList);
+        if (CollectionUtil.isNotEmpty(scrapPerOutnosUp)){
+            scrapPerOutnoMapper.updateBatch(scrapPerOutnosUp);
+        }
+        if (CollectionUtil.isNotEmpty(scrapPerOutnosIn)){
+            scrapPerOutnoMapper.batchInsert(scrapPerOutnosIn);
+        }
     }
 }

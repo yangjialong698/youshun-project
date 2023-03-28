@@ -514,8 +514,11 @@
     select
     <include refid="Base_Column_List" />
     from erp_scrap_loss
-    where scrap_num is null AND Scrap_cost is null AND del_flag != 1
+    where  del_flag != 1
+    AND DATEDIFF(order_date,NOW())&lt;-1
+    AND DATEDIFF(order_date,NOW())&gt;-6
   </select>
+<!--  where scrap_num is null AND Scrap_cost is null AND del_flag != 1-->
 
   <select id="selByOmpNo" resultMap="BaseResultMap">
     select

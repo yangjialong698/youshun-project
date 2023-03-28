@@ -429,9 +429,11 @@
     <include refid="Base_Column_List" />
     from erp_transfer_order
     where move_out_no = #{mOutNo,jdbcType=VARCHAR}
-    AND to_days(now())-to_days(order_date) = 2;
+    AND DATEDIFF(order_date,NOW())&lt;-1
+    AND DATEDIFF(order_date,NOW())&gt;-6
   </select>
 <!--  AND to_days(now())-to_days(order_date) = 2;-->
   <!--    AND to_days(now())-to_days(order_date) = 1;-->
 <!--  AND order_date BETWEEN '2023-03-04' and '2023-03-05'-->
+<!--  AND DATEDIFF(order_date,NOW())<-1 AND DATEDIFF(order_date,NOW())>-6-->
 </mapper>

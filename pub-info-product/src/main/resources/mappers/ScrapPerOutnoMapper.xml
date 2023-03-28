@@ -381,4 +381,11 @@
     </foreach>
     AND DATE_SUB(CURDATE(),INTERVAL 30 DAY) &lt;= DATE(order_date)
   </select>
+
+  <select id="selectByMoveOutNoAndOrderDate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from scrap_per_outno
+    where move_out_no=#{moveOutNo,jdbcType=VARCHAR} and order_date=#{orderDate,jdbcType=VARCHAR}
+  </select>
 </mapper>
