@@ -271,7 +271,33 @@
             <if test="rejectsId != null">
                 and rejects_id = #{rejectsId,jdbcType=INTEGER}
             </if>
+            <if test="setpStaus != null">
+                and setp_staus = #{setpStaus,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByRejectsIdAndOpinionUserId" resultType="com.ennova.pubinfopurchase.vo.OaRejectsOpinionVO">
+        select id,
+        rejects_id      as rejectsId,
+        opinion_user_id as opinionUserId,
+        opinion_user    as opinionUser,
+        setp_staus      as setpStaus,
+        opinion_content as opinionContent,
+        create_time     as createTime,
+        publish_time    as publishTime,
+        overtime,
+        del_flag as delFlag
+        from oa_rejects_opinion
+        <where>
+            del_flag = 0
             <if test="rejectsId != null">
+                and rejects_id = #{rejectsId,jdbcType=INTEGER}
+            </if>
+            <if test="opinionUserId != null">
+                and opinion_user_id = #{opinionUserId,jdbcType=INTEGER}
+            </if>
+            <if test="setpStaus != null">
                 and setp_staus = #{setpStaus,jdbcType=INTEGER}
             </if>
         </where>

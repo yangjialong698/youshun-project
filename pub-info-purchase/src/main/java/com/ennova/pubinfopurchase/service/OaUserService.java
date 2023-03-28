@@ -82,7 +82,7 @@ public class OaUserService {
 
     public Callback<List<TUserDing>> queryNameByManageIdOrDeptId(String manageId, String deptName, String deptId) {
         ArrayList<TUserDing> tUserDingList = new ArrayList<TUserDing>() ;
-        if (StringUtils.isNotEmpty(deptName) && StringUtils.isNotEmpty(deptId) && deptName.contains("设备") || deptName.contains("工艺部") || deptName.contains("机加")){
+        if (StringUtils.isNotEmpty(deptName) && StringUtils.isNotEmpty(deptId) && deptName.contains("设备") || deptName.contains("工艺部") || deptName.contains("机加") || deptName.contains("信息技术平台")){
             List<TUserDing> tUserDingList1 = tUserDingMapper.selectByDepartment(deptId);
             if (CollectionUtil.isNotEmpty(tUserDingList1)){
                 return Callback.success(tUserDingList1);

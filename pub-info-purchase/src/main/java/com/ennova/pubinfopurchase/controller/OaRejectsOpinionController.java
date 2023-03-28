@@ -1,6 +1,7 @@
 package com.ennova.pubinfopurchase.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfopurchase.dto.OaRejectsOpinionDTO;
 import com.ennova.pubinfopurchase.service.OaRejectsOpinionService;
 import com.ennova.pubinfopurchase.vo.OaRejectsOpinionVO;
 import io.swagger.annotations.Api;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * (project.oa_rejects_opinion)表控制层
@@ -32,7 +31,7 @@ public class OaRejectsOpinionController {
 
     @ApiOperation(value = "oa不合格品处理单 - 新增会签人明细信息")
     @PostMapping("/insertRejectsOpinion")
-    public Callback insertRejectsOpinion(@RequestBody @Validated List<OaRejectsOpinionVO> oaRejectsOpinionVOS) {
+    public Callback insertRejectsOpinion(@RequestBody @Validated OaRejectsOpinionDTO oaRejectsOpinionVOS) {
         return oaRejectsOpinionService.insertRejectsOpinion(oaRejectsOpinionVOS);
     }
 

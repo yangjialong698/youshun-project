@@ -344,10 +344,7 @@
                 and schedule like CONCAT('%', trim (#{schedule}), '%')
             </if>
             <if test="headline != null and headline != ''">
-                and headline like CONCAT('%', trim (#{headline}), '%')
-            </if>
-            <if test="serialNumber != null and serialNumber != ''">
-                and serial_number like CONCAT('%', trim (#{serialNumber}), '%')
+                and headline like CONCAT('%', trim (#{headline}), '%') or headline like CONCAT('%', trim (#{serialNumber}), '%')
             </if>
             <if test="startTime!=null and startTime!=''">
                 AND documentation_date &gt;= #{startTime,jdbcType=TIMESTAMP}
@@ -356,5 +353,6 @@
                 AND documentation_date &lt;= #{endTime,jdbcType=TIMESTAMP}
             </if>
         </where>
+        order by serial_number desc
     </select>
 </mapper>

@@ -337,6 +337,7 @@
     <include refid="Base_Column_List"/>
     from t_user
     <where>
+      is_delete != 1
       <if test="department != null">
         and department=#{department,jdbcType=VARCHAR}
       </if>

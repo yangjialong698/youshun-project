@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author yangjialong
@@ -66,7 +67,8 @@ public class OaRejectsDetailService {
     private String[] fileSuffix;
 
     public Callback<List<PrdInfoDTO>> getPrdInfo(String workOrderNo) {
-        List<PrdInfoDTO> erpPrdInfos = oaRejectsDetailMapper.selectByWorkOrderNo(workOrderNo);
+        List<PrdInfoDTO> collect = oaRejectsDetailMapper.selectByWorkOrderNo(workOrderNo);
+        List<PrdInfoDTO> erpPrdInfos = collect.stream().distinct().collect(Collectors.toList());
         for (PrdInfoDTO erpPrdInfo : erpPrdInfos) {
             String[] workOrderNos = erpPrdInfo.getWorkOrderNo().split("-");
             erpPrdInfo.setWorkOrderNo(workOrderNos[1]);

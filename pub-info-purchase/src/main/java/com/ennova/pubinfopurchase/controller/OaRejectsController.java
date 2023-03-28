@@ -63,9 +63,8 @@ public class OaRejectsController {
                                                            @RequestParam("workCenter") String workCenter,
                                                            @RequestParam("exigencyStatus") String exigencyStatus,
                                                            @RequestParam("schedule") String schedule,
-                                                           @RequestParam("headline") String headline,
-                                                           @RequestParam("serialNumber") String serialNumber) {
-        return oaRejectsService.selectRejectsInfo(page, pageSize, startTime, endTime, workCenter, exigencyStatus, schedule, headline, serialNumber);
+                                                           @RequestParam("headline") String headline) {
+        return oaRejectsService.selectRejectsInfo(page, pageSize, startTime, endTime, workCenter, exigencyStatus, schedule, headline);
     }
 
     @ApiOperation(value = "oa不合格品处理单 - 不良品创建单详情信息")

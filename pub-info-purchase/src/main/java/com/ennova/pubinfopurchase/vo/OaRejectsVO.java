@@ -135,6 +135,12 @@ public class OaRejectsVO {
     private Integer backStatus;
 
     /**
+     * 是否可以进行会签
+     * */
+    @ApiModelProperty(value="是否可以进行会签")
+    private Integer opinionStatus;
+
+    /**
      * 办理时间
      */
     @ApiModelProperty(value="办理时间")

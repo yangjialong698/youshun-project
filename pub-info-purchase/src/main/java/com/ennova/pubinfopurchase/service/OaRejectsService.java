@@ -150,12 +150,12 @@ public class OaRejectsService {
         return Callback.error(2, "修改数据失败!");
     }
 
-    public Callback<BaseVO<OaRejectsVO>> selectRejectsInfo(Integer page, Integer pageSize, String startTime, String endTime, String workCenter, String exigencyStatus, String schedule, String headline, String serialNumber) {
+    public Callback<BaseVO<OaRejectsVO>> selectRejectsInfo(Integer page, Integer pageSize, String startTime, String endTime, String workCenter, String exigencyStatus, String schedule, String headline) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
         Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
-        List<OaRejects> oaRejects = oaRejectsMapper.selectRejectsInfo(startTime, endTime, workCenter, exigencyStatus, schedule, headline, serialNumber);
+        List<OaRejects> oaRejects = oaRejectsMapper.selectRejectsInfo(startTime, endTime, workCenter, exigencyStatus, schedule, headline);
         List<OaRejectsVO> rejectsInfos = new ArrayList<>();
         oaRejects.forEach(v -> {
             OaRejectsVO oaRejectsVO = BeanConvertUtils.convertTo(v, OaRejectsVO::new);
@@ -178,7 +178,7 @@ public class OaRejectsService {
                 publishTime = publishTimes.stream().filter(o -> ObjectUtils.isNotEmpty(o)).reduce((first, second) -> second).orElse(LocalDateTime.now());
             }
             oaRejectsVO.setPublishTime(publishTime);
-            if (opinionUserIds.contains(userVo.getId())) {
+            if (opinionUserIds.contains(userVo.getId()) && v.getSetpStaus() > 1) {
                 oaRejectsVO.setBackStatus(1);
             }
             if (StringUtils.isEmpty(v.getTransactor()) || v.getTransactor().equals(userMapper.selectById(userVo.getId()).getUserName())) {
@@ -205,16 +205,21 @@ public class OaRejectsService {
             });
         }
         oaRejectsVO.setOaRejectsDetails(oaRejectsDetailVOS);
-        List<OaRejectsOpinionVO> oaRejectsOpinions = oaRejectsOpinionMapper.selectByRejectsId(oaRejects.getId());
+        List<OaRejectsOpinionVO> oaRejectsOpinions = oaRejectsOpinionMapper.selectByRejectsIdAndSetpStaus(oaRejects.getId(), oaRejects.getSetpStaus());
         if (CollectionUtils.isNotEmpty(oaRejectsOpinions)) {
             oaRejectsVO.setOaRejectsOpinionVOS(oaRejectsOpinions);
         }
         List<Integer> opinionUserIds = oaRejectsOpinions.stream().map(o -> o.getOpinionUserId()).collect(Collectors.toList());
-        if (opinionUserIds.contains(userVo.getId())) {
+        if (opinionUserIds.contains(userVo.getId()) && oaRejects.getSetpStaus() > 1) {
             oaRejectsVO.setBackStatus(1);
         }
         if (StringUtils.isEmpty(oaRejects.getTransactor()) || oaRejects.getTransactor().equals(userMapper.selectById(userVo.getId()).getUserName())) {
             oaRejectsVO.setOpenStatus(1);
+        }
+        /*是否可以会签*/
+        List<Integer> opinionUserId = oaRejectsOpinions.stream().filter(v -> StringUtils.isEmpty(v.getOpinionContent())).map(v -> v.getOpinionUserId()).collect(Collectors.toList());
+        if (opinionUserId.size() > 0 && opinionUserId.contains(userVo.getId())) {
+            oaRejectsVO.setOpinionStatus(1);
         }
         return Callback.success(oaRejectsVO);
     }
@@ -224,17 +229,9 @@ public class OaRejectsService {
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
-        OaRejects oaRejects = new OaRejects();
+        OaRejects oaRejects = oaRejectsMapper.selectByPrimaryKey(id);
         List<OaRejectsOpinionVO> oaRejectsOpinions = oaRejectsOpinionMapper.selectByRejectsIdAndSetpStaus(id, setpStaus);
-
-        Integer setpstaus = oaRejectsOpinions.stream().map(v -> v.getSetpStaus()).collect(Collectors.toList()).get(0);
-
-        List<OaRejectsOpinionVO> oaRejectsOpinionss = oaRejectsOpinionMapper.selectByRejectsIdAndSetpStaus(id, setpstaus - 1);
-        if (oaRejects.getSetpStaus() > 1) {
-            oaRejects.setId(id);
-            oaRejects.setSetpStaus(setpstaus - 1);
-            oaRejectsMapper.updateByPrimaryKeySelective(oaRejects);
-        }
+        List<OaRejectsOpinionVO> oaRejectsOpinionss = oaRejectsOpinionMapper.selectByRejectsIdAndSetpStaus(id, setpStaus - 1);
 
         for (OaRejectsOpinionVO oaRejectsOpinionVO : oaRejectsOpinions) {
             OaRejectsOpinion oaRejectsOpinion = new OaRejectsOpinion();
@@ -247,19 +244,19 @@ public class OaRejectsService {
             OaRejectsOpinion oaRejectsOpinion = BeanConvertUtils.convertTo(oaRejectsOpinionVO, OaRejectsOpinion::new);
             oaRejectsOpinion.setOpinionContent(null);
             oaRejectsOpinion.setPublishTime(null);
-            oaRejectsOpinionMapper.updateByPrimaryKeySelective(oaRejectsOpinion);
+            oaRejectsOpinionMapper.updateByPrimaryKey(oaRejectsOpinion);
         }
 
-        List<Integer> collect = oaRejectsOpinionss.stream().map(v -> v.getRejectsId()).limit(1).collect(Collectors.toList());
-        String opinionUsers = oaRejectsOpinionss.stream().filter(v -> StringUtils.isEmpty(v.getOpinionContent())).map(v -> v.getOpinionUser()).collect(Collectors.joining(","));
-        OaRejects build = OaRejects.builder().id(collect.get(0)).transactor(opinionUsers).build();
-        int j = oaRejectsMapper.updateByPrimaryKeySelective(build);
-
-        if (j > 0) {
+        if (oaRejects.getSetpStaus() > 1) {
+            oaRejects.setId(id);
+            oaRejects.setSetpStaus(setpStaus - 1);
+            String opinionUsers = oaRejectsOpinionss.stream().filter(v -> StringUtils.isEmpty(v.getOpinionContent())).map(v -> v.getOpinionUser()).collect(Collectors.joining(","));
+            oaRejects.setTransactor(opinionUsers);
+            oaRejectsMapper.updateByPrimaryKeySelective(oaRejects);
             return Callback.success(true);
+        }else {
+            return Callback.error(2, "当前不能回退!");
         }
-
-        return Callback.error(2, "修改数据失败!");
     }
 
     public Callback pressRejects(Integer id, Integer setpStaus) throws MessagingException {

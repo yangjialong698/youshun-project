@@ -66,8 +66,7 @@ public interface OaRejectsMapper {
                                       @Param("workCenter") String workCenter,
                                       @Param("exigencyStatus") String exigencyStatus,
                                       @Param("schedule") String schedule,
-                                      @Param("headline") String headline,
-                                      @Param("serialNumber") String serialNumber);
+                                      @Param("headline") String headline);
 
 
 }

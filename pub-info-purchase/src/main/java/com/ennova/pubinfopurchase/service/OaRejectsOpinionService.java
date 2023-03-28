@@ -5,9 +5,10 @@ import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfopurchase.dao.OaRejectsMapper;
 import com.ennova.pubinfopurchase.dao.OaRejectsOpinionMapper;
+import com.ennova.pubinfopurchase.dto.OaOpinionDTO;
+import com.ennova.pubinfopurchase.dto.OaRejectsOpinionDTO;
 import com.ennova.pubinfopurchase.entity.OaRejects;
 import com.ennova.pubinfopurchase.entity.OaRejectsOpinion;
-import com.ennova.pubinfopurchase.utils.BeanConvertUtils;
 import com.ennova.pubinfopurchase.vo.OaRejectsOpinionVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,25 +39,25 @@ public class OaRejectsOpinionService {
     private final OaRejectsMapper oaRejectsMapper;
     private final HttpServletRequest request;
 
-    public Callback insertRejectsOpinion(List<OaRejectsOpinionVO> oaRejectsOpinionVOS) {
+    public Callback insertRejectsOpinion(OaRejectsOpinionDTO oaRejectsOpinionVOS) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
-        List<Integer> rejectsIds = oaRejectsOpinionVOS.stream().map(oaRejectsOpinionVO -> oaRejectsOpinionVO.getRejectsId()).collect(Collectors.toList());
-        if (CollectionUtils.isNotEmpty(oaRejectsOpinionVOS) && CollectionUtils.isNotEmpty(rejectsIds)) {
-            for (OaRejectsOpinionVO oaRejectsOpinionVO : oaRejectsOpinionVOS) {
+        if (CollectionUtils.isNotEmpty(oaRejectsOpinionVOS.getOpinionDTOS()) && ObjectUtils.isNotEmpty(oaRejectsOpinionVOS.getRejectsId())) {
+
+            for (OaOpinionDTO opinionDTO : oaRejectsOpinionVOS.getOpinionDTOS()) {
                 OaRejectsOpinion oaRejectsOpinion = new OaRejectsOpinion();
-                BeanConvertUtils.copyProperties(oaRejectsOpinionVO, oaRejectsOpinion);
+                oaRejectsOpinion.setOpinionUserId(opinionDTO.getOpinionUserId());
+                oaRejectsOpinion.setOpinionUser(opinionDTO.getOpinionUser());
+                oaRejectsOpinion.setRejectsId(oaRejectsOpinionVOS.getRejectsId());
                 oaRejectsOpinion.setCreateTime(LocalDateTime.now());
+                oaRejectsOpinion.setSetpStaus(oaRejectsOpinionVOS.getSetpStaus());
                 oaRejectsOpinion.setDelFlag(0);
                 oaRejectsOpinionMapper.insertSelective(oaRejectsOpinion);
             }
-            List<Integer> collect = oaRejectsOpinionVOS.stream().map(oaRejectsOpinionVO -> oaRejectsOpinionVO.getRejectsId()).limit(1).collect(Collectors.toList());
-            List<Integer> setpStaus = oaRejectsOpinionVOS.stream().map(oaRejectsOpinionVO -> oaRejectsOpinionVO.getSetpStaus()).limit(1).collect(Collectors.toList());
-            List<String> opinionUsers = oaRejectsOpinionVOS.stream().map(oaRejectsOpinionVO -> oaRejectsOpinionVO.getOpinionUser()).collect(Collectors.toList());
-            String mobileStr = StringUtils.strip(opinionUsers.toString(), "[]").replace(" ", "");
-            OaRejects build = OaRejects.builder().id(collect.get(0)).setpStaus(setpStaus.get(0)).transactor(mobileStr).build();
+            String transactor = oaRejectsOpinionVOS.getOpinionDTOS().stream().map(oaRejectsOpinionVO -> oaRejectsOpinionVO.getOpinionUser()).collect(Collectors.joining(","));
+            OaRejects build = OaRejects.builder().id(oaRejectsOpinionVOS.getRejectsId()).setpStaus(oaRejectsOpinionVOS.getSetpStaus()).transactor(transactor).build();
             int i = oaRejectsMapper.updateByPrimaryKeySelective(build);
             if (i > 0) {
                 return Callback.success(true);
@@ -71,12 +72,13 @@ public class OaRejectsOpinionService {
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
-        if (ObjectUtils.isNotEmpty(oaRejectsOpinionVO) && oaRejectsOpinionVO.getRejectsId() != null) {
-            List<OaRejectsOpinionVO> oaRejectsOpinions = oaRejectsOpinionMapper.selectByRejectsId(oaRejectsOpinionVO.getRejectsId());
-            List<Integer> opinionUserIds = oaRejectsOpinions.stream().map(oaRejectsOpinion -> oaRejectsOpinion.getOpinionUserId()).collect(Collectors.toList());
-            if (opinionUserIds.stream().anyMatch(o -> o.equals(userVo.getId()))) {
+        if (ObjectUtils.isNotEmpty(oaRejectsOpinionVO) && oaRejectsOpinionVO.getRejectsId() != null && oaRejectsOpinionVO.getSetpStaus() != null) {
+
+            OaRejectsOpinionVO oaRejectsOpinionVos = oaRejectsOpinionMapper.selectByRejectsIdAndOpinionUserId(oaRejectsOpinionVO.getRejectsId(), userVo.getId(), oaRejectsOpinionVO.getSetpStaus());
+
+            if (ObjectUtils.isNotEmpty(oaRejectsOpinionVos)) {
                 OaRejectsOpinion oaRejectsOpinion = new OaRejectsOpinion();
-                oaRejectsOpinion.setId(oaRejectsOpinionVO.getId());
+                oaRejectsOpinion.setId(oaRejectsOpinionVos.getId());
                 oaRejectsOpinion.setOpinionContent(oaRejectsOpinionVO.getOpinionContent());
                 oaRejectsOpinion.setPublishTime(LocalDateTime.now());
                 int i = oaRejectsOpinionMapper.updateByPrimaryKeySelective(oaRejectsOpinion);
