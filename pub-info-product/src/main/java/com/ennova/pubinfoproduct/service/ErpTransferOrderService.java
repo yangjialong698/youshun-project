@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -97,7 +99,9 @@ public class ErpTransferOrderService {
                 int badCount = value.stream().mapToInt(o -> Objects.isNull(o.getBadNum()) ? 0 : o.getBadNum()).sum(); // 不良数量汇总
                 Double badScrapRate = value.stream().mapToDouble(o -> Objects.isNull(o.getBadScrapRate()) ? 0 : Double.parseDouble(o.getBadScrapRate())).sum(); // 报废率汇总
                 Double scrapCostCount = value.stream().mapToDouble(o -> Objects.isNull(o.getScrapCost()) ? 0 : o.getScrapCost()).sum(); // 报废金额汇总
-                scrapVO.setScrapCostCount(scrapCostCount);
+                DecimalFormat doubleFormatter = new DecimalFormat("#.00");
+                doubleFormatter.setRoundingMode(RoundingMode.HALF_UP);
+                scrapVO.setScrapCostCount(Double.parseDouble(doubleFormatter.format(scrapCostCount)));
                 scrapVO.setScrapNum(scrapCount);
                 BigDecimal bg = new BigDecimal(badScrapRate);
                 double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
