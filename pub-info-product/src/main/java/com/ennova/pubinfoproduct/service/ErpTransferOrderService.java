@@ -90,6 +90,7 @@ public class ErpTransferOrderService {
         List<ScrapPerOutno> scrapPerOutnoList = scrapPerOutnoMapper.selectByOutNos(gxList);
         if (CollectionUtil.isNotEmpty(scrapPerOutnoList)) {
             Map<String, List<ScrapPerOutno>> listMap = scrapPerOutnoList.stream().collect(Collectors.groupingBy(ScrapPerOutno::getOrderDate));
+            List<String> finalGxList = gxList;
             listMap.entrySet().stream().map(key -> {
                 ScrapVO scrapVO = new ScrapVO();
                 String orderDate = key.getKey();
@@ -97,7 +98,15 @@ public class ErpTransferOrderService {
                 int dayPrdCount = value.stream().mapToInt(o -> Objects.isNull(o.getDayPrdNum()) ? 0 : o.getDayPrdNum()).sum();// 日产量汇总
                 int scrapCount = value.stream().mapToInt(o -> Objects.isNull(o.getScrapNum()) ? 0 : o.getScrapNum()).sum(); // 报废数量汇总
                 int badCount = value.stream().mapToInt(o -> Objects.isNull(o.getBadNum()) ? 0 : o.getBadNum()).sum(); // 不良数量汇总
-                Double badScrapRate = value.stream().mapToDouble(o -> Objects.isNull(o.getBadScrapRate()) ? 0 : Double.parseDouble(o.getBadScrapRate())).sum(); // 报废率汇总
+                Double badScrapRate = 0.0;
+                if (finalGxList.size()==1){
+                    badScrapRate = value.stream().mapToDouble(o -> Objects.isNull(o.getBadScrapRate()) ? 0 : Double.parseDouble(o.getBadScrapRate())).sum(); // 报废率汇总
+                }else {
+                    float num= (float)scrapCount/dayPrdCount *100;
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    df.setRoundingMode(RoundingMode.HALF_UP);
+                    badScrapRate = Double.parseDouble(df.format(num));
+                }
                 Double scrapCostCount = value.stream().mapToDouble(o -> Objects.isNull(o.getScrapCost()) ? 0 : o.getScrapCost()).sum(); // 报废金额汇总
                 DecimalFormat doubleFormatter = new DecimalFormat("#.00");
                 doubleFormatter.setRoundingMode(RoundingMode.HALF_UP);
