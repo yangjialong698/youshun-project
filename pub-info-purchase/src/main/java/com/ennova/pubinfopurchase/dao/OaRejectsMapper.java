@@ -7,14 +7,15 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * @author  yangjialong
- * @date  2023/3/20
+ * @author yangjialong
  * @version 1.0
+ * @date 2023/3/30
  */
 @Mapper
 public interface OaRejectsMapper {
     /**
      * delete by primary key
+     *
      * @param id primaryKey
      * @return deleteCount
      */
@@ -22,6 +23,7 @@ public interface OaRejectsMapper {
 
     /**
      * insert record to table
+     *
      * @param record the record
      * @return insert count
      */
@@ -29,6 +31,7 @@ public interface OaRejectsMapper {
 
     /**
      * insert record to table selective
+     *
      * @param record the record
      * @return insert count
      */
@@ -36,6 +39,7 @@ public interface OaRejectsMapper {
 
     /**
      * select by primary key
+     *
      * @param id primary key
      * @return object by primary key
      */
@@ -43,6 +47,7 @@ public interface OaRejectsMapper {
 
     /**
      * update record selective
+     *
      * @param record the updated record
      * @return update count
      */
@@ -50,6 +55,7 @@ public interface OaRejectsMapper {
 
     /**
      * update record
+     *
      * @param record the updated record
      * @return update count
      */
@@ -67,6 +73,4 @@ public interface OaRejectsMapper {
                                       @Param("exigencyStatus") String exigencyStatus,
                                       @Param("schedule") String schedule,
                                       @Param("headline") String headline);
-
-
 }

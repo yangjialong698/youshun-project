@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
  */
 
 /**
- * 不良品明细文件表
+ * 不良品明细文件
  */
-@ApiModel(description = "不良品明细文件表")
+@ApiModel(description = "不良品明细文件")
 @Data
 @Builder
 @AllArgsConstructor

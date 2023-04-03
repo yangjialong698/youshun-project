@@ -147,5 +147,9 @@ public class OaRejectsVO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishTime;
 
-
+    /**
+     * 是否删除（0-未删除 1-已删除）
+     */
+    @ApiModelProperty(value = "是否删除（0-未删除 1-已删除）")
+    private Integer delFlag;
 }

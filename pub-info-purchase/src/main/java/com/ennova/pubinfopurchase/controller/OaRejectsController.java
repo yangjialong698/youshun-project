@@ -3,11 +3,9 @@ package com.ennova.pubinfopurchase.controller;
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfopurchase.service.OaRejectsService;
+import com.ennova.pubinfopurchase.vo.OaPressRejectsVO;
 import com.ennova.pubinfopurchase.vo.OaRejectsVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,9 +77,18 @@ public class OaRejectsController {
         return oaRejectsService.backRejects(id, setpStaus);
     }
 
-    @ApiOperation(value = "oa不合格品处理单 - 催办")
+    @ApiOperation(value = "oa不合格品处理单 - 批量催办")
     @PostMapping("/pressRejects")
-    public Callback pressRejects(Integer id, Integer setpStaus) throws MessagingException {
-        return oaRejectsService.pressRejects(id, setpStaus);
+    public Callback pressRejects(OaPressRejectsVO oaPressRejectsVO) throws MessagingException {
+        return oaRejectsService.pressRejects(oaPressRejectsVO);
     }
+
+    @ApiOperation(value = "oa不合格品处理单 - 批量删除")
+    @PostMapping("/batchRejectsDelete")
+    public Callback batchRejectsDelete(@ApiParam(name = "ids", value = "处理单id数组")
+                                 @RequestParam("ids[]") Integer[] ids) {
+        return oaRejectsService.batchRejectsDelete(ids);
+    }
+
+
 }

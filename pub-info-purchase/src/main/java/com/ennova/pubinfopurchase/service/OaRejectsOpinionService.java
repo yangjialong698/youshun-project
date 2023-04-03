@@ -49,6 +49,7 @@ public class OaRejectsOpinionService {
             for (OaOpinionDTO opinionDTO : oaRejectsOpinionVOS.getOpinionDTOS()) {
                 OaRejectsOpinion oaRejectsOpinion = new OaRejectsOpinion();
                 oaRejectsOpinion.setOpinionUserId(opinionDTO.getOpinionUserId());
+                oaRejectsOpinion.setOvertime(oaRejectsOpinionVOS.getOvertime());
                 oaRejectsOpinion.setOpinionUser(opinionDTO.getOpinionUser());
                 oaRejectsOpinion.setRejectsId(oaRejectsOpinionVOS.getRejectsId());
                 oaRejectsOpinion.setCreateTime(LocalDateTime.now());

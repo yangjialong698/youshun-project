@@ -39,8 +39,8 @@
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
-        delete
-        from project.oa_rejects_detail_file
+        update project.oa_rejects_detail_file
+        set del_flag = 1
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id"

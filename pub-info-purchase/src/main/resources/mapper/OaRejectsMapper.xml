@@ -1,314 +1,312 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ennova.pubinfopurchase.dao.OaRejectsMapper">
-    <resultMap id="BaseResultMap" type="com.ennova.pubinfopurchase.entity.OaRejects">
-        <!--@mbg.generated-->
-        <!--@Table project.oa_rejects-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="headline" jdbcType="VARCHAR" property="headline"/>
-        <result column="serial_number" jdbcType="VARCHAR" property="serialNumber"/>
-        <result column="setp_staus" jdbcType="INTEGER" property="setpStaus"/>
-        <result column="transactor" jdbcType="VARCHAR" property="transactor"/>
-        <result column="documentation_date" jdbcType="TIMESTAMP" property="documentationDate"/>
-        <result column="survey_date" jdbcType="TIMESTAMP" property="surveyDate"/>
-        <result column="work_center" jdbcType="VARCHAR" property="workCenter"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
-        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
-        <result column="processing_details" jdbcType="VARCHAR" property="processingDetails"/>
-        <result column="quality_confirm" jdbcType="VARCHAR" property="qualityConfirm"/>
-        <result column="exigency_status" jdbcType="VARCHAR" property="exigencyStatus"/>
-        <result column="schedule" jdbcType="VARCHAR" property="schedule"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id,
+  <resultMap id="BaseResultMap" type="com.ennova.pubinfopurchase.entity.OaRejects">
+    <!--@mbg.generated-->
+    <!--@Table project.oa_rejects-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="headline" jdbcType="VARCHAR" property="headline" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="setp_staus" jdbcType="INTEGER" property="setpStaus" />
+    <result column="transactor" jdbcType="VARCHAR" property="transactor" />
+    <result column="documentation_date" jdbcType="TIMESTAMP" property="documentationDate" />
+    <result column="survey_date" jdbcType="TIMESTAMP" property="surveyDate" />
+    <result column="work_center" jdbcType="VARCHAR" property="workCenter" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="processing_details" jdbcType="VARCHAR" property="processingDetails" />
+    <result column="quality_confirm" jdbcType="VARCHAR" property="qualityConfirm" />
+    <result column="exigency_status" jdbcType="VARCHAR" property="exigencyStatus" />
+    <result column="schedule" jdbcType="VARCHAR" property="schedule" />
+    <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, headline, serial_number, setp_staus, transactor, documentation_date, survey_date, 
+    work_center, user_id, user_name, processing_details, quality_confirm, exigency_status, 
+    schedule, del_flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from project.oa_rejects
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update project.oa_rejects
+    set del_flag = 1
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfopurchase.entity.OaRejects" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into project.oa_rejects (headline, serial_number, setp_staus, 
+      transactor, documentation_date, survey_date, 
+      work_center, user_id, user_name, 
+      processing_details, quality_confirm, exigency_status, 
+      schedule, del_flag)
+    values (#{headline,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{setpStaus,jdbcType=INTEGER}, 
+      #{transactor,jdbcType=VARCHAR}, #{documentationDate,jdbcType=TIMESTAMP}, #{surveyDate,jdbcType=TIMESTAMP}, 
+      #{workCenter,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{processingDetails,jdbcType=VARCHAR}, #{qualityConfirm,jdbcType=VARCHAR}, #{exigencyStatus,jdbcType=VARCHAR}, 
+      #{schedule,jdbcType=VARCHAR}, #{delFlag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfopurchase.entity.OaRejects" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into project.oa_rejects
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="headline != null">
         headline,
+      </if>
+      <if test="serialNumber != null">
         serial_number,
+      </if>
+      <if test="setpStaus != null">
         setp_staus,
+      </if>
+      <if test="transactor != null">
         transactor,
+      </if>
+      <if test="documentationDate != null">
         documentation_date,
+      </if>
+      <if test="surveyDate != null">
         survey_date,
+      </if>
+      <if test="workCenter != null">
         work_center,
+      </if>
+      <if test="userId != null">
         user_id,
+      </if>
+      <if test="userName != null">
         user_name,
+      </if>
+      <if test="processingDetails != null">
         processing_details,
+      </if>
+      <if test="qualityConfirm != null">
         quality_confirm,
+      </if>
+      <if test="exigencyStatus != null">
         exigency_status,
-        schedule
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from project.oa_rejects
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete
-        from project.oa_rejects
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ennova.pubinfopurchase.entity.OaRejects"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into project.oa_rejects (headline, serial_number, setp_staus,
-                                        transactor, documentation_date, survey_date,
-                                        work_center, user_id, user_name,
-                                        processing_details, quality_confirm, exigency_status,
-                                        schedule)
-        values (#{headline,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{setpStaus,jdbcType=INTEGER},
-                #{transactor,jdbcType=VARCHAR}, #{documentationDate,jdbcType=TIMESTAMP},
-                #{surveyDate,jdbcType=TIMESTAMP},
-                #{workCenter,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
-                #{processingDetails,jdbcType=VARCHAR}, #{qualityConfirm,jdbcType=VARCHAR},
-                #{exigencyStatus,jdbcType=VARCHAR},
-                #{schedule,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.ennova.pubinfopurchase.entity.OaRejects" useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into project.oa_rejects
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="headline != null">
-                headline,
-            </if>
-            <if test="serialNumber != null">
-                serial_number,
-            </if>
-            <if test="setpStaus != null">
-                setp_staus,
-            </if>
-            <if test="transactor != null">
-                transactor,
-            </if>
-            <if test="documentationDate != null">
-                documentation_date,
-            </if>
-            <if test="surveyDate != null">
-                survey_date,
-            </if>
-            <if test="workCenter != null">
-                work_center,
-            </if>
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="userName != null">
-                user_name,
-            </if>
-            <if test="processingDetails != null">
-                processing_details,
-            </if>
-            <if test="qualityConfirm != null">
-                quality_confirm,
-            </if>
-            <if test="exigencyStatus != null">
-                exigency_status,
-            </if>
-            <if test="schedule != null">
-                schedule,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="headline != null">
-                #{headline,jdbcType=VARCHAR},
-            </if>
-            <if test="serialNumber != null">
-                #{serialNumber,jdbcType=VARCHAR},
-            </if>
-            <if test="setpStaus != null">
-                #{setpStaus,jdbcType=INTEGER},
-            </if>
-            <if test="transactor != null">
-                #{transactor,jdbcType=VARCHAR},
-            </if>
-            <if test="documentationDate != null">
-                #{documentationDate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="surveyDate != null">
-                #{surveyDate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="workCenter != null">
-                #{workCenter,jdbcType=VARCHAR},
-            </if>
-            <if test="userId != null">
-                #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="userName != null">
-                #{userName,jdbcType=VARCHAR},
-            </if>
-            <if test="processingDetails != null">
-                #{processingDetails,jdbcType=VARCHAR},
-            </if>
-            <if test="qualityConfirm != null">
-                #{qualityConfirm,jdbcType=VARCHAR},
-            </if>
-            <if test="exigencyStatus != null">
-                #{exigencyStatus,jdbcType=VARCHAR},
-            </if>
-            <if test="schedule != null">
-                #{schedule,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfopurchase.entity.OaRejects">
-        <!--@mbg.generated-->
-        update project.oa_rejects
-        <set>
-            <if test="headline != null">
-                headline = #{headline,jdbcType=VARCHAR},
-            </if>
-            <if test="serialNumber != null">
-                serial_number = #{serialNumber,jdbcType=VARCHAR},
-            </if>
-            <if test="setpStaus != null">
-                setp_staus = #{setpStaus,jdbcType=INTEGER},
-            </if>
-            <if test="transactor != null">
-                transactor = #{transactor,jdbcType=VARCHAR},
-            </if>
-            <if test="documentationDate != null">
-                documentation_date = #{documentationDate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="surveyDate != null">
-                survey_date = #{surveyDate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="workCenter != null">
-                work_center = #{workCenter,jdbcType=VARCHAR},
-            </if>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="userName != null">
-                user_name = #{userName,jdbcType=VARCHAR},
-            </if>
-            <if test="processingDetails != null">
-                processing_details = #{processingDetails,jdbcType=VARCHAR},
-            </if>
-            <if test="qualityConfirm != null">
-                quality_confirm = #{qualityConfirm,jdbcType=VARCHAR},
-            </if>
-            <if test="exigencyStatus != null">
-                exigency_status = #{exigencyStatus,jdbcType=VARCHAR},
-            </if>
-            <if test="schedule != null">
-                schedule = #{schedule,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfopurchase.entity.OaRejects">
-        <!--@mbg.generated-->
-        update project.oa_rejects
-        set headline           = #{headline,jdbcType=VARCHAR},
-            serial_number      = #{serialNumber,jdbcType=VARCHAR},
-            setp_staus         = #{setpStaus,jdbcType=INTEGER},
-            transactor         = #{transactor,jdbcType=VARCHAR},
-            documentation_date = #{documentationDate,jdbcType=TIMESTAMP},
-            survey_date        = #{surveyDate,jdbcType=TIMESTAMP},
-            work_center        = #{workCenter,jdbcType=VARCHAR},
-            user_id            = #{userId,jdbcType=INTEGER},
-            user_name          = #{userName,jdbcType=VARCHAR},
-            processing_details = #{processingDetails,jdbcType=VARCHAR},
-            quality_confirm    = #{qualityConfirm,jdbcType=VARCHAR},
-            exigency_status    = #{exigencyStatus,jdbcType=VARCHAR},
-            schedule           = #{schedule,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateBatch" parameterType="java.util.List">
-        <!--@mbg.generated-->
-        update project.oa_rejects
-        <trim prefix="set" suffixOverrides=",">
-            <trim prefix="headline = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.headline,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="serial_number = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.serialNumber,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="setp_staus = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.setpStaus,jdbcType=INTEGER}
-                </foreach>
-            </trim>
-            <trim prefix="transactor = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.transactor,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="documentation_date = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.documentationDate,jdbcType=TIMESTAMP}
-                </foreach>
-            </trim>
-            <trim prefix="survey_date = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.surveyDate,jdbcType=TIMESTAMP}
-                </foreach>
-            </trim>
-            <trim prefix="work_center = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.workCenter,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="user_id = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.userId,jdbcType=INTEGER}
-                </foreach>
-            </trim>
-            <trim prefix="user_name = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.userName,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="processing_details = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.processingDetails,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="quality_confirm = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.qualityConfirm,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="exigency_status = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.exigencyStatus,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-            <trim prefix="schedule = case" suffix="end,">
-                <foreach collection="list" index="index" item="item">
-                    when id = #{item.id,jdbcType=INTEGER} then #{item.schedule,jdbcType=VARCHAR}
-                </foreach>
-            </trim>
-        </trim>
-        where id in
-        <foreach close=")" collection="list" item="item" open="(" separator=", ">
-            #{item.id,jdbcType=INTEGER}
+      </if>
+      <if test="schedule != null">
+        schedule,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="headline != null">
+        #{headline,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="setpStaus != null">
+        #{setpStaus,jdbcType=INTEGER},
+      </if>
+      <if test="transactor != null">
+        #{transactor,jdbcType=VARCHAR},
+      </if>
+      <if test="documentationDate != null">
+        #{documentationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="surveyDate != null">
+        #{surveyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workCenter != null">
+        #{workCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="processingDetails != null">
+        #{processingDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityConfirm != null">
+        #{qualityConfirm,jdbcType=VARCHAR},
+      </if>
+      <if test="exigencyStatus != null">
+        #{exigencyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="schedule != null">
+        #{schedule,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfopurchase.entity.OaRejects">
+    <!--@mbg.generated-->
+    update project.oa_rejects
+    <set>
+      <if test="headline != null">
+        headline = #{headline,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="setpStaus != null">
+        setp_staus = #{setpStaus,jdbcType=INTEGER},
+      </if>
+      <if test="transactor != null">
+        transactor = #{transactor,jdbcType=VARCHAR},
+      </if>
+      <if test="documentationDate != null">
+        documentation_date = #{documentationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="surveyDate != null">
+        survey_date = #{surveyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workCenter != null">
+        work_center = #{workCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="processingDetails != null">
+        processing_details = #{processingDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityConfirm != null">
+        quality_confirm = #{qualityConfirm,jdbcType=VARCHAR},
+      </if>
+      <if test="exigencyStatus != null">
+        exigency_status = #{exigencyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="schedule != null">
+        schedule = #{schedule,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfopurchase.entity.OaRejects">
+    <!--@mbg.generated-->
+    update project.oa_rejects
+    set headline = #{headline,jdbcType=VARCHAR},
+      serial_number = #{serialNumber,jdbcType=VARCHAR},
+      setp_staus = #{setpStaus,jdbcType=INTEGER},
+      transactor = #{transactor,jdbcType=VARCHAR},
+      documentation_date = #{documentationDate,jdbcType=TIMESTAMP},
+      survey_date = #{surveyDate,jdbcType=TIMESTAMP},
+      work_center = #{workCenter,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      processing_details = #{processingDetails,jdbcType=VARCHAR},
+      quality_confirm = #{qualityConfirm,jdbcType=VARCHAR},
+      exigency_status = #{exigencyStatus,jdbcType=VARCHAR},
+      schedule = #{schedule,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update project.oa_rejects
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="headline = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.headline,jdbcType=VARCHAR}
         </foreach>
-    </update>
-    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into project.oa_rejects
-        (headline, serial_number, setp_staus, transactor, documentation_date, survey_date,
-         work_center, user_id, user_name, processing_details, quality_confirm, exigency_status,
-         schedule)
-        values
-        <foreach collection="list" item="item" separator=",">
-            (#{item.headline,jdbcType=VARCHAR}, #{item.serialNumber,jdbcType=VARCHAR},
-             #{item.setpStaus,jdbcType=INTEGER},
-             #{item.transactor,jdbcType=VARCHAR}, #{item.documentationDate,jdbcType=TIMESTAMP},
-             #{item.surveyDate,jdbcType=TIMESTAMP}, #{item.workCenter,jdbcType=VARCHAR},
-             #{item.userId,jdbcType=INTEGER},
-             #{item.userName,jdbcType=VARCHAR}, #{item.processingDetails,jdbcType=VARCHAR},
-             #{item.qualityConfirm,jdbcType=VARCHAR}, #{item.exigencyStatus,jdbcType=VARCHAR},
-             #{item.schedule,jdbcType=VARCHAR})
+      </trim>
+      <trim prefix="serial_number = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.serialNumber,jdbcType=VARCHAR}
         </foreach>
-    </insert>
+      </trim>
+      <trim prefix="setp_staus = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.setpStaus,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="transactor = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.transactor,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="documentation_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.documentationDate,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="survey_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.surveyDate,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="work_center = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.workCenter,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="user_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.userId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="user_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.userName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="processing_details = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.processingDetails,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="quality_confirm = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.qualityConfirm,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="exigency_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.exigencyStatus,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="schedule = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.schedule,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="del_flag = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.delFlag,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into project.oa_rejects
+    (headline, serial_number, setp_staus, transactor, documentation_date, survey_date, 
+      work_center, user_id, user_name, processing_details, quality_confirm, exigency_status, 
+      schedule, del_flag)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.headline,jdbcType=VARCHAR}, #{item.serialNumber,jdbcType=VARCHAR}, #{item.setpStaus,jdbcType=INTEGER}, 
+        #{item.transactor,jdbcType=VARCHAR}, #{item.documentationDate,jdbcType=TIMESTAMP}, 
+        #{item.surveyDate,jdbcType=TIMESTAMP}, #{item.workCenter,jdbcType=VARCHAR}, #{item.userId,jdbcType=INTEGER}, 
+        #{item.userName,jdbcType=VARCHAR}, #{item.processingDetails,jdbcType=VARCHAR}, 
+        #{item.qualityConfirm,jdbcType=VARCHAR}, #{item.exigencyStatus,jdbcType=VARCHAR}, 
+        #{item.schedule,jdbcType=VARCHAR}, #{item.delFlag,jdbcType=INTEGER})
+    </foreach>
+  </insert>
 
     <select id="selectLastSerialNumber" resultType="java.lang.String">
         select serial_number
@@ -344,7 +342,7 @@
                 and schedule like CONCAT('%', trim (#{schedule}), '%')
             </if>
             <if test="headline != null and headline != ''">
-                and headline like CONCAT('%', trim (#{headline}), '%') or headline like CONCAT('%', trim (#{serialNumber}), '%')
+                and headline like CONCAT('%', trim (#{headline}), '%') or serial_number like CONCAT('%', trim (#{headline}), '%')
             </if>
             <if test="startTime!=null and startTime!=''">
                 AND documentation_date &gt;= #{startTime,jdbcType=TIMESTAMP}

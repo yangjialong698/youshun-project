@@ -6,13 +6,11 @@ import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfopurchase.dao.*;
+import com.ennova.pubinfopurchase.dto.OaPressRejectsDTO;
 import com.ennova.pubinfopurchase.entity.*;
 import com.ennova.pubinfopurchase.utils.BeanConvertUtils;
 import com.ennova.pubinfopurchase.utils.OaUtils;
-import com.ennova.pubinfopurchase.vo.OaRejectsDetailFileVO;
-import com.ennova.pubinfopurchase.vo.OaRejectsDetailVO;
-import com.ennova.pubinfopurchase.vo.OaRejectsOpinionVO;
-import com.ennova.pubinfopurchase.vo.OaRejectsVO;
+import com.ennova.pubinfopurchase.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
@@ -83,6 +81,7 @@ public class OaRejectsService {
             oaRejects.setUserId(userVo.getId());
             oaRejects.setUserName(userMapper.selectById(userVo.getId()).getUserName());
             oaRejects.setSchedule("进行中");
+            oaRejects.setDelFlag(0);
             oaRejectsMapper.insertSelective(oaRejects);
 
             if (CollectionUtils.isNotEmpty(oaRejectsVO.getOaRejectsDetails())) {
@@ -233,18 +232,22 @@ public class OaRejectsService {
         List<OaRejectsOpinionVO> oaRejectsOpinions = oaRejectsOpinionMapper.selectByRejectsIdAndSetpStaus(id, setpStaus);
         List<OaRejectsOpinionVO> oaRejectsOpinionss = oaRejectsOpinionMapper.selectByRejectsIdAndSetpStaus(id, setpStaus - 1);
 
-        for (OaRejectsOpinionVO oaRejectsOpinionVO : oaRejectsOpinions) {
-            OaRejectsOpinion oaRejectsOpinion = new OaRejectsOpinion();
-            oaRejectsOpinion.setId(oaRejectsOpinionVO.getId());
-            oaRejectsOpinion.setDelFlag(1);
-            oaRejectsOpinionMapper.updateByPrimaryKeySelective(oaRejectsOpinion);
+        if (CollectionUtils.isNotEmpty(oaRejectsOpinions)){
+            for (OaRejectsOpinionVO oaRejectsOpinionVO : oaRejectsOpinions) {
+                OaRejectsOpinion oaRejectsOpinion = new OaRejectsOpinion();
+                oaRejectsOpinion.setId(oaRejectsOpinionVO.getId());
+                oaRejectsOpinion.setDelFlag(1);
+                oaRejectsOpinionMapper.updateByPrimaryKeySelective(oaRejectsOpinion);
+            }
         }
 
-        for (OaRejectsOpinionVO oaRejectsOpinionVO : oaRejectsOpinionss) {
-            OaRejectsOpinion oaRejectsOpinion = BeanConvertUtils.convertTo(oaRejectsOpinionVO, OaRejectsOpinion::new);
-            oaRejectsOpinion.setOpinionContent(null);
-            oaRejectsOpinion.setPublishTime(null);
-            oaRejectsOpinionMapper.updateByPrimaryKey(oaRejectsOpinion);
+        if (CollectionUtils.isNotEmpty(oaRejectsOpinionss)){
+            for (OaRejectsOpinionVO oaRejectsOpinionVO : oaRejectsOpinionss) {
+                OaRejectsOpinion oaRejectsOpinion = BeanConvertUtils.convertTo(oaRejectsOpinionVO, OaRejectsOpinion::new);
+                oaRejectsOpinion.setOpinionContent(null);
+                oaRejectsOpinion.setPublishTime(null);
+                oaRejectsOpinionMapper.updateByPrimaryKey(oaRejectsOpinion);
+            }
         }
 
         if (oaRejects.getSetpStaus() > 1) {
@@ -254,49 +257,91 @@ public class OaRejectsService {
             oaRejects.setTransactor(opinionUsers);
             oaRejectsMapper.updateByPrimaryKeySelective(oaRejects);
             return Callback.success(true);
-        }else {
+        } else {
             return Callback.error(2, "当前不能回退!");
         }
     }
 
-    public Callback pressRejects(Integer id, Integer setpStaus) throws MessagingException {
+    public Callback pressRejects(OaPressRejectsVO oaPressRejectsVO) throws MessagingException {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
-        OaRejects oaRejects = oaRejectsMapper.selectByPrimaryKey(id);
-        List<OaRejectsOpinionVO> oaRejectsOpinions = oaRejectsOpinionMapper.selectByRejectsIdAndSetpStaus(id, setpStaus);
-        List<String> opinionUsers = oaRejectsOpinions.stream().filter(v -> StringUtils.isEmpty(v.getOpinionContent())).map(v -> v.getOpinionUser()).collect(Collectors.toList());
+        List<OaPressRejectsDTO> oaPressRejectsDTOList = oaPressRejectsVO.getOaPressRejectsDTOList();
+        for (OaPressRejectsDTO oaPressRejectsDTO : oaPressRejectsDTOList) {
+            OaRejects oaRejects = oaRejectsMapper.selectByPrimaryKey(oaPressRejectsDTO.getRejectsId());
+            List<OaRejectsOpinionVO> oaRejectsOpinions = oaRejectsOpinionMapper.selectByRejectsIdAndSetpStaus(oaPressRejectsDTO.getRejectsId(), oaPressRejectsDTO.getSetpStaus());
+            List<String> opinionUsers = oaRejectsOpinions.stream().filter(v -> StringUtils.isEmpty(v.getOpinionContent())).map(v -> v.getOpinionUser()).collect(Collectors.toList());
 
-        List<Mail> mailList = new ArrayList<>();
-        for (String opinionUser : opinionUsers) {
-            Mail mail = mailMapper.selectByName(opinionUser);
-            mailList.add(mail);
-        }
-        //抄送人
-        String cc = null;
-        //主题
-        String subject = "流程催办";
-        //收件人
-        String mailTo = mailList.stream().filter(v -> StringUtils.isNotEmpty(v.getMail())).map(v -> v.getMail()).collect(Collectors.joining(","));
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        try {
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom(new InternetAddress(mailFromNick + " <" + mailFrom + ">"));
-            // 设置多个收件人
-            String[] toAddress = mailTo.split(",");
-            mimeMessageHelper.setTo(toAddress);
-            if (!StringUtils.isEmpty(cc)) {
-                mimeMessageHelper.setCc(cc);
+            List<Mail> mailList = new ArrayList<>();
+            for (String opinionUser : opinionUsers) {
+                Mail mail = mailMapper.selectByName(opinionUser);
+                mailList.add(mail);
             }
-            mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.setText("流程：" + oaRejects.getHeadline() + oaRejects.getSerialNumber() + "到达你处，请尽快办理，谢谢！");
-            mailSender.send(mimeMessage);
-        } catch (MessagingException e) {
-            log.info("发送邮件失败", e);
+            //抄送人
+            String cc = null;
+            //主题
+            String subject = "流程催办";
+            //收件人
+            String mailTo = mailList.stream().filter(v -> StringUtils.isNotEmpty(v.getMail())).map(v -> v.getMail()).collect(Collectors.joining(","));
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            try {
+                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+                mimeMessageHelper.setFrom(new InternetAddress(mailFromNick + " <" + mailFrom + ">"));
+                // 设置多个收件人
+                String[] toAddress = mailTo.split(",");
+                mimeMessageHelper.setTo(toAddress);
+                if (!StringUtils.isEmpty(cc)) {
+                    mimeMessageHelper.setCc(cc);
+                }
+                mimeMessageHelper.setSubject(subject);
+                mimeMessageHelper.setText("流程：" + oaRejects.getHeadline() + oaRejects.getSerialNumber() + "到达你处，请尽快办理，谢谢！");
+                mailSender.send(mimeMessage);
+            } catch (MessagingException e) {
+                log.info("发送邮件失败", e);
+            }
         }
-
         return Callback.success(true);
     }
 
+    public Callback batchRejectsDelete(Integer[] ids) {
+
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        // 判断ID是不是数字
+        for (Integer id : ids) {
+            if (id == null || !StringUtils.isNumeric(String.valueOf(id))) {
+                return Callback.error(2, "ID不能为空");
+            }
+            OaRejects oaRejects = oaRejectsMapper.selectByPrimaryKey(id);
+            if (ObjectUtils.isNotEmpty(oaRejects)) {
+                List<OaRejectsDetailVO> oaRejectsDetailVOS = oaRejectsDetailMapper.selectByRejectsId(oaRejects.getId());
+                List<OaRejectsDetailVO> oaRejectsDetailVOList = oaRejectsDetailVOS.stream().filter(o -> o.getId() != null).collect(Collectors.toList());
+                if (CollectionUtils.isNotEmpty(oaRejectsDetailVOList)) {
+                    for (OaRejectsDetailVO oaRejectsDetailVO : oaRejectsDetailVOList) {
+                        oaRejectsDetailMapper.deleteByPrimaryKey(oaRejectsDetailVO.getId());
+                        List<OaRejectsDetailFileVO> oaRejectsDetailFileVOS = oaRejectsDetailFileMapper.selectAllByRejectsDetailId(oaRejectsDetailVO.getId());
+                        List<OaRejectsDetailFileVO> oaRejectsDetailFileVOList = oaRejectsDetailFileVOS.stream().filter(o -> o.getId() != null).collect(Collectors.toList());
+                        if (CollectionUtils.isNotEmpty(oaRejectsDetailFileVOList)) {
+                            for (OaRejectsDetailFileVO oaRejectsDetailFileVO : oaRejectsDetailFileVOList) {
+                                oaRejectsDetailFileMapper.deleteByPrimaryKey(oaRejectsDetailFileVO.getId());
+                            }
+                        }
+                    }
+                }
+                List<OaRejectsOpinionVO> oaRejectsOpinionVOS = oaRejectsOpinionMapper.selectByRejectsId(oaRejects.getId());
+                List<OaRejectsOpinionVO> oaRejectsOpinionVOList = oaRejectsOpinionVOS.stream().filter(o -> o.getId() != null).collect(Collectors.toList());
+                if (CollectionUtils.isNotEmpty(oaRejectsOpinionVOList)) {
+                    for (OaRejectsOpinionVO oaRejectsOpinionVO : oaRejectsOpinionVOList) {
+                        oaRejectsOpinionMapper.deleteByPrimaryKey(oaRejectsOpinionVO.getId());
+                    }
+                }
+                oaRejectsMapper.deleteByPrimaryKey(oaRejects.getId());
+            }
+        }
+        return Callback.success(true);
+    }
 }
+

@@ -37,8 +37,8 @@
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
-        delete
-        from project.oa_rejects_opinion
+        update project.oa_rejects_opinion
+        set del_flag = 1
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.ennova.pubinfopurchase.entity.OaRejectsOpinion">

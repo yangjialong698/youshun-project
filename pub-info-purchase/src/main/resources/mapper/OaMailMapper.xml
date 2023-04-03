@@ -103,6 +103,6 @@
     select
     <include refid="Base_Column_List" />
     from t_mail
-    where 'name' = #{name,jdbcType=VARCHAR}
+    where `name` = #{name,jdbcType=VARCHAR}
   </select>
 </mapper>
