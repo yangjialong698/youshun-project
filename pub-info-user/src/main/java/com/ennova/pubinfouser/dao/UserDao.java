@@ -35,4 +35,8 @@ public interface UserDao extends BaseDao<UserEntity> {
     List<UserEntity> selectLeave();
 
     void updateAllDept();
+
+    List<UserEntity> seleteComeBackUsers();
+
+    void updateBatchDeleteStaById(@Param("userIds") List<Integer> userIds);
 }

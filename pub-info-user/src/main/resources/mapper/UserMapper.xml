@@ -395,12 +395,29 @@
         and tu.is_show = 1
     </select>
 
-
     <update id="updateAllDept">
         UPDATE t_user tu
             INNER JOIN t_user_ding tdu
         SET tu.department = tdu.department
         WHERE
             tdu.job_num = tu.job_num
+    </update>
+
+    <select id="seleteComeBackUsers"  resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        t_user tu
+        WHERE
+        tu.is_delete = 1
+        AND tu.job_num IN (SELECT job_num FROM t_user_ding)
+    </select>
+
+    <update id="updateBatchDeleteStaById" parameterType="java.util.List">
+        update t_user  set is_delete = 0
+        where id in
+        <foreach collection="userIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </update>
 </mapper>

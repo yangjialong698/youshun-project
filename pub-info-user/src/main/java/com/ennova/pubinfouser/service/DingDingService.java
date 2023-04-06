@@ -301,7 +301,13 @@ public class DingDingService  {
         userEntities.forEach(e->{
             userDao.insert(e);
         });
-        //2.查询t_user有,t_user_ding无的数据(已离职-排除isshow等于0)
+        //2.t_user_ding有，t_user表也有但是是已删除状态的用户(即放假回归的用户)更新t_user删除状态
+        List<UserEntity> userEntitys = userDao.seleteComeBackUsers();
+        if (CollectionUtil.isNotEmpty(userEntitys)){
+            List<Integer> userIds = userEntitys.stream().map(e -> e.getId()).collect(Collectors.toList());
+            userDao.updateBatchDeleteStaById(userIds);
+        }
+        //3.查询t_user有,t_user_ding无的数据(已离职-排除isshow等于0)
         List<UserEntity> userEntityList = userDao.selectLeave();
         if (CollectionUtil.isNotEmpty(userEntityList)){
             userEntityList.forEach(e->{

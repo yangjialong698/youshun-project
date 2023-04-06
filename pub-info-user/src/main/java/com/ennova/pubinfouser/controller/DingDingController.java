@@ -46,7 +46,7 @@ public class DingDingController {
     @PostMapping("/updatTempTdept")
     @ApiOperation(value = "测试", tags = "测试")
     public void updatTempTdept() {
-         dingDingService.updatTempTdept();
+         dingDingService.updatTuser();
     }
 
     @ApiOperation(value = "钉钉-根据部门集合获取钉钉所有部门详情", tags = "钉钉API")
