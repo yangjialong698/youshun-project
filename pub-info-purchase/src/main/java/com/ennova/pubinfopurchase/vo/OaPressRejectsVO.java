@@ -1,6 +1,7 @@
 package com.ennova.pubinfopurchase.vo;
 
 import com.ennova.pubinfopurchase.dto.OaPressRejectsDTO;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OaPressRejectsVO {
 
+    @ApiModelProperty(value = "oaPressRejectsDTOList")
     List<OaPressRejectsDTO> oaPressRejectsDTOList;
 
 }

@@ -1,10 +1,10 @@
 package com.ennova.pubinfopurchase.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfocommon.vo.BaseVO;
 import com.ennova.pubinfopurchase.service.OaRejectsService;
 import com.ennova.pubinfopurchase.vo.OaPressRejectsVO;
 import com.ennova.pubinfopurchase.vo.OaRejectsVO;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,14 +54,14 @@ public class OaRejectsController {
             @ApiImplicitParam(name = "serialNumber", value = "流水号")
     })
     @GetMapping("/selectRejectsInfo")
-    public Callback<BaseVO<OaRejectsVO>> selectRejectsInfo(@RequestParam(defaultValue = "1") Integer page,
-                                                           @RequestParam(defaultValue = "10") Integer pageSize,
-                                                           @RequestParam("startTime") String startTime,
-                                                           @RequestParam("endTime") String endTime,
-                                                           @RequestParam("workCenter") String workCenter,
-                                                           @RequestParam("exigencyStatus") String exigencyStatus,
-                                                           @RequestParam("schedule") String schedule,
-                                                           @RequestParam("headline") String headline) {
+    public Callback<PageInfo<OaRejectsVO>> selectRejectsInfo(@RequestParam(defaultValue = "1") Integer page,
+                                                             @RequestParam(defaultValue = "10") Integer pageSize,
+                                                             @RequestParam("startTime") String startTime,
+                                                             @RequestParam("endTime") String endTime,
+                                                             @RequestParam("workCenter") String workCenter,
+                                                             @RequestParam("exigencyStatus") String exigencyStatus,
+                                                             @RequestParam("schedule") String schedule,
+                                                             @RequestParam("headline") String headline) {
         return oaRejectsService.selectRejectsInfo(page, pageSize, startTime, endTime, workCenter, exigencyStatus, schedule, headline);
     }
 
@@ -79,13 +79,13 @@ public class OaRejectsController {
 
     @ApiOperation(value = "oa不合格品处理单 - 批量催办")
     @PostMapping("/pressRejects")
-    public Callback pressRejects(OaPressRejectsVO oaPressRejectsVO) throws MessagingException {
+    public Callback pressRejects(@RequestBody @Validated OaPressRejectsVO oaPressRejectsVO) throws MessagingException {
         return oaRejectsService.pressRejects(oaPressRejectsVO);
     }
 
     @ApiOperation(value = "oa不合格品处理单 - 批量删除")
     @PostMapping("/batchRejectsDelete")
-    public Callback batchRejectsDelete(@ApiParam(name = "ids", value = "处理单id数组")
+    public Callback batchRejectsDelete(@RequestBody @Validated @ApiParam(name = "ids", value = "处理单id数组")
                                  @RequestParam("ids[]") Integer[] ids) {
         return oaRejectsService.batchRejectsDelete(ids);
     }

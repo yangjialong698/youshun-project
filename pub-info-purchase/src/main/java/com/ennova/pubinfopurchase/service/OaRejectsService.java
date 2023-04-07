@@ -2,8 +2,6 @@ package com.ennova.pubinfopurchase.service;
 
 import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
-import com.ennova.pubinfocommon.vo.BaseVO;
-import com.ennova.pubinfocommon.vo.PageUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfopurchase.dao.*;
 import com.ennova.pubinfopurchase.dto.OaPressRejectsDTO;
@@ -11,7 +9,7 @@ import com.ennova.pubinfopurchase.entity.*;
 import com.ennova.pubinfopurchase.utils.BeanConvertUtils;
 import com.ennova.pubinfopurchase.utils.OaUtils;
 import com.ennova.pubinfopurchase.vo.*;
-import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +29,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -149,11 +147,11 @@ public class OaRejectsService {
         return Callback.error(2, "修改数据失败!");
     }
 
-    public Callback<BaseVO<OaRejectsVO>> selectRejectsInfo(Integer page, Integer pageSize, String startTime, String endTime, String workCenter, String exigencyStatus, String schedule, String headline) {
+    public Callback<PageInfo<OaRejectsVO>> selectRejectsInfo(Integer page, Integer pageSize, String startTime, String endTime, String workCenter, String exigencyStatus, String schedule, String headline) {
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
-        Page<LinkedHashMap> startPage = PageMethod.startPage(page, pageSize);
+        PageMethod.startPage(page, pageSize);
         List<OaRejects> oaRejects = oaRejectsMapper.selectRejectsInfo(startTime, endTime, workCenter, exigencyStatus, schedule, headline);
         List<OaRejectsVO> rejectsInfos = new ArrayList<>();
         oaRejects.forEach(v -> {
@@ -171,12 +169,10 @@ public class OaRejectsService {
                 oaRejectsVO.setOaRejectsOpinionVOS(oaRejectsOpinions);
             }
             List<Integer> opinionUserIds = oaRejectsOpinions.stream().map(o -> o.getOpinionUserId()).collect(Collectors.toList());
-            List<LocalDateTime> publishTimes = oaRejectsOpinions.stream().map(o -> o.getPublishTime()).collect(Collectors.toList());
-            LocalDateTime publishTime = null;
+            List<LocalDateTime> publishTimes = oaRejectsOpinions.stream().sorted(Comparator.comparing(o -> o.getCreateTime())).map(o -> o.getPublishTime()).collect(Collectors.toList());
             if (publishTimes.size() > 0) {
-                publishTime = publishTimes.stream().filter(o -> ObjectUtils.isNotEmpty(o)).reduce((first, second) -> second).orElse(LocalDateTime.now());
+                oaRejectsVO.setPublishTime(publishTimes.get(0));
             }
-            oaRejectsVO.setPublishTime(publishTime);
             if (opinionUserIds.contains(userVo.getId()) && v.getSetpStaus() > 1) {
                 oaRejectsVO.setBackStatus(1);
             }
@@ -185,8 +181,9 @@ public class OaRejectsService {
             }
             rejectsInfos.add(oaRejectsVO);
         });
-        BaseVO<OaRejectsVO> baseVO = new BaseVO<>(rejectsInfos, new PageUtil(pageSize, (int) startPage.getTotal(), page));
-        return Callback.success(baseVO);
+        List<OaRejectsVO> list = rejectsInfos.stream().filter(o -> o.getUserId().equals(userVo.getId()) || ObjectUtils.isNotEmpty(o.getBackStatus()) && o.getBackStatus().equals(1)).collect(Collectors.toList());
+        PageInfo<OaRejectsVO> oaRejectsVOPageInfo = new PageInfo<>(list);
+        return Callback.success(oaRejectsVOPageInfo);
     }
 
     public Callback<OaRejectsVO> selectRejectsInfoDetail(Integer id) {
@@ -204,9 +201,11 @@ public class OaRejectsService {
             });
         }
         oaRejectsVO.setOaRejectsDetails(oaRejectsDetailVOS);
+        List<OaRejectsOpinionVO> oaRejectsOpinionVOList = oaRejectsOpinionMapper.selectByRejectsId(oaRejects.getId());
+        List<OaRejectsOpinionVO> oaRejectsOpinionVOS = oaRejectsOpinionVOList.stream().filter(o -> StringUtils.isNotEmpty(o.getOpinionContent())).collect(Collectors.toList());
         List<OaRejectsOpinionVO> oaRejectsOpinions = oaRejectsOpinionMapper.selectByRejectsIdAndSetpStaus(oaRejects.getId(), oaRejects.getSetpStaus());
         if (CollectionUtils.isNotEmpty(oaRejectsOpinions)) {
-            oaRejectsVO.setOaRejectsOpinionVOS(oaRejectsOpinions);
+            oaRejectsVO.setOaRejectsOpinionVOS(oaRejectsOpinionVOS);
         }
         List<Integer> opinionUserIds = oaRejectsOpinions.stream().map(o -> o.getOpinionUserId()).collect(Collectors.toList());
         if (opinionUserIds.contains(userVo.getId()) && oaRejects.getSetpStaus() > 1) {

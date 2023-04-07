@@ -423,7 +423,7 @@
 
     <select id="selectRejectsDetail" resultType="com.ennova.pubinfopurchase.vo.OaRejectsDetailVO">
         select id,
-               rejects_id as rejectId,
+               rejects_id as rejectsId,
                work_class as workClass,
                work_number as workNumber,
                prd_no as prdNo,
