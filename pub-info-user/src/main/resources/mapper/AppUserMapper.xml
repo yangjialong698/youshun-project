@@ -335,4 +335,20 @@
             </if>
         </trim>
     </insert>
+
+    <select id="selectByCid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where cid=#{cid,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateByIds" parameterType="java.util.List">
+        update t_user
+        set cid = ""
+        where id in
+        <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

@@ -26,4 +26,8 @@ public interface AppUserDao{
     int batchInsert(@Param("list") List<AppUserEntity> list);
 
     int insertSelective(AppUserEntity record);
+
+    List<AppUserEntity> selectByCid(String cid);
+
+    void updateByIds(@Param("userIds") List<Integer> userIds);
 }

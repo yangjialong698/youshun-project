@@ -548,6 +548,14 @@ public class UserService extends BaseService<UserEntity> {
         com.ennova.pubinfocommon.vo.UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
+        //1.查看当前cid是否别的用户已获取
+        List<AppUserEntity> userEntityList = appUserDao.selectByCid(cid);
+        //2.有已使用当前cid,更新这些cid用户cid为空
+        if (CollectionUtil.isNotEmpty(userEntityList)){
+            List<Integer> userIds = userEntityList.stream().map(e -> e.getId()).collect(Collectors.toList());
+            appUserDao.updateByIds(userIds);
+        }
+
         //更新app用户cid
         AppUserEntity appUserEntity = appUserDao.selectByPrimaryKey(userVo.getId());
         appUserEntity.setCid(cid);
