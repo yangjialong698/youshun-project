@@ -1,18 +1,11 @@
 package com.ennova.pubinfopurchase.controller;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelReader;
-import com.alibaba.excel.read.metadata.ReadSheet;
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfopurchase.config.ExcelDataListener;
 import com.ennova.pubinfopurchase.dao.OaRejectsDetailMapper;
 import com.ennova.pubinfopurchase.dto.BadDisposalDTO;
 import com.ennova.pubinfopurchase.dto.BadItemDTO;
-import com.ennova.pubinfopurchase.dto.OaRejectsExportDTO;
 import com.ennova.pubinfopurchase.dto.PrdInfoDTO;
-import com.ennova.pubinfopurchase.entity.OaRejectsDetail;
 import com.ennova.pubinfopurchase.service.OaRejectsDetailService;
-import com.ennova.pubinfopurchase.utils.BeanConvertUtils;
 import com.ennova.pubinfopurchase.vo.FileVO;
 import com.ennova.pubinfopurchase.vo.OaRejectsDetailVO;
 import io.swagger.annotations.Api;
@@ -26,13 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @author yangjialong
@@ -94,7 +81,7 @@ public class OaRejectsDetailController {
         return oaRejectsDetailService.uploadFile(file);
     }
 
-    @ApiOperation(value = "oa不合格品处理单 -  不良品明细导出")
+   /* @ApiOperation(value = "oa不合格品处理单 -  不良品明细导出")
     @GetMapping("/export")
     public void exportUserExcel(HttpServletResponse response) {
         try {
@@ -132,6 +119,6 @@ public class OaRejectsDetailController {
         } catch (IOException e) {
             throw new RuntimeException("导入 Excel 文件失败", e);
         }
-    }
+    }*/
 
 }

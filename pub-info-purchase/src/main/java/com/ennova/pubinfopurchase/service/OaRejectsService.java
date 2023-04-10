@@ -4,6 +4,7 @@ import com.ennova.pubinfocommon.entity.Callback;
 import com.ennova.pubinfocommon.utils.JWTUtil;
 import com.ennova.pubinfocommon.vo.UserVO;
 import com.ennova.pubinfopurchase.dao.*;
+import com.ennova.pubinfopurchase.dto.OaBathRejectsDeleteDTO;
 import com.ennova.pubinfopurchase.dto.OaPressRejectsDTO;
 import com.ennova.pubinfopurchase.entity.*;
 import com.ennova.pubinfopurchase.utils.BeanConvertUtils;
@@ -28,10 +29,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +47,7 @@ public class OaRejectsService {
     private final OaRejectsDetailMapper oaRejectsDetailMapper;
     private final OaRejectsDetailFileMapper oaRejectsDetailFileMapper;
     private final OaRejectsOpinionMapper oaRejectsOpinionMapper;
+    private final OaSystemManageMapper oaSystemManageMapper;
     private final HttpServletRequest request;
     private final UserMapper userMapper;
     private final OaMailMapper mailMapper;
@@ -179,6 +178,10 @@ public class OaRejectsService {
             if (StringUtils.isEmpty(v.getTransactor()) || v.getTransactor().equals(userMapper.selectById(userVo.getId()).getUserName())) {
                 oaRejectsVO.setOpenStatus(1);
             }
+            Set<Integer> userIds = oaSystemManageMapper.selectByAll().stream().map(oaSystemManage -> oaSystemManage.getUserId()).collect(Collectors.toSet());
+            if (userIds.contains(userVo.getId())) {
+                oaRejectsVO.setBatchDeletes(1);
+            }
             rejectsInfos.add(oaRejectsVO);
         });
         List<OaRejectsVO> list = rejectsInfos.stream().filter(o -> o.getUserId().equals(userVo.getId()) || ObjectUtils.isNotEmpty(o.getBackStatus()) && o.getBackStatus().equals(1)).collect(Collectors.toList());
@@ -303,14 +306,21 @@ public class OaRejectsService {
         return Callback.success(true);
     }
 
-    public Callback batchRejectsDelete(Integer[] ids) {
+    public Callback batchRejectsDelete(OaBathRejectsDeleteDTO oaBathRejectsDeleteDTO) {
 
         String token = request.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
+        List<OaSystemManage> oaSystemManages = oaSystemManageMapper.selectByAll();
+        Set<Integer> userIds = oaSystemManages.stream().map(v -> v.getUserId()).collect(Collectors.toSet());
+
+        if (!userIds.contains(userVo.getId())) {
+            return Callback.error("暂无权限删除");
+        }
+
         // 判断ID是不是数字
-        for (Integer id : ids) {
+        for (Integer id : oaBathRejectsDeleteDTO.getRejectsIds()) {
             if (id == null || !StringUtils.isNumeric(String.valueOf(id))) {
                 return Callback.error(2, "ID不能为空");
             }

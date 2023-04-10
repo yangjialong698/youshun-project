@@ -4,16 +4,16 @@
   <resultMap id="BaseResultMap" type="com.ennova.pubinfopurchase.entity.OaRejects">
     <!--@mbg.generated-->
     <!--@Table project.oa_rejects-->
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="INTEGER" property="id"/>
     <result column="headline" jdbcType="VARCHAR" property="headline" />
     <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
-    <result column="setp_staus" jdbcType="INTEGER" property="setpStaus" />
+    <result column="setp_staus" jdbcType="INTEGER" property="setpStaus"/>
     <result column="transactor" jdbcType="VARCHAR" property="transactor" />
     <result column="documentation_date" jdbcType="TIMESTAMP" property="documentationDate" />
     <result column="survey_date" jdbcType="TIMESTAMP" property="surveyDate" />
     <result column="work_center" jdbcType="VARCHAR" property="workCenter" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName"/>
     <result column="processing_details" jdbcType="VARCHAR" property="processingDetails" />
     <result column="quality_confirm" jdbcType="VARCHAR" property="qualityConfirm" />
     <result column="exigency_status" jdbcType="VARCHAR" property="exigencyStatus" />
@@ -316,41 +316,43 @@
 
     <select id="selectRejectsInfo" resultType="com.ennova.pubinfopurchase.entity.OaRejects">
         select
-        id,
-        headline,
-        serial_number as serialNumber,
-        setp_staus as setpStaus,
-        transactor,
-        documentation_date as documentationDate,
-        survey_date as surveyDate,
-        work_center as workCenter,
-        user_id as userId,
-        user_name as userName,
-        processing_details as processingDetails,
-        quality_confirm as qualityConfirm,
-        exigency_status as exigencyStatus,
-        schedule
+          id,
+          headline,
+          serial_number      as serialNumber,
+          setp_staus         as setpStaus,
+          transactor,
+          documentation_date as documentationDate,
+          survey_date        as surveyDate,
+          work_center        as workCenter,
+          user_id            as userId,
+          user_name          as userName,
+          processing_details as processingDetails,
+          quality_confirm    as qualityConfirm,
+          exigency_status    as exigencyStatus,
+          schedule
         from oa_rejects
-        <where>
-            <if test="workCenter != null and workCenter != ''">
-                 work_center like CONCAT('%', trim (#{workCenter}), '%')
-            </if>
-            <if test="exigencyStatus != null and exigencyStatus != ''">
-                and exigency_status like CONCAT('%', trim (#{exigencyStatus}), '%')
-            </if>
-            <if test="schedule != null and schedule != ''">
-                and schedule like CONCAT('%', trim (#{schedule}), '%')
-            </if>
-            <if test="headline != null and headline != ''">
-                and headline like CONCAT('%', trim (#{headline}), '%') or serial_number like CONCAT('%', trim (#{headline}), '%')
-            </if>
-            <if test="startTime!=null and startTime!=''">
-                AND documentation_date &gt;= #{startTime,jdbcType=TIMESTAMP}
-            </if>
-            <if test="endTime!=null and endTime!=''">
-                AND documentation_date &lt;= #{endTime,jdbcType=TIMESTAMP}
-            </if>
-        </where>
-        order by serial_number desc
+      <where>
+        del_flag = 0
+        <if test="workCenter != null and workCenter != ''">
+          and work_center like CONCAT('%', trim(#{workCenter}), '%')
+        </if>
+        <if test="exigencyStatus != null and exigencyStatus != ''">
+          and exigency_status like CONCAT('%', trim(#{exigencyStatus}), '%')
+        </if>
+        <if test="schedule != null and schedule != ''">
+          and schedule like CONCAT('%', trim(#{schedule}), '%')
+        </if>
+        <if test="headline != null and headline != ''">
+          and headline like CONCAT('%', trim(#{headline}), '%')
+             or serial_number like CONCAT('%', trim(#{headline}), '%')
+        </if>
+        <if test="startTime != null and startTime != ''">
+          AND documentation_date &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null and endTime != ''">
+          AND documentation_date &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+      </where>
+      order by serial_number desc
     </select>
 </mapper>

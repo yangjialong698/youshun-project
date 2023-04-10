@@ -88,7 +88,7 @@ public class OaRejectsOpinionService {
                 List<String> collect = oaRejectsOpinionss.stream().filter(v -> StringUtils.isEmpty(v.getOpinionContent())).map(v -> v.getOpinionContent()).collect(Collectors.toList());
                 String opinionUsers = oaRejectsOpinionss.stream().filter(v -> StringUtils.isEmpty(v.getOpinionContent())).map(v -> v.getOpinionUser()).collect(Collectors.joining(","));
                 OaRejects build = new OaRejects();
-                if (CollectionUtils.isNotEmpty(collect)) {
+                if (CollectionUtils.isNotEmpty(collect) && !oaRejectsOpinionVO.getSetpStaus().equals(5)) {
                     build = OaRejects.builder().id(oaRejectsOpinionVO.getRejectsId()).transactor(opinionUsers).build();
                 } else {
                     build = OaRejects.builder().id(oaRejectsOpinionVO.getRejectsId()).schedule("已完成").transactor(opinionUsers).build();

@@ -141,6 +141,12 @@ public class OaRejectsVO {
     private Integer opinionStatus;
 
     /**
+     * 是否可以批量删除
+     * */
+    @ApiModelProperty(value="是否可以批量删除")
+    private Integer batchDeletes;
+
+    /**
      * 办理时间
      */
     @ApiModelProperty(value="办理时间")

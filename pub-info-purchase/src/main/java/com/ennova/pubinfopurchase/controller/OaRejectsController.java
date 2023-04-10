@@ -1,6 +1,7 @@
 package com.ennova.pubinfopurchase.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfopurchase.dto.OaBathRejectsDeleteDTO;
 import com.ennova.pubinfopurchase.service.OaRejectsService;
 import com.ennova.pubinfopurchase.vo.OaPressRejectsVO;
 import com.ennova.pubinfopurchase.vo.OaRejectsVO;
@@ -85,9 +86,8 @@ public class OaRejectsController {
 
     @ApiOperation(value = "oa不合格品处理单 - 批量删除")
     @PostMapping("/batchRejectsDelete")
-    public Callback batchRejectsDelete(@RequestBody @Validated @ApiParam(name = "ids", value = "处理单id数组")
-                                 @RequestParam("ids[]") Integer[] ids) {
-        return oaRejectsService.batchRejectsDelete(ids);
+    public Callback batchRejectsDelete(@RequestBody @Validated OaBathRejectsDeleteDTO oaBathRejectsDeleteDTO) {
+        return oaRejectsService.batchRejectsDelete(oaBathRejectsDeleteDTO);
     }
 
 
