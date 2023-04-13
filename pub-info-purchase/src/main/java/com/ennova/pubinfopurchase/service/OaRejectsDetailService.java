@@ -9,6 +9,7 @@ import com.ennova.pubinfopurchase.dao.OaRejectsDetailFileMapper;
 import com.ennova.pubinfopurchase.dao.OaRejectsDetailMapper;
 import com.ennova.pubinfopurchase.dto.BadDisposalDTO;
 import com.ennova.pubinfopurchase.dto.BadItemDTO;
+import com.ennova.pubinfopurchase.dto.FileDelDTO;
 import com.ennova.pubinfopurchase.dto.PrdInfoDTO;
 import com.ennova.pubinfopurchase.entity.OaRejectsDetail;
 import com.ennova.pubinfopurchase.entity.OaRejectsDetailFile;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -178,5 +180,26 @@ public class OaRejectsDetailService {
         return Callback.error(2, "上传失败!");
     }
 
-
+    public Callback deleteFile(FileDelDTO fileDelDTO) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        fileDelDTO.getFileVos().forEach(fileVo -> {
+            String path = localPath + "/" + fileVo.getNewfileName();
+            // 如果是本人上传的，才能执行删除操作
+            assert userVo != null;
+            List<OaRejectsDetailFile> oaRejectsDetailFiles = oaRejectsDetailFileMapper.selectAllByFileMd5AndUserId(fileVo.getNewfileName(), userVo.getId());
+            if (oaRejectsDetailFiles != null && !oaRejectsDetailFiles.isEmpty()) {
+                File file = new File(path);
+                if (file.exists()) {
+                    //查看是否唯一
+                    int count = oaRejectsDetailFileMapper.selectByFileMd5(fileVo.getNewfileName());
+                    if (count == 1) {
+                        file.delete();
+                    }
+                    oaRejectsDetailFileMapper.deleteByPrimaryKey(fileVo.getId());
+                }
+            }
+        });
+        return Callback.success("附件删除成功");
+    }
 }

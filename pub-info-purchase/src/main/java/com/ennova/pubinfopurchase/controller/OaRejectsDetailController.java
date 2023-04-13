@@ -1,9 +1,9 @@
 package com.ennova.pubinfopurchase.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
-import com.ennova.pubinfopurchase.dao.OaRejectsDetailMapper;
 import com.ennova.pubinfopurchase.dto.BadDisposalDTO;
 import com.ennova.pubinfopurchase.dto.BadItemDTO;
+import com.ennova.pubinfopurchase.dto.FileDelDTO;
 import com.ennova.pubinfopurchase.dto.PrdInfoDTO;
 import com.ennova.pubinfopurchase.service.OaRejectsDetailService;
 import com.ennova.pubinfopurchase.vo.FileVO;
@@ -34,7 +34,6 @@ import java.util.List;
 public class OaRejectsDetailController {
 
     private final OaRejectsDetailService oaRejectsDetailService;
-    private final OaRejectsDetailMapper oaRejectsDetailMapper;
 
     @ApiOperation(value = "根据工单号查询零件号和零件名称")
     @GetMapping("/getPrdInfo")
@@ -79,6 +78,12 @@ public class OaRejectsDetailController {
     @PostMapping("/upload")
     public Callback<FileVO> upload(MultipartFile file) {
         return oaRejectsDetailService.uploadFile(file);
+    }
+
+    @ApiOperation(value = "oa不合格品处理单 - 不良品明细文件删除")
+    @PostMapping("/deleteFile")
+    public Callback deleteFile(@RequestBody FileDelDTO fileDelDTO) {
+        return oaRejectsDetailService.deleteFile(fileDelDTO);
     }
 
    /* @ApiOperation(value = "oa不合格品处理单 -  不良品明细导出")

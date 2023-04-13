@@ -1,17 +1,23 @@
 package com.ennova.pubinfopurchase.controller;
 
 import com.ennova.pubinfocommon.entity.Callback;
+import com.ennova.pubinfopurchase.dto.FileDelDTO;
 import com.ennova.pubinfopurchase.dto.OaBathRejectsDeleteDTO;
 import com.ennova.pubinfopurchase.service.OaRejectsService;
+import com.ennova.pubinfopurchase.vo.FileVO;
 import com.ennova.pubinfopurchase.vo.OaPressRejectsVO;
 import com.ennova.pubinfopurchase.vo.OaRejectsVO;
 import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 
@@ -90,5 +96,27 @@ public class OaRejectsController {
         return oaRejectsService.batchRejectsDelete(oaBathRejectsDeleteDTO);
     }
 
+    @ApiOperation(value = "oa不合格品处理单 -  不良原因分析报告文件上传")
+    @PostMapping("/upload")
+    public Callback<FileVO> upload(MultipartFile file) {
+        return oaRejectsService.uploadFile(file);
+    }
 
+    @ApiOperation(value = "oa不合格品处理单 - 不良原因分析报告文件删除")
+    @PostMapping("/deleteFile")
+    public Callback deleteFile(@RequestBody FileDelDTO fileDelDTO) {
+        return oaRejectsService.deleteFile(fileDelDTO);
+    }
+
+    @ApiOperation(value = "oa不合格品处理单 - 批量删除状态")
+    @GetMapping("/selectBatchDeletes")
+    public Callback selectBatchDeletes() {
+        return oaRejectsService.selectBatchDeletes();
+    }
+
+    @ApiOperation(value = "oa不合格品处理单 - 新增处理明细")
+    @PostMapping("/insertProcessingDetails")
+    public Callback insertProcessingDetails(@RequestBody OaRejectsVO oaRejectsVO) {
+        return oaRejectsService.insertProcessingDetails(oaRejectsVO);
+    }
 }

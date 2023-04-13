@@ -167,7 +167,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="selectByPurchaseInfoId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPurchaseInfoId" parameterType="java.lang.Integer" resultType="com.ennova.pubinfopurchase.vo.FileVO">
         <!--@mbg.generated-->
         select
         <include refid="Base_Column_List"/>
