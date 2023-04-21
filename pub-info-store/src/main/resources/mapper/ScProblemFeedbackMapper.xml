@@ -371,6 +371,9 @@
         <include refid="Base_Column_List"/>
         from sc_problem_feedback
         where 1 = 1
+        <if test="backStatus != null and backStatus != ''">
+            and back_status = #{backStatus,jdbcType=VARCHAR}
+        </if>
         <if test="searchKey != null and searchKey != ''">
             and problem_description like CONCAT('%', #{searchKey}, '%')
             or duty_person like CONCAT('%', #{searchKey}, '%')
@@ -421,6 +424,9 @@
         <include refid="Base_Column_List"/>
         from sc_problem_feedback
         where 1 = 1
+        <if test="backStatus != null and backStatus != ''">
+            and back_status = #{backStatus,jdbcType=VARCHAR}
+        </if>
         <if test="searchKey != null and searchKey != ''">
             and problem_description like CONCAT('%', #{searchKey}, '%')
             or back_person like CONCAT('%', #{searchKey}, '%')

@@ -105,8 +105,9 @@ public class AppController {
     @GetMapping("/getMyProblemFeedbackList")
     public Callback<BaseVO<ScProblemFeedback>> getMyProblemFeedbackList(@RequestParam(defaultValue = "1") Integer page,
                                                                         @RequestParam(defaultValue = "10") Integer pageSize,
+                                                                        String backStatus,
                                                                         String searchKey) {
-        return appService.getMyProblemFeedbackList(page,pageSize,searchKey);
+        return appService.getMyProblemFeedbackList(page,pageSize,backStatus,searchKey);
     }
 
     @ApiOperation(value = "APP移动端接口 - 我反馈的问题状态")
@@ -122,8 +123,9 @@ public class AppController {
     @GetMapping("/getMyHandleProblemList")
     public Callback<BaseVO<ScProblemFeedback>> getMyHandleProblemList(@RequestParam(defaultValue = "1") Integer page,
                                                                       @RequestParam(defaultValue = "10") Integer pageSize,
+                                                                      String backStatus,
                                                                       String searchKey) {
-        return appService.getMyHandleProblemList(page,pageSize,searchKey);
+        return appService.getMyHandleProblemList(page,pageSize,backStatus,searchKey);
     }
 
     @ApiOperation(value = "APP移动端接口 - 我经办的问题状态")

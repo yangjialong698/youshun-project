@@ -491,14 +491,14 @@ public class AppService {
         return i > 0 ? Callback.success() : Callback.error("删除失败");
     }
 
-    public Callback<BaseVO<ScProblemFeedback>> getMyProblemFeedbackList(Integer page, Integer pageSize, String searchKey) {
+    public Callback<BaseVO<ScProblemFeedback>> getMyProblemFeedbackList(Integer page, Integer pageSize,String backStatus, String searchKey) {
 
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
         Page<ScProblemFeedback> startPage = PageHelper.startPage(page, pageSize);
-        List<ScProblemFeedback> myProblemFeedbackList = scProblemFeedbackMapper.getMyProblemFeedbackList(searchKey, userVo.getId());
+        List<ScProblemFeedback> myProblemFeedbackList = scProblemFeedbackMapper.getMyProblemFeedbackList(backStatus,searchKey, userVo.getId());
         BaseVO<ScProblemFeedback> baseVO = new BaseVO<>(myProblemFeedbackList, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
@@ -513,14 +513,14 @@ public class AppService {
         return Callback.success(myProblemsStatus);
     }
 
-    public Callback<BaseVO<ScProblemFeedback>> getMyHandleProblemList(Integer page, Integer pageSize, String searchKey) {
+    public Callback<BaseVO<ScProblemFeedback>> getMyHandleProblemList(Integer page, Integer pageSize, String backStatus,String searchKey) {
 
         String token = req.getHeader("Authorization");
         UserVO userVo = JWTUtil.getUserVOByToken(token);
         assert userVo != null;
 
         Page<ScProblemFeedback> startPage = PageHelper.startPage(page, pageSize);
-        List<ScProblemFeedback> myProblemFeedbackList = scProblemFeedbackMapper.getMyHandleProblemList(searchKey, userVo.getId());
+        List<ScProblemFeedback> myProblemFeedbackList = scProblemFeedbackMapper.getMyHandleProblemList(backStatus,searchKey, userVo.getId());
         BaseVO<ScProblemFeedback> baseVO = new BaseVO<>(myProblemFeedbackList, new PageUtil(pageSize, (int) startPage.getTotal(), page));
         return Callback.success(baseVO);
     }
