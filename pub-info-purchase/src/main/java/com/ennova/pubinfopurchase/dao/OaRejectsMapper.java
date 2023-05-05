@@ -70,7 +70,15 @@ public interface OaRejectsMapper {
     List<OaRejects> selectRejectsInfo(@Param("startTime") String startTime,
                                       @Param("endTime") String endTime,
                                       @Param("workCenter") String workCenter,
-                                      @Param("exigencyStatus") String exigencyStatus,
+                                      @Param("userName") String userName,
+                                      @Param("schedule") String schedule,
+                                      @Param("headline") String headline);
+
+    List<OaRejects> selectRejectsInfos(@Param("startTime") String startTime,
+                                      @Param("endTime") String endTime,
+                                      @Param("workCenter") String workCenter,
+                                      @Param("userName") String userName,
+                                       @Param("transactor") String transactor,
                                       @Param("schedule") String schedule,
                                       @Param("headline") String headline);
 }

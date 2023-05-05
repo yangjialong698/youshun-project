@@ -41,5 +41,9 @@ public class OaRejectsOpinionController {
         return oaRejectsOpinionService.countersignOpinion(oaRejectsOpinionVO);
     }
 
-
+    @ApiOperation(value = "oa不合格品处理单 - 会签人进行修改会签意见")
+    @PostMapping("/updateOpinion")
+    public Callback updateOpinion(@RequestBody @Validated OaRejectsOpinionVO oaRejectsOpinionVO) {
+        return oaRejectsOpinionService.updateOpinion(oaRejectsOpinionVO);
+    }
 }

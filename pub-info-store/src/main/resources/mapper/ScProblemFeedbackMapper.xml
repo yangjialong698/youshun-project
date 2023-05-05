@@ -381,7 +381,8 @@
         <if test="userId != null">
             and back_user_id = #{userId,jdbcType=INTEGER}
         </if>
-        order by create_time desc
+        group by back_status, create_time
+        order by back_status desc, create_time desc
     </select>
 
     <select id="getMyProblemsStatus" resultType="com.ennova.pubinfostore.vo.ScProblemFeedbackVO">

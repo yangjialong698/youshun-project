@@ -63,6 +63,9 @@ public interface OaRejectsOpinionMapper {
     //根据不良品处理单id查询不合格单会签明细
     List<OaRejectsOpinionVO> selectByRejectsId(@Param("rejectsId") Integer rejectsId);
 
+    //根据会签人id和会签人姓名查询会签明细
+    List<OaRejectsOpinion> selectByOpinionUserIdAndOpinionUser(@Param("opinionUserId") Integer opinionUserId, @Param("opinionUser") String opinionUser);
+
     //根据不良品处理单id和查询不合格单会签明细
     List<OaRejectsOpinionVO> selectByRejectsIdAndSetpStaus(@Param("rejectsId") Integer rejectsId, @Param("setpStaus") Integer setpStaus);
 

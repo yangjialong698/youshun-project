@@ -91,8 +91,31 @@ public class OaRejectsOpinionService {
                 if (i > 0 && j > 0) {
                     return Callback.success(true);
                 }
-            }else {
-                return Callback.error(2,"您不在会签人列表中");
+            } else {
+                return Callback.error(2, "您不在会签人列表中");
+            }
+        }
+        return Callback.error(2, "数据处理失败!");
+    }
+
+    public Callback updateOpinion(OaRejectsOpinionVO oaRejectsOpinionVO) {
+        String token = request.getHeader("Authorization");
+        UserVO userVo = JWTUtil.getUserVOByToken(token);
+        assert userVo != null;
+
+        if (ObjectUtils.isNotEmpty(oaRejectsOpinionVO) && oaRejectsOpinionVO.getRejectsId() != null && oaRejectsOpinionVO.getSetpStaus() != null) {
+
+            OaRejectsOpinionVO oaRejectsOpinionVos = oaRejectsOpinionMapper.selectByRejectsIdAndOpinionUserId(oaRejectsOpinionVO.getRejectsId(), userVo.getId(), oaRejectsOpinionVO.getSetpStaus());
+
+            if (ObjectUtils.isNotEmpty(oaRejectsOpinionVos)) {
+                OaRejectsOpinion oaRejectsOpinion = new OaRejectsOpinion();
+                oaRejectsOpinion.setId(oaRejectsOpinionVos.getId());
+                oaRejectsOpinion.setOpinionContent(oaRejectsOpinionVO.getOpinionContent());
+                oaRejectsOpinion.setPublishTime(LocalDateTime.now());
+                int i = oaRejectsOpinionMapper.updateByPrimaryKeySelective(oaRejectsOpinion);
+                if (i > 0) {
+                    return Callback.success(true);
+                }
             }
         }
         return Callback.error(2, "数据处理失败!");

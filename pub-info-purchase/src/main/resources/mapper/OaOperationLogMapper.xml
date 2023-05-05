@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ennova.pubinfopurchase.dao.OaOperationLogMapper">
+    <resultMap id="BaseResultMap" type="com.ennova.pubinfopurchase.entity.OaOperationLog">
+        <!--@mbg.generated-->
+        <!--@Table project.oa_operation_log-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="rejects_id" jdbcType="INTEGER" property="rejectsId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="setp_staus" jdbcType="INTEGER" property="setpStaus"/>
+        <result column="opinion_content" jdbcType="VARCHAR" property="opinionContent"/>
+        <result column="back_reason" jdbcType="VARCHAR" property="backReason"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        rejects_id,
+        user_id,
+        user_name,
+        setp_staus,
+        opinion_content,
+        back_reason,
+        create_time,
+        description
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from project.oa_operation_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from project.oa_operation_log
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.ennova.pubinfopurchase.entity.OaOperationLog">
+        <!--@mbg.generated-->
+        insert into project.oa_operation_log (id, rejects_id, user_id,
+                                              user_name, setp_staus, opinion_content,
+                                              back_reason, create_time, description)
+        values (#{id,jdbcType=INTEGER}, #{rejectsId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+                #{userName,jdbcType=VARCHAR}, #{setpStaus,jdbcType=INTEGER}, #{opinionContent,jdbcType=VARCHAR},
+                #{backReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.ennova.pubinfopurchase.entity.OaOperationLog">
+        <!--@mbg.generated-->
+        insert into project.oa_operation_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="rejectsId != null">
+                rejects_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="setpStaus != null">
+                setp_staus,
+            </if>
+            <if test="opinionContent != null">
+                opinion_content,
+            </if>
+            <if test="backReason != null">
+                back_reason,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="rejectsId != null">
+                #{rejectsId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="setpStaus != null">
+                #{setpStaus,jdbcType=INTEGER},
+            </if>
+            <if test="opinionContent != null">
+                #{opinionContent,jdbcType=VARCHAR},
+            </if>
+            <if test="backReason != null">
+                #{backReason,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ennova.pubinfopurchase.entity.OaOperationLog">
+        <!--@mbg.generated-->
+        update project.oa_operation_log
+        <set>
+            <if test="rejectsId != null">
+                rejects_id = #{rejectsId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="setpStaus != null">
+                setp_staus = #{setpStaus,jdbcType=INTEGER},
+            </if>
+            <if test="opinionContent != null">
+                opinion_content = #{opinionContent,jdbcType=VARCHAR},
+            </if>
+            <if test="backReason != null">
+                back_reason = #{backReason,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ennova.pubinfopurchase.entity.OaOperationLog">
+        <!--@mbg.generated-->
+        update project.oa_operation_log
+        set rejects_id      = #{rejectsId,jdbcType=INTEGER},
+            user_id         = #{userId,jdbcType=INTEGER},
+            user_name       = #{userName,jdbcType=VARCHAR},
+            setp_staus      = #{setpStaus,jdbcType=INTEGER},
+            opinion_content = #{opinionContent,jdbcType=VARCHAR},
+            back_reason     = #{backReason,jdbcType=VARCHAR},
+            create_time     = #{createTime,jdbcType=TIMESTAMP},
+            description     = #{description,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByRejectsId" resultType="com.ennova.pubinfopurchase.vo.OaOperationLogVO">
+        select id,
+               rejects_id      as rejectsId,
+               user_id         as userId,
+               user_name       as userName,
+               setp_staus      as setpStaus,
+               opinion_content as opinionContent,
+               back_reason     as backReason,
+               create_time     as createTime,
+               description
+        from oa_operation_log
+        where rejects_id = #{rejectsId,jdbcType=INTEGER}
+    </select>
+</mapper>

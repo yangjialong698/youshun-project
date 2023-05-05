@@ -336,8 +336,8 @@
         <if test="workCenter != null and workCenter != ''">
           and work_center like CONCAT('%', trim(#{workCenter}), '%')
         </if>
-        <if test="exigencyStatus != null and exigencyStatus != ''">
-          and exigency_status like CONCAT('%', trim(#{exigencyStatus}), '%')
+        <if test="userName != null and userName != ''">
+          and user_name like CONCAT('%', trim(#{userName}), '%')
         </if>
         <if test="schedule != null and schedule != ''">
           and schedule like CONCAT('%', trim(#{schedule}), '%')
@@ -355,4 +355,49 @@
       </where>
       order by serial_number desc
     </select>
+
+  <select id="selectRejectsInfos" resultType="com.ennova.pubinfopurchase.entity.OaRejects">
+    select
+    id,
+    headline,
+    serial_number      as serialNumber,
+    setp_staus         as setpStaus,
+    transactor,
+    documentation_date as documentationDate,
+    survey_date        as surveyDate,
+    work_center        as workCenter,
+    user_id            as userId,
+    user_name          as userName,
+    processing_details as processingDetails,
+    quality_confirm    as qualityConfirm,
+    exigency_status    as exigencyStatus,
+    schedule
+    from oa_rejects
+    <where>
+      del_flag = 0
+      <if test="workCenter != null and workCenter != ''">
+        and work_center like CONCAT('%', trim(#{workCenter}), '%')
+      </if>
+      <if test="userName != null and userName != ''">
+        and user_name like CONCAT('%', trim(#{userName}), '%')
+      </if>
+      <if test="transactor != null and transactor != ''">
+        and transactor like CONCAT('%', trim(#{transactor}), '%')
+      </if>
+      <if test="schedule != null and schedule != ''">
+        and schedule like CONCAT('%', trim(#{schedule}), '%')
+      </if>
+      <if test="headline != null and headline != ''">
+        and headline like CONCAT('%', trim(#{headline}), '%')
+        or serial_number like CONCAT('%', trim(#{headline}), '%')
+      </if>
+      <if test="startTime != null and startTime != ''">
+        AND documentation_date &gt;= #{startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        AND documentation_date &lt;= #{endTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by serial_number desc
+  </select>
 </mapper>
